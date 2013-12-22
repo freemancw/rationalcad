@@ -104,7 +104,7 @@ static std::vector<std::string> solve_boggle_r(Array<bool>& visited,
         visited(row, col) = true;
 
         // add valid words to output list
-        if (next_node->is_word() && next_prefix.size() >= kMinWordLength) {
+        if (next_node->is_word() && next_prefix.size() > kMinWordLength) {
             wordlist.push_back(next_prefix);
         }
 
@@ -112,7 +112,7 @@ static std::vector<std::string> solve_boggle_r(Array<bool>& visited,
         auto nlist = list_neighbors(row, col, board.n_rows(), board.n_cols());
         for (size_t i = 0; i < nlist.size(); ++i) {
             if (!visited(nlist[i].first, nlist[i].second)) {
-                auto subsln = solve_boggle_r(board, nlist[i].first,
+                auto subsln = solve_boggle_r(visited, board, nlist[i].first,
                                              nlist[i].second, next_node,
                                              next_prefix);
                 wordlist.insert(end(wordlist), begin(subsln), end(subsln));
@@ -126,7 +126,9 @@ static std::vector<std::string> solve_boggle_r(Array<bool>& visited,
     return wordlist;
 }
 
-
+/*!
+ *
+ */
 static std::vector<grididx> list_neighbors(const size_t row,
                                            const size_t col,
                                            const size_t num_rows,
@@ -229,7 +231,7 @@ void Dictionary::AddWord(const std::string& word) {
     Node* cur_node = root_;
 
     for (size_t i = 0; i < word.size(); ++i) {
-        Node* next_node = nullptr;
+        Node* next_node = NULL;
 
         for (size_t j = 0; j < cur_node->children().size(); ++j) {
             if (cur_node->children()[j]->c() == word[i]) {
@@ -238,7 +240,7 @@ void Dictionary::AddWord(const std::string& word) {
             }
         }
 
-        if (next_node == nullptr) {
+        if (!next_node) {
             next_node = new Node(word[i], i == word.size()-1);
             cur_node->AddChild(next_node);
         }
