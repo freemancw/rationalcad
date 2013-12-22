@@ -30,7 +30,8 @@ HEADERS += \
     include/rc_reverse.h \
     include/rc_boggle.h \
     include/rc_duplicate.h \
-    include/rc_segments.h
+    include/rc_segments.h \
+    include/rc_array.h
 
 # Form files ==================================================================
 
