@@ -9,12 +9,12 @@
 namespace RCAD {
 
 // shorten names
-typedef std::pair<size_t, size_t> grididx;
+typedef std::pair<size_t, size_t> boardidx;
 
 // convenience function for generating a list of grid neighbors
-static std::vector<grididx> list_neighbors(const size_t row, const size_t col,
-                                           const size_t num_rows,
-                                           const size_t num_cols);
+static std::vector<boardidx> list_neighbors(const size_t row, const size_t col,
+                                            const size_t num_rows,
+                                            const size_t num_cols);
 
 // recursive function for actually solving the boggle board
 static std::vector<std::string> solve_boggle_r(Array<bool>& visited,
@@ -75,7 +75,10 @@ std::vector<std::string> solve_board(const size_t rows, const size_t cols,
 }
 
 /*!
+ * Recursive function to solve a boggle board.
  *
+ * Base case: we stop the recursion whenever a cell's character does not form a
+ * valid prefix (i.e. we cannot find the character in the node's children).
  */
 static std::vector<std::string> solve_boggle_r(Array<bool>& visited,
                                                const Array<char>& board,
@@ -85,10 +88,6 @@ static std::vector<std::string> solve_boggle_r(Array<bool>& visited,
                                                const std::string& prefix) {
     std::vector<std::string> wordlist;
     std::string next_prefix = prefix+board(row, col);
-
-    // base case: we stop the recursion whenever a cell's character does not
-    // form a valid prefix (i.e. we cannot find the character in the input
-    // node's children)
 
     // attempt to find the char among the children
     Dictionary::Node* next_node = NULL;
@@ -127,75 +126,76 @@ static std::vector<std::string> solve_boggle_r(Array<bool>& visited,
 }
 
 /*!
- *
+ * Convenience function to generate a list of coordinates for a given cell.
+ * @note Arbitrarily chooses to branch on row index first.
  */
-static std::vector<grididx> list_neighbors(const size_t row,
-                                           const size_t col,
-                                           const size_t num_rows,
-                                           const size_t num_cols) {
+static std::vector<boardidx> list_neighbors(const size_t row,
+                                            const size_t col,
+                                            const size_t num_rows,
+                                            const size_t num_cols) {
     std::vector<std::pair<size_t, size_t>> neighbors;
 
     if (row == 0) {
         // all north edge vertices have a neighbor directly below
-        neighbors.push_back(grididx(row+1, col));
+        neighbors.push_back(boardidx(row+1, col));
 
         if (col == 0) {
             // northwest corner
-            neighbors.push_back(grididx(row, col+1));
-            neighbors.push_back(grididx(row+1, col+1));
+            neighbors.push_back(boardidx(row, col+1));
+            neighbors.push_back(boardidx(row+1, col+1));
         } else if (col > 0 && col < num_cols-1) {
             // north edge
-            neighbors.push_back(grididx(row, col+1));
-            neighbors.push_back(grididx(row, col-1));
-            neighbors.push_back(grididx(row+1, col+1));
-            neighbors.push_back(grididx(row+1, col-1));
+            neighbors.push_back(boardidx(row, col+1));
+            neighbors.push_back(boardidx(row, col-1));
+            neighbors.push_back(boardidx(row+1, col+1));
+            neighbors.push_back(boardidx(row+1, col-1));
         } else {
             // northeast corner
-            neighbors.push_back(grididx(row, col-1));
-            neighbors.push_back(grididx(row+1, col-1));
+            neighbors.push_back(boardidx(row, col-1));
+            neighbors.push_back(boardidx(row+1, col-1));
         }
     } else if (row > 0 && row < num_rows-1) {
         // all N-S interior vertices have neighbors above and below
-        neighbors.push_back(grididx(row+1, col));
-        neighbors.push_back(grididx(row-1, col));
+        neighbors.push_back(boardidx(row+1, col));
+        neighbors.push_back(boardidx(row-1, col));
 
         if (col == 0) {
             // west edge
-            neighbors.push_back(grididx(row, col+1));
-            neighbors.push_back(grididx(row+1, col+1));
-            neighbors.push_back(grididx(row-1, col+1));
+            neighbors.push_back(boardidx(row, col+1));
+            neighbors.push_back(boardidx(row+1, col+1));
+            neighbors.push_back(boardidx(row-1, col+1));
         } else if (col > 0 && col < num_cols-1) {
             // interior
-            neighbors.push_back(grididx(row, col+1));
-            neighbors.push_back(grididx(row, col-1));
-            neighbors.push_back(grididx(row+1, col+1));
-            neighbors.push_back(grididx(row+1, col-1));
-            neighbors.push_back(grididx(row-1, col+1));
-            neighbors.push_back(grididx(row-1, col-1));
+            neighbors.push_back(boardidx(row, col+1));
+            neighbors.push_back(boardidx(row, col-1));
+            neighbors.push_back(boardidx(row+1, col+1));
+            neighbors.push_back(boardidx(row+1, col-1));
+            neighbors.push_back(boardidx(row-1, col+1));
+            neighbors.push_back(boardidx(row-1, col-1));
         } else {
             // east edge
-            neighbors.push_back(grididx(row, col-1));
-            neighbors.push_back(grididx(row+1, col-1));
-            neighbors.push_back(grididx(row-1, col-1));
+            neighbors.push_back(boardidx(row, col-1));
+            neighbors.push_back(boardidx(row+1, col-1));
+            neighbors.push_back(boardidx(row-1, col-1));
         }
     } else {
         // all south edge vertices have a neighbor directly above
-        neighbors.push_back(grididx(row-1, col));
+        neighbors.push_back(boardidx(row-1, col));
 
         if (col == 0) {
             // southwest corner
-            neighbors.push_back(grididx(row, col+1));
-            neighbors.push_back(grididx(row-1, col+1));
+            neighbors.push_back(boardidx(row, col+1));
+            neighbors.push_back(boardidx(row-1, col+1));
         } else if (col > 0 && col < num_cols-1) {
             // south edge
-            neighbors.push_back(grididx(row, col+1));
-            neighbors.push_back(grididx(row, col-1));
-            neighbors.push_back(grididx(row-1, col+1));
-            neighbors.push_back(grididx(row-1, col-1));
+            neighbors.push_back(boardidx(row, col+1));
+            neighbors.push_back(boardidx(row, col-1));
+            neighbors.push_back(boardidx(row-1, col+1));
+            neighbors.push_back(boardidx(row-1, col-1));
         } else {
             // southeast corner
-            neighbors.push_back(grididx(row, col-1));
-            neighbors.push_back(grididx(row-1, col-1));
+            neighbors.push_back(boardidx(row, col-1));
+            neighbors.push_back(boardidx(row-1, col-1));
         }
     }
 
@@ -209,10 +209,21 @@ static std::vector<grididx> list_neighbors(const size_t row,
 Dictionary::Dictionary() :
     root_(new Node()) {}
 
+/*!
+ * Constructs a dictionary structure from a plain text file. The file is
+ * expected to be formatted simply as:
+ *
+ * wordA'\n'
+ * wordB'\n'
+ * wordC'\n'
+ * ...
+ * finalword'EOF'
+ */
 Dictionary::Dictionary(const std::string& filename) :
     root_(new Node()) {
     std::ifstream dfile;
 
+    // attempt to read, report errors
     dfile.open(filename.c_str(), std::ifstream::in);
     if (dfile.good()) {
         qDebug() << "open successful.";
@@ -220,6 +231,7 @@ Dictionary::Dictionary(const std::string& filename) :
         qDebug() << "open failed.";
     }
 
+    // populate dictionary line by line
     while (!dfile.eof()) {
         std::string line;
         std::getline(dfile, line);

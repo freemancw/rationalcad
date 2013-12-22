@@ -37,9 +37,8 @@ public:
     Dictionary();
     Dictionary(const std::string& filename);
 
-    void AddWord(const std::string& word);
     void PrintAll() const;
-    //bool Contains(const std::string& word) const;
+    void AddWord(const std::string& word);
 
     const Node* root() const;
 
@@ -49,6 +48,7 @@ private:
     void PrintAll_r(const std::string& prefix, const Node* cur_node) const;
 };
 
+// see rc_boggle.cpp for documentation
 std::vector<std::string> solve_board(const size_t rows, const size_t cols,
                                      const std::string& s,
                                      const Dictionary& dictionary);

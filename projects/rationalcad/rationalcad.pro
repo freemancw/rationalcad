@@ -37,3 +37,6 @@ HEADERS += \
 
 FORMS += \
     forms/rc_mainwindow.ui
+
+OTHER_FILES += \
+    README.txt
