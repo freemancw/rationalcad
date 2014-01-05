@@ -152,7 +152,7 @@ private:
 //=============================================================================
 
 /*!
- *  \brief Manager type responsible for storing and manipulating geometric
+ *  @brief Manager type responsible for storing and manipulating geometric
  *         objects the user creates.
  */
 class SceneManager : public QObject, public IGeometryObserver {

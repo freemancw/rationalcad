@@ -40,7 +40,7 @@ IntegerGrid::IntegerGrid(const QSharedPointer<GLManager>& gl_manager) :
 //=============================================================================
 
 /*!
- * \brief IntegerGrid::InitializeGrid
+ * @brief IntegerGrid::InitializeGrid
  * \param min_pixel_spacing
  * \param major_line_spacing
  * \param n_major_lines
@@ -161,7 +161,7 @@ void IntegerGrid::InitializeGrid(const int min_pixel_spacing,
 //=============================================================================
 
 /*!
- * \brief IntegerGrid::Draw
+ * @brief IntegerGrid::Draw
  */
 void IntegerGrid::Draw() {
     // upload tranformation
@@ -191,7 +191,7 @@ void IntegerGrid::Draw() {
 }
 
 /*!
- * \brief IntegerGrid::GetMajorXCoords
+ * @brief IntegerGrid::GetMajorXCoords
  * \param width
  * \return vector of (pixel, value) line labels for visible x-coords.
  */
@@ -216,7 +216,7 @@ QVector<QPair<int, int>> IntegerGrid::GetMajorXCoords(const int width) const {
 }
 
 /*!
- * \brief IntegerGrid::GetMajorYCoords
+ * @brief IntegerGrid::GetMajorYCoords
  * \param height - viewport height
  * \return - vector of (pixel, value) line labels for visible y-coords.
  */
@@ -245,7 +245,7 @@ QVector<QPair<int, int>> IntegerGrid::GetMajorYCoords(const int height) const {
 //=============================================================================
 
 /*!
- * \brief IntegerGrid::IncreaseMagnification
+ * @brief IntegerGrid::IncreaseMagnification
  */
 void IntegerGrid::IncreaseMagnification() {
     if(local_mag_ == local_mag_max_-1 && global_mag_ == global_mag_max_-1)
@@ -267,7 +267,7 @@ void IntegerGrid::IncreaseMagnification() {
 }
 
 /*!
- * \brief IntegerGrid::DecreaseMagnification
+ * @brief IntegerGrid::DecreaseMagnification
  */
 void IntegerGrid::DecreaseMagnification() {
     if(local_mag_ == 0 && global_mag_ == 0)
@@ -289,7 +289,7 @@ void IntegerGrid::DecreaseMagnification() {
 }
 
 /*!
- * \brief IntegerGrid::Translate
+ * @brief IntegerGrid::Translate
  * \param pixel_delta
  */
 void IntegerGrid::Translate(const QVector2D &pixel_delta) {
@@ -300,7 +300,7 @@ void IntegerGrid::Translate(const QVector2D &pixel_delta) {
 }
 
 /*!
- * \brief IntegerGrid::GetCoordsForPixel
+ * @brief IntegerGrid::GetCoordsForPixel
  * \param pixel - position in screen space
  * \return position in world space
  */
@@ -310,7 +310,7 @@ QVector2D IntegerGrid::GetCoordsForPixel(const QVector2D &pixel) const {
 }
 
 /*!
- * \brief IntegerGrid::WrapGrid
+ * @brief IntegerGrid::WrapGrid
  */
 void IntegerGrid::WrapGrid() {
     local_scale_ = (local_mag_max_*min_pixel_spacing_)/
@@ -347,7 +347,7 @@ void IntegerGrid::WrapGrid() {
 }
 
 /*!
- * \brief IntegerGrid::RoundToNearestMinor
+ * @brief IntegerGrid::RoundToNearestMinor
  * \param coord
  * \return
  */
@@ -356,7 +356,7 @@ int IntegerGrid::RoundToNearestMinor(const int coord) const {
 }
 
 /*!
- * \brief IntegerGrid::RoundToNearestMajor
+ * @brief IntegerGrid::RoundToNearestMajor
  * \param coord - value along some axis in world space
  * \return input value rounded to the nearest major grid line in world space
  */
@@ -366,7 +366,7 @@ int IntegerGrid::RoundToNearestMajor(const int coord) const {
 }
 
 /*!
- * \brief IntegerGrid::GetMajorCoordIncrement
+ * @brief IntegerGrid::GetMajorCoordIncrement
  * \return distance in world coordinates between successive major grid lines
  */
 int IntegerGrid::GetMajorCoordIncrement() const {
@@ -375,7 +375,7 @@ int IntegerGrid::GetMajorCoordIncrement() const {
 }
 
 /*!
- * \brief IntegerGrid::CoordToPixel
+ * @brief IntegerGrid::CoordToPixel
  * \param a - value along an axis
  * \param global_a - global position of camera along the same axis
  * \param length - width for x axis or height for y axis

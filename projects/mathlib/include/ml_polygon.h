@@ -1,23 +1,23 @@
 /*
- * This file is part of the Degree-Driven Algorithm Design Project (DDAD).
+ * This file is part of RationalCAD.
  *
- * DDAD is free software: you can redistribute it and/or modify it under the
- * terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
+ * RationalCAD is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
  *
- * DDAD is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details. You should have received a copy of the GNU General Public License
- * along with DDAD. If not, see <http://www.gnu.org/licenses/>.
+ * RationalCAD is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details. You should have received a copy of the GNU General Public
+ * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /*!
- * \brief 2-dimensional polygonal chain and polygon types.
- * \author {David L. Millman <dave@cs.unc.edu>,
- *          Clinton Freeman <freeman@cs.unc.edu>}
- * \date 02/12/2013
+ * @brief 2-dimensional polygonal chain and polygon types.
+ * @author {David L. Millman <dave@cs.unc.edu>,
+ *          Clinton Freeman <admin@freemancw.com>
+ * @date 02/12/2013
  */
 
 #ifndef DDAD_ML_POLYGON_H

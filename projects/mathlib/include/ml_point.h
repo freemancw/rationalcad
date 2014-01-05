@@ -1,22 +1,22 @@
 /*
- * This file is part of the Degree-Driven Algorithm Design Project (DDAD).
+ * This file is part of RationalCAD.
  *
- * DDAD is free software: you can redistribute it and/or modify it under the
- * terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
+ * RationalCAD is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
  *
- * DDAD is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details. You should have received a copy of the GNU General Public License
- * along with DDAD. If not, see <http://www.gnu.org/licenses/>.
+ * RationalCAD is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details. You should have received a copy of the GNU General Public
+ * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /*!
- * \brief Integer, floating-point, and rational point types for 2D and 3D.
- * \author {Clinton Freeman <freeman@cs.unc.edu>}
- * \date 12/27/2012
+ * @brief Integer, floating-point, and rational point types for 2D and 3D.
+ * @author Clinton Freeman <admin@freemancw.com>
+ * @date 12/27/2012
  */
 
 #ifndef DDAD_ML_POINT_H
@@ -201,18 +201,18 @@ inline Point_2i& Point_2i::operator=(const Point_2i& rhs) {
     return *this;
 }
 
-//! \brief Index-based access operator without elegant out-of-bounds handling.
+//! @brief Index-based access operator without elegant out-of-bounds handling.
 inline const integer& Point_2i::operator[](const size_t i) const {
     assert(i < 2);
     return elements_[i];
 }
 
-//! \brief Sequentially calls operator== element-wise.
+//! @brief Sequentially calls operator== element-wise.
 inline bool operator==(const Point_2i& lhs, const Point_2i& rhs) {
     return lhs.elements() == rhs.elements();
 }
 
-//! \brief Sequentially calls operator!= element-wise.
+//! @brief Sequentially calls operator!= element-wise.
 inline bool operator!=(const Point_2i& lhs, const Point_2i& rhs) {
     return lhs.elements() != rhs.elements();
 }
@@ -221,7 +221,7 @@ inline std::ostream& operator<<(std::ostream& o, const Point_2i& p) {
     return o << to_string(p);
 }
 
-//! \brief Represents this point using parentheses (x, y).
+//! @brief Represents this point using parentheses (x, y).
 inline std::string to_string(const Point_2i& p) {
     std::stringstream ss;
     ss << "(" << p.x() << ", " << p.y() << ")";
@@ -292,18 +292,18 @@ inline Point_2f& Point_2f::operator=(const Point_2f& rhs) {
     return *this;
 }
 
-//! \brief Index-based access operator without elegant out-of-bounds handling.
+//! @brief Index-based access operator without elegant out-of-bounds handling.
 inline const float Point_2f::operator[](const size_t i) const {
     assert(i < 2);
     return elements_[i];
 }
 
-//! \brief Sequentially calls operator== element-wise.
+//! @brief Sequentially calls operator== element-wise.
 inline bool operator==(const Point_2f& lhs, const Point_2f& rhs) {
     return lhs.elements() == rhs.elements();
 }
 
-//! \brief Sequentially calls operator!= element-wise.
+//! @brief Sequentially calls operator!= element-wise.
 inline bool operator!=(const Point_2f& lhs, const Point_2f& rhs) {
     return lhs.elements() != rhs.elements();
 }
@@ -312,7 +312,7 @@ inline std::ostream& operator<<(std::ostream& o, const Point_2f& p) {
     return o << to_string(p);
 }
 
-//! \brief Represents this point using parentheses (x, y).
+//! @brief Represents this point using parentheses (x, y).
 inline std::string to_string(const Point_2f& p) {
     std::stringstream ss;
     ss << "(" << p.x() << ", " << p.y() << ")";
@@ -370,14 +370,14 @@ inline Point_2r::Point_2r(const Point_2r& p) {
     *this = p;
 }
 
-//! \brief Allow implicit conversion from integer point.
+//! @brief Allow implicit conversion from integer point.
 inline Point_2r::Point_2r(const Point_2i& p) {
     set_x(p.x());
     set_y(p.y());
     set_unique_id(p.unique_id());
 }
 
-//! \brief Allow implicit conversion from float point.
+//! @brief Allow implicit conversion from float point.
 inline Point_2r::Point_2r(const Point_2f& p) {
     set_x(p.x());
     set_y(p.y());
@@ -411,18 +411,18 @@ inline Point_2r& Point_2r::operator=(const Point_2r& rhs) {
     return *this;
 }
 
-//! \brief Index-based access operator without elegant out-of-bounds handling.
+//! @brief Index-based access operator without elegant out-of-bounds handling.
 inline const rational& Point_2r::operator[](const size_t i) const {
     assert(i < 2);
     return elements_[i];
 }
 
-//! \brief Sequentially calls operator== element-wise.
+//! @brief Sequentially calls operator== element-wise.
 inline bool operator==(const Point_2r& lhs, const Point_2r& rhs) {
     return lhs.elements() == rhs.elements();
 }
 
-//! \brief Sequentially calls operator!= element-wise.
+//! @brief Sequentially calls operator!= element-wise.
 inline bool operator!=(const Point_2r& lhs, const Point_2r& rhs) {
     return lhs.elements() != rhs.elements();
 }
@@ -431,7 +431,7 @@ inline std::ostream& operator<<(std::ostream& o, const Point_2r& p) {
     return o << to_string(p);
 }
 
-//! \brief Represents this point using parentheses (x, y).
+//! @brief Represents this point using parentheses (x, y).
 inline std::string to_string(const Point_2r& p) {
     std::stringstream ss;
     ss << "(" << p.x() << ", " << p.y() << ")";
@@ -603,7 +603,7 @@ std::string to_string(const Point_3r& p);
 // Implementation: Point_3i
 //=============================================================================
 
-//! \brief Sets both elements and unique id to zero.
+//! @brief Sets both elements and unique id to zero.
 inline Point_3i::Point_3i() {
     set_x(0);
     set_y(0);
@@ -638,18 +638,18 @@ inline Point_3i& Point_3i::operator=(const Point_3i& rhs) {
     return *this;
 }
 
-//! \brief Index-based access operator without elegant out-of-bounds handling.
+//! @brief Index-based access operator without elegant out-of-bounds handling.
 inline const integer& Point_3i::operator[](const size_t i) const {
     assert(i < 3);
     return elements_[i];
 }
 
-//! \brief Sequentially calls operator== element-wise.
+//! @brief Sequentially calls operator== element-wise.
 inline bool operator==(const Point_3i& lhs, const Point_3i& rhs) {
     return lhs.elements() == rhs.elements();
 }
 
-//! \brief Sequentially calls operator!= element-wise.
+//! @brief Sequentially calls operator!= element-wise.
 inline bool operator!=(const Point_3i& lhs, const Point_3i& rhs) {
     return lhs.elements() != rhs.elements();
 }
@@ -658,7 +658,7 @@ inline std::ostream& operator<<(std::ostream& o, const Point_3i& p) {
     return o << to_string(p);
 }
 
-//! \brief Represents this point using parentheses (x, y).
+//! @brief Represents this point using parentheses (x, y).
 inline std::string to_string(const Point_3i& p) {
     std::stringstream ss;
     ss << "(" << p.x() << ", " << p.y() << ", " << p.z() << ")";
@@ -735,18 +735,18 @@ inline Point_3f& Point_3f::operator=(const Point_3f& rhs) {
     return *this;
 }
 
-//! \brief Index-based access operator without elegant out-of-bounds handling.
+//! @brief Index-based access operator without elegant out-of-bounds handling.
 inline const float Point_3f::operator[](const size_t i) const {
     assert(i < 3);
     return elements_[i];
 }
 
-//! \brief Sequentially calls operator== element-wise.
+//! @brief Sequentially calls operator== element-wise.
 inline bool operator==(const Point_3f& lhs, const Point_3f& rhs) {
     return lhs.elements() == rhs.elements();
 }
 
-//! \brief Sequentially calls operator!= element-wise.
+//! @brief Sequentially calls operator!= element-wise.
 inline bool operator!=(const Point_3f& lhs, const Point_3f& rhs) {
     return lhs.elements() != rhs.elements();
 }
@@ -755,7 +755,7 @@ inline std::ostream& operator<<(std::ostream& o, const Point_3f& p) {
     o << to_string(p);
 }
 
-//! \brief Represents this point using parentheses (x, y).
+//! @brief Represents this point using parentheses (x, y).
 inline std::string to_string(const Point_3f& p) {
     std::stringstream ss;
     ss << "(" << p.x() << ", " << p.y() << ", " << p.z() << ")";
@@ -817,7 +817,7 @@ inline Point_3r::Point_3r(const Point_2r& p) {
     set_unique_id(p.unique_id());
 }
 
-//! \brief Allow implicit conversion from integer point.
+//! @brief Allow implicit conversion from integer point.
 inline Point_3r::Point_3r(const Point_3i& p) {
     set_x(p.x());
     set_y(p.y());
@@ -825,7 +825,7 @@ inline Point_3r::Point_3r(const Point_3i& p) {
     set_unique_id(p.unique_id());
 }
 
-//! \brief Allow implicit conversion from float point.
+//! @brief Allow implicit conversion from float point.
 inline Point_3r::Point_3r(const Point_3f& p) {
     set_x(p.x());
     set_y(p.y());
@@ -863,18 +863,18 @@ inline Point_3r& Point_3r::operator=(const Point_3r& rhs) {
     return *this;
 }
 
-//! \brief Index-based access operator without elegant out-of-bounds handling.
+//! @brief Index-based access operator without elegant out-of-bounds handling.
 inline const rational& Point_3r::operator[](const size_t i) const {
     assert(i < 3);
     return elements_[i];
 }
 
-//! \brief Sequentially calls operator== element-wise.
+//! @brief Sequentially calls operator== element-wise.
 inline bool operator==(const Point_3r& lhs, const Point_3r& rhs) {
     return lhs.elements() == rhs.elements();
 }
 
-//! \brief Sequentially calls operator!= element-wise.
+//! @brief Sequentially calls operator!= element-wise.
 inline bool operator!=(const Point_3r& lhs, const Point_3r& rhs) {
     return lhs.elements() != rhs.elements();
 }
@@ -884,7 +884,7 @@ inline std::ostream& operator<<(std::ostream& o, const Point_3r& p) {
     return o << to_string(p);
 }
 
-//! \brief Represents this point using parentheses (x, y).
+//! @brief Represents this point using parentheses (x, y).
 inline std::string to_string(const Point_3r& p) {
     std::stringstream ss;
     ss << "(" << p.x() << ", " << p.y() << ", " << p.z() << ")";

@@ -1,22 +1,22 @@
 /*
- * This file is part of the Degree-Driven Algorithm Design Project (DDAD).
+ * This file is part of RationalCAD.
  *
- * DDAD is free software: you can redistribute it and/or modify it under the
- * terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
+ * RationalCAD is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
  *
- * DDAD is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details. You should have received a copy of the GNU General Public License
- * along with DDAD. If not, see <http://www.gnu.org/licenses/>.
+ * RationalCAD is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details. You should have received a copy of the GNU General Public
+ * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /*!
- * \author {David L. Millman <dave@cs.unc.edu>,
- *          Clinton Freeman <freeman@cs.unc.edu>}
- * \date 06/19/2013
+ * @author {David L. Millman <dave@cs.unc.edu>,
+ *          Clinton Freeman <admin@freemancw.com>
+ * @date 06/19/2013
  */
 
 #ifndef DDAD_ML_LINE_H
@@ -42,7 +42,7 @@ enum SlopeType {
 };
 
 /*!
- * \brief The Line_2r class represents an oriented rational line in the plane.
+ * @brief The Line_2r class represents an oriented rational line in the plane.
  *
  * An oriented line \f$ \ell \f$ in the plane can be represented in several
  * different ways. This class maintains three different representations:

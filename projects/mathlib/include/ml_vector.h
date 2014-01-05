@@ -1,22 +1,22 @@
 /*
- * This file is part of the Degree-Driven Algorithm Design Project (DDAD).
+ * This file is part of RationalCAD.
  *
- * DDAD is free software: you can redistribute it and/or modify it under the
- * terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
+ * RationalCAD is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
  *
- * DDAD is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details. You should have received a copy of the GNU General Public License
- * along with DDAD. If not, see <http://www.gnu.org/licenses/>.
+ * RationalCAD is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details. You should have received a copy of the GNU General Public
+ * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /*!
- * \brief Integer, floating-point, and rational vector types for 2D and 3D.
- * \author {Clinton Freeman <freeman@cs.unc.edu>}
- * \date 12/26/2012
+ * @brief Integer, floating-point, and rational vector types for 2D and 3D.
+ * @author Clinton Freeman <admin@freemancw.com>
+ * @date 12/26/2012
  */
 
 #ifndef DDAD_ML_VECTOR_H
@@ -206,18 +206,18 @@ inline Vector_2i& Vector_2i::operator=(const Vector_2i& rhs) {
     return *this;
 }
 
-//! \brief Index-based access operator without elegant out-of-bounds handling.
+//! @brief Index-based access operator without elegant out-of-bounds handling.
 inline const integer& Vector_2i::operator[](const size_t i) const {
     assert(i < 2);
     return elements_[i];
 }
 
-//! \brief Sequentially calls operator== element-wise.
+//! @brief Sequentially calls operator== element-wise.
 inline bool operator==(const Vector_2i& lhs, const Vector_2i& rhs) {
     return lhs.elements() == rhs.elements();
 }
 
-//! \brief Sequentially calls operator!= element-wise.
+//! @brief Sequentially calls operator!= element-wise.
 inline bool operator!=(const Vector_2i& lhs, const Vector_2i& rhs) {
     return lhs.elements() != rhs.elements();
 }
@@ -258,7 +258,7 @@ inline std::ostream& operator<<(std::ostream& o, const Vector_2i& v) {
     return o << to_string(v);
 }
 
-//! \brief Standard inner product of two vectors.
+//! @brief Standard inner product of two vectors.
 inline integer Dot(const Vector_2i &lhs, const Vector_2i &rhs) {
     return lhs.x()*rhs.x()+lhs.y()*rhs.y();
 }
@@ -278,7 +278,7 @@ inline bool IsCoprime(const Vector_2i& v) {
     return false;
 }
 
-//! \brief Represents this vector using angle brackets <x, y>.
+//! @brief Represents this vector using angle brackets <x, y>.
 inline std::string to_string(const Vector_2i& v) {
     std::stringstream ss;
     ss << "<" << v.x() << ", " << v.y() << ">";
@@ -310,17 +310,17 @@ inline void Vector_2i::set_elements(const std::array<integer, 2>& elements) {
 // Implementation: Mixed Point_2i/Vector_2i arithmetic
 //=============================================================================
 
-//! \brief Point + Vector = Point
+//! @brief Point + Vector = Point
 inline Point_2i operator+(const Point_2i& lhs, const Vector_2i& rhs) {
     return Point_2i(lhs.x()+rhs.x(), lhs.y()+rhs.y());
 }
 
-//! \brief Point - Vector = Point
+//! @brief Point - Vector = Point
 inline Point_2i operator-(const Point_2i& lhs, const Vector_2i& rhs) {
     return Point_2i(lhs.x()-rhs.x(), lhs.y()-rhs.y());
 }
 
-//! \brief Point - Point = Vector
+//! @brief Point - Point = Vector
 inline Vector_2i operator-(const Point_2i& lhs, const Point_2i& rhs) {
     return Vector_2i(lhs.x()-rhs.x(), lhs.y()-rhs.y());
 }
@@ -333,7 +333,7 @@ inline Point_2i& operator-=(Point_2i& lhs, const Vector_2i& rhs) {
     return lhs = lhs-rhs;
 }
 
-//! \brief Projection of a point onto a vector.
+//! @brief Projection of a point onto a vector.
 inline integer Dot(const Vector_2i& lhs, const Point_2i& rhs) {
     return lhs.x()*rhs.x()+lhs.y()*rhs.y();
 }
@@ -363,18 +363,18 @@ inline Vector_2f& Vector_2f::operator=(const Vector_2f& rhs) {
     return *this;
 }
 
-//! \brief Index-based access operator without elegant out-of-bounds handling.
+//! @brief Index-based access operator without elegant out-of-bounds handling.
 inline const float Vector_2f::operator[](const size_t i) const {
     assert(i < 2);
     return elements_[i];
 }
 
-//! \brief Sequentially calls operator== element-wise.
+//! @brief Sequentially calls operator== element-wise.
 inline bool operator==(const Vector_2f& lhs, const Vector_2f& rhs) {
     return lhs.elements() == rhs.elements();
 }
 
-//! \brief Sequentially calls operator!= element-wise.
+//! @brief Sequentially calls operator!= element-wise.
 inline bool operator!=(const Vector_2f& lhs, const Vector_2f& rhs) {
     return lhs.elements() != rhs.elements();
 }
@@ -419,12 +419,12 @@ inline std::ostream& operator<<(std::ostream& o, const Vector_2f& v) {
     return o << to_string(v);
 }
 
-//! \brief Standard inner product of two vectors.
+//! @brief Standard inner product of two vectors.
 inline float Dot(const Vector_2f &lhs, const Vector_2f &rhs) {
     return lhs.x()*rhs.x()+lhs.y()*rhs.y();
 }
 
-//! \brief Represents this vector using angle brackets <x, y>.
+//! @brief Represents this vector using angle brackets <x, y>.
 inline std::string to_string(const Vector_2f& v) {
     std::stringstream ss;
     ss << "<" << v.x() << ", " << v.y() << ">";
@@ -456,17 +456,17 @@ inline void Vector_2f::set_elements(const std::array<float, 2>& elements) {
 // Implementation: Mixed Point_2f/Vector_2f arithmetic
 //=============================================================================
 
-//! \brief Point + Vector = Point
+//! @brief Point + Vector = Point
 inline Point_2f operator+(const Point_2f& lhs, const Vector_2f& rhs) {
     return Point_2f(lhs.x()+rhs.x(), lhs.y()+rhs.y());
 }
 
-//! \brief Point - Vector = Point
+//! @brief Point - Vector = Point
 inline Point_2f operator-(const Point_2f& lhs, const Vector_2f& rhs) {
     return Point_2f(lhs.x()-rhs.x(), lhs.y()-rhs.y());
 }
 
-//! \brief Point - Point = Vector
+//! @brief Point - Point = Vector
 inline Vector_2f operator-(const Point_2f& lhs, const Point_2f& rhs) {
     return Vector_2f(lhs.x()-rhs.x(), lhs.y()-rhs.y());
 }
@@ -479,7 +479,7 @@ inline Point_2f& operator-=(Point_2f& lhs, const Vector_2f& rhs) {
     return lhs = lhs-rhs;
 }
 
-//! \brief Projection of a point onto a vector.
+//! @brief Projection of a point onto a vector.
 inline float Dot(const Vector_2f& lhs, const Point_2f& rhs) {
     return lhs.x()*rhs.x()+lhs.y()*rhs.y();
 }
@@ -498,13 +498,13 @@ inline Vector_2r::Vector_2r(const Vector_2r& v) {
     set_y(v.y());
 }
 
-//! \brief Allow implicit conversion from integer vector.
+//! @brief Allow implicit conversion from integer vector.
 inline Vector_2r::Vector_2r(const Vector_2i& v) {
     set_x(v.x());
     set_y(v.y());
 }
 
-//! \brief Allow implicit conversion from float vector.
+//! @brief Allow implicit conversion from float vector.
 inline Vector_2r::Vector_2r(const Vector_2f& v) {
     set_x(v.x());
     set_y(v.y());
@@ -521,18 +521,18 @@ inline Vector_2r& Vector_2r::operator=(const Vector_2r& rhs) {
     return *this;
 }
 
-//! \brief Index-based access operator without elegant out-of-bounds handling.
+//! @brief Index-based access operator without elegant out-of-bounds handling.
 inline const rational& Vector_2r::operator[](const size_t i) const {
     assert(i < 2);
     return elements_[i];
 }
 
-//! \brief Sequentially calls operator== element-wise.
+//! @brief Sequentially calls operator== element-wise.
 inline bool operator==(const Vector_2r& lhs, const Vector_2r& rhs) {
     return lhs.elements() == rhs.elements();
 }
 
-//! \brief Sequentially calls operator!= element-wise.
+//! @brief Sequentially calls operator!= element-wise.
 inline bool operator!=(const Vector_2r& lhs, const Vector_2r& rhs) {
     return lhs.elements() != rhs.elements();
 }
@@ -577,12 +577,12 @@ inline std::ostream& operator<<(std::ostream& o, const Vector_2r& v) {
     return o << to_string(v);
 }
 
-//! \brief Standard inner product of two vectors.
+//! @brief Standard inner product of two vectors.
 inline rational Dot(const Vector_2r &lhs, const Vector_2r &rhs) {
     return lhs.x()*rhs.x()+lhs.y()*rhs.y();
 }
 
-//! \brief Represents this vector using angle brackets <x, y>.
+//! @brief Represents this vector using angle brackets <x, y>.
 inline std::string to_string(const Vector_2r& v) {
     std::stringstream ss;
     ss << "<" << v.x() << ", " << v.y() << ">";
@@ -614,17 +614,17 @@ inline void Vector_2r::set_elements(const std::array<rational, 2>& elements) {
 // Implementation: Mixed Point_2r/Vector_2r arithmetic
 //=============================================================================
 
-//! \brief Point + Vector = Point
+//! @brief Point + Vector = Point
 inline Point_2r operator+(const Point_2r& lhs, const Vector_2r& rhs) {
     return Point_2r(lhs.x()+rhs.x(), lhs.y()+rhs.y());
 }
 
-//! \brief Point - Vector = Point
+//! @brief Point - Vector = Point
 inline Point_2r operator-(const Point_2r& lhs, const Vector_2r& rhs) {
     return Point_2r(lhs.x()-rhs.x(), lhs.y()-rhs.y());
 }
 
-//! \brief Point - Point = Vector
+//! @brief Point - Point = Vector
 inline Vector_2r operator-(const Point_2r& lhs, const Point_2r& rhs) {
     return Vector_2r(lhs.x()-rhs.x(), lhs.y()-rhs.y());
 }
@@ -637,7 +637,7 @@ inline Point_2r& operator-=(Point_2r& lhs, const Vector_2r& rhs) {
     return lhs = lhs-rhs;
 }
 
-//! \brief Projection of a point onto a vector.
+//! @brief Projection of a point onto a vector.
 inline rational Dot(const Vector_2r& lhs, const Point_2r& rhs) {
     return lhs.x()*rhs.x()+lhs.y()*rhs.y();
 }
@@ -835,18 +835,18 @@ inline Vector_3i& Vector_3i::operator=(const Vector_3i& rhs) {
     return *this;
 }
 
-//! \brief Index-based access operator without elegant out-of-bounds handling.
+//! @brief Index-based access operator without elegant out-of-bounds handling.
 inline const integer& Vector_3i::operator[](const size_t i) const {
     assert(i < 3);
     return elements_[i];
 }
 
-//! \brief Sequentially calls operator== element-wise.
+//! @brief Sequentially calls operator== element-wise.
 inline bool operator==(const Vector_3i& lhs, const Vector_3i& rhs) {
     return lhs.elements() == rhs.elements();
 }
 
-//! \brief Sequentially calls operator!= element-wise.
+//! @brief Sequentially calls operator!= element-wise.
 inline bool operator!=(const Vector_3i& lhs, const Vector_3i& rhs) {
     return lhs.elements() != rhs.elements();
 }
@@ -887,7 +887,7 @@ inline std::ostream& operator<<(std::ostream& o, const Vector_3i& v) {
     return o << to_string(v);
 }
 
-//! \brief Standard inner product of two vectors.
+//! @brief Standard inner product of two vectors.
 inline integer Dot(const Vector_3i &lhs, const Vector_3i &rhs) {
     return lhs.x()*rhs.x()+lhs.y()*rhs.y()+lhs.z()*rhs.z();
 }
@@ -914,7 +914,7 @@ inline bool IsCoprime(const Vector_3i& v) {
     return false;
 }
 
-//! \brief Represents this vector using angle brackets <x, y, z>.
+//! @brief Represents this vector using angle brackets <x, y, z>.
 inline std::string to_string(const Vector_3i& v) {
     std::stringstream ss;
     ss << "<" << v.x() << ", " << v.y() << ", " << v.z() << ">";
@@ -952,17 +952,17 @@ inline void Vector_3i::set_elements(const std::array<integer, 3>& elements) {
 // Implementation: Mixed Point_3i/Vector_3i arithmetic
 //=============================================================================
 
-//! \brief Point + Vector = Point
+//! @brief Point + Vector = Point
 inline Point_3i operator+(const Point_3i& lhs, const Vector_3i& rhs) {
     return Point_3i(lhs.x()+rhs.x(), lhs.y()+rhs.y(), lhs.z()+rhs.z());
 }
 
-//! \brief Point - Vector = Point
+//! @brief Point - Vector = Point
 inline Point_3i operator-(const Point_3i& lhs, const Vector_3i& rhs) {
     return Point_3i(lhs.x()-rhs.x(), lhs.y()-rhs.y(), lhs.z()-rhs.z());
 }
 
-//! \brief Point - Point = Vector
+//! @brief Point - Point = Vector
 inline Vector_3i operator-(const Point_3i& lhs, const Point_3i& rhs) {
     return Vector_3i(lhs.x()-rhs.x(), lhs.y()-rhs.y(), lhs.z()-rhs.z());
 }
@@ -975,7 +975,7 @@ inline Point_3i& operator-=(Point_3i& lhs, const Vector_3i& rhs) {
     return lhs = lhs-rhs;
 }
 
-//! \brief Projection of a point onto a vector.
+//! @brief Projection of a point onto a vector.
 inline integer Dot(const Vector_3i& lhs, const Point_3i& rhs) {
     return lhs.x()*rhs.x()+lhs.y()*rhs.y()+lhs.z()*rhs.z();
 }
@@ -1009,18 +1009,18 @@ inline Vector_3f& Vector_3f::operator=(const Vector_3f& rhs) {
     return *this;
 }
 
-//! \brief Index-based access operator without elegant out-of-bounds handling.
+//! @brief Index-based access operator without elegant out-of-bounds handling.
 inline const float Vector_3f::operator[](const size_t i) const {
     assert(i < 3);
     return elements_[i];
 }
 
-//! \brief Sequentially calls operator== element-wise.
+//! @brief Sequentially calls operator== element-wise.
 inline bool operator==(const Vector_3f& lhs, const Vector_3f& rhs) {
     return lhs.elements() == rhs.elements();
 }
 
-//! \brief Sequentially calls operator!= element-wise.
+//! @brief Sequentially calls operator!= element-wise.
 inline bool operator!=(const Vector_3f& lhs, const Vector_3f& rhs) {
     return lhs.elements() != rhs.elements();
 }
@@ -1065,7 +1065,7 @@ inline std::ostream& operator<<(std::ostream& o, const Vector_3f& v) {
     return o << to_string(v);
 }
 
-//! \brief Standard inner product of two vectors.
+//! @brief Standard inner product of two vectors.
 inline float Dot(const Vector_3f &lhs, const Vector_3f &rhs) {
     return lhs.x()*rhs.x()+lhs.y()*rhs.y()+lhs.z()*rhs.z();
 }
@@ -1076,7 +1076,7 @@ inline Vector_3f Cross(const Vector_3f& lhs, const Vector_3f& rhs) {
                      lhs.x()*rhs.y()-lhs.y()*rhs.x());
 }
 
-//! \brief Represents this vector using angle brackets <x, y, z>.
+//! @brief Represents this vector using angle brackets <x, y, z>.
 inline std::string to_string(const Vector_3f& v) {
     std::stringstream ss;
     ss << "<" << v.x() << ", " << v.y() << ", " << v.z() << ">";
@@ -1114,17 +1114,17 @@ inline void Vector_3f::set_elements(const std::array<float, 3>& elements) {
 // Implementation: Mixed Point_3f/Vector_3f arithmetic
 //=============================================================================
 
-//! \brief Point + Vector = Point
+//! @brief Point + Vector = Point
 inline Point_3f operator+(const Point_3f& lhs, const Vector_3f& rhs) {
     return Point_3f(lhs.x()+rhs.x(), lhs.y()+rhs.y(), lhs.z()+rhs.z());
 }
 
-//! \brief Point - Vector = Point
+//! @brief Point - Vector = Point
 inline Point_3f operator-(const Point_3f& lhs, const Vector_3f& rhs) {
     return Point_3f(lhs.x()-rhs.x(), lhs.y()-rhs.y(), lhs.z()-rhs.z());
 }
 
-//! \brief Point - Point = Vector
+//! @brief Point - Point = Vector
 inline Vector_3f operator-(const Point_3f& lhs, const Point_3f& rhs) {
     return Vector_3f(lhs.x()-rhs.x(), lhs.y()-rhs.y(), lhs.z()-rhs.z());
 }
@@ -1137,7 +1137,7 @@ inline Point_3f& operator-=(Point_3f& lhs, const Vector_3f& rhs) {
     return lhs = lhs-rhs;
 }
 
-//! \brief Projection of a point onto a vector.
+//! @brief Projection of a point onto a vector.
 inline float Dot(const Vector_3f& lhs, const Point_3f& rhs) {
     return lhs.x()*rhs.x()+lhs.y()*rhs.y()+lhs.z()*rhs.z();
 }
@@ -1158,14 +1158,14 @@ inline Vector_3r::Vector_3r(const Vector_3r& v) {
     set_z(v.z());
 }
 
-//! \brief Allow implicit conversion from integer vector.
+//! @brief Allow implicit conversion from integer vector.
 inline Vector_3r::Vector_3r(const Vector_3i& v) {
     set_x(v.x());
     set_y(v.y());
     set_z(v.z());
 }
 
-//! \brief Allow implicit conversion from float vector.
+//! @brief Allow implicit conversion from float vector.
 inline Vector_3r::Vector_3r(const Vector_3f& v) {
     set_x(v.x());
     set_y(v.y());
@@ -1186,18 +1186,18 @@ inline Vector_3r& Vector_3r::operator=(const Vector_3r& rhs) {
     return *this;
 }
 
-//! \brief Index-based access operator without elegant out-of-bounds handling.
+//! @brief Index-based access operator without elegant out-of-bounds handling.
 inline const rational& Vector_3r::operator[](const size_t i) const {
     assert(i < 3);
     return elements_[i];
 }
 
-//! \brief Sequentially calls operator== element-wise.
+//! @brief Sequentially calls operator== element-wise.
 inline bool operator==(const Vector_3r& lhs, const Vector_3r& rhs) {
     return lhs.elements() == rhs.elements();
 }
 
-//! \brief Sequentially calls operator!= element-wise.
+//! @brief Sequentially calls operator!= element-wise.
 inline bool operator!=(const Vector_3r& lhs, const Vector_3r& rhs) {
     return lhs.elements() != rhs.elements();
 }
@@ -1242,7 +1242,7 @@ inline std::ostream& operator<<(std::ostream& o, const Vector_3r& v) {
     return o << to_string(v);
 }
 
-//! \brief Standard inner product of two vectors.
+//! @brief Standard inner product of two vectors.
 inline rational Dot(const Vector_3r &lhs, const Vector_3r &rhs) {
     return lhs.x()*rhs.x()+lhs.y()*rhs.y()+lhs.z()*rhs.z();
 }
@@ -1253,7 +1253,7 @@ inline Vector_3r Cross(const Vector_3r& lhs, const Vector_3r& rhs) {
                      lhs.x()*rhs.y()-lhs.y()*rhs.x());
 }
 
-//! \brief Represents this vector using angle brackets <x, y, z>.
+//! @brief Represents this vector using angle brackets <x, y, z>.
 inline std::string to_string(const Vector_3r& v) {
     std::stringstream ss;
     ss << "<" << v.x() << ", " << v.y() << ", " << v.z() << ">";
@@ -1291,17 +1291,17 @@ inline void Vector_3r::set_elements(const std::array<rational, 3>& elements) {
 // Implementation: Mixed Point_3r/Vector_3r arithmetic
 //=============================================================================
 
-//! \brief Point + Vector = Point
+//! @brief Point + Vector = Point
 inline Point_3r operator+(const Point_3r& lhs, const Vector_3r& rhs) {
     return Point_3r(lhs.x()+rhs.x(), lhs.y()+rhs.y(), lhs.z()+rhs.z());
 }
 
-//! \brief Point - Vector = Point
+//! @brief Point - Vector = Point
 inline Point_3r operator-(const Point_3r& lhs, const Vector_3r& rhs) {
     return Point_3r(lhs.x()-rhs.x(), lhs.y()-rhs.y(), lhs.z()-rhs.z());
 }
 
-//! \brief Point - Point = Vector
+//! @brief Point - Point = Vector
 inline Vector_3r operator-(const Point_3r& lhs, const Point_3r& rhs) {
     return Vector_3r(lhs.x()-rhs.x(), lhs.y()-rhs.y(), lhs.z()-rhs.z());
 }
@@ -1314,7 +1314,7 @@ inline Point_3r& operator-=(Point_3r& lhs, const Vector_3r& rhs) {
     return lhs = lhs-rhs;
 }
 
-//! \brief Projection of a point onto a vector.
+//! @brief Projection of a point onto a vector.
 inline rational Dot(const Vector_3r& lhs, const Point_3r& rhs) {
     return lhs.x()*rhs.x()+lhs.y()*rhs.y()+lhs.z()*rhs.z();
 }
