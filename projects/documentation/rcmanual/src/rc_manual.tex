@@ -1,0 +1,277 @@
+%==============================================================================
+% @author Clinton Freeman
+% @date 12/18/2013
+%==============================================================================
+
+\documentclass[oneside]{memoir}   
+
+\usepackage{rc_style} 
+
+\begin{document} 
+
+%==============================================================================
+% Cover page
+%==============================================================================
+   
+\frontmatter
+
+\pagenumbering{gobble}
+\thispagestyle{empty}
+   
+\textbf{{\Huge RationalCAD}}
+
+\clearpage
+
+%==============================================================================
+% Table of Contents
+%==============================================================================
+
+\pagenumbering{roman}
+
+\tableofcontents* 
+  
+%==============================================================================
+% Introduction
+%==============================================================================
+
+\mainmatter  
+\pagenumbering{arabic}
+     
+\chapterstyle{freeman}
+\chapter{Introduction}         
+
+Hello and welcome to the RationalCAD manual! This document is intended to
+catalogue the solutions to technical challenges faced by the software. It brings
+together relevant background material, discusses both theoretical and practical 
+issues, and provides explanations of concrete implementations in C++.   
+
+\section{Audience}  
+ 
+\section{General considerations} 
+ 
+\subsection{Mathematical notation}
+   
+\begin{tabularx}{\textwidth}{llX}
+\toprule 
+Entity & Notation & Description \\  
+\midrule
+%Set & derp & derp \\
+Set                         & $\{\square,\square,\square\}$                   & 
+Curly braces surrounding a list denote a set of objects. \\
+
+Tuple                       & $(\square,\square,\square)$                     & 
+Parentheses surrounding a list denote a sequence of objects. \\
+
+Elementary set              & $\mathbb{N, Z, Q, R}$                           & 
+Naturals, integers, rationals, and reals. \\               
+
+Elementary value            & $\alpha, \beta, a, b$                           &  
+A value in some set. \\   
+    
+Point                       & $\mPt{p}, \mPt{q}, \mPt{r}, \mPt{s}$            & 
+An element of some space such as $\mR{3}$. \\
+    
+Vector                      & $\mVc{t}, \mVc{u}, \mVc{v}, \mVc{w}$            &
+A vector in some space such as $\mR{3}$. \\
+ 
+Matrix                      & $\mMt{A}, \mMt{B}, \mMt{C}, \mMt{D}$            & 
+description \\
+ 
+Line (oriented)             & $\mOLine{ab}, \mOLine{cd}, \mOLine{A}, \mOLine{B}$        
+& description \\  
+%                
+% %Line (unoriented)           & $\mULine{ab}, \mULine{pq}$                      &
+% %description \\ 
+ 
+Line segment                & $\mSeg{ab}, \mSeg{cd}, \mSeg{A}, \mSeg{B}$                         
+& description \\  
+   
+Ray                         & $\mRay{ab}, \mRay{cd}, \mRay{A}, \mRay{B}$                               
+& description \\           
+    
+Compound object             & $\mPlane{P}, \mPolygon{Q}, \mPolytope{R},
+\mPolytope{S}$ & description \\                  
+
+%Matrix transpose            & $a$ & description \\
+%Matrix inverse              & $a$ & description \\
+%Tuple                       & $a$ & description \\
+%Determinant                 & $a$ & description \\
+%Space (linear etc)          & $a$ & description \\ 
+%Space (reals)               & $a$ & description \\      
+%Dot (inner) product         & $a$ & description \\  
+%Cross product               & $a$ & description \\ 
+%Tensor (outer) product      & $a$ & description \\
+ 
+%Vector length               & $a$ & description \\     
+%Scalar                      & $a$ & description \\
+%Angle                       & $a$ & description \\
+%Unit vector                 & $a$ & description \\
+%Perpendicular vector        & $a$ & description \\
+%Parallel vector             & $a$ & description \\
+
+\bottomrule          
+\end{tabularx}   
+
+\section{Branding and logo design}
+
+\subsection{Font}
+
+\subsection{Colors}
+
+\subsection{Splash screen}
+
+Splash screens are typically used by particularly large applications to notify
+the user that the program is in the process of loading. They provide feedback
+that a lengthy process is underway. Occasionally, a progress bar within the
+splash screen indicates the loading progress. A splash screen disappears when
+the application's main window appears. Splash screens typically serve to enhance
+the look and feel of an application or web site, hence they are often visually
+appealing. They may also have animations, graphics, and sound. (cite wiki)
+
+\section{Coding style}
+
+one true brace style, google style guide, etc
+
+% \chapter{Basics of affine geometry}
+% \section{Affine space}
+% \section{Examples of affine spaces}
+% \section{Chasles's identity}
+% \section{Affine combinations, barycenters}
+% \section{Affine subspaces}
+% \section{Affine independence and affine frames}
+% \section{Affine maps}
+% \section{Affine groups}
+% \section{Affine geometry: a glipse}
+% \section{Affine hyperplanes}
+% \section{Intersection of affine spaces}
+% \section{Problems}
+
+\chapter{Intersection computation}
+
+\section{Sphere-sphere} 
+
+
+Since the direction of each segment is allowed to vary, the start position and
+length define the center and radius of respective spheres. The solution set may
+be represented as the intersection of these spheres, which is one of the
+following:
+\begin{enumerate}
+  \item The empty set $\emptyset$, which occurs in three cases. In the first
+  case, the spheres are too far apart to touch, given by the conditions
+  \begin{align} 
+  \|\mPt{p_0}-\mPt{p_1}\| &> l_0,\text{ or} \\
+  \|\mPt{p_0}-\mPt{p_1}\| &> l_1. 
+  \end{align}
+  In the second and third cases, one sphere is fully enclosed by the other,
+  given by the conditions 
+  \begin{align}
+  \|\mPt{p_0}-\mPt{p_1}\| + l_0 &< l_1,\text{ or} \\
+  \|\mPt{p_0}-\mPt{p_1}\| + l_1 &< l_0.
+  \end{align}
+  \item A single point $\mPt{q}$, which occurs when the distance between the two
+  centers exactly equals the sum of the radii
+  \begin{equation}
+  \|\mPt{p_0}-\mPt{p_1}\|=l_0+l_1. 
+  \end{equation}
+  First observe that $\mPt{q}$ is located along the vector connecting the
+  centers. We may use this fact to construct $\mPt{q}$ with a number of
+  different algebraic expressions -- we should choose the expression of
+  lowest degree in order to minimize its precision requirement. For example, a
+  straightforward way is to form the vector $\mVc{v} = \mPt{p_0}-\mPt{p_1}$,
+  normalize $\mVc{v}$, and construct $\mPt{q} = \mPt{p_1}+l_1\mVc{v}$. However,
+  we can do better by simply computing $\mPt{q}$ as
+  \begin{equation}
+  \mPt{q} = \left(\frac{l_0+l_1}{l_1}\right)\mVc{v}.
+  \end{equation}
+  \item A circle $\mSet{C}$, which occurs when
+  \begin{equation}
+  \|\mPt{p_0}-\mPt{p_1}\|<l_0+l_1. 
+  \end{equation}
+  To begin, we may write $\mSet{C}$ precisely as the set of points 
+  \begin{equation}\label{eq:circle_set}
+  \mSet{C} = \left\{\mPt{q} \in \mR{3} : (\mPt{q} - \mPt{p_0})\cdot(\mPt{q} -
+  \mPt{p_0})= l_0^2\text{ and } (\mPt{q} - \mPt{p_1})\cdot(\mPt{q} -
+  \mPt{p_1})= l_1^2\right\}.
+  \end{equation}
+  For programming purposes, we would prefer a different representation. For
+  simplicity, we can let $\mCompound{C}$ be the tuple $\mCompound{C} = (\mPt{c},
+  r, \mVc{n})$, where $\mPt{c}$ is its center in $\mR{3}$, $\mVc{n}$ is normal
+  to its supporting plane, and $r$ is its radius. We may compute this tuple from
+  equation~\eqref{eq:circle_set} as follows. Intuitively, the normal $\mVc{n}$
+  should be the normalized vector from one center to the other, $\mVc{n} =
+  \mPt{p_0}-\mPt{p_1}$. 
+  
+  \item A sphere $\mCompound{S}$, when (L0 == L1) and (P0 == P1).
+\end{enumerate}
+
+
+\backmatter
+
+\appendix
+\chapter{Linear algebra}
+ 
+\section{Vector spaces}
+
+\begin{definition} 
+A \term{vector space} over a field $\mField{F}$ is a set $\mSet{V}$, equipped
+with two binary operations, that together satisfy eight axioms. Elements of 
+$\mField{F}$ are called \term{scalars} and elements of $\mSet{V}$ are called
+\term{vectors}. Let $s$, and $t$ be scalars and $\mVector{a}$, $\mVector{b}$,
+and $\mVector{c}$ be vectors. The first binary operation is vector addition, $+ :
+\mSet{V} \times \mSet{V} \to \mSet{V}$, written as $\mVector{a} + \mVector{b} =
+\mVector{c}$.
+The second binary operation is scalar multiplication, $\cdot : \mField{F} \times
+\mSet{V} \to \mSet{V}$, written as $t \cdot \mVector{a} = \mVector{b}$ or
+simply $t\mVector{a} = \mVector{b}$. A vector space satisfies the following
+axioms.
+
+\vspace{1em}
+
+\noindent\begin{tabularx}{\textwidth}{lX}
+\toprule 
+Description & Axiom \\  
+\midrule
+Vector addition is associative. & $\mVector a + (\mVector b + \mVector c) =
+(\mVector a + \mVector b) + \mVector c$ \\
+
+Vector addition is commutative. & $\mVector a + \mVector b = \mVector b +
+\mVector a$ \\
+
+Additive identity for vector addition. & $\exists \, \mVector{0}
+\in \mSet{V} :
+\mVector{a}+\mVector{0}=\mVector{a}$\\
+
+Additive inverse for all vectors. & $\exists \, \mVector{b} \in
+\mSet{V} : \mVector{a}+\mVector{b} = \mVector{0}$ \\
+
+Scalar multiplication distributes over vector addition. & $t(\mVector a +
+\mVector b) = t\mVector a + t\mVector b$ 
+\\
+
+Scalar multiplication distributes over scalar addition. & $(s + t)\mVector a =
+s\mVector a + t\mVector a$
+\\
+
+Scalar multiplication is associative. & $s(t\mVector a) = (st) \mVector a$ \\
+
+Multiplicative identity for scalar multiplication & $1\mVector a = \mVector a$ \\
+\bottomrule
+\end{tabularx}  
+\end{definition}
+
+
+% \begin{center}
+% \begin{tabular}{@{\makebox[3em][l]{(\rownumber)\space}} cl}
+% $\mVector a + (\mVector b + \mVector c) = (\mVector a + \mVector b) + \mVector c$ & $\forall \, \mVector a, \mVector b, \mVector c \in V$ \\
+% $\mVector a + \mVector b = \mVector b + \mVector a$ & $\forall \, \mVector a, \mVector b \in V$ \\
+% $\exists \, \mVector 0 \in V \enspace \mid \enspace \mVector a + \mVector 0 = \mVector a$ & $\forall \, \mVector a \in V$\\
+% $\exists \, \mVector b \in V \enspace \mid \enspace \mVector a + \mVector b = \mVector 0$ & $\forall \, \mVector a \in V$ \\
+% $t(\mVector a + \mVector b) = t\mVector a + t\mVector b$ & $\forall \, t \in F, \, \mVector a, \mVector b \in V$ \\
+% $(s + t)\mVector a = s\mVector a + t\mVector a$ & $\forall \, s, t \in F, \, \mVector a \in V$ \\
+% $s(t\mVector a) = (st) \mVector a$ & $\forall \, s, t \in F, \, \mVector a \in V$ \\
+% $1\mVector a = \mVector a$ & $\forall \, \mVector a \in V$
+% \end{tabular}
+% \end{center}
+
+
+\end{document}

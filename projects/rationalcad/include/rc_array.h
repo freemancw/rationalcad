@@ -1,10 +1,24 @@
+/*
+ * This file is part of RationalCAD.
+ *
+ * RationalCAD is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
+ *
+ * RationalCAD is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details. You should have received a copy of the GNU General Public
+ * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /*!
- * @author Clinton Freeman <freeman@cs.unc.edu>
+ * @author Clinton Freeman <admin@freemancw.com>
  * @date 03/02/2013
+ * @brief Generic, dynamic, 2D array type.
  *
- * This file contains a generic, dynamic, 2D array class. I adapted the code
- * from this codeproject article:
- *
+ * Code adapted from:
  * http://www.codeproject.com/Articles/310822/Rock-Solid-Cplusplus-2D-Templatized-Array-Class
  */
 
@@ -13,7 +27,7 @@
 
 #include "rc_common.h"
 
-namespace RCAD {
+BEGIN_NAMESPACE(RCAD)
 
 //=============================================================================
 // Interface: Array
@@ -142,6 +156,6 @@ inline size_t Array<T>::checkedIndex(const size_t i, const size_t j) const {
     return k;
 }
 
-} // namespace RCAD
+END_NAMESPACE(RCAD)
 
 #endif // RC_ARRAY_H
