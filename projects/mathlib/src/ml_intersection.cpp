@@ -23,7 +23,7 @@
 #include "ml_rational.h"
 #include "ml_quadrilateral.h"
 
-namespace DDAD {
+namespace RCAD {
 
 //=============================================================================
 // Implementation: Line_2rLine_2r
@@ -286,5 +286,5 @@ Ray_2rBasis_2r::Ray_2rBasis_2r(const Ray_2r *ray, const Parallelogram_2r *basis)
 
 } // namespace Intersection
 
-} // namespace DDAD
+} // namespace RCAD
 

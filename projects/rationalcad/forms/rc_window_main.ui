@@ -143,29 +143,9 @@
                <number>4</number>
               </property>
               <item>
-               <widget class="QPushButton" name="button_polygon">
-                <property name="text">
-                 <string>Convex Polygon</string>
-                </property>
-                <property name="checkable">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
                <widget class="QPushButton" name="button_polytope">
                 <property name="text">
                  <string>Convex Polytope</string>
-                </property>
-                <property name="checkable">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="button_polygonal_cone">
-                <property name="text">
-                 <string>Polygonal Cone</string>
                 </property>
                 <property name="checkable">
                  <bool>true</bool>

@@ -1,26 +1,26 @@
 /*
- * This file is part of the Degree-Driven Algorithm Design Project (DDAD).
+ * This file is part of RationalCAD.
  *
- * DDAD is free software: you can redistribute it and/or modify it under the
- * terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
+ * RationalCAD is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
  *
- * DDAD is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details. You should have received a copy of the GNU General Public License
- * along with DDAD. If not, see <http://www.gnu.org/licenses/>.
+ * RationalCAD is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details. You should have received a copy of the GNU General Public
+ * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /*!
- * \brief Main window responsible for forwarding widget input.
- * \author {Clinton Freeman <freeman@cs.unc.edu>}
- * \date 05/23/2012
+ * @author Clinton Freeman <admin@freemancw.com>
+ * @date 05/23/2012
+ * @brief Main window responsible for forwarding widget input.
  */
 
-#ifndef DDAD_RC_QT_WINDOW_MAIN_H
-#define DDAD_RC_QT_WINDOW_MAIN_H
+#ifndef RCAD_RC_QT_WINDOW_MAIN_H
+#define RCAD_RC_QT_WINDOW_MAIN_H
 
 // Qt
 #include <QMainWindow>
@@ -30,17 +30,14 @@
 #include "rc_manager_scene.h"
 #include "rc_logger.h"
 
-namespace DDAD {
+BEGIN_NAMESPACE(Ui)
 
-class WorkerThread : public QThread { void run() { exec(); } };
-
-}
-
-namespace Ui {
 class MainWindow;
-}
+
+END_NAMESPACE(Ui)
 
 class MainWindow : public QMainWindow {
+
     Q_OBJECT
 
 public:
@@ -52,17 +49,7 @@ protected:
     bool eventFilter(QObject *obj, QEvent *event);
 
 signals:
-    // polygon
-    void BeginCreatePolygon(const QString& name, const QColor& face_color);
-    void EndCreatePolygon();
-    void ComputeIntegerHull();
-
-    // cone_2
-    void BeginCreate2Cone(const QString& name, const QColor& face_color);
-    void EndCreate2Cone();
-    void ComputeCIGP();
-
-
+    // polytope
     void BeginCreatePolytope(const QString& name, const QColor& face_color);
     void EndCreatePolytope();
 
@@ -83,20 +70,17 @@ private slots:
     void UpdateStatusBarMsg(const QString& status);
 
     void on_compute_interior_grid_pt_clicked();
-    void on_button_polygon_toggled(bool checked);
     void on_button_polytope_toggled(bool checked);
-    void on_button_polygonal_cone_toggled(bool checked);
 
 private:
     Ui::MainWindow *ui;
 
-    QSharedPointer<DDAD::SceneManager> scene_manager_;
-    QSharedPointer<DDAD::GLManager> gl_manager_;
-    QSharedPointer<QThread> scene_manager_thread_;
+    QSharedPointer<RCAD::SceneManager> scene_manager_;
+    QSharedPointer<RCAD::GLManager> gl_manager_;
 
-    DDAD::RCLogger logger_;
+    RCAD::RCLogger logger_;
 
     QColor create_object_color_;
 };
 
-#endif // DDAD_RC_QT_WINDOW_MAIN_H
+#endif // RCAD_RC_QT_WINDOW_MAIN_H

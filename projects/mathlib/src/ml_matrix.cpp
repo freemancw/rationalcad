@@ -24,7 +24,7 @@
 #include "ml_point.h"
 #include "ml_vector.h"
 
-namespace DDAD {
+namespace RCAD {
 
 //=============================================================================
 // Implementation: Matrix_3x3i
@@ -80,4 +80,4 @@ Matrix_3x3r Inverse(const Matrix_3x3r& mat) {
                         (mat(0,0)*mat(1,1)-mat(0,1)*mat(1,0))*d);
 }
 
-} // namespace DDAD
+} // namespace RCAD

@@ -22,7 +22,7 @@
 #include "ml_point.h"
 #include "ml_matrix.h"
 
-namespace DDAD {
+namespace RCAD {
 
 namespace Predicate {
 
@@ -73,6 +73,6 @@ Orientation OrientationPQR(const Point_2f &p, const Point_2f &q,
 
 } // namespace Predicate
 
-} // namespace DDAD
+} // namespace RCAD
 
 

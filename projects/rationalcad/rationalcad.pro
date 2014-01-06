@@ -108,9 +108,9 @@ HEADERS += \
     include/rc_manager_scene.h \
     include/rc_qt_dialog_about.h \
     include/rc_qt_dialog_preferences.h \
-    include/rc_widget_perspective.h \
-    include/rc_widget_orthographic.h \
-    include/rc_window_main.h
+    include/rc_qt_widget_perspective.h \
+    include/rc_qt_widget_orthographic.h \
+    include/rc_qt_window_main.h
 
 # Misc files ==================================================================
 

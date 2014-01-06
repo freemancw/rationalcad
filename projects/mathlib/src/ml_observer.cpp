@@ -21,7 +21,7 @@
 #include "ml_common.h"
 #include "ml_observer.h"
 
-namespace DDAD {
+namespace RCAD {
 
 VisualGeometry::~VisualGeometry() {}
 
@@ -215,4 +215,4 @@ void VisualGeometry::SigUpdate() const {
     }
 }
 
-} // namespace DDAD
+} // namespace RCAD

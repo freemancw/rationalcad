@@ -37,7 +37,7 @@
 BEGIN_NAMESPACE(RCAD)
 
 //=============================================================================
-// Interfaces
+// Interface: GLAttributeMeta
 //=============================================================================
 
 struct GLAttributeMeta {
@@ -50,6 +50,10 @@ struct GLAttributeMeta {
     int offset;
     const char* name;
 };
+
+//=============================================================================
+// Interface: GLVertex
+//=============================================================================
 
 class GLVertex {
 public:
@@ -137,6 +141,10 @@ struct GLElementArray {
     GLvoid* indices;   // offset pointer from currently bound IBO
 };
 
+//=============================================================================
+// Interface: GLManager
+//=============================================================================
+
 class GLManager : public QObject, public QOpenGLFunctions_3_3_Core {
 
     Q_OBJECT
@@ -153,43 +161,18 @@ public:
     void DisableAttributes(const QString& id,
                            const QList<GLAttributeMeta>& attributes);
 
-    void DrawPoints(const QString& id,
-                    const QList<GLAttributeMeta>& attributes);
-    void DrawLines(const QString& id,
-                   const QList<GLAttributeMeta>& attributes);
-    void DrawTriangles(const QString& id,
-                       const QList<GLAttributeMeta>& attributes);
-
-    void BindPointsVBO() { vbo_points_.buffer.bind(); }
-    void BindLinesVBO() { vbo_lines_.buffer.bind(); }
-    void BindTrianglesVBO() { vbo_triangles_.buffer.bind(); }
-    void ReleasePointsVBO() { vbo_points_.buffer.release(); }
-    void ReleaseLinesVBO() { vbo_lines_.buffer.release(); }
-    void ReleaseTrianglesVBO() { vbo_triangles_.buffer.release(); }
-    void DrawPointsVBO() { glDrawArrays(GL_POINTS, 0, vbo_points_.num_vertices); }
-    void DrawLinesVBO() { glDrawArrays(GL_LINES, 0, vbo_lines_.num_vertices); }
-    void DrawTrianglesVBO() { glDrawArrays(GL_TRIANGLES, 0, vbo_triangles_.num_vertices); }
-
     QSharedPointer<QOpenGLShaderProgram> GetProgram(const QString& id);
 
 public slots:
-    void UpdateVboPoints(QVector<GLVertex> verts);
-    void UpdateVboLines(QVector<GLVertex> verts);
-    void UpdateVboTriangles(QVector<GLVertex> verts);
     void LogDebugMessage(const QOpenGLDebugMessage& message);
 
 private:
     QHash<QString, QSharedPointer<QOpenGLShaderProgram>> programs_;
-
-    GLVertexBuffer vbo_points_;
-    GLVertexBuffer vbo_lines_;
-    GLVertexBuffer vbo_triangles_;
-
     QOpenGLDebugLogger gl_logger_;
 };
 
  Q_DECLARE_METATYPE(QVector<GLVertex>)
 
-END__NAMESPACE(RCAD)
+END_NAMESPACE(RCAD)
 
 #endif // RC_GL_ABSTRACTION_H

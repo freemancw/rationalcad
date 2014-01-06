@@ -32,31 +32,19 @@ BEGIN_NAMESPACE(RCAD)
 
 IntegerGrid::IntegerGrid() {}
 
-IntegerGrid::IntegerGrid(const QSharedPointer<GLManager>& gl_manager) :
-    gl_manager_(gl_manager) {}
-
 //=============================================================================
 // Grid Creation
 //=============================================================================
 
-/*!
- * @brief IntegerGrid::InitializeGrid
- * \param min_pixel_spacing
- * \param major_line_spacing
- * \param n_major_lines
- * \param bit_complexity
- */
 void IntegerGrid::InitializeGrid(const int min_pixel_spacing,
                                  const int major_line_spacing,
                                  const int n_major_lines,
-                                 const int bit_complexity) {
+                                 const int bit_complexity,
+                                 QVector<GLVertex>& grid_verts,
+                                 QVector<GLushort>& grid_idxs) {
     Q_UNUSED(bit_complexity);
 
     rDebug("Initializing grid.");
-
-    initializeOpenGLFunctions();
-
-    shader_program_ = gl_manager_->GetProgram("gl2_default");
 
     min_pixel_spacing_ = min_pixel_spacing;
     major_line_spacing_ = major_line_spacing;
@@ -79,7 +67,6 @@ void IntegerGrid::InitializeGrid(const int min_pixel_spacing,
     //int line_half_length = min_pixel_spacing_ * n_in_halfspace;
     int line_half_length = n_in_halfspace;
 
-    QVector<GLVertex> grid_verts;
     QVector<GLushort> grid_minor_idxs;
     QVector<GLushort> grid_major_idxs;
 
@@ -134,23 +121,7 @@ void IntegerGrid::InitializeGrid(const int min_pixel_spacing,
     offset_major_idxs_ = (void*)(n_minor_idxs_*sizeof(GLushort));
 
     // glue indices into one contiguous chunk
-    QVector<GLushort> grid_idxs = grid_minor_idxs + grid_major_idxs;
-
-    // upload vert data
-    glGenBuffers(1, &vbo_id_);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_id_);
-    glBufferData(GL_ARRAY_BUFFER, grid_verts.size() * sizeof(GLVertex),
-                 grid_verts.data(), GL_STATIC_DRAW);
-
-    // upload index data
-    glGenBuffers(1, &ibo_id_);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo_id_);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, grid_idxs.size() * sizeof(GLushort),
-                 grid_idxs.data(), GL_STATIC_DRAW);
-
-    // clean up (important for QPainter to work correctly)
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    grid_idxs = grid_minor_idxs + grid_major_idxs;
 
     // setup modelview matrix
     WrapGrid();
@@ -160,9 +131,6 @@ void IntegerGrid::InitializeGrid(const int min_pixel_spacing,
 // Drawing
 //=============================================================================
 
-/*!
- * @brief IntegerGrid::Draw
- */
 void IntegerGrid::Draw() {
     // upload tranformation
     QMatrix4x4 mv;
@@ -192,8 +160,8 @@ void IntegerGrid::Draw() {
 
 /*!
  * @brief IntegerGrid::GetMajorXCoords
- * \param width
- * \return vector of (pixel, value) line labels for visible x-coords.
+ * @param width
+ * @return vector of (pixel, value) line labels for visible x-coords.
  */
 QVector<QPair<int, int>> IntegerGrid::GetMajorXCoords(const int width) const {
     QVector<QPair<int, int>> out;
@@ -217,8 +185,8 @@ QVector<QPair<int, int>> IntegerGrid::GetMajorXCoords(const int width) const {
 
 /*!
  * @brief IntegerGrid::GetMajorYCoords
- * \param height - viewport height
- * \return - vector of (pixel, value) line labels for visible y-coords.
+ * @param height - viewport height
+ * @return - vector of (pixel, value) line labels for visible y-coords.
  */
 QVector<QPair<int, int>> IntegerGrid::GetMajorYCoords(const int height) const {
     QVector<QPair<int, int>> out;
@@ -290,7 +258,7 @@ void IntegerGrid::DecreaseMagnification() {
 
 /*!
  * @brief IntegerGrid::Translate
- * \param pixel_delta
+ * @param pixel_delta
  */
 void IntegerGrid::Translate(const QVector2D &pixel_delta) {
     global_pos_ += pixel_delta/global_scale_;
@@ -301,8 +269,8 @@ void IntegerGrid::Translate(const QVector2D &pixel_delta) {
 
 /*!
  * @brief IntegerGrid::GetCoordsForPixel
- * \param pixel - position in screen space
- * \return position in world space
+ * @param pixel - position in screen space
+ * @return position in world space
  */
 QVector2D IntegerGrid::GetCoordsForPixel(const QVector2D &pixel) const {
     return QVector2D(pixel.x()/global_scale_+global_pos_.x(),
@@ -322,18 +290,20 @@ void IntegerGrid::WrapGrid() {
     local_pos_ = global_pos_*global_scale_/local_scale_;
     qreal min_translation = min_pixel_spacing_*major_line_spacing_;
 
-    while(fabs(local_pos_.x()) > min_translation) {
-        if(local_pos_.x() > 0.0)
+    while (fabs(local_pos_.x()) > min_translation) {
+        if (local_pos_.x() > 0.0) {
             local_pos_.setX(local_pos_.x()-min_translation);
-        else
+        } else {
             local_pos_.setX(local_pos_.x()+min_translation);
+        }
     }
 
-    while(fabs(local_pos_.y()) > min_translation) {
-        if(local_pos_.y() > 0.0)
+    while (fabs(local_pos_.y()) > min_translation) {
+        if (local_pos_.y() > 0.0) {
             local_pos_.setY(local_pos_.y()-min_translation);
-        else
+        } else {
             local_pos_.setY(local_pos_.y()+min_translation);
+        }
     }
 
     /*
@@ -348,8 +318,8 @@ void IntegerGrid::WrapGrid() {
 
 /*!
  * @brief IntegerGrid::RoundToNearestMinor
- * \param coord
- * \return
+ * @param coord
+ * @return
  */
 int IntegerGrid::RoundToNearestMinor(const int coord) const {
     return coord;
@@ -357,8 +327,8 @@ int IntegerGrid::RoundToNearestMinor(const int coord) const {
 
 /*!
  * @brief IntegerGrid::RoundToNearestMajor
- * \param coord - value along some axis in world space
- * \return input value rounded to the nearest major grid line in world space
+ * @param coord - value along some axis in world space
+ * @return input value rounded to the nearest major grid line in world space
  */
 int IntegerGrid::RoundToNearestMajor(const int coord) const {
     int lowest_snap = GetMajorCoordIncrement();
@@ -367,7 +337,7 @@ int IntegerGrid::RoundToNearestMajor(const int coord) const {
 
 /*!
  * @brief IntegerGrid::GetMajorCoordIncrement
- * \return distance in world coordinates between successive major grid lines
+ * @return distance in world coordinates between successive major grid lines
  */
 int IntegerGrid::GetMajorCoordIncrement() const {
     return major_line_spacing_*
@@ -376,10 +346,10 @@ int IntegerGrid::GetMajorCoordIncrement() const {
 
 /*!
  * @brief IntegerGrid::CoordToPixel
- * \param a - value along an axis
- * \param global_a - global position of camera along the same axis
- * \param length - width for x axis or height for y axis
- * \return pixel value for a position in world space along some axis
+ * @param a - value along an axis
+ * @param global_a - global position of camera along the same axis
+ * @param length - width for x axis or height for y axis
+ * @return pixel value for a position in world space along some axis
  */
 int IntegerGrid::CoordToPixel(const int a, const qreal global_a,
                               const int length) const {
@@ -394,4 +364,4 @@ const qreal& IntegerGrid::global_scale() const {
     return global_scale_;
 }
 
-END__NAMESPACE(RCAD)
+END_NAMESPACE(RCAD)

@@ -18,12 +18,12 @@
  * @date 02/12/2013
  */
 
-#ifndef DDAD_ML_INTEGER_H
-#define DDAD_ML_INTEGER_H
+#ifndef RC_ML_INTEGER_H
+#define RC_ML_INTEGER_H
 
 #include "ml_common.h"
 
-namespace DDAD {
+namespace RCAD {
 
 class Integer {
 public:
@@ -33,6 +33,6 @@ private:
     std::vector<uint32_t> value_;
 };
 
-} // namespace DDAD
+} // namespace RCAD
 
-#endif // DDAD_ML_INTEGER_H
+#endif // RC_ML_INTEGER_H

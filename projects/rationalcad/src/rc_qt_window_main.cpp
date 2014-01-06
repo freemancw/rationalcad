@@ -28,7 +28,7 @@
 #include "rc_qt_widget_perspective.h"
 #include "rc_manager_scene.h"
 
-using namespace DDAD;
+using namespace RCAD;
 
 //=============================================================================
 // Constructors/Destructors

@@ -22,7 +22,7 @@
 #include "ml_rational.h"
 #include "ml_triangle.h"
 
-namespace DDAD {
+namespace RCAD {
 
 //=============================================================================
 // Implementation: Triangle_2r
@@ -112,4 +112,4 @@ SharedPoint_3r Triangle_3r::c_sptr() {
     return c_;
 }
 
-} // namespace DDAD
+} // namespace RCAD

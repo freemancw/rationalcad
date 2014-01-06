@@ -18,12 +18,12 @@
  * @date 02/12/2013
  */
 
-#ifndef DDAD_ML_RATIONAL_H
-#define DDAD_ML_RATIONAL_H
+#ifndef RC_ML_RATIONAL_H
+#define RC_ML_RATIONAL_H
 
 #include "ml_common.h"
 
-namespace DDAD {
+namespace RCAD {
 
 //=============================================================================
 // Interfaces
@@ -104,7 +104,7 @@ inline integer CeilKeepFraction(const rational &x, rational *out_frac) {
     return out_int;
 }
 
-} // namespace DDAD
+} // namespace RCAD
 
-#endif // DDAD_ML_RATIONAL_H
+#endif // RC_ML_RATIONAL_H
 

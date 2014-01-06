@@ -93,18 +93,6 @@ void GLManager::Initialize() {
     UpdateVboTriangles(QVector<GLVertex>());
 }
 
-void GLManager::UpdateVboPoints(QVector<GLVertex> verts) {
-    vbo_points_.UploadVertices(verts);
-}
-
-void GLManager::UpdateVboLines(QVector<GLVertex> verts) {
-    vbo_lines_.UploadVertices(verts);
-}
-
-void GLManager::UpdateVboTriangles(QVector<GLVertex> verts) {
-    vbo_triangles_.UploadVertices(verts);
-}
-
 void GLManager::LogDebugMessage(const QOpenGLDebugMessage &message) {
     rInfo(message.message().toStdString().c_str());
 }
@@ -306,4 +294,4 @@ GLElementArray::GLElementArray(const QString &tag, const GLenum mode,
     type(type),
     indices(indices) {}
 
-END__NAMESPACE(RCAD)
+END_NAMESPACE(RCAD)

@@ -21,7 +21,7 @@
 #include "ml_common.h"
 #include "ml_line.h"
 
-namespace DDAD {
+namespace RCAD {
 
 //=============================================================================
 // Implementation: Line_2r
@@ -434,4 +434,4 @@ void Segment_3r::set_q(SharedPoint_3r q) {
     q_ = q;
 }
 
-} // namespace DDAD
+} // namespace RCAD

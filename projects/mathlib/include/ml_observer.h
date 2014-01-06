@@ -18,15 +18,15 @@
  * @date 07/17/2013
  */
 
-#ifndef DDAD_ML_OBSERVER_H
-#define DDAD_ML_OBSERVER_H
+#ifndef RC_ML_OBSERVER_H
+#define RC_ML_OBSERVER_H
 
 #include "ml_common.h"
 #include "ml_point.h"
 #include "ml_line.h"
 #include "ml_triangle.h"
 
-namespace DDAD {
+namespace RCAD {
 
 struct IGeometryObserver {
     virtual void SlotRegisterPoint_2r(Point_2r& p) = 0;
@@ -238,4 +238,4 @@ private:
 
 }
 
-#endif // DDAD_ML_OBSERVER_H
+#endif // RC_ML_OBSERVER_H

@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
     QApplication::setStyle(QStyleFactory::create("Fusion"));
 
     // register any types that will pass through Qt's signal/slot mechanism
-    qRegisterMetaType<QVector<DDAD::GLVertex>>("QVector<DDAD::GLVertex>");
+    qRegisterMetaType<QVector<RCAD::GLVertex>>("QVector<RCAD::GLVertex>");
 
     QPixmap splash_image(":/splash3.png");
     QSplashScreen splash(splash_image);
@@ -43,7 +43,6 @@ int main(int argc, char *argv[]) {
     //splash.showMessage("Initializing...");
     a.processEvents();
 
-    while(true);
     MainWindow w;
     w.showMaximized();
     splash.finish(&w);

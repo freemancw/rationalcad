@@ -29,14 +29,9 @@
 #include "ml_point.h"
 #include "ml_vector.h"
 
-// assimp
-//#include "assimp/Importer.hpp"      // C++ importer interface
-//#include "assimp/scene.h"           // Output data structure
-//#include "assimp/postprocess.h"     // Post processing flags
+using namespace RCAD;
 
-using namespace DDAD;
-
-const int OrthographicWidget::kRedrawMsec = 0;
+const int OrthographicWidget::kRedrawMsec = 16;
 const int OrthographicWidget::kMinHintWidth = 64;
 const int OrthographicWidget::kMinHintHeight = 64;
 const int OrthographicWidget::kPrefHintWidth = 512;
@@ -55,7 +50,6 @@ OrthographicWidget::OrthographicWidget(QSharedPointer<GLManager> gl_manager,
     gl_manager_(gl_manager),
     scene_manager_(scene_manager),
     orientation_(orientation),
-    i_grid_(gl_manager),
     num_frames_(0) {
     setAutoFillBackground(false);
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -88,20 +82,6 @@ OrthographicWidget::OrthographicWidget(QSharedPointer<GLManager> gl_manager,
             SIGNAL(SelectObject(QVector2D)),
             scene_manager_.data(),
             SLOT(SelectObject(QVector2D)));
-
-    //qDebug("derp");
-    //rDebug("herp");
-
-    //Assimp::Importer importer;
-      // And have it read the given file with some example postprocessing
-      // Usually - if speed is not the most important aspect for you - you'll
-      // propably to request more postprocessing than we do in this example.
-    /*
-    const aiScene* scene = importer.ReadFile( "data/sdcc/building.obj",
-            aiProcess_CalcTangentSpace       |
-            aiProcess_Triangulate            |
-            aiProcess_JoinIdenticalVertices  |
-            aiProcess_SortByPType);*/
 }
 
 //=============================================================================
@@ -109,10 +89,12 @@ OrthographicWidget::OrthographicWidget(QSharedPointer<GLManager> gl_manager,
 //=============================================================================
 
 void OrthographicWidget::initializeGL() {
-    rDebug("Initializing OpenGL.");
+    rInfo("Initializing OpenGL.");
 
     initializeOpenGLFunctions();
+
     shader_program_ = gl_manager_->GetProgram("gl2_default");
+    shader_program_->bind();
 
     gl_manager_->glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     gl_manager_->glEnable(GL_CULL_FACE);
@@ -120,37 +102,54 @@ void OrthographicWidget::initializeGL() {
     //gl_manager_->glEnable(GL_BLEND);
     //gl_manager_->glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    shader_program_->bind();
-
     modelview_.setToIdentity();
     shader_program_->setUniformValue("m_modelview", modelview_);
-
-    i_grid_.InitializeGrid(8, 8, 16, 16);
 
     QList<GLAttributeMeta> ortho_attributes;
     ortho_attributes.push_back(GLVertex::kPositionMeta);
     ortho_attributes.push_back(GLVertex::kMatAmbientMeta);
 
+    QVector<GLVertex> grid_verts;
+    QVector<GLushort> grid_idxs;
+    i_grid_.InitializeGrid(8, 8, 16, 16, grid_verts, grid_idxs);
+
+
+    // upload vert data
+    glGenBuffers(1, &vbo_id_);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_id_);
+    glBufferData(GL_ARRAY_BUFFER, grid_verts.size() * sizeof(GLVertex),
+                 grid_verts.data(), GL_STATIC_DRAW);
+
+    // upload index data
+    glGenBuffers(1, &ibo_id_);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo_id_);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, grid_idxs.size() * sizeof(GLushort),
+                 grid_idxs.data(), GL_STATIC_DRAW);
+
+    // clean up (important for QPainter to work correctly)
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
     vao_points_.create();
     vao_points_.bind();
-    gl_manager_->BindPointsVBO();
+    scene_manager_->BindPointsVBO();
     gl_manager_->EnableAttributes("gl2_default", ortho_attributes);
     vao_points_.release();
-    gl_manager_->ReleasePointsVBO();
+    scene_manager_->ReleasePointsVBO();
 
     vao_lines_.create();
     vao_lines_.bind();
-    gl_manager_->BindLinesVBO();
+    scene_manager_->BindLinesVBO();
     gl_manager_->EnableAttributes("gl2_default", ortho_attributes);
     vao_lines_.release();
-    gl_manager_->ReleaseLinesVBO();
+    scene_manager_->ReleaseLinesVBO();
 
     vao_triangles_.create();
     vao_triangles_.bind();
-    gl_manager_->BindTrianglesVBO();
+    scene_manager_->BindTrianglesVBO();
     gl_manager_->EnableAttributes("gl2_default", ortho_attributes);
     vao_triangles_.release();
-    gl_manager_->ReleaseTrianglesVBO();
+    scene_manager_->ReleaseTrianglesVBO();
 
     shader_program_->release();
 

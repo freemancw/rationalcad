@@ -18,8 +18,8 @@
  * @date 08/27/2013
  */
 
-#ifndef DDAD_ML_QUADRILATERAL_H
-#define DDAD_ML_QUADRILATERAL_H
+#ifndef RC_ML_QUADRILATERAL_H
+#define RC_ML_QUADRILATERAL_H
 
 #include "ml_common.h"
 #include "ml_observer.h"
@@ -27,7 +27,7 @@
 #include "ml_vector.h"
 #include "ml_triangle.h"
 
-namespace DDAD {
+namespace RCAD {
 
 class Parallelogram_2r : public VisualGeometry {
 public:
@@ -81,6 +81,6 @@ std::shared_ptr<Parallelogram_2r> Z2Neighbors(const Point_2r& p,
                                               IGeometryObserver* obs = nullptr);
 }
 
-} // namespace DDAD
+} // namespace RCAD
 
 #endif // ML_QUADRILATERAL_H

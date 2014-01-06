@@ -18,14 +18,14 @@
  * @date 12/26/2012
  */
 
-#ifndef DDAD_ML_MATRIX_H
-#define DDAD_ML_MATRIX_H
+#ifndef RC_ML_MATRIX_H
+#define RC_ML_MATRIX_H
 
 #include "ml_common.h"
 #include "ml_point.h"
 #include "ml_vector.h"
 
-namespace DDAD {
+namespace RCAD {
 
 //=============================================================================
 // Interface: Matrix_2x2i
@@ -652,6 +652,6 @@ inline Vector_3r operator*(const Vector_3r& v, const Matrix_3x3r& mat) {
                      Dot(ColVec(mat, 2), v));
 }
 
-} // namespace DDAD
+} // namespace RCAD
 
-#endif // DDAD_ML_MATRIX_H
+#endif // RC_ML_MATRIX_H

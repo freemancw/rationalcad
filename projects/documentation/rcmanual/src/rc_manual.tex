@@ -146,6 +146,71 @@ one true brace style, google style guide, etc
 % \section{Intersection of affine spaces}
 % \section{Problems}
 
+\chapter{Grid system}
+
+Several objects and settings are relevant to specifying how the 2D grid is drawn:
+
+\begin{itemize}
+  \item QGLWidget: acts as a container and provides a GL drawing surface (API).
+  \item glViewport: sets up the correspondence between the dimensions of the
+  penultimate GL image and the GL drawing surface (API).
+  \item Projection matrix: describes the region of space which will be included
+  in the final image.
+  \item Modelview matrix: induces various transformations on the grid vertices;
+  we will need scaling and translation, but not rotation.
+  \item Vertex coordinates: describes the untransformed position of gridlines in
+  world space.
+\end{itemize}
+
+\chapter{Models of computation}
+
+The following uses the \textbf{bitwise computation} model. Let $O_b$ denote
+big-oh notation in this model.
+
+\section{Complexity of arithmetic operations on integers}
+
+\subsection{Addition}
+
+Integer addition $+ : \mathbb{Z} \times \mathbb{Z} \mapsto \mathbb{Z}$ takes as
+input two 
+
+
+
+\begin{table}[hr]
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+Operation & Time complexity \\
+\midrule
+Addition & $O_b(\beta)$ \\
+Subtraction & $O_b(\beta)$ \\
+Multiplication & $O_b(\beta \log \beta \log \log \beta)$ \\
+Division & $O_b(\beta \log \beta \log \log \beta)$ \\ 
+\bottomrule
+\end{tabularx}
+\end{table}
+
+
+rational multiplication
+rational division
+rational addition
+rational subtraction
+
+\section{Complexity of matrix operations}
+
+\begin{table}[hr]
+\caption{Time complexity of basic arithmetic operations on two $n \times n$
+matrices.}
+\begin{tabular}{ll}
+\toprule 
+Operation & Time complexity \\
+\midrule
+Multiplication & $O(n^{2.376})$ \\
+Inverse & $O(n)$ \\
+Determinant & $O_b(n \log n \log \log n)$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \chapter{Intersection computation}
 
 \section{Sphere-sphere} 

@@ -32,37 +32,12 @@
 #include "ml_line.h"
 #include "ml_intersection.h"
 
-/*!
- * Specifies a lexicographical ordering on two vectors of nonnegative integers.
- *
- * A 123
- * B 1234
- */
-bool operator<(const QVector<uint32_t>& a, const QVector<uint32_t>& b) {
-    for(int i = 0; i < qMin(a.size(), b.size()); ++i) {
-        if(a[i] < b[i]) {
-            return true;
-        } else if(a.at(i) > b.at(i)) {
-            return false;
-        }
-    }
-
-    // if we reach here they have to be equal
-    if(a.size() == b.size()) {
-        return false;
-    } else if(a.size() < b.size()) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
 BEGIN_NAMESPACE(RCAD)
 
 Point_2f ToPoint_2f(const QVector2D& v, bool snap = false);
 
 //=============================================================================
-// SceneManager Constructors/Destructors
+// Implementation: SceneManager
 //=============================================================================
 
 SceneManager::SceneManager() :
@@ -70,14 +45,22 @@ SceneManager::SceneManager() :
 
 SceneManager::~SceneManager() {}
 
-//=============================================================================
-// SceneManager Slots
-//=============================================================================
+void GLManager::UpdateVboPoints(QVector<GLVertex> verts) {
+    vbo_points_.UploadVertices(verts);
+}
+
+void GLManager::UpdateVboLines(QVector<GLVertex> verts) {
+    vbo_lines_.UploadVertices(verts);
+}
+
+void GLManager::UpdateVboTriangles(QVector<GLVertex> verts) {
+    vbo_triangles_.UploadVertices(verts);
+}
 
 void SceneManager::GenerateVboPoints() {
     QVector<GLVertex> points;
     for (auto i = viz_points_.begin(); i != viz_points_.end(); ++i) {
-        GLVertex v(approx_points_.value(i.key())->approximation());
+        GLVertex v(approx_points_.value(i.key())->approx());
         v.set_mat_ambient(i->back().color());
         points.push_back(v);
     }
@@ -87,8 +70,8 @@ void SceneManager::GenerateVboPoints() {
 void SceneManager::GenerateVboLines() {
     QVector<GLVertex> lines;
     for (auto i = viz_segments_.begin(); i != viz_segments_.end(); ++i) {
-        GLVertex p(approx_points_.value(i.key().first)->approximation());
-        GLVertex q(approx_points_.value(i.key().second)->approximation());
+        GLVertex p(approx_points_.value(i.key().first)->approx());
+        GLVertex q(approx_points_.value(i.key().second)->approx());
         p.set_mat_ambient(i->back().color());
         q.set_mat_ambient(i->back().color());
         lines.push_back(p);
@@ -101,9 +84,9 @@ void SceneManager::GenerateVboTriangles() {
     QVector<GLVertex> triangles;
     for (auto i = viz_triangles_.begin(); i != viz_triangles_.end(); ++i) {
         auto current_vt = i.value().top();
-        GLVertex a(approx_points_.value(i.key().at(0))->approximation());
-        GLVertex b(approx_points_.value(i.key().at(1))->approximation());
-        GLVertex c(approx_points_.value(i.key().at(2))->approximation());
+        GLVertex a(approx_points_.value(i.key().at(0))->approx());
+        GLVertex b(approx_points_.value(i.key().at(1))->approx());
+        GLVertex c(approx_points_.value(i.key().at(2))->approx());
         a.set_mat_ambient(current_vt.diffuse());
         b.set_mat_ambient(current_vt.diffuse());
         c.set_mat_ambient(current_vt.diffuse());
@@ -119,7 +102,7 @@ void SceneManager::SlotRegisterPoint_2r(Point_2r &p) {
         p.set_unique_id(cur_point_uid_++);
     }
     if(!approx_points_.contains(p.unique_id())) {
-        auto approx = QSharedPointer<ApproximatePoint_3f>(new ApproximatePoint_3f(p));
+        auto approx = QSharedPointer<ApproxPoint_3f>(new ApproxPoint_3f(p));
         approx_points_.insert(p.unique_id(), approx);
         p.AddObserver(approx.data());
     }
@@ -211,7 +194,7 @@ void SceneManager::SlotRegisterPoint_3r(Point_3r &p) {
         p.set_unique_id(cur_point_uid_++);
     }
     if(!approx_points_.contains(p.unique_id())) {
-        auto approx = QSharedPointer<ApproximatePoint_3f>(new ApproximatePoint_3f(p));
+        auto approx = QSharedPointer<ApproxPoint_3f>(new ApproxPoint_3f(p));
         approx_points_.insert(p.unique_id(), approx);
         p.AddObserver(approx.data());
     }
@@ -521,33 +504,56 @@ void ScenePolygon_2::Deselect() {
 // ApproximatePoint_3f
 //=============================================================================
 
-ApproximatePoint_3f::ApproximatePoint_3f() {}
+ApproxPoint_3f::ApproxPoint_3f() {}
 
-ApproximatePoint_3f::ApproximatePoint_3f(const Point_2r &p) {
-    approximation_.set_x(p.x().get_d());
-    approximation_.set_y(p.y().get_d());
-    approximation_.set_z(0);
+ApproxPoint_3f::ApproxPoint_3f(const Point_2r &p) {
+    approx_.set_x(p.x().get_d());
+    approx_.set_y(p.y().get_d());
+    approx_.set_z(0);
 }
 
-ApproximatePoint_3f::ApproximatePoint_3f(const Point_3r &p) {
-    approximation_.set_x(p.x().get_d());
-    approximation_.set_y(p.y().get_d());
-    approximation_.set_z(p.z().get_d());
+ApproxPoint_3f::ApproxPoint_3f(const Point_3r &p) {
+    approx_.set_x(p.x().get_d());
+    approx_.set_y(p.y().get_d());
+    approx_.set_z(p.z().get_d());
 }
 
-void ApproximatePoint_3f::SlotPositionChanged_2r(const Point_2r &p) {
-    approximation_.set_x(p.x().get_d());
-    approximation_.set_y(p.y().get_d());
+void ApproxPoint_3f::SlotPositionChanged_2r(const Point_2r &p) {
+    approx_.set_x(p.x().get_d());
+    approx_.set_y(p.y().get_d());
 }
 
-void ApproximatePoint_3f::SlotPositionChanged_3r(const Point_3r& p) {
-    approximation_.set_x(p.x().get_d());
-    approximation_.set_y(p.y().get_d());
-    approximation_.set_z(p.z().get_d());
+void ApproxPoint_3f::SlotPositionChanged_3r(const Point_3r& p) {
+    approx_.set_x(p.x().get_d());
+    approx_.set_y(p.y().get_d());
+    approx_.set_z(p.z().get_d());
 }
 
-const Point_3f& ApproximatePoint_3f::approximation() const {
-    return approximation_;
+const Point_3f& ApproxPoint_3f::approx() const {
+    return approx_;
 }
 
-END__NAMESPACE(RCAD)
+END_NAMESPACE(RCAD)
+
+
+/*!
+ * Specifies a lexicographical ordering on two vectors of nonnegative integers.
+ */
+bool operator<(const QVector<uint32_t>& a, const QVector<uint32_t>& b) {
+    for(int i = 0; i < qMin(a.size(), b.size()); ++i) {
+        if(a[i] < b[i]) {
+            return true;
+        } else if(a.at(i) > b.at(i)) {
+            return false;
+        }
+    }
+
+    // if we reach here they have to be equal
+    if(a.size() == b.size()) {
+        return false;
+    } else if(a.size() < b.size()) {
+        return true;
+    } else {
+        return false;
+    }
+}

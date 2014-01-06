@@ -19,8 +19,8 @@
  * @date 10/23/2013
  */
 
-#ifndef DDAD_ML_POLYTOPE_H
-#define DDAD_ML_POLYTOPE_H
+#ifndef RC_ML_POLYTOPE_H
+#define RC_ML_POLYTOPE_H
 
 #include "ml_common.h"
 #include "ml_observer.h"
@@ -28,7 +28,7 @@
 #include "ml_line.h"
 #include "ml_triangle.h"
 
-namespace DDAD {
+namespace RCAD {
 
 //=============================================================================
 // Interface: Polytope_3r
@@ -67,6 +67,6 @@ private:
 };
 */
 
-} // namespace DDAD
+} // namespace RCAD
 
-#endif // DDAD_ML_POLYTOPE_H
+#endif // RC_ML_POLYTOPE_H

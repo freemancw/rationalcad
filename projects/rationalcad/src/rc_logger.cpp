@@ -71,4 +71,4 @@ void RCLogger::set_console(QTextEdit *console) {
     console_ = console;
 }
 
-END__NAMESPACE(RCAD)
+END_NAMESPACE(RCAD)

@@ -19,14 +19,14 @@
  * @date 06/19/2013
  */
 
-#ifndef DDAD_ML_LINE_H
-#define DDAD_ML_LINE_H
+#ifndef RC_ML_LINE_H
+#define RC_ML_LINE_H
 
 #include "ml_common.h"
 #include "ml_point.h"
 #include "ml_vector.h"
 
-namespace DDAD {
+namespace RCAD {
 
 //=============================================================================
 // Line_2 Interface
@@ -258,6 +258,6 @@ private:
     Line_3r support_;
 };
 
-} // namespace DDAD
+} // namespace RCAD
 
-#endif // DDAD_ML_LINE_H
+#endif // RC_ML_LINE_H

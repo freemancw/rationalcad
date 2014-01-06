@@ -20,7 +20,7 @@
 
 #include "ml_common.h"
 
-namespace DDAD {
+namespace RCAD {
 
 namespace Visual {
 
@@ -135,4 +135,4 @@ void Triangle::set_diffuse(const Color& diffuse) {
 
 } // namespace Visual
 
-} // namespace DDAD
+} // namespace RCAD

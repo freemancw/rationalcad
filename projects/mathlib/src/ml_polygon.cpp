@@ -25,7 +25,7 @@
 #include "ml_polygon.h"
 #include "ml_wedge.h"
 
-namespace DDAD {
+namespace RCAD {
 
 //=============================================================================
 // Polygon_2r
@@ -272,4 +272,4 @@ void PolyChainVertex_2r::set_vertex_sptr(SharedPoint_2r v) {
     vertex_ = v;
 }
 
-} // namespace DDAD
+} // namespace RCAD

@@ -20,14 +20,14 @@
  *       see geometrictools.com
  */
 
-#ifndef DDAD_ML_INTERSECTION_H
-#define DDAD_ML_INTERSECTION_H
+#ifndef RC_ML_INTERSECTION_H
+#define RC_ML_INTERSECTION_H
 
 #include "ml_common.h"
 #include "ml_vector.h"
 #include "ml_observer.h"
 
-namespace DDAD {
+namespace RCAD {
 
 class Parallelogram_2r;
 class Cone_2r;
@@ -286,6 +286,6 @@ namespace Predicate {
 bool IsEmpty(const Intersection::Cone_2rBasis_2r& i);
 }
 
-} // namespace DDAD
+} // namespace RCAD
 
-#endif // DDAD_ML_INTERSECTION_H
+#endif // RC_ML_INTERSECTION_H

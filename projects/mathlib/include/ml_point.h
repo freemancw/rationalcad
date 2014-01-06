@@ -19,13 +19,13 @@
  * @date 12/27/2012
  */
 
-#ifndef DDAD_ML_POINT_H
-#define DDAD_ML_POINT_H
+#ifndef RC_ML_POINT_H
+#define RC_ML_POINT_H
 
 #include "ml_common.h"
 #include "ml_rational.h"
 
-namespace DDAD {
+namespace RCAD {
 
 class Point_2i;
 class Point_2f;
@@ -924,6 +924,6 @@ inline void Point_3r::set_unique_id(const uint32_t unique_id) {
     unique_id_ = unique_id;
 }
 
-} // namespace DDAD
+} // namespace RCAD
 
-#endif // DDAD_ML_POINT_H
+#endif // RC_ML_POINT_H

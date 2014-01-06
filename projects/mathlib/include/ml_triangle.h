@@ -18,14 +18,14 @@
  * @date 08/14/2013
  */
 
-#ifndef DDAD_ML_TRIANGLE_H
-#define DDAD_ML_TRIANGLE_H
+#ifndef RC_ML_TRIANGLE_H
+#define RC_ML_TRIANGLE_H
 
 #include "ml_common.h"
 #include "ml_point.h"
 #include "ml_line.h"
 
-namespace DDAD {
+namespace RCAD {
 
 class Triangle_2r {
 public:
@@ -77,6 +77,6 @@ private:
 
 std::ostream& operator<<(std::ostream& o, const Triangle_3r& tri);
 
-} // namespace DDAD
+} // namespace RCAD
 
-#endif // DDAD_ML_TRIANGLE_H
+#endif // RC_ML_TRIANGLE_H

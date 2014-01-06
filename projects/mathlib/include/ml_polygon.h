@@ -20,8 +20,8 @@
  * @date 02/12/2013
  */
 
-#ifndef DDAD_ML_POLYGON_H
-#define DDAD_ML_POLYGON_H
+#ifndef RC_ML_POLYGON_H
+#define RC_ML_POLYGON_H
 
 #include "ml_common.h"
 #include "ml_observer.h"
@@ -29,7 +29,7 @@
 #include "ml_line.h"
 #include "ml_triangle.h"
 
-namespace DDAD {
+namespace RCAD {
 
 //=============================================================================
 // Interface: PolyChainVertex_2r
@@ -118,6 +118,6 @@ private:
     Visual::Color diffuse_;
 };
 
-} // namespace DDAD
+} // namespace RCAD
 
-#endif // DDAD_ML_POLYGON_H
+#endif // RC_ML_POLYGON_H

@@ -18,8 +18,8 @@
  * @date 12/30/2012
  */
 
-#ifndef DDAD_ML_COMMON_H
-#define DDAD_ML_COMMON_H
+#ifndef RC_ML_COMMON_H
+#define RC_ML_COMMON_H
 
 #pragma warning(push)
 #pragma warning(disable:4100)
@@ -53,7 +53,7 @@
 
 #define UNUSED(x) (void)x;
 
-namespace DDAD {
+namespace RCAD {
 
 typedef mpz_class integer;
 typedef mpq_class rational;
@@ -186,6 +186,6 @@ enum Sign {
     SIGN_ZERO       =  0
 };
 
-} // namespace DDAD
+} // namespace RCAD
 
-#endif // DDAD_ML_COMMON_H
+#endif // RC_ML_COMMON_H

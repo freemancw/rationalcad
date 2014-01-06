@@ -157,7 +157,7 @@
 #include "ml_polytope.h"
 #include "ml_intersection.h"
 
-namespace DDAD {
+namespace RCAD {
 
 namespace Construction {
 
@@ -728,4 +728,4 @@ void Polytope_3r::Update() {
 
 }
 
-} // namespace DDAD
+} // namespace RCAD

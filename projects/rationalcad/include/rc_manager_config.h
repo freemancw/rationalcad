@@ -78,6 +78,6 @@ extern RCConfig g_config;
 
 void InitializeGlobalConfig();
 
-END__NAMESPACE(RCAD)
+END_NAMESPACE(RCAD)
 
 #endif // RC_MANAGER_CONFIG_H

@@ -18,8 +18,8 @@
  * @date 08/23/2013
  */
 
-#ifndef DDAD_ML_CONE_H
-#define DDAD_ML_CONE_H
+#ifndef RC_ML_CONE_H
+#define RC_ML_CONE_H
 
 #include "ml_common.h"
 #include "ml_rational.h"
@@ -28,7 +28,7 @@
 #include "ml_observer.h"
 #include "ml_triangle.h"
 
-namespace DDAD {
+namespace RCAD {
 
 class Parallelogram_2r;
 
@@ -105,6 +105,6 @@ private:
 };
 */
 
-} // namespace DDAD
+} // namespace RCAD
 
-#endif // DDAD_ML_CONE_H
+#endif // RC_ML_CONE_H

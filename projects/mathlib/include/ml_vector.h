@@ -19,13 +19,13 @@
  * @date 12/26/2012
  */
 
-#ifndef DDAD_ML_VECTOR_H
-#define DDAD_ML_VECTOR_H
+#ifndef RC_ML_VECTOR_H
+#define RC_ML_VECTOR_H
 
 #include "ml_common.h"
 #include "ml_point.h"
 
-namespace DDAD {
+namespace RCAD {
 
 //=============================================================================
 // Interface: Vector_2i
@@ -1319,6 +1319,6 @@ inline rational Dot(const Vector_3r& lhs, const Point_3r& rhs) {
     return lhs.x()*rhs.x()+lhs.y()*rhs.y()+lhs.z()*rhs.z();
 }
 
-} // namespace DDAD
+} // namespace RCAD
 
-#endif // DDAD_ML_VECTOR_H
+#endif // RC_ML_VECTOR_H

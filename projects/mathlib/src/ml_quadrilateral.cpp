@@ -23,7 +23,7 @@
 #include "ml_intersection.h"
 #include "ml_quadrilateral.h"
 
-namespace DDAD {
+namespace RCAD {
 
 //=============================================================================
 // Implementation: Parallelogram_2r
@@ -206,6 +206,6 @@ std::shared_ptr<Parallelogram_2r> Z2Neighbors(const Point_2r &p,
 
 } // namespace Construction
 
-} // namespace DDAD
+} // namespace RCAD
 
 

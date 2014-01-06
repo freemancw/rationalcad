@@ -25,7 +25,7 @@
 #include "ml_intersection.h"
 #include "ml_quadrilateral.h"
 
-namespace DDAD {
+namespace RCAD {
 
 //=============================================================================
 // Implementation: Matrix_3x3r
@@ -439,4 +439,4 @@ bool AContainsVertexOfB(const Cone_2r& a, const Parallelogram_2r& b) {
 
 } // namespace Predicate
 
-} // namespace DDAD
+} // namespace RCAD

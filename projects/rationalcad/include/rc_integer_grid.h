@@ -30,22 +30,22 @@
 
 BEGIN_NAMESPACE(RCAD)
 
-class GLManager;
+class GLVertex;
 
-class IntegerGrid : protected QOpenGLFunctions_3_3_Core {
+class IntegerGrid {
 public:
     IntegerGrid();
-    explicit IntegerGrid(const QSharedPointer<GLManager>& gl_manager);
 
     void InitializeGrid(const int min_pixel_spacing,
                         const int major_line_spacing,
                         const int n_major_lines,
-                        const int bit_complexity);
+                        const int bit_complexity,
+                        QVector<GLVertex>& grid_verts,
+                        QVector<GLushort>& grid_idxs);
 
     void IncreaseMagnification();
     void DecreaseMagnification();
     void Translate(const QVector2D& pixel_delta);
-    void Draw();
     QVector<QPair<int, int>> GetMajorXCoords(const int width) const;
     QVector<QPair<int, int>> GetMajorYCoords(const int height) const;
     QVector2D GetCoordsForPixel(const QVector2D& pixel) const;
@@ -61,14 +61,8 @@ private:
                      const int length) const;
     int GetMajorCoordIncrement() const;
 
-    GLuint vbo_id_;
-    GLuint ibo_id_;
-
     QVector2D global_pos_;
     qreal global_scale_;
-
-    QSharedPointer<GLManager> gl_manager_;
-    QSharedPointer<QOpenGLShaderProgram> shader_program_;
 
     int min_pixel_spacing_;         // the minimum number of pixels we will
                                     // accept between minor grid lines before

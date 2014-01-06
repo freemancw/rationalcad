@@ -26,7 +26,7 @@
 #include "rc_qt_dialog_preferences.h"
 #include "ui_rc_dialog_preferences.h"
 
-using namespace DDAD;
+using namespace RCAD;
 
 PreferencesDialog::PreferencesDialog(QWidget *parent) :
     QDialog(parent),

@@ -66,5 +66,5 @@ void InitializeGlobalConfig() {
     g_config.snap_to_grid_ = false;
 }
 
-END__NAMESPACE(RCAD)
+END_NAMESPACE(RCAD)
 

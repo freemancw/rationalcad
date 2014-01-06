@@ -18,8 +18,8 @@
  * @date 07/26/2013
  */
 
-#ifndef DDAD_ML_WEDGE_H
-#define DDAD_ML_WEDGE_H
+#ifndef RC_ML_WEDGE_H
+#define RC_ML_WEDGE_H
 
 #include "ml_common.h"
 #include "ml_observer.h"
@@ -27,7 +27,7 @@
 #include "ml_vector.h"
 #include "ml_triangle.h"
 
-namespace DDAD {
+namespace RCAD {
 
 //=============================================================================
 // Interface: Wedge_2r
@@ -100,6 +100,6 @@ private:
     SharedPoint_2r origin_;
 };
 
-} // namespace DDAD
+} // namespace RCAD
 
-#endif // DDAD_ML_WEDGE_H
+#endif // RC_ML_WEDGE_H

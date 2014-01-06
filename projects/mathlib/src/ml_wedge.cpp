@@ -23,7 +23,7 @@
 #include "ml_line.h"
 #include "ml_wedge.h"
 
-namespace DDAD {
+namespace RCAD {
 
 //=============================================================================
 // Wedge_2r
@@ -198,4 +198,4 @@ bool WedgeStack_2r::empty() const {
     return wedge_stack_.empty();
 }
 
-} // namespace DDAD
+} // namespace RCAD
