@@ -145,16 +145,29 @@ public:
 
     void SlotUpdate() override;
 
-private:
+signals:
+    void UpdateVboPoints(QVector<GLVertex> verts);
+    void UpdateVboLines(QVector<GLVertex> verts);
+    void UpdateVboTriangles(QVector<GLVertex> verts);
 
+private:
+    void GenerateVboPoints();
+    void GenerateVboLines();
+    void GenerateVboTriangles();
+
+    QHash<QString, QSharedPointer<ISceneObject>> scene_objects_;
+    quint32 cur_point_uid_;
+    QHash<uint32_t, QSharedPointer<ApproxPoint_3f>> approx_points_;
+    QHash<uint32_t, QStack<Visual::Point>> viz_points_;
+    QMap<QPair<uint32_t, uint32_t>, QStack<Visual::Segment>> viz_segments_;
+    QMap<QVector<uint32_t>, QStack<Visual::Triangle>> viz_triangles_;
 };
 
 //=============================================================================
 // Interface: SceneManager
 //=============================================================================
 
-class SceneManager :
-    public QObject {
+class SceneManager : public QObject {
 
     Q_OBJECT
 
@@ -166,21 +179,13 @@ public:
     const QString& selected_name() const;
 
 public slots:
-    void BeginCreatePolygon(const QString& name, const QColor& face_color);
-    void EndCreatePolygon();
-    void AddVertexToNewPolygon(const QVector2D& coords);
-    void ComputeIntegerHull();
+
+    void UpdateVboPoints(QVector<GLVertex> verts);
+    void UpdateVboLines(QVector<GLVertex> verts);
+    void UpdateVboTriangles(QVector<GLVertex> verts);
 
     void BeginCreatePolytope(const QString& name, const QColor& face_color);
     void EndCreatePolytope();
-
-    void BeginCreate2Cone(const QString& name, const QColor& face_color);
-    void EndCreate2Cone();
-    void Update2ConeA(const QVector2D& coords);
-    void Update2ConeB(const QVector2D& coords);
-    void SetVertexForNew2Cone(const QVector2D& coords);
-    void AddConstraintToNew2Cone(const QVector2D& coords);
-    void ComputeCIGP();
 
     void UpdateSelectedObjectName(const QString& name);
     void UpdateSelectedObjectColor(const QColor& color);
@@ -188,31 +193,13 @@ public slots:
     void SelectObject(const QVector2D& coords);
     void Deselect();
 
-signals:
-    void UpdateVboPoints(QVector<GLVertex> verts);
-    void UpdateVboLines(QVector<GLVertex> verts);
-    void UpdateVboTriangles(QVector<GLVertex> verts);
-
 private:
     bool ObjectIsSelected() const;
     ISceneObject* SelectedObject();
-    ScenePolygon_2* SelectedPolygon_2();
     ScenePolytope_3* SelectedPolytope_3();
-    SceneCone_2* SelectedCone_2();
 
-    void GenerateVboPoints();
-    void GenerateVboLines();
-    void GenerateVboTriangles();
-
+    SceneObserver scene_observer_;
     QString selected_name_;
-    QHash<QString, QSharedPointer<ISceneObject>> scene_objects_;
-
-    quint32 cur_point_uid_;
-    QHash<uint32_t, QSharedPointer<ApproxPoint_3f>> approx_points_;
-    QHash<uint32_t, QStack<Visual::Point>> viz_points_;
-    QMap<QPair<uint32_t, uint32_t>, QStack<Visual::Segment>> viz_segments_;
-    QMap<QVector<uint32_t>, QStack<Visual::Triangle>> viz_triangles_;
-
     QSharedPointer<QThread> animation_thread_;
 };
 

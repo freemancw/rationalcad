@@ -114,6 +114,7 @@ void OrthographicWidget::initializeGL() {
     i_grid_.InitializeGrid(8, 8, 16, 16, grid_verts, grid_idxs);
 
 
+/*
     // upload vert data
     glGenBuffers(1, &vbo_id_);
     glBindBuffer(GL_ARRAY_BUFFER, vbo_id_);
@@ -129,27 +130,28 @@ void OrthographicWidget::initializeGL() {
     // clean up (important for QPainter to work correctly)
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+    */
 
     vao_points_.create();
     vao_points_.bind();
-    scene_manager_->BindPointsVBO();
+    //scene_manager_->BindPointsVBO();
     gl_manager_->EnableAttributes("gl2_default", ortho_attributes);
     vao_points_.release();
-    scene_manager_->ReleasePointsVBO();
+    //scene_manager_->ReleasePointsVBO();
 
     vao_lines_.create();
     vao_lines_.bind();
-    scene_manager_->BindLinesVBO();
+    //scene_manager_->BindLinesVBO();
     gl_manager_->EnableAttributes("gl2_default", ortho_attributes);
     vao_lines_.release();
-    scene_manager_->ReleaseLinesVBO();
+    //scene_manager_->ReleaseLinesVBO();
 
     vao_triangles_.create();
     vao_triangles_.bind();
-    scene_manager_->BindTrianglesVBO();
+    //scene_manager_->BindTrianglesVBO();
     gl_manager_->EnableAttributes("gl2_default", ortho_attributes);
     vao_triangles_.release();
-    scene_manager_->ReleaseTrianglesVBO();
+    //scene_manager_->ReleaseTrianglesVBO();
 
     shader_program_->release();
 
@@ -170,7 +172,7 @@ void OrthographicWidget::paintEvent(QPaintEvent *event) {
     gl_manager_->glEnable(GL_DEPTH_TEST);
 
     gl_manager_->glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    i_grid_.Draw();
+    //i_grid_.Draw();
     setupModelview();
     drawScene();
 
@@ -208,6 +210,7 @@ void OrthographicWidget::drawScene() {
     //gl_manager_->glEnable(GL_BLEND);
     //gl_manager_->glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+/*
     vao_points_.bind();
     gl_manager_->DrawPointsVBO();
     vao_points_.release();
@@ -217,6 +220,7 @@ void OrthographicWidget::drawScene() {
     vao_triangles_.bind();
     gl_manager_->DrawTrianglesVBO();
     vao_triangles_.release();
+    */
 }
 
 void OrthographicWidget::draw2DOverlay() {
@@ -285,26 +289,6 @@ void OrthographicWidget::mousePressEvent(QMouseEvent *event) {
 
     if(event->buttons() & Qt::LeftButton) {
         switch(g_config.input_state_) {
-        case CREATE_POLYGON:
-            emit AddVertexToNewPolygon(world_coords);
-            emit ChangeMessage("Right-click to finish polygon creation.");
-            return;
-        case CREATE_2CONE_VERTEX:
-            emit SetVertexForNew2Cone(world_coords);
-            emit ChangeMessage("Left-click to place first constraint for polygonal cone.");
-            setMouseTracking(true);
-            grabKeyboard();
-            //emit AddConstraintToNew2Cone(world_coords);
-            return;
-        case CREATE_2CONE_RAY_A:
-            emit AddConstraintToNew2Cone(world_coords);
-            emit ChangeMessage("Left-click to place second constraint for polygonal cone.");
-            return;
-        case CREATE_2CONE_RAY_B:
-            emit EndCreate2Cone(false);
-            releaseKeyboard();
-            setMouseTracking(false);
-            return;
         case SELECT:
             if(event->modifiers() & Qt::ShiftModifier) {
                 emit SelectObject(world_coords);
@@ -322,14 +306,6 @@ void OrthographicWidget::mousePressEvent(QMouseEvent *event) {
 
     if(event->buttons() & Qt::RightButton) {
         switch(g_config.input_state_) {
-        case CREATE_POLYGON:
-            emit EndCreatePolygon(false);
-            return;
-        case CREATE_2CONE_VERTEX:
-        case CREATE_2CONE_RAY_A:
-        case CREATE_2CONE_RAY_B:
-            emit EndCreate2Cone(false);
-            return;
         case SELECT:
         default:
             break;
@@ -350,14 +326,6 @@ void OrthographicWidget::mouseMoveEvent(QMouseEvent *event) {
                     last_click_pos.y()-convertedY);
 
     switch(g_config.input_state_) {
-    case CREATE_POLYGON:
-        break;
-    case CREATE_2CONE_RAY_A:
-        emit Update2ConeA(mousePressToWorld(event));
-        break;
-    case CREATE_2CONE_RAY_B:
-        emit Update2ConeB(mousePressToWorld(event));
-        break;
     default:
         break;
     }

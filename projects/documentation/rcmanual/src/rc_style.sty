@@ -10,9 +10,10 @@
 \usepackage{amssymb}
 \usepackage{amsfonts}
 \usepackage{amsthm}
-\usepackage{unicode-math}
 \usepackage[svgnames]{xcolor}
-\setmainfont[Ligatures=TeX,Scale=1.1]{Adobe Jenson Pro}
+\usepackage{unicode-math}
+\setmainfont[Ligatures=TeX,Scale=1.1]{Adobe Caslon Pro}
+%\setmainfont[Ligatures=TeX,Scale=1.1]{Garamond Premier Pro}
 %\setmainfont[Ligatures=TeX,Scale=1.0]{GriffosFont Medium}
 %\setmainfont[Ligatures=TeX,Scale=1.0]{IM FELL English PRO}
 %\setsansfont{Helvetica Neue LT Std 47}
@@ -31,9 +32,25 @@
 %\setmainfont[Ligatures=TeX,Scale=1.1]{ITC Garamond Handtooled Std}
 \setmathfont{XITS Math}
 \setmathfont[range=\mathbb]{Linux Libertine}
-\usepackage[linktocpage=true]{hyperref}
+\usepackage[linktocpage=true, colorlinks=true, linkcolor=DodgerBlue,
+citecolor=DodgerBlue]{hyperref}
 \usepackage{tikz}
 \usepackage{calc}
+\usepackage[framemethod=tikz]{mdframed}
+\usepackage{xfrac}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage{listings} 
+\usepackage{tabularx}
+\usepackage{etoolbox}
+\usepackage{lettrine}
+\usepackage{yfonts}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+\epigraphfontsize{\small\itshape}
+\setlength\epigraphwidth{8cm}
+\setlength\epigraphrule{0pt}
 
 \usetikzlibrary{calc, decorations.pathmorphing, shapes, arrows.new}
 
@@ -50,6 +67,20 @@
 %\usepackage{mathptmx}
 %\usepackage{times}
 %\usepackage[garamond]{mathdesign}
+
+\definecolor{answerColor}{RGB}{50, 50, 50}
+\mdfdefinestyle{answer} {
+	backgroundcolor = white,
+	linecolor = white,
+	%skipabove = 8px,
+	%skipbelow = 8px,
+	%splittopskip = 22px,
+	%splitbottomskip = \baselineskip,
+	innertopmargin = 1em,
+	innerbottommargin = 1em,
+	innerrightmargin = 1em,
+	innerleftmargin = 1em
+}
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{corollary}{Corollary}
@@ -163,8 +194,9 @@
  	}
 	
 	\renewcommand*{\afterchaptertitle} {
-  		\vskip\onelineskip \hrule height 3pt \vskip\onelineskip}
-  	}
+  		\vskip\onelineskip \hrule height 3pt
+  		\vskip\onelineskip } }%\includegraphics[width=\textwidth,
+  		% page=1]{figs/quote}
 \makeatother
 
 \setsecheadstyle{\LARGE\scshape\bfseries\raggedright\MakeLowercase}%\color{DodgerBlue}

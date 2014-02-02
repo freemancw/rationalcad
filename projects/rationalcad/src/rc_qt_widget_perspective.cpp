@@ -80,24 +80,24 @@ void PerspectiveWidget::initializeGL() {
 
     vao_points_.create();
     vao_points_.bind();
-    gl_manager_->BindPointsVBO();
+    //gl_manager_->BindPointsVBO();
     gl_manager_->EnableAttributes("gl3_default", persp_attributes);
     vao_points_.release();
-    gl_manager_->ReleasePointsVBO();
+    //gl_manager_->ReleasePointsVBO();
 
     vao_lines_.create();
     vao_lines_.bind();
-    gl_manager_->BindLinesVBO();
+    //gl_manager_->BindLinesVBO();
     gl_manager_->EnableAttributes("gl3_default", persp_attributes);
     vao_lines_.release();
-    gl_manager_->ReleaseLinesVBO();
+    //gl_manager_->ReleaseLinesVBO();
 
     vao_triangles_.create();
     vao_triangles_.bind();
-    gl_manager_->BindTrianglesVBO();
+    //gl_manager_->BindTrianglesVBO();
     gl_manager_->EnableAttributes("gl3_default", persp_attributes);
     vao_triangles_.release();
-    gl_manager_->ReleaseTrianglesVBO();
+    //gl_manager_->ReleaseTrianglesVBO();
 
     shader_program_->release();
 
@@ -191,6 +191,7 @@ void PerspectiveWidget::drawScene() {
     //gl_manager_->glEnable(GL_BLEND);
     //gl_manager_->glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+/*
     vao_points_.bind();
     gl_manager_->DrawPointsVBO();
     vao_points_.release();
@@ -200,6 +201,7 @@ void PerspectiveWidget::drawScene() {
     vao_triangles_.bind();
     gl_manager_->DrawTrianglesVBO();
     vao_triangles_.release();
+    */
 }
 
 void PerspectiveWidget::resizeGL(int width, int height) {

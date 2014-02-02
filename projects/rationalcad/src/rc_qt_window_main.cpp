@@ -47,25 +47,6 @@ MainWindow::MainWindow(QWidget *parent) :
     logger_.subscribeTo(rlog::GetGlobalChannel("debug"));
     logger_.subscribeTo(rlog::GetGlobalChannel("error"));
 
-    // the scene manager lives in its own thread and emits updated OpenGL
-    // data to the gl manager
-    scene_manager_thread_ = QSharedPointer<QThread>(new QThread());
-    scene_manager_->moveToThread(scene_manager_thread_.data());
-
-    scene_manager_thread_->start();
-
-    connect(this,
-            SIGNAL(BeginCreatePolygon(QString,QColor)),
-            scene_manager_.data(),
-            SLOT(BeginCreatePolygon(QString,QColor)));
-    connect(this,
-            SIGNAL(EndCreatePolygon()),
-            scene_manager_.data(),
-            SLOT(EndCreatePolygon()));
-    connect(this,
-            SIGNAL(ComputeIntegerHull()),
-            scene_manager_.data(),
-            SLOT(ComputeIntegerHull()));
     connect(this,
             SIGNAL(BeginCreatePolytope(QString,QColor)),
             scene_manager_.data(),
@@ -74,18 +55,6 @@ MainWindow::MainWindow(QWidget *parent) :
             SIGNAL(EndCreatePolytope()),
             scene_manager_.data(),
             SLOT(EndCreatePolytope()));
-    connect(this,
-            SIGNAL(BeginCreate2Cone(QString,QColor)),
-            scene_manager_.data(),
-            SLOT(BeginCreate2Cone(QString,QColor)));
-    connect(this,
-            SIGNAL(EndCreate2Cone()),
-            scene_manager_.data(),
-            SLOT(EndCreate2Cone()));
-    connect(this,
-            SIGNAL(ComputeCIGP()),
-            scene_manager_.data(),
-            SLOT(ComputeCIGP()));
     connect(this,
             SIGNAL(Deselect()),
             scene_manager_.data(),
@@ -120,14 +89,8 @@ MainWindow::MainWindow(QWidget *parent) :
             SIGNAL(ChangeMessage(const QString&)),
             SLOT(UpdateStatusBarMsg(const QString&)));
     connect(ortho_top,
-            SIGNAL(EndCreatePolygon(bool)),
-            SLOT(on_button_polygon_toggled(bool)));
-    connect(ortho_top,
             SIGNAL(EndCreatePolytope(bool)),
             SLOT(on_button_polytope_toggled(bool)));
-    connect(ortho_top,
-            SIGNAL(EndCreate2Cone(bool)),
-            SLOT(on_button_polygonal_cone_toggled(bool)));
 
     rDebug("Creating perspective.");
     auto perspective = new PerspectiveWidget(gl_manager_, scene_manager_,
@@ -161,8 +124,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow() {
     delete ui;
-    scene_manager_thread_->quit();
-    scene_manager_thread_->wait();
 }
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
@@ -216,27 +177,6 @@ void MainWindow::UpdateStatusBarMsg(const QString &status) {
     ui->statusbar_main->showMessage(status);
 }
 
-void MainWindow::on_button_polygon_toggled(bool checked) {
-    if(checked) {
-        ui->statusbar_main->showMessage("Left-click in the Top view to begin "
-                                        "creating the polygon.");
-        g_config.input_state_ = CREATE_POLYGON;
-
-        ui->name_and_color->setDisabled(false);
-        ui->line_edit_name->setText(QString("Object%1").arg(
-                                        scene_manager_->NumObjects()));
-        emit BeginCreatePolygon(ui->line_edit_name->text(),
-                                create_object_color_);
-    } else {
-        if(g_config.input_state_ == CREATE_POLYGON) {
-            ui->statusbar_main->clearMessage();
-            g_config.input_state_ = SELECT;
-            emit EndCreatePolygon();
-            ui->button_polygon->setChecked(false);
-        }
-    }
-}
-
 void MainWindow::on_action_toggle_snaps_toggled(bool checked) {
     g_config.snap_to_grid_ = checked;
 }
@@ -249,42 +189,6 @@ void MainWindow::on_button_color_clicked() {
                 create_object_color_.blue());
     ui->button_color->setStyleSheet(color_style);
     emit UpdateSelectedObjectColor(create_object_color_);
-}
-
-void MainWindow::on_compute_integer_hull_clicked() {
-    emit ComputeIntegerHull();
-}
-
-
-void MainWindow::on_compute_interior_grid_pt_clicked() {
-    emit ComputeCIGP();
-}
-
-void MainWindow::on_button_polygonal_cone_toggled(bool checked) {
-    if(checked) {
-        ui->statusbar_main->showMessage("Left-click in the Top view to place "
-                                        "the cone's vertex.");
-        g_config.input_state_ = CREATE_2CONE_VERTEX;
-
-        ui->name_and_color->setDisabled(false);
-        ui->line_edit_name->setText(QString("Object%1").arg(
-                                        scene_manager_->NumObjects()));
-        emit BeginCreate2Cone(ui->line_edit_name->text(),
-                              create_object_color_);
-    } else {
-        switch(g_config.input_state_) {
-        case CREATE_2CONE_VERTEX:
-        case CREATE_2CONE_RAY_A:
-        case CREATE_2CONE_RAY_B:
-            ui->statusbar_main->clearMessage();
-            g_config.input_state_ = SELECT;
-            emit EndCreate2Cone();
-            ui->button_polygonal_cone->setChecked(false);
-            break;
-        default:
-            break;
-        }
-    }
 }
 
 void MainWindow::on_button_polytope_toggled(bool checked) {
@@ -303,7 +207,7 @@ void MainWindow::on_button_polytope_toggled(bool checked) {
             ui->statusbar_main->clearMessage();
             g_config.input_state_ = SELECT;
             emit EndCreatePolytope();
-            ui->button_polygonal_cone->setChecked(false);
+            //ui->button_polygonal_cone->setChecked(false);
             break;
         default:
             break;

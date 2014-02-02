@@ -87,16 +87,13 @@ void GLManager::Initialize() {
 
     // restore system locale
     setlocale(LC_ALL, "");
-
-    UpdateVboPoints(QVector<GLVertex>());
-    UpdateVboLines(QVector<GLVertex>());
-    UpdateVboTriangles(QVector<GLVertex>());
 }
 
 void GLManager::LogDebugMessage(const QOpenGLDebugMessage &message) {
     rInfo(message.message().toStdString().c_str());
 }
 
+/*
 void GLManager::DrawPoints(const QString &id,
                            const QList<GLAttributeMeta> &attributes) {
     vbo_points_.buffer.bind();
@@ -119,6 +116,7 @@ void GLManager::DrawTriangles(const QString &id,
                               const QList<GLAttributeMeta> &attributes) {
 
 }
+*/
 
 bool GLManager::AddProgram(const QString &id, const QString &vert_path,
                            const QString &frag_path) {

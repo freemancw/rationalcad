@@ -12,6 +12,9 @@
 \usepackage{amssymb}
 \usepackage{amsfonts}
 \usepackage{amsthm}
+\usepackage{lmodern}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 %\usepackage{unicode-math} 
 %\setmainfont[Ligatures=TeX,Scale=1.1]{Adobe Jenson Pro}
 %\setsansfont{Frutiger LT Std}
@@ -104,248 +107,57 @@
 
 \begin{document}
 
-\title{BUNGIE TEST README}
+%\title{Computing the integer hull of a simplicial cone in three dimensions}
+\title{Computing a unimodular basis containing a given vector}
 \author{Clinton Freeman}
 
 \maketitle
 
-\section{General notes}
+\section{Introduction}
 
-%I used C++ for all problems. AFAIK, I used two C++11 features: the
-% \texttt{auto} keyword, and \texttt{begin(container)} and \texttt{end(container)} instead
-%of \texttt{container.begin()} and \texttt{container.end()}.
+This document describes an algorithm that solves the following problem:
+given a vector $\mVc{v} \in \mZ{3}$, compute an unimodular basis $\mMt{B}$ for
+$\mZ{3}$ that has $\mVc{v}$ as one of the three basis vectors. In order to
+precisely specify the input, output, and running time of the algorithm, I
+provide a good deal of background material on linear algebra, models of
+computation, and the computational complexity of basic arithmetic and algebraic
+operations. 
 
-I used C++ for all problems, including a number of C++11 features. I compiled my
-test program with VS2013, although I've not used anything too exotic so VS2012
-should also work (not sure about VS2010).
+\section{Background}
 
-\section{Reverse sentence}
+\subsection{Model of computation}
 
-For an input string consisting of $n$ characters, my algorithm makes two
-in-place passes over the string, first reversing all characters irrespective of
-whitespace, then reversing each word individually in a left-to-right traversal.
-It uses $O(n)$ time and $O(1)$ space, since each pass is also linear with a
-constant space requirement.
+\subsection{Linear algebra}
 
-\vspace{1em}
-\noindent Relevant files: \texttt{bt\_reverse.h, bt\_reverse.cpp} 
+\section{Algorithm description and analysis}
 
-\section{Duplicate list}
-
-For a list with $n$ nodes, my algorithm takes three passes to duplicate the
-list, using $O(n)$ time and $O(n)$ space. It uses a somewhat complicated
-rearrangement of pointers on each pass in order to avoid allocating extra space
-beyond a constant number of temporaries. An alternative algorithm could achieve
-the same asymptotic performance in fewer passes and without modifying the input
-list by allocating a few extra pointers per node. This may be preferable for
-simplicity.
-
-\vspace{1em}
-\noindent Relevant files: \texttt{bt\_duplicate.h, bt\_duplicate.cpp}
-
-\section{Line segments}
-
-\subsection{Sphere-sphere intersection}
-
-Since the direction of each segment is allowed to vary, the start position and
-length define the center and radius of respective spheres. The solution set may
-be represented as the intersection of these spheres, which is one of the
-following:
-\begin{enumerate}
-  \item The empty set $\emptyset$, which occurs in three cases. In the first
-  case, the spheres are too far apart to touch, given by the conditions
-  \begin{align} 
-  \|\mPt{p_0}-\mPt{p_1}\| &> l_0,\text{ or} \\
-  \|\mPt{p_0}-\mPt{p_1}\| &> l_1. 
-  \end{align}
-  In the second and third cases, one sphere is fully enclosed by the other,
-  given by the conditions 
-  \begin{align}
-  \|\mPt{p_0}-\mPt{p_1}\| + l_0 &< l_1,\text{ or} \\
-  \|\mPt{p_0}-\mPt{p_1}\| + l_1 &< l_0.
-  \end{align}
-  \item A single point $\mPt{q}$, which occurs when the distance between the two
-  centers exactly equals the sum of the radii
-  \begin{equation}
-  \|\mPt{p_0}-\mPt{p_1}\|=l_0+l_1. 
-  \end{equation}
-  First observe that $\mPt{q}$ is located along the vector connecting the
-  centers. We may use this fact to construct $\mPt{q}$ with a number of
-  different algebraic expressions -- we should choose the expression of
-  lowest degree in order to minimize its precision requirement. For example, a
-  straightforward way is to form the vector $\mVc{v} = \mPt{p_1}-\mPt{p_0}$,
-  normalize $\mVc{v}$, and construct $\mPt{q} = \mPt{p_0}+l_0\mVc{v}$. However,
-  we can do better by simply computing $\mPt{q}$ as
-  \begin{equation}
-  \mPt{q} = \mPt{p_0}+\left(\frac{l_0}{l_0+l_1}\right)\mVc{v}.
-  \end{equation}
-  \item A circle $\mSet{C}$, which occurs when
-  \begin{equation}
-  \|\mPt{p_0}-\mPt{p_1}\|<l_0+l_1. 
-  \end{equation}
-  To begin, we may write $\mSet{C}$ precisely as the set of points 
-  \begin{equation}\label{eq:circle_set}
-  \mSet{C} = \left\{\mPt{q} \in \mR{3} : (\mPt{q} - \mPt{p_0})\cdot(\mPt{q} -
-  \mPt{p_0})= l_0^2\text{ and } (\mPt{q} - \mPt{p_1})\cdot(\mPt{q} -
-  \mPt{p_1})= l_1^2\right\}.
-  \end{equation}
-  For programming purposes, we would prefer a different representation. We can
-  let $\mCompound{C} = (\mPt{c}, r, \mVc{n})$, where $\mPt{c}$ is its center in
-  $\mR{3}$, $\mVc{n}$ is normal to its supporting plane, and $r$ is its radius.
-  We may compute this tuple from equation~\eqref{eq:circle_set} as follows.
-  First, translate everything to $\mPt{p_0}$'s local space, letting
-  $\mPt{\hat{p}_0} = \mPt{p_0}-\mPt{p_0}=0$ and $\mPt{\hat{p}_1} =
-  \mPt{p_1}-\mPt{p_0}$,
-  \begin{align}
-  \mPt{q}\cdot\mPt{q} = q_x^2+q_y^2+q_z^2 &= l_0^2 \\ 
-  (\mPt{q} - \mPt{\hat{p}_1})\cdot(\mPt{q} - \mPt{\hat{p}_1}) =
-  (q_x-\hat{p}_{1x})^2+(q_y-\hat{p}_{1y})^2+(q_z-\hat{p}_{1z})^2 &= l_1^2.
-  \end{align} 
-  Second, rewrite the equations in terms of a new basis composed of
-  (normalized) $\mVc{v}$ and two other orthogonal vectors $\mVc{u}$ and
-  $\mVc{w}$. The first equation will not change, but the second will have the
-  $\mVc{u}$ and $\mVc{w}$ offsets set to 0 since the sphere's center now resides
-  along $\mVc{v}$,
-  \begin{align}
-  q_u^2+q_v^2+q_w^2 &= l_0^2 \\ 
-  q_u^2+(q_v-\hat{p}_{1v})^2+q_w^2 &= l_1^2.
-  \end{align}
-  Third, solve for $q_v$ in order to determine where along $\mVc{v}$ the spheres
-  intersect,
-  \begin{align}
-  q_u^2+q_v^2+q_w^2-l_0^2 &= q_u^2+(q_v-\hat{p}_{1v})^2+q_w^2-l_1^2 \\
-  q_v^2-l_0^2 &= (q_v-\hat{p}_{1v})^2-l_1^2 \\
-  q_v^2-(q_v-\hat{p}_{1v})^2 &= l_0^2-l_1^2 \\
-  q_v^2-q_v^2+2q_v\hat{p}_{1v}-\hat{p}_{1v}^2 &= l_0^2-l_1^2 \\ 
-  2q_v\hat{p}_{1v} &= l_0^2-l_1^2+\hat{p}_{1v}^2 \\
-  q_v &= \frac{l_0^2-l_1^2+\hat{p}_{1v}^2}{2\hat{p}_{1v}}. 
-  \end{align}
-  Finally, to find the radius $r$, we plug our expression for $q_v$ into the
-  first equation and rearrange terms into the equation for a circle in the
-  $\mVc{u}\mVc{w}$-plane,
-  \begin{align}
-  q_u^2 + \left(\frac{l_0^2-l_1^2+\hat{p}_{1v}^2}{2\hat{p}_{1v}}\right)^2
-  + q_w^2 &= l_0^2 \\
-  q_u^2 + q_w^2 &= l_0^2 -
-  \left(\frac{l_0^2-l_1^2+\hat{p}_{1v}^2}{2\hat{p}_{1v}}\right)^2 \\
-  r &= \sqrt{l_0^2 -
-  \left(\frac{l_0^2-l_1^2+\hat{p}_{1v}^2}{2\hat{p}_{1v}}\right)^2}.
-  \end{align}
-  \item A sphere $\mCompound{S}$, when $l_0 = l_1$ and $\mPt{p_0} = \mPt{p_1}$.
-  We may simply set $\mCompound{S} = (\mPt{p_0}, l_0)$.
-\end{enumerate}
-
-\subsection{Possible uses}
-
-There isn't a use that immediately comes to mind, so I'll just make a few
-hand-wavy conjectures:
-
-\begin{itemize}
-  \item Modeling some physical system. For example, suppose we have a rod of
-  some length with one end at some fixed position, the other end of which is
-  heavily magnetized. If we have two such rods sufficiently close to one
-  another and sufficiently magnetized to overcome gravity, then after a short
-  time the two free ends will meet at a point returned by our function.
-  \item Visual effects along the intersection of spheres. Imagine two huge
-  spheres that form some architectural feature, and the designer would like to
-  place decals along the seam where they meet.
-  \item Collision detection with uncertainty. If the points model objects and
-  the lengths model the distance the objects will travel over a frame, but for
-  some reason we don't know in which direction they'll be travelling. Normally
-  we would want penetration depth and first point of contact, but maybe this is 
-  useful. 
-\end{itemize} 
-
-\subsection{Robustness}
-
-I can't go into too much detail about whether the code I wrote ``is robust'' or
-not without knowing what it will be used for. I made an attempt to avoid
-roundoff where possible, but I wouldn't be surprised if there is a better way of
-calculating the circle center and radius. 
-
-\vspace{1em}
-\noindent Relevant files: \texttt{bt\_point.h, bt\_vector.h, bt\_segments.h,
-bt\_segments.cpp}
-
-\section{Solving boggle}
-
-\subsection{Dictionary data structure}
-
-I use a Trie data structure to store the given dictionary based on the
-observation that we may quit exploring some path through the board once we've
-determined that the current string is not a prefix for any words in the
-dictionary. Tries are particularly well suited to this task since it is simply
-a matter of checking if the node corresponding to the string in question has
-any children. While I considered using a hash table, there isn't an inherent
-relationship between the hashed values of strings with common prefixes, so a
-hash table based algorithm would need to investigate all possible boggle
-strings, which seemed to lead to an exponential time algorithm.
-
-There are a number of ways to implement Tries - the primary difference is the
-way in which children are stored. Each way comes with different time/space
-characteristics. In particular, a Trie built for a language with $n$ characters,
-we might do any of the following:
-\begin{enumerate}
-  \item Store an array of $n$ child pointers, one for each possible character.
-  This gives $O(1)$ access time at the cost of a potentially large amount of
-  unused space.
-  \item Store an list of child pointers that may range in size from $0\ldots n$.
-  This is simple and does not waste space, but we pay with an access time linear
-  in the number of pointers at a particular node.
-  \item Store a BST of child pointers. This gives access time logarithmic in the
-  number of pointers at each node, but uses more space than the list.
-\end{enumerate}
-My implementation uses (2) for simplicity, since it wasn't immediately obvious
-which would be "better." An extensive analysis of Tries can be found in
-Sedgewick's "Algorithms" and "Introduction to Algorithm Analysis."
-
-\subsection{Algorithm description and performance}
-
-Without being particularly formal, my algorithm uses divide and conquer on each
-board cell to produce NxM disjoint subproblems. Then, for each subproblem, it
-uses dynamic programming to search through all possible words that may be
-generated by the given start cell. Once a recursive call realizes that the
-current path through the board is incapable of generating any more words in the
-dictionary, further exploration is cut short. By memoizing the prefix string
-and current node in the dictionary Trie, it avoids repeated computation.
-Currently, I provide only a recursive implementation of the algorithm, but
-given more time I would write an iterative version to reduce overhead. Some
-factors relevant to performance are:
-\begin{itemize}
-  \item number of letters in the alphabet
-  \item board dimensions
-  \item characteristics of the strings in the dictionary, esp. longest word length
-  \item minimum word length set by boggle rules
-  \item the fact that letters are randomly chosen
-  \item the expected number of letters for search failure
-  \item total number of possible strings
-\end{itemize}
-
-% In lieu of analysis, I'll make the following conjectures:
-% 
-%   - For an N by M board, the running time is N*M times the running time of the
-%     dynamic programming subroutine, T(s).
-%   - A rough upper bound may be obtained by assuming that we must examine all
-%     paths all the way to the end.
-
-\vspace{1em}
-\noindent Relevant files: \texttt{bt\_array.h, bt\_boggle.h, bt\_boggle.cpp}
-
-\section{Custom question}
-
-The following was a homework problem from my Physically-based Modeling course
-that is roughly the length/difficulty of the line segments problem. 
-
-\begin{quote}
-A spring hands vertically in its equilibrium or resting position. Given a
-user-defined mass $m$ attached to the spring with spring constant $k$, not
-stretched at first. Simulate the motion of the spring and mass under the effects
-of spring and gravitational forces. Use standard earth gravity as a default. 
-
-For both problems, you'll need to write at least two functions (Euler's method 
-vs. Mid-point or 4th order Runge-Kutta) for integration and compare their 
-numerical accuracy and stability. Which function is more accurate? 
-Which one is more stable? Which one is more efficient?
-\end{quote}
+\begin{algorithm}
+\caption{Constructing a unimodular basis that contains a specified vector}
+\label{alg:UnimodularBasisWithVec}
+\begin{algorithmic}[1]
+    \vspace{0.75em}
+    \Require{Integer vector $\mVector{v} \in \mR{3}$} 
+    \Ensure{Unimodular basis $\mMatrix{B}$}
+    \vspace{0.75em}
+    \Procedure{UnimodularBasisWithVec3}{$\mVector{v}$}
+    \State $\mMatrix{B} := \textsc{identity}$
+    %\State $\mMatrix{B}_{i,i} := \mTernary{v_i < 0}{-1}{+1}$ 
+    \While{$\mVector{v}$ is not a row of $\mMatrix{B}$}
+        \State $\mVector{v}^\prime := \mVector{v} \cdot \mMatrix{B}^{-1}$
+        \State $\mVector{v}^\prime_{\text{min}} :=
+        \min(\mVector{v}^\prime)$, $\mVector{v}^\prime_{\text{mid}} :=
+        \text{mid}(\mVector{v}^\prime)$, $\mVector{v}^\prime_{\text{max}} :=
+        \max(\mVector{v}^\prime)$
+        \State $\mMatrix{B}_{\text{min}, i} := \mMatrix{B}_{\text{min}, i} +
+        \mMatrix{B}_{\text{mid}, i}$
+        \State $\mMatrix{B}_{\text{min}, i} := \mMatrix{B}_{\text{min}, i} +
+        \mMatrix{B}_{\text{max}, i}$
+        \State $\mMatrix{B}_{\text{mid}, i} := \mMatrix{B}_{\text{mid}, i} +
+        \mMatrix{B}_{\text{max}, i}$
+    \EndWhile
+    \State \Return $\mMatrix{B}$
+    \EndProcedure 
+\end{algorithmic}
+\end{algorithm}
 
 \end{document}

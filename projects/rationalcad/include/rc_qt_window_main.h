@@ -65,11 +65,9 @@ private slots:
     void on_action_preferences_triggered();
     void on_action_toggle_snaps_toggled(bool arg1);
     void on_button_color_clicked();
-    void on_compute_integer_hull_clicked();
 
     void UpdateStatusBarMsg(const QString& status);
 
-    void on_compute_interior_grid_pt_clicked();
     void on_button_polytope_toggled(bool checked);
 
 private:

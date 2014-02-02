@@ -15,21 +15,59 @@
    
 \frontmatter
 
+%\pagecolor{answerColor}
+%\color{white}
+
 \pagenumbering{gobble}
 \thispagestyle{empty}
-   
-\textbf{{\Huge RationalCAD}}
+
+%\begin{mdframed}[style=answer]  
+\noindent\textbf{{\fontsize{20pt}{48pt}\selectfont ROBUST GEOMETRIC COMPUTING}}  
+    
+\vspace{1.5em}
+
+\noindent\textit{\fontsize{16pt}{24pt}\selectfont A handy guide to writing
+reliable geometric software}
+%\end{mdframed}   
+%\vspace{10em} 
+\par\vspace*{\fill}
+
+\noindent\hfill{\fontsize{16pt}{24pt}\selectfont by CLINTON FREEMAN}  
 
 \clearpage
 
+%\pagecolor{white}
+%\color{black}
+
+%\newpage\null\thispagestyle{empty}\newpage
+
 %==============================================================================
-% Table of Contents
+% Table of Contents 
 %==============================================================================
 
 \pagenumbering{roman}
 
-\tableofcontents* 
-  
+\tableofcontents*   
+
+\clearpage
+
+%==============================================================================
+% Preface
+%==============================================================================
+
+\chapter{Preface}  
+
+I am writing this book because I have yet to find a single source that clearly
+outlines what is to be done about geometric nonrobustness from both a
+theoretical and practical point of view.
+
+\vspace{2em}
+\hfill\textbf{Clinton Freeman}
+
+\hfill\textit{Chapel Hill, North Carolina}
+
+\hfill January 2014
+
 %==============================================================================
 % Introduction
 %==============================================================================
@@ -38,14 +76,17 @@
 \pagenumbering{arabic}
      
 \chapterstyle{freeman}
-\chapter{Introduction}         
 
-Hello and welcome to the RationalCAD manual! This document is intended to
-catalogue the solutions to technical challenges faced by the software. It brings
-together relevant background material, discusses both theoretical and practical 
-issues, and provides explanations of concrete implementations in C++.   
+\chapter{Uncategorized}         
+ 
+% \chapterprecishere{``Begin at the beginning,¨ the King said gravely, ``and go on
+% till you come to the end: then stop."\par\raggedleft--- \textup{Lewis Carroll}, Alice in Wonderland}
 
-\section{Audience}  
+%\epigraph{``Begin at the beginning," the King said gravely, ``and go on till
+% you come to the end: then stop."}{--- \textup{Lewis Carroll}, Alice in Wonderland}
+ 
+
+%\section{Audience}   
  
 \section{General considerations} 
  
@@ -112,57 +153,287 @@ Compound object             & $\mPlane{P}, \mPolygon{Q}, \mPolytope{R},
 \bottomrule          
 \end{tabularx}   
 
-\section{Branding and logo design}
+\subsection{Pseudocode}
 
-\subsection{Font}
+\section{Geometric and solid modeling}
 
-\subsection{Colors}
+Geometric and solid modeling are processes by which a user may employ a computer
+to design virtual geometric shapes. Another term for these processes is
+computer-aided geometric design. The purpose may vary greatly, but we can
+classify broadly as: creating a virtual object to live in a virtual world,
+creating a virtual object to be manufactured to live in the real world, modeling
+a real object, and \ldots The difference between geometric and solid modeling is
+\ldots
 
-\subsection{Splash screen}
+%purpose of geometric modeling
+%purpose of solid modeling
+%difference between geometric and solid modeling
+computer aided design
 
-Splash screens are typically used by particularly large applications to notify
-the user that the program is in the process of loading. They provide feedback
-that a lengthy process is underway. Occasionally, a progress bar within the
-splash screen indicates the loading progress. A splash screen disappears when
-the application's main window appears. Splash screens typically serve to enhance
-the look and feel of an application or web site, hence they are often visually
-appealing. They may also have animations, graphics, and sound. (cite wiki)
+\section{Software reliability}
 
-\section{Coding style}
+robust
+reliable
+software reliability
+probability
 
-one true brace style, google style guide, etc
 
-% \chapter{Basics of affine geometry}
-% \section{Affine space}
-% \section{Examples of affine spaces}
-% \section{Chasles's identity}
-% \section{Affine combinations, barycenters}
-% \section{Affine subspaces}
-% \section{Affine independence and affine frames}
-% \section{Affine maps}
-% \section{Affine groups}
-% \section{Affine geometry: a glipse}
-% \section{Affine hyperplanes}
-% \section{Intersection of affine spaces}
-% \section{Problems}
+\section{Polyhedra}
 
-\chapter{Grid system}
+Our primary objects of study are convex polytopes and their corresponding
+integer hulls. Below, we define both terms and bound the complexity of integer
+hulls in 3-space by specializing a general bound for fixed dimensions.
 
-Several objects and settings are relevant to specifying how the 2D grid is drawn:
+In $\mR{d}$, let $S^d$ and $B^d$ denote the unit sphere and unit ball,
+respectively, and for a set $X \subseteq \mR{d}$, let $\text{cl}X$ denote
+the closure of $X$. A $k$\emph{-face} (or $k$\emph{-cell}) is subset of
+$\mR{d}$ that is homeomorphic to $B^k$. A $d$-dimensional \emph{cell
+complex} is a disjoint union of $k$-faces for $k=0,1,2,\ldots,d$ in which, for
+any faces $a$ and $b$, the intersection of $\text{cl}a$ and $\text{cl}b$ is
+either a union of faces or the empty set.
 
-\begin{itemize}
-  \item QGLWidget: acts as a container and provides a GL drawing surface (API).
-  \item glViewport: sets up the correspondence between the dimensions of the
-  penultimate GL image and the GL drawing surface (API).
-  \item Projection matrix: describes the region of space which will be included
-  in the final image.
-  \item Modelview matrix: induces various transformations on the grid vertices;
-  we will need scaling and translation, but not rotation.
-  \item Vertex coordinates: describes the untransformed position of gridlines in
-  world space.
-\end{itemize}
+A \emph{convex polyhedron} $P$ is a nonempty intersection of a finite number of
+closed half-spaces in $\mR{d}$. A \emph{convex polytope} is a convex
+polyhedron whose volume is bounded. The reader should assume the words
+polyhedron or polytope by themselves refer to a convex object unless otherwise
+stated. The boundary of a polytope $P$, denoted $\partial P$, is a 2-dimensional
+cell complex, and we call 0-faces \emph{vertices}, 1-faces \emph{edges}, and
+2-faces \emph{facets}. We use the quad-edge data
+structure~\cite{guibas1985primitives} to store and manipulate polytope
+boundaries.
 
-\chapter{Models of computation}
+\subsection{Integer hulls and their complexity in 3-space}
+
+As mentioned in the introduction, the \emph{integer hull} $\mIntHull{P}$ of a
+polyhedron $P$ is the convex hull of all integer points contained by $P$. The
+combinatorial complexity of $\mIntHull{P}$ is the sum of its vertices, edges,
+and facets. In order to state an upper bound for the complexity of
+$\mIntHull{P}$, we first define the \emph{size of an inequality}. For a rational
+number $r = p/q$ with $p$ and $q$ relatively prime integers, let
+$\text{size}(r) = 1+\ceiling{\log_2(|p|+1)}+\ceiling{\log_2(|q|+1)}$, and for a
+rational vector $a$, $\text{size}(a) = n+\sum_{j=1}^n \text{size}(a_j)$. The
+\emph{size of an inequality} $a^Tx \leq \beta$ is thus given by
+$1+\text{size}(a)+\text{size}(\beta)$ and is an indication of the number of bits
+necessary to encode it as a binary string.
+
+\begin{theorem}
+For a convex polyhedron $P \subset \mR{3}$ defined by $m$ inequalities
+of size at most $\varphi$, the complexity of the integer hull $\mIntHull{P}$ is
+$O(m^3\varphi^2)$.
+\end{theorem}
+\begin{proof}
+Cook et.al. give an upper bound on the number of vertices of integer hulls in
+$\mR{d}$~\cite{cook1992integer}. For fixed $d$, the bound is
+$O(m^d\varphi^{d-1})$, so when $d=3$ we have $O(m^3\varphi^2)$. By Euler's
+formula for planar graphs, we know that the complexity of a convex polyhedron in
+three space is linear in the number of vertices~\cite{dutchBook}. Thus, we can
+conclude that the overall complexity of $\mIntHull{P}$ shares the
+$O(m^3\varphi^2)$ bound. 
+\end{proof}
+
+\subsection{Flattening planes}
+
+In $\mR{3}$, we have the standard basis vectors $\{\mVector{i}, \mVector{j},
+\mVector{k}\}$. These 3 standard vectors define what we may call the 3 standard
+planes, $\{\hat{IJ}, \hat{IK}, \hat{JK}\}$. Intuitively, these planes -- taken
+together -- divide 3-space into 8 octants. Given a plane $\Gamma \subset
+\mR{3}$, how can we compute a transformation matrix that makes $\Gamma$
+parallel to one of the three standard planes?
+
+The basic idea is to find two linearly independent vectors that span $\Gamma$,
+and make these two of our new basis vectors, combined with a third vector formed
+from their cross product.
+
+\subsection{Constructing unimodular bases}
+
+\begin{algorithm}
+\caption{Constructing a unimodular basis that contains a specified vector}
+\label{alg:UnimodularBasisWithVec}
+\begin{algorithmic}[1]
+    \vspace{0.75em}
+    \Require{Integer vector $\mVector{v} \in \mR{3}$} 
+    \Ensure{Unimodular basis $\mMatrix{B}$}
+    \vspace{0.75em}
+    \Procedure{UnimodularBasisWithVec3}{$\mVector{v}$}
+    \State $\mMatrix{B} := \textsc{identity}$
+    \State $\mMatrix{B}_{i,i} := \mTernary{v_i < 0}{-1}{+1}$ 
+    \While{$\mVector{v}$ is not a row of $\mMatrix{B}$}
+        \State $\mVector{v}^\prime := \mVector{v} \cdot \mMatrix{B}^{-1}$
+        \State $\mVector{v}^\prime_{\text{min}} :=
+        \min(\mVector{v}^\prime)$, $\mVector{v}^\prime_{\text{mid}} :=
+        \text{mid}(\mVector{v}^\prime)$, $\mVector{v}^\prime_{\text{max}} :=
+        \max(\mVector{v}^\prime)$
+        \State $\mMatrix{B}_{\text{min}, i} := \mMatrix{B}_{\text{min}, i} +
+        \mMatrix{B}_{\text{mid}, i}$
+        \State $\mMatrix{B}_{\text{min}, i} := \mMatrix{B}_{\text{min}, i} +
+        \mMatrix{B}_{\text{max}, i}$
+        \State $\mMatrix{B}_{\text{mid}, i} := \mMatrix{B}_{\text{mid}, i} +
+        \mMatrix{B}_{\text{max}, i}$
+    \EndWhile
+    \State \Return $\mMatrix{B}$
+    \EndProcedure 
+\end{algorithmic} 
+\end{algorithm}
+
+\begin{lemma}
+Given an integer vector $\mVector{v}$ with $\gcd(\mVector{v}) = 1$, Algorithm
+\ref{alg:UnimodularBasisWithVec} computes a unimodular basis matrix with one row
+equal to $\mVector{v}$ in $O(\log_\phi \varphi)$ time.
+\end{lemma}
+\begin{proof}
+We have several proof obligations. First, we show that each iteration
+computes a new basis that is closer to containing $\mVector{v}$. Next, we
+show that output matrix $\mMatrix{B}$ is unimodular. Lines 2 and 3
+establish the invariant that $|\mMatrix{B}| = \pm 1$. The loop beginning on line
+4 maintains this invariant since $\mMatrix{B}$ is only modified with row
+operations on lines 7-9, and row operations do not alter the determinant.
+\end{proof}
+
+polyhedron
+polytope
+polygon
+polygonal chain
+triangle
+tetrahedron
+simplex
+cone
+simplicial cone
+mesh
+simplicial mesh
+subdivision
+complex
+simplicial complex
+cross product
+dot product
+inner product
+inner product space
+projection
+point
+vertex
+edge
+face
+line segment
+line
+ray
+plane
+hyperplane
+open set
+closed set
+topology
+homeomorphic
+homology
+cohomology
+isomorphic
+hausdorff distance
+norm
+euclidean distance
+euclidean norm
+manhattan distance
+metric
+taxicab metric
+taxicab geometry
+space
+genus
+Euler's formula
+convex set
+convex hull
+integer hull
+linear programming
+simplex algorithm
+integer programming
+quadratic programming
+linear inequality
+halfspace
+naturals
+reals
+integers
+rationals
+algebraic numbers
+square root
+kth root
+floating point numbers
+arithmetic operations
+relative error
+absolute error
+tolerance
+interval arithmetic
+sin/cos/pi/e
+transcendental numbers
+numerical analysis
+floor
+ceiling
+mod
+logarithm
+exponentiation
+factorial
+greatest common denominator
+euclid's algorithm
+extended euclid
+diophantus
+linear diophantine equations 
+clipping a polytope with a plane
+checking a polytope for convexity
+boolean operations
+rotations
+rotating a collection of polytopes
+CSG
+Brep
+high level geometric rounding
+snap rounding
+surface
+boundary
+manifold
+winding order
+predicate
+construction
+orientation predicate
+matrix
+matrix multiplication
+matrix addition
+matrix subtraction
+matrix inverse
+unimodular matrix
+unimodular transformation
+lattice
+staircase
+
+
+minkowski sum
+hermann minkowski
+convex decomposition
+binary space partition
+k-d tree
+big-o notation
+computational complexity
+NP-hard
+NP-complete
+collision detection
+axis
+axis-aligned bounding box
+oriented bounding box
+separating axis theorem
+circle
+sphere
+ball
+quadric
+cylinder
+capsule
+
+
+\section{Models of computation}
+
+concrete machines
+BSS
+RAM
+Real RAM
+turing machine
+straight-line program
+decision-tree model
+pseudocode
+
+
+% \epigraph{``Begin at the beginning," the King said gravely, ``and go on till you 
+% come to the end: then stop."}{--- \textup{Lewis Carroll}, Alice in Wonderland}
 
 The following uses the \textbf{bitwise computation} model. Let $O_b$ denote
 big-oh notation in this model.
@@ -173,7 +444,6 @@ big-oh notation in this model.
 
 Integer addition $+ : \mathbb{Z} \times \mathbb{Z} \mapsto \mathbb{Z}$ takes as
 input two 
-
 
 
 \begin{table}[hr]
@@ -211,7 +481,74 @@ Determinant & $O_b(n \log n \log \log n)$ \\
 \end{tabular}
 \end{table}
 
-\chapter{Intersection computation}
+\chapter{Surface-surface intersection}
+
+\section{Degree and genus of algebraic curves}
+
+Katz and Sederberg presents formula for computing the degree and genus of the
+intersection curve between two surfaces \cite{katz1988genus}. They show that for
+two generic tensor product surface patches of parametric degree $m_1 \times m_2$
+and $n_1 \times n_2$ respectively, the intersection curve is of degree
+$4m_1m_2n_1n_2$ and generally of genus $8m_1m_2n_1n_2 -
+2m_1m_2(n_1+n_2)-2n_1n_2(m_1+m_2)+1$. Bicubic patches (i.e. $m_1 = m_2 = 3$),
+are often used in geometric modeling systems. Two such patches would intersect
+in a curve of degree 324 and of genus 433. They explain that only curves whose
+genus is zero can be expressed parametrically, curves whose genus is one or two
+can be expressed using formula involving square roots, and curves whose genus is
+greater than two possess no such parameterizations.
+
+\section{B-splines}
+
+B-splines are piecewise polynomial functions formed from linear combinations of
+B-spline basis functions. These basis functions are in turn specified by a knot
+vector, which is a monotonically increasing sequence of real numbers. The knot
+vector defines the basis functions' support interval in parameter space. The
+formula commonly used to compute the basis functions from the knot vector is
+known as the Cox-de Boor recursion formula.
+
+Although a more intuitive geometric way of deriving B-splines involves repeated
+convex combinations of control points, the vector space point of view is more
+important for considering tensor product surfaces and T-splines. For T-splines,
+being able to derive the basis functions independently of the control points is
+necessary since they are constructed with unique knot vectors for each control
+point. Since there is only one control point per set of basis functions, we are
+unable to use the repeated convex combination construction, and must rely on the
+Cox-de Boor recurrence.
+
+\section{Tensors, the tensor product, and tensor product surfaces}
+
+Tensors (from the Latin word \emph{tendere}, ``to stretch'') came into use
+around the turn of the 19\textsuperscript{th} century by mathematicians working
+in differential geometry, perhaps most notably by Ricci and Levi-Civita. One
+most often finds tensors in physics literature, where they can be used to
+succinctly describe physical concepts such as stress and strain on geometric
+objects. Einstein used tensors extensively in his theory of general relativity,
+which helped give tensors more widespread acceptance. He also introduced an
+eponymous index notation to simplify the sometimes unwieldy expressions. This
+notation is now standard practice when working with tensors.
+
+A natural way for computer scientists to think about tensors is to view them as
+multidimensional arrays paired with a transformation law which describes how the
+entries respond to a change of basis. Each element in the array is called a
+component, and represents a value of the tensor with respect to a particular
+basis. If we perform a change of basis with a transformation matrix $R$, the
+transformation law just describes how each component is mapped to the new basis.
+That is to say, whether the component will be multiplied by $R$ or by $R^{-1}$.
+Components which are multiplied by $R$ are said to be covariant and their index
+appears as a subscript, and components which are multiplied by $R^{-1}$ are said
+to be contravariant and their index appears as a superscript. We can also talk
+about the order of a tensor, which is the number of indices you need to specify
+a particular element in the array. The familiar concepts of scalars, vectors,
+and matrices are subsumed under the definition of a tensor; they are order 0, 1,
+and 2 tensors, respectively.
+
+There are a number of ways to view tensor products. When talking about ``tensor
+product surfaces,'' we are referring to taking a product of vector spaces. The
+first vector space is specified by the $U$ knot vector, which generates a
+corresponding set of basis functions. The set of all linear combinations of
+these basis functions is the vector space. Likewise, another vector space is
+generated from the second knot vector $V$. The tensor product is formed from the
+Cartesian product that is modified with equivalence relations.
 
 \section{Sphere-sphere} 
 
@@ -274,7 +611,16 @@ following:
 
 \appendix
 \chapter{Linear algebra}
- 
+
+vector
+vector space
+change of basis
+basis
+frame
+determinant
+derterminant computation, 2x2 3x3 4x4, nxn
+transpose
+
 \section{Vector spaces}
 
 \begin{definition} 
@@ -339,4 +685,219 @@ Multiplicative identity for scalar multiplication & $1\mVector a = \mVector a$ \
 % \end{center}
 
 
+\bibliographystyle{plain}  
+\bibliography{rc_references} 
+
 \end{document}
+
+\endinput
+
+
+
+\lettrine[lines=2, findent=0.25em, nindent=0em]{G}{eometric} objects on a
+digital computer are composed of two types of data: numerical and combinatorial.
+Examples of numerical data may include the Cartesian coordinates of a point in
+3-space, the length of a line segment connecting two such points, or the angle
+between two such line segments. Examples of combinatorial information may
+include grouping two points as an edge, grouping a collection of edges as a
+face, or grouping a collection of faces as a surface.
+
+Geometric algorithms that operate on geometric objects are best thought of as
+two types of operations: predicates and constructions. Predicates determine
+relationships between objects. A predicate might determine if a point is to the
+left, right, or is collinear with a line segment, determine if a point is
+inside, outside, or on a circle, or determine if a line intersects a plane in
+one, none, or infinitely many points. Constructions produce new geometric
+objects from existing geometric objects. A construction might produce the
+rotation of a point around an origin, produce the point of intersection between
+two line segments, or produce an offset of an algebraic curve.
+
+Geometric algorithms are typically designed and analyzed using the Real-RAM
+model of computation~\cite{preparata1977convex}. In other words, these
+algorithms assume that the numerical data in geometric objects are exact values
+in $\mathbb{R}$ that can be stored and retrieved in constant time, and that
+arithmetic involving these values is performed in constant time. From a
+practical point of view, it may seem like an odd or frustrating decision to
+assume access to infinite precision real arithmetic, given that digital
+computers are finite objects. From a theoretical point of view, this is a
+sensible choice given that for subsets of $\mathbb{R}$, such as the rational
+numbers $\mathbb{Q}$, many fundamental geometric axioms no longer hold.
+
+Geometric nonrobustness results from this unfortunate disconnect between
+continuous theoretical formulations and the reality of discrete machine
+implementation. In most instances, the numerical data composing geometric
+objects is an approximation to a real value. Predicates that assume exact values
+but are fed approximate values are liable to make incorrect determinations.
+Constructions compound the situation by taking exact values and producing
+approximate ones, or by taking approximate values and producing even coarser
+approximations. In short, geometric nonrobustness is a problem wherein branching
+decisions in geometric algorithms are predicated on approximate numerical
+computations, leading to various forms of unreliability including ill-formed
+output and software failure through crashing or infinite loops.
+
+\section{Consequences of geometric nonrobustness}
+
+Broadly speaking, the consequence of geometric nonrobustness is software
+unreliability. That is, nonrobust geometric algorithms do not perform their
+stated function for all inputs; they can enter into undefined states and produce
+incorrect output. Algorithms that are theoretically deterministic are
+practically probabilistic. Fortunately, software unreliability is a
+well-established concept. By first equating geometric nonrobustness with
+software unreliability, we can understand the former in terms of the latter.
+
+The broad consequence of software unreliability can only be refined in reference
+to a specific application. As we refine from broad to specific, we eventually
+arrive at the real-world impact of the unreliable software. This abstract
+process can not actually be carried out in full. Instead, we can sketch a
+picture of how geometric nonrobustness manifests in real-world situations with
+various types of data, including anecdotal documents, economic impact
+assessments, and publically available industrial cost estimates. Below, I
+provide examples of such data from two applications which make extensive use of
+geometric computation: real-time video games and computer-aided design software.
+
+The first situation involves the tradeoffs between network efficiency, collision
+detection accuracy, and visual fidelity involved in choosing a numerical
+representation for three dimensional position coordinates. In a technical log,
+the lead engineer of video game developer id Software discusses how he chose to
+balance each of these competing ends. The coordinates needed to be transmitted
+over a network, so quantizing the floating point components was attractive from
+an efficiency point of view. However, this resulted in erroneous collisions and
+discernably discrete movement of game characters. As Carmack writes
+\cite{carmack1999plan}, {\itshape ``Another aspect of the problem that wasn't
+visible to the public was that the the fractional quantization of position could
+cause the position to actually be inside a nearby solid when used for client
+side prediction. The code had to check for this and try to correct the situation
+by jittering the position in each of the possible directions it might have been
+truncated from. This is a potential issue whenever there is any loss of
+precision whatsoever in the server to client communication.'' }
+
+The second situation involves the transfer of CAD geometry to analysis
+algorithms. At a 1999 workshop on the mathematical foundations of CAD software,
+members of academia and industry sought to address the fact that CAD systems
+were still lacking in efficiency, reliability, and compatibility with subsequent
+analysis tools such as computational fluid dynamics (CFD). Blame for the
+incompatibility between CAD and analysis was laid directly at the feet of
+geometric nonrobustness. As Farouki notes \cite{farouki1999closing}, {\itshape
+``the overriding theme of the workshop, echoed in virtually all the position
+papers, was the cumbersome and error-prone process of deriving satisfactory CFD
+surface and volume meshes from CAD models. This problem is not the fault of the
+meshing algorithms, but rather of the geometrical or topological errors and
+inconsistencies that plague CAD models.'' }
+
+Reliability is subject to cost-benefit analysis alongside other measures of
+software quality: developers allocate their time and effort among many
+alternatives in order to maximize utility for the end user. In real-time
+graphics applications such as video games, where practitioners are known for
+ruthlessly approximating to shave off clock cycles, software developers
+routinely encounter the effects of nonrobustness. In the transfer of geometry
+from CAD to analysis tools such as CFD, nonrobustness plays a central role as a
+frustrating and costly problem.
+
+\section{The state of robust geometric computing}
+
+Today, practitioners faced with writing geometric code typically follow two
+basic strategies. The first is to use floating-point representations, empirical
+epsilon tolerancing, and various types of application-specific special case
+handling. The strategy is to minimize the probability of failure, and when
+failures occur, devise ways to ensure the failure is in some way graceful. The
+second is to follow the Exact Geometric Computation (EGC) paradigm
+\cite{yap1995exact}, in which algorithms use arbitrary precision arithmetic in
+order to ensure predicate evaluations are correct. The EGC paradigm is embodied
+in software libraries such as LEDA, CORE, and CGAL. CGAL is notable since users
+can choose to parameterize algorithms with exact number types for completely
+robust results, or to rely on floating-point for faster, but potentially
+incorrect, results.
+
+EGC is a very powerful framework when computing purely combinatorial
+information. For example, convex hull algorithms are given a set of points, and
+return another set of points chosen from the input set. EGC works well because
+predicates only have to temporarily compute higher precision values, and the
+numerical precision in the output is the same as in the input. EGC falls short
+when computing repeated, or cascaded, constructions. For example, rigid body
+rotations of objects increase the amount of precision required for exact
+representation of rotated object. Users of CAD software apply these types of
+operations over and over again when modeling geometry. This growth of precision
+will quickly become prohibitive, and naive rounding can introduce
+inconsistencies between numerical and combinatorial data.
+
+
+The following is taken from Hopcroft and Ullman.
+
+Given a problem, how do we find an efficient algorithm for its solution? Once we
+have found an algorithm, how can we compare this algorithm with other algorithms
+that solve the same problem? How should we judge the goodness of an algorithm?
+Questions of this nature are of interest both to programmers and to
+theoretically oriented computer scientists. In this book we shall examine
+various lines of research that attempt to answer questions such as these.
+
+In this chapter, we consider several models of a computer -- the random access
+machine, the random access stored program machine, and the Turing machine. We
+compare these models on the basis of their ability to reflect the complexity of
+an algorithm, and derive from them several more specialized models of
+computation, namely, straight-line arithmetic sequences, bitwise computations,
+bit vector computations, and decision trees. Finally, in the last section of
+this chapter we introduce a language called Pidgin Algol for describing
+algorithms.
+
+
+
+\lettrine[lines=2, findent=0.25em, nindent=0em]{H}{ello} and welcome to the
+RationalCAD manual! This document is intended to catalogue the solutions to technical challenges faced by the software. It brings
+together relevant background material, discusses both theoretical and practical 
+issues, and provides explanations of concrete implementations in C++.   
+
+
+\section{Branding and logo design}
+
+\subsection{Font}
+
+\subsection{Colors}
+
+\subsection{Splash screen}
+ 
+Splash screens are typically used by particularly large applications to notify
+the user that the program is in the process of loading. They provide feedback
+that a lengthy process is underway. Occasionally, a progress bar within the
+splash screen indicates the loading progress. A splash screen disappears when
+the application's main window appears. Splash screens typically serve to enhance
+the look and feel of an application or web site, hence they are often visually
+appealing. They may also have animations, graphics, and sound. (cite wiki)
+
+\section{Coding style}
+
+one true brace style, google style guide, etc
+
+% \chapter{Basics of affine geometry}
+% \section{Affine space}
+% \section{Examples of affine spaces}
+% \section{Chasles's identity}
+% \section{Affine combinations, barycenters}
+% \section{Affine subspaces}
+% \section{Affine independence and affine frames}
+% \section{Affine maps}
+% \section{Affine groups}
+% \section{Affine geometry: a glipse}
+% \section{Affine hyperplanes}
+% \section{Intersection of affine spaces}
+% \section{Problems}
+
+
+\chapter{Grid system}
+
+\epigraph{``Begin at the beginning," the King said gravely, ``and go on till you 
+come to the end: then stop."}{--- \textup{Lewis Carroll}, Alice in Wonderland}
+
+Several objects and settings are relevant to specifying how the 2D grid is drawn:
+
+\begin{itemize}
+  \item QGLWidget: acts as a container and provides a GL drawing surface (API).
+  \item glViewport: sets up the correspondence between the dimensions of the
+  penultimate GL image and the GL drawing surface (API).
+  \item Projection matrix: describes the region of space which will be included
+  in the final image.
+  \item Modelview matrix: induces various transformations on the grid vertices;
+  we will need scaling and translation, but not rotation.
+  \item Vertex coordinates: describes the untransformed position of gridlines in
+  world space.
+\end{itemize}
+

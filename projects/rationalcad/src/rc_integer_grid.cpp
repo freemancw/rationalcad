@@ -131,6 +131,7 @@ void IntegerGrid::InitializeGrid(const int min_pixel_spacing,
 // Drawing
 //=============================================================================
 
+/*
 void IntegerGrid::Draw() {
     // upload tranformation
     QMatrix4x4 mv;
@@ -157,6 +158,7 @@ void IntegerGrid::Draw() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
+*/
 
 /*!
  * @brief IntegerGrid::GetMajorXCoords
