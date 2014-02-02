@@ -15,7 +15,7 @@
 
 /*!
  * @author Clinton Freeman <admin@freemancw.com>
- * @date 05/23/2012
+ * @date 2012-05-23
  * @brief Modal dialog that displays program information (e.g. build date).
  */
 

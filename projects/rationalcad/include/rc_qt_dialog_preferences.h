@@ -15,7 +15,7 @@
 
 /*!
  * @author Clinton Freeman <admin@freemancw.com>
- * @date 01/29/2013
+ * @date 2013-01-29
  * @brief Modal dialog that allows user to alter global configuration settings.
  */
 

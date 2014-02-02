@@ -15,7 +15,7 @@
 
 /*!
  * @author Clinton Freeman <admin@freemancw.com>
- * @date 01/29/2013
+ * @date 2013-01-29
  * @brief OpenGL widget that displays an orthogonal view of the current scene.
  */
 
@@ -83,6 +83,7 @@ protected:
     void keyReleaseEvent(QKeyEvent *event);
 
     void setupModelview();
+    //void drawGrid();
     void drawScene();
     void draw2DOverlay();
 
@@ -100,12 +101,11 @@ protected:
     QOpenGLVertexArrayObject vao_lines_;
     QOpenGLVertexArrayObject vao_triangles_;
 
-    QOpenGLBuffer vbo_grid_;
-    QOpenGLBuffer ibo_grid_;
-    QOpenGLVertexArrayObject vao_grid_;
+    RCAD::IntegerGrid i_grid_;
+    RCAD::GLVertexBuffer i_grid_vbo_;
+    QOpenGLVertexArrayObject i_grid_vao_;
 
     quint32 num_frames_;
-    RCAD::IntegerGrid i_grid_;
     QTimer timer_;
     QMatrix4x4 modelview_;
     QMatrix4x4 projection_;

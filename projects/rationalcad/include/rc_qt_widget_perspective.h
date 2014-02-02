@@ -15,7 +15,7 @@
 
 /*!
  * @author Clinton Freeman <admin@freemancw.com>
- * @date 01/29/2013
+ * @date 2013-01-29
  * @brief OpenGL widget that allows for navigation with 3D perspective camera.
  */
 

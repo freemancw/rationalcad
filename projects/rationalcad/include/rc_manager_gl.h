@@ -15,7 +15,7 @@
 
 /*!
  * @author Clinton Freeman <admin@freemancw.com>
- * @date 06/03/2013
+ * @date 2013-06-03
  * @brief Manager type responsible for altering OpenGL states and data.
  */
 
@@ -34,7 +34,7 @@
 #include "ml_point.h"
 #include "ml_vector.h"
 
-BEGIN_NAMESPACE(RCAD)
+namespace RCAD {
 
 //=============================================================================
 // Interface: GLAttributeMeta
@@ -173,6 +173,6 @@ private:
 
  Q_DECLARE_METATYPE(QVector<GLVertex>)
 
-END_NAMESPACE(RCAD)
+} // namespace RCAD
 
 #endif // RC_GL_ABSTRACTION_H

@@ -15,7 +15,7 @@
 
 /*!
  * @author Clinton Freeman <admin@freemancw.com>
- * @date 01/13/2013
+ * @date 2013-01-13
  * @brief Customizable grid type to support precise placement of objects.
  */
 
@@ -28,7 +28,7 @@
 // RationalCAD
 #include "rc_common.h"
 
-BEGIN_NAMESPACE(RCAD)
+namespace RCAD {
 
 class GLVertex;
 
@@ -40,8 +40,7 @@ public:
                         const int major_line_spacing,
                         const int n_major_lines,
                         const int bit_complexity,
-                        QVector<GLVertex>& grid_verts,
-                        QVector<GLushort>& grid_idxs);
+                        QVector<GLVertex>& grid_verts);
 
     void IncreaseMagnification();
     void DecreaseMagnification();
@@ -76,12 +75,6 @@ private:
                                     // including the origin
                                     // TODO: automatically determine this
 
-    int n_major_idxs_;
-    int n_minor_idxs_;
-
-    void* offset_major_idxs_;
-    void* offset_minor_idxs_;
-
     int local_mag_;
     int local_mag_max_;
     int global_mag_;
@@ -99,6 +92,6 @@ private:
     //Q_DISABLE_COPY(IntegerGrid)
 };
 
-END_NAMESPACE(RCAD)
+} // namespace RCAD
 
 #endif // RC_INTEGER_GRID_H

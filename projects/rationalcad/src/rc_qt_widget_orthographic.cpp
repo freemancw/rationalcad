@@ -59,26 +59,6 @@ OrthographicWidget::OrthographicWidget(QSharedPointer<GLManager> gl_manager,
             this,
             SLOT(ShowContextMenu(const QPoint&)));
     connect(this,
-            SIGNAL(AddVertexToNewPolygon(QVector2D)),
-            scene_manager_.data(),
-            SLOT(AddVertexToNewPolygon(QVector2D)));
-    connect(this,
-            SIGNAL(SetVertexForNew2Cone(QVector2D)),
-            scene_manager_.data(),
-            SLOT(SetVertexForNew2Cone(QVector2D)));
-    connect(this,
-            SIGNAL(AddConstraintToNew2Cone(QVector2D)),
-            scene_manager_.data(),
-            SLOT(AddConstraintToNew2Cone(QVector2D)));
-    connect(this,
-            SIGNAL(Update2ConeA(QVector2D)),
-            scene_manager_.data(),
-            SLOT(Update2ConeA(QVector2D)));
-    connect(this,
-            SIGNAL(Update2ConeB(QVector2D)),
-            scene_manager_.data(),
-            SLOT(Update2ConeB(QVector2D)));
-    connect(this,
             SIGNAL(SelectObject(QVector2D)),
             scene_manager_.data(),
             SLOT(SelectObject(QVector2D)));
@@ -110,27 +90,14 @@ void OrthographicWidget::initializeGL() {
     ortho_attributes.push_back(GLVertex::kMatAmbientMeta);
 
     QVector<GLVertex> grid_verts;
-    QVector<GLushort> grid_idxs;
-    i_grid_.InitializeGrid(8, 8, 16, 16, grid_verts, grid_idxs);
-
-
-/*
-    // upload vert data
-    glGenBuffers(1, &vbo_id_);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_id_);
-    glBufferData(GL_ARRAY_BUFFER, grid_verts.size() * sizeof(GLVertex),
-                 grid_verts.data(), GL_STATIC_DRAW);
-
-    // upload index data
-    glGenBuffers(1, &ibo_id_);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo_id_);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, grid_idxs.size() * sizeof(GLushort),
-                 grid_idxs.data(), GL_STATIC_DRAW);
-
-    // clean up (important for QPainter to work correctly)
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    */
+    i_grid_.InitializeGrid(8, 8, 16, 16, grid_verts);
+    i_grid_vbo_.UploadVertices(grid_verts);
+    i_grid_vao_.create();
+    i_grid_vao_.bind();
+    i_grid_vbo_.buffer.bind();
+    gl_manager_->EnableAttributes("gl2_default", ortho_attributes);
+    i_grid_vao_.release();
+    i_grid_vbo_.buffer.release();
 
     vao_points_.create();
     vao_points_.bind();
@@ -172,7 +139,11 @@ void OrthographicWidget::paintEvent(QPaintEvent *event) {
     gl_manager_->glEnable(GL_DEPTH_TEST);
 
     gl_manager_->glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    //i_grid_.Draw();
+
+    i_grid_vao_.bind();
+    glDrawArrays(GL_LINES, 0, i_grid_vbo_.num_vertices);
+    i_grid_vao_.release();
+
     setupModelview();
     drawScene();
 

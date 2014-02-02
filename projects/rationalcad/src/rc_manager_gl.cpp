@@ -22,7 +22,7 @@
 #include "rc_common.h"
 #include "rc_manager_gl.h"
 
-BEGIN_NAMESPACE(RCAD)
+namespace RCAD {
 
 //=============================================================================
 // GLManager
@@ -52,34 +52,34 @@ void GLManager::Initialize() {
                           ":/shaders/gl2_default.fsh")
             && AddProgram("gl3_default",
                           ":/shaders/gl3_default.vsh",
-                          ":/shaders/gl3_default.fsh")
-            && AddProgram("gl_fxaa",
-                          ":/shaders/gl_fxaa.vsh",
-                          ":/shaders/gl_fxaa.fsh")
-            && AddProgram("dual_peeling_blend",
-                          ":/shaders/dual_peeling_blend.vsh",
-                          ":/shaders/dual_peeling_blend.fsh")
-            && AddProgram("dual_peeling_final",
-                          ":/shaders/dual_peeling_final.vsh",
-                          ":/shaders/dual_peeling_final.fsh")
-            && AddProgram("dual_peeling_init",
-                          ":/shaders/dual_peeling_init.vsh",
-                          ":/shaders/dual_peeling_init.fsh")
-            && AddProgram("dual_peeling_peel",
-                          ":/shaders/dual_peeling_peel.vsh",
-                          ":/shaders/dual_peeling_peel.fsh")
-            && AddProgram("front_peeling_blend",
-                          ":/shaders/front_peeling_blend.vsh",
-                          ":/shaders/front_peeling_blend.fsh")
-            && AddProgram("front_peeling_final",
-                          ":/shaders/front_peeling_final.vsh",
-                          ":/shaders/front_peeling_final.fsh")
-            && AddProgram("front_peeling_init",
-                          ":/shaders/front_peeling_init.vsh",
-                          ":/shaders/front_peeling_init.fsh")
-            && AddProgram("front_peeling_peel",
-                          ":/shaders/front_peeling_peel.vsh",
-                          ":/shaders/front_peeling_peel.fsh");
+                          ":/shaders/gl3_default.fsh");
+//            && AddProgram("gl_fxaa",
+//                          ":/shaders/gl_fxaa.vsh",
+//                          ":/shaders/gl_fxaa.fsh")
+//            && AddProgram("dual_peeling_blend",
+//                          ":/shaders/dual_peeling_blend.vsh",
+//                          ":/shaders/dual_peeling_blend.fsh")
+//            && AddProgram("dual_peeling_final",
+//                          ":/shaders/dual_peeling_final.vsh",
+//                          ":/shaders/dual_peeling_final.fsh")
+//            && AddProgram("dual_peeling_init",
+//                          ":/shaders/dual_peeling_init.vsh",
+//                          ":/shaders/dual_peeling_init.fsh")
+//            && AddProgram("dual_peeling_peel",
+//                          ":/shaders/dual_peeling_peel.vsh",
+//                          ":/shaders/dual_peeling_peel.fsh")
+//            && AddProgram("front_peeling_blend",
+//                          ":/shaders/front_peeling_blend.vsh",
+//                          ":/shaders/front_peeling_blend.fsh")
+//            && AddProgram("front_peeling_final",
+//                          ":/shaders/front_peeling_final.vsh",
+//                          ":/shaders/front_peeling_final.fsh")
+//            && AddProgram("front_peeling_init",
+//                          ":/shaders/front_peeling_init.vsh",
+//                          ":/shaders/front_peeling_init.fsh")
+//            && AddProgram("front_peeling_peel",
+//                          ":/shaders/front_peeling_peel.vsh",
+//                          ":/shaders/front_peeling_peel.fsh");
 
     if (!shaders_valid) {
         rWarning("Shaders did not compile.");
@@ -292,4 +292,4 @@ GLElementArray::GLElementArray(const QString &tag, const GLenum mode,
     type(type),
     indices(indices) {}
 
-END_NAMESPACE(RCAD)
+} // namespace RCAD

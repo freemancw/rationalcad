@@ -24,7 +24,7 @@
 #include "rc_manager_scene.h"
 #include "rc_manager_config.h"
 
-BEGIN_NAMESPACE(RCAD)
+namespace RCAD {
 
 //=============================================================================
 // Constructors / Destructors
@@ -40,11 +40,10 @@ void IntegerGrid::InitializeGrid(const int min_pixel_spacing,
                                  const int major_line_spacing,
                                  const int n_major_lines,
                                  const int bit_complexity,
-                                 QVector<GLVertex>& grid_verts,
-                                 QVector<GLushort>& grid_idxs) {
+                                 QVector<GLVertex>& grid_verts) {
     Q_UNUSED(bit_complexity);
 
-    rDebug("Initializing grid.");
+    rInfo("Initializing coordinate grid.");
 
     min_pixel_spacing_ = min_pixel_spacing;
     major_line_spacing_ = major_line_spacing;
@@ -67,13 +66,7 @@ void IntegerGrid::InitializeGrid(const int min_pixel_spacing,
     //int line_half_length = min_pixel_spacing_ * n_in_halfspace;
     int line_half_length = n_in_halfspace;
 
-    QVector<GLushort> grid_minor_idxs;
-    QVector<GLushort> grid_major_idxs;
-
     for(int i = 0; i < n_along_axis; ++i) {
-        QVector<GLushort>& idx_vec = (i % major_line_spacing_) ?
-                    grid_minor_idxs : grid_major_idxs;
-
         QColor grid_color = (i % major_line_spacing_) ?
                     g_config.grid_minor_color_ : g_config.grid_major_color_;
 
@@ -102,26 +95,11 @@ void IntegerGrid::InitializeGrid(const int min_pixel_spacing,
         v.set_y(cur_pos);
         GLVertex v_right(v, grid_color);
 
-        idx_vec.push_back(grid_verts.size());
         grid_verts.push_back(v_top);
-
-        idx_vec.push_back(grid_verts.size());
         grid_verts.push_back(v_bottom);
-
-        idx_vec.push_back(grid_verts.size());
         grid_verts.push_back(v_left);
-
-        idx_vec.push_back(grid_verts.size());
         grid_verts.push_back(v_right);
     }
-
-    n_minor_idxs_ = grid_minor_idxs.size();
-    n_major_idxs_ = grid_major_idxs.size();
-    offset_minor_idxs_ = (void*)(0);
-    offset_major_idxs_ = (void*)(n_minor_idxs_*sizeof(GLushort));
-
-    // glue indices into one contiguous chunk
-    grid_idxs = grid_minor_idxs + grid_major_idxs;
 
     // setup modelview matrix
     WrapGrid();
@@ -366,4 +344,4 @@ const qreal& IntegerGrid::global_scale() const {
     return global_scale_;
 }
 
-END_NAMESPACE(RCAD)
+} // namespace RCAD

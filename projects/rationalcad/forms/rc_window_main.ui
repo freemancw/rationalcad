@@ -376,6 +376,8 @@
     <bool>false</bool>
    </attribute>
    <addaction name="action_toggle_snaps"/>
+   <addaction name="separator"/>
+   <addaction name="action_select_object"/>
   </widget>
   <action name="action_about">
    <property name="text">

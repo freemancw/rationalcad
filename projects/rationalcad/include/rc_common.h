@@ -15,7 +15,7 @@
 
 /*!
  * @author Clinton Freeman <admin@freemancw.com>
- * @date 08/16/2013
+ * @date 2013-08-13
  */
 
 #ifndef RC_COMMON_H

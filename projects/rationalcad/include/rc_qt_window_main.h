@@ -15,7 +15,7 @@
 
 /*!
  * @author Clinton Freeman <admin@freemancw.com>
- * @date 05/23/2012
+ * @date 2013-05-23
  * @brief Main window responsible for forwarding widget input.
  */
 

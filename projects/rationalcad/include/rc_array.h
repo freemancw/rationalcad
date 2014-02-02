@@ -15,7 +15,7 @@
 
 /*!
  * @author Clinton Freeman <admin@freemancw.com>
- * @date 03/02/2013
+ * @date 2013-03-02
  * @brief Generic, dynamic, 2D array type.
  *
  * Code adapted from:
