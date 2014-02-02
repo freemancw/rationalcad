@@ -69,7 +69,7 @@ OrthographicWidget::OrthographicWidget(QSharedPointer<GLManager> gl_manager,
 //=============================================================================
 
 void OrthographicWidget::initializeGL() {
-    rInfo("Initializing OpenGL.");
+    rInfo("Initializing orthographic OpenGL.");
 
     initializeOpenGLFunctions();
 
@@ -79,15 +79,12 @@ void OrthographicWidget::initializeGL() {
     gl_manager_->glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     gl_manager_->glEnable(GL_CULL_FACE);
     gl_manager_->glEnable(GL_PROGRAM_POINT_SIZE);
-    //gl_manager_->glEnable(GL_BLEND);
-    //gl_manager_->glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     modelview_.setToIdentity();
     shader_program_->setUniformValue("m_modelview", modelview_);
 
-    QList<GLAttributeMeta> ortho_attributes;
-    ortho_attributes.push_back(GLVertex::kPositionMeta);
-    ortho_attributes.push_back(GLVertex::kMatAmbientMeta);
+    attributes_.push_back(GLVertex::kPositionMeta);
+    attributes_.push_back(GLVertex::kMatAmbientMeta);
 
     QVector<GLVertex> grid_verts;
     i_grid_.InitializeGrid(8, 8, 16, 16, grid_verts);
@@ -95,36 +92,42 @@ void OrthographicWidget::initializeGL() {
     i_grid_vao_.create();
     i_grid_vao_.bind();
     i_grid_vbo_.buffer.bind();
-    gl_manager_->EnableAttributes("gl2_default", ortho_attributes);
+    gl_manager_->EnableAttributes("gl2_default", attributes_);
     i_grid_vao_.release();
     i_grid_vbo_.buffer.release();
-
-    vao_points_.create();
-    vao_points_.bind();
-    //scene_manager_->BindPointsVBO();
-    gl_manager_->EnableAttributes("gl2_default", ortho_attributes);
-    vao_points_.release();
-    //scene_manager_->ReleasePointsVBO();
-
-    vao_lines_.create();
-    vao_lines_.bind();
-    //scene_manager_->BindLinesVBO();
-    gl_manager_->EnableAttributes("gl2_default", ortho_attributes);
-    vao_lines_.release();
-    //scene_manager_->ReleaseLinesVBO();
-
-    vao_triangles_.create();
-    vao_triangles_.bind();
-    //scene_manager_->BindTrianglesVBO();
-    gl_manager_->EnableAttributes("gl2_default", ortho_attributes);
-    vao_triangles_.release();
-    //scene_manager_->ReleaseTrianglesVBO();
 
     shader_program_->release();
 
     timer_.setTimerType(Qt::PreciseTimer);
     connect(&timer_, SIGNAL(timeout()), this, SLOT(update()));
     timer_.start(kRedrawMsec);
+}
+
+void OrthographicWidget::initializeDrawSettings() {
+    shader_program_->bind();
+
+    vao_points_.create();
+    vao_points_.bind();
+    scene_manager_->points_vbo().buffer.bind();
+    gl_manager_->EnableAttributes("gl2_default", attributes_);
+    vao_points_.release();
+    scene_manager_->points_vbo().buffer.release();
+
+    vao_lines_.create();
+    vao_lines_.bind();
+    scene_manager_->lines_vbo().buffer.bind();
+    gl_manager_->EnableAttributes("gl2_default", attributes_);
+    vao_lines_.release();
+    scene_manager_->lines_vbo().buffer.release();
+
+    vao_triangles_.create();
+    vao_triangles_.bind();
+    scene_manager_->triangles_vbo().buffer.bind();
+    gl_manager_->EnableAttributes("gl2_default", attributes_);
+    vao_triangles_.release();
+    scene_manager_->triangles_vbo().buffer.release();
+
+    shader_program_->release();
 }
 
 void OrthographicWidget::paintEvent(QPaintEvent *event) {
@@ -137,8 +140,12 @@ void OrthographicWidget::paintEvent(QPaintEvent *event) {
     shader_program_->bind();
 
     gl_manager_->glEnable(GL_DEPTH_TEST);
-
     gl_manager_->glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    QMatrix4x4 mv;
+    mv.scale(i_grid_.local_scale());
+    mv.translate(-i_grid_.local_pos().x(), -i_grid_.local_pos().y());
+    shader_program_->setUniformValue("m_modelview", mv);
 
     i_grid_vao_.bind();
     glDrawArrays(GL_LINES, 0, i_grid_vbo_.num_vertices);
@@ -178,20 +185,18 @@ void OrthographicWidget::setupModelview() {
 }
 
 void OrthographicWidget::drawScene() {
-    //gl_manager_->glEnable(GL_BLEND);
-    //gl_manager_->glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    gl_manager_->glEnable(GL_BLEND);
+    gl_manager_->glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-/*
     vao_points_.bind();
-    gl_manager_->DrawPointsVBO();
+    glDrawArrays(GL_POINTS, 0, scene_manager_->points_vbo().num_vertices);
     vao_points_.release();
     vao_lines_.bind();
-    gl_manager_->DrawLinesVBO();
+    glDrawArrays(GL_LINES, 0, scene_manager_->lines_vbo().num_vertices);
     vao_lines_.release();
     vao_triangles_.bind();
-    gl_manager_->DrawTrianglesVBO();
+    glDrawArrays(GL_TRIANGLES, 0, scene_manager_->triangles_vbo().num_vertices);
     vao_triangles_.release();
-    */
 }
 
 void OrthographicWidget::draw2DOverlay() {

@@ -212,8 +212,8 @@ void SceneObserver::SlotPopVisualPoint_3r(const Point_3r& p,
 }
 
 void SceneObserver::SlotPushVisualSegment_3r(const Segment_3r& s,
-                                         const Visual::Segment& vs,
-                                         const uint32_t msec_delay) {
+                                             const Visual::Segment& vs,
+                                             const uint32_t msec_delay) {
     QPair<uint32_t, uint32_t> key(s.p().unique_id(), s.q().unique_id());
     viz_segments_[key].push_back(vs);
     GenerateVboLines();
@@ -222,7 +222,7 @@ void SceneObserver::SlotPushVisualSegment_3r(const Segment_3r& s,
 }
 
 void SceneObserver::SlotPopVisualSegment_3r(const Segment_3r& s,
-                                        const uint32_t msec_delay) {
+                                            const uint32_t msec_delay) {
     QPair<uint32_t, uint32_t> key(s.p().unique_id(), s.q().unique_id());
     rAssert(!viz_segments_.value(key).isEmpty());
     viz_segments_[key].pop_back();
@@ -237,8 +237,8 @@ void SceneObserver::SlotPopVisualSegment_3r(const Segment_3r& s,
 }
 
 void SceneObserver::SlotPushVisualTriangle_3r(const Triangle_3r &t,
-                                             const Visual::Triangle& vt,
-                                             const uint32_t msec_delay) {
+                                              const Visual::Triangle& vt,
+                                              const uint32_t msec_delay) {
     QVector<uint32_t> key;
     key.push_back(t.a().unique_id());
     key.push_back(t.b().unique_id());
@@ -252,7 +252,7 @@ void SceneObserver::SlotPushVisualTriangle_3r(const Triangle_3r &t,
 }
 
 void SceneObserver::SlotPopVisualTriangle_3r(const Triangle_3r &t,
-                                            const uint32_t msec_delay) {
+                                             const uint32_t msec_delay) {
     QVector<uint32_t> key;
     key.push_back(t.a().unique_id());
     key.push_back(t.b().unique_id());
@@ -279,20 +279,50 @@ void SceneObserver::SlotUpdate() {
 // Implementation: SceneManager
 //=============================================================================
 
-SceneManager::SceneManager() {}
+SceneManager::SceneManager() {
+    animation_thread_ = QSharedPointer<QThread>(new QThread());
+    scene_observer_.moveToThread(animation_thread_.data());
+    animation_thread_->start();
 
-SceneManager::~SceneManager() {}
+    connect(&scene_observer_,
+            SIGNAL(UpdateVboPoints(QVector<GLVertex>)),
+            this,
+            SLOT(UpdateVboPoints(QVector<GLVertex>)));
+    connect(&scene_observer_,
+            SIGNAL(UpdateVboLines(QVector<GLVertex>)),
+            this,
+            SLOT(UpdateVboLines(QVector<GLVertex>)));
+    connect(&scene_observer_,
+            SIGNAL(UpdateVboTriangles(QVector<GLVertex>)),
+            this,
+            SLOT(UpdateVboTriangles(QVector<GLVertex>)));
+}
+
+SceneManager::~SceneManager() {
+    animation_thread_->quit();
+    animation_thread_->wait();
+}
 
 void SceneManager::UpdateVboPoints(QVector<GLVertex> verts) {
-    //vbo_points_.UploadVertices(verts);
+    points_vbo_.UploadVertices(verts);
 }
 
 void SceneManager::UpdateVboLines(QVector<GLVertex> verts) {
-    //vbo_lines_.UploadVertices(verts);
+    lines_vbo_.UploadVertices(verts);
 }
 
 void SceneManager::UpdateVboTriangles(QVector<GLVertex> verts) {
-    //vbo_triangles_.UploadVertices(verts);
+    triangles_vbo_.UploadVertices(verts);
+}
+
+GLVertexBuffer& SceneManager::points_vbo() {
+    return points_vbo_;
+}
+GLVertexBuffer& SceneManager::lines_vbo() {
+    return lines_vbo_;
+}
+GLVertexBuffer& SceneManager::triangles_vbo() {
+    return triangles_vbo_;
 }
 
 //=============================================================================
@@ -320,7 +350,9 @@ void SceneManager::EndCreatePolytope() {
 //=============================================================================
 
 void SceneManager::UpdateSelectedObjectName(const QString &name) {
-    if(!ObjectIsSelected()) return;
+    if (!ObjectIsSelected()) {
+        return;
+    }
 
     QSharedPointer<ISceneObject> obj_ptr(SelectedObject());
     //scene_objects_.remove(selected_name_);
@@ -329,13 +361,17 @@ void SceneManager::UpdateSelectedObjectName(const QString &name) {
 }
 
 void SceneManager::UpdateSelectedObjectColor(const QColor &color) {
-    if(!ObjectIsSelected()) return;
+    if (!ObjectIsSelected()) {
+        return;
+    }
 
     SelectedObject()->UpdateColor(color);
 }
 
 void SceneManager::DeleteSelectedObject() {
-    if(!ObjectIsSelected()) return;
+    if (!ObjectIsSelected()) {
+        return;
+    }
 
     //scene_objects_.remove(selected_name_);
     //selected_name_ = "";
@@ -358,7 +394,9 @@ ScenePolytope_3* SceneManager::SelectedPolytope_3() {
 }
 
 void SceneManager::Deselect() {
-    if(!ObjectIsSelected()) return;
+    if (!ObjectIsSelected()) {
+        return;
+    }
 
     SelectedObject()->Deselect();
     selected_name_ = "";

@@ -71,6 +71,10 @@ private slots:
     void on_button_polytope_toggled(bool checked);
 
 private:
+    void initializeLogging();
+    void initializeConnections();
+
+
     Ui::MainWindow *ui;
 
     QSharedPointer<RCAD::SceneManager> scene_manager_;

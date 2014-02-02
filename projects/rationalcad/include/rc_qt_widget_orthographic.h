@@ -51,13 +51,15 @@ class OrthographicWidget : public QGLWidget,
 
 public:
     OrthographicWidget(QSharedPointer<RCAD::GLManager> gl_manager,
-                       QSharedPointer<RCAD::SceneManager> scene,
+                       QSharedPointer<RCAD::SceneManager> scene_manager,
                        QWidget* parent = nullptr,
                        const QGLWidget* shareWidget = nullptr,
                        OrthoOrientation orientation = TOP);
 
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
+
+    void initializeDrawSettings();
 
 public slots:
     void ShowContextMenu(const QPoint& p);
@@ -83,7 +85,6 @@ protected:
     void keyReleaseEvent(QKeyEvent *event);
 
     void setupModelview();
-    //void drawGrid();
     void drawScene();
     void draw2DOverlay();
 
@@ -96,6 +97,8 @@ protected:
     QSharedPointer<RCAD::GLManager> gl_manager_;
     QSharedPointer<RCAD::SceneManager> scene_manager_;
     QSharedPointer<QOpenGLShaderProgram> shader_program_;
+
+    QList<RCAD::GLAttributeMeta> attributes_;
 
     QOpenGLVertexArrayObject vao_points_;
     QOpenGLVertexArrayObject vao_lines_;

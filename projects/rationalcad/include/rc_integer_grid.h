@@ -49,6 +49,8 @@ public:
     QVector<QPair<int, int>> GetMajorYCoords(const int height) const;
     QVector2D GetCoordsForPixel(const QVector2D& pixel) const;
 
+    const QVector2D& local_pos() const;
+    const qreal& local_scale() const;
     const QVector2D& global_pos() const;
     const qreal& global_scale() const;
 

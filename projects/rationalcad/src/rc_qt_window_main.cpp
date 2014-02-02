@@ -42,10 +42,37 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->setupUi(this);
 
-    logger_.set_console(ui->console);
-    logger_.subscribeTo(rlog::GetGlobalChannel("info"));
-    logger_.subscribeTo(rlog::GetGlobalChannel("debug"));
-    logger_.subscribeTo(rlog::GetGlobalChannel("error"));
+    initializeLogging();
+    InitializeGlobalConfig();
+
+
+
+
+
+
+    rInfo("Creating orthographic view.");
+    auto ortho_top = new OrthographicWidget(gl_manager_, scene_manager_,
+                                            ui->group_top);
+    ui->group_top->layout()->addWidget(ortho_top);
+    ortho_top->installEventFilter(this);
+
+    connect(ortho_top,
+            SIGNAL(ChangeMessage(const QString&)),
+            SLOT(UpdateStatusBarMsg(const QString&)));
+    connect(ortho_top,
+            SIGNAL(EndCreatePolytope(bool)),
+            SLOT(on_button_polytope_toggled(bool)));
+
+    rInfo("Creating perspective view.");
+    auto perspective = new PerspectiveWidget(gl_manager_, scene_manager_,
+                                             ui->group_perspective, ortho_top);
+    ui->group_perspective->layout()->addWidget(perspective);
+    perspective->installEventFilter(this);
+    perspective->context()->makeCurrent();
+
+    rInfo("Initializing OpenGL manager.");
+    gl_manager_->Initialize();
+
 
     connect(this,
             SIGNAL(BeginCreatePolytope(QString,QColor)),
@@ -63,44 +90,6 @@ MainWindow::MainWindow(QWidget *parent) :
             SIGNAL(DeleteSelectedObject()),
             scene_manager_.data(),
             SLOT(DeleteSelectedObject()));
-
-    connect(scene_manager_.data(),
-            SIGNAL(UpdateVboPoints(QVector<GLVertex>)),
-            gl_manager_.data(),
-            SLOT(UpdateVboPoints(QVector<GLVertex>)));
-    connect(scene_manager_.data(),
-            SIGNAL(UpdateVboLines(QVector<GLVertex>)),
-            gl_manager_.data(),
-            SLOT(UpdateVboLines(QVector<GLVertex>)));
-    connect(scene_manager_.data(),
-            SIGNAL(UpdateVboTriangles(QVector<GLVertex>)),
-            gl_manager_.data(),
-            SLOT(UpdateVboTriangles(QVector<GLVertex>)));
-
-    InitializeGlobalConfig();
-
-    rDebug("Creating ortho_top.");
-    auto ortho_top = new OrthographicWidget(gl_manager_, scene_manager_,
-                                            ui->group_top);
-    ui->group_top->layout()->addWidget(ortho_top);
-    ortho_top->installEventFilter(this);
-
-    connect(ortho_top,
-            SIGNAL(ChangeMessage(const QString&)),
-            SLOT(UpdateStatusBarMsg(const QString&)));
-    connect(ortho_top,
-            SIGNAL(EndCreatePolytope(bool)),
-            SLOT(on_button_polytope_toggled(bool)));
-
-    rDebug("Creating perspective.");
-    auto perspective = new PerspectiveWidget(gl_manager_, scene_manager_,
-                                             ui->group_perspective, ortho_top);
-    ui->group_perspective->layout()->addWidget(perspective);
-    perspective->installEventFilter(this);
-    perspective->context()->makeCurrent();
-
-    rDebug("Initializing gl_manager.");
-    gl_manager_->Initialize();
 
     auto object_color_style = QString("border:0;background-color: rgb(%1, %2, %3);").arg(
                 g_config.tag_colors["face_default"].red()).arg(
@@ -124,6 +113,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow() {
     delete ui;
+}
+
+void MainWindow::initializeLogging() {
+    logger_.set_console(ui->console);
+    logger_.subscribeTo(rlog::GetGlobalChannel("info"));
+    logger_.subscribeTo(rlog::GetGlobalChannel("debug"));
+    logger_.subscribeTo(rlog::GetGlobalChannel("error"));
 }
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event) {

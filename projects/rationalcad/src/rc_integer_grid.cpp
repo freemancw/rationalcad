@@ -105,39 +105,6 @@ void IntegerGrid::InitializeGrid(const int min_pixel_spacing,
     WrapGrid();
 }
 
-//=============================================================================
-// Drawing
-//=============================================================================
-
-/*
-void IntegerGrid::Draw() {
-    // upload tranformation
-    QMatrix4x4 mv;
-    mv.scale(local_scale_);
-    mv.translate(-local_pos_.x(), -local_pos_.y());
-    shader_program_->setUniformValue("m_modelview", mv);
-
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_id_);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo_id_);
-
-    QList<GLAttributeMeta> igrid_attributes;
-    igrid_attributes.append(GLVertex::kPositionMeta);
-    igrid_attributes.append(GLVertex::kMatAmbientMeta);
-
-    gl_manager_->EnableAttributes("gl2_default", igrid_attributes);
-
-    glDrawElements(GL_LINES, n_minor_idxs_, GL_UNSIGNED_SHORT,
-                   offset_minor_idxs_);
-    glDrawElements(GL_LINES, n_major_idxs_, GL_UNSIGNED_SHORT,
-                   offset_major_idxs_);
-
-    // clean up
-    gl_manager_->DisableAttributes("gl2_default", igrid_attributes);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-}
-*/
-
 /*!
  * @brief IntegerGrid::GetMajorXCoords
  * @param width
@@ -336,7 +303,12 @@ int IntegerGrid::CoordToPixel(const int a, const qreal global_a,
     return ((a-global_a)*global_scale_)+(length/2);
 }
 
-
+const QVector2D& IntegerGrid::local_pos() const {
+    return local_pos_;
+}
+const qreal& IntegerGrid::local_scale() const {
+    return local_scale_;
+}
 const QVector2D& IntegerGrid::global_pos() const {
     return global_pos_;
 }

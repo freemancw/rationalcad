@@ -38,7 +38,7 @@
 
 bool operator<(const QVector<uint32_t>& a, const QVector<uint32_t>& b);
 
-BEGIN_NAMESPACE(RCAD)
+namespace RCAD {
 
 //=============================================================================
 // Interface: ApproximatePoint_3f
@@ -177,6 +177,9 @@ public:
 
     int NumObjects() const;
     const QString& selected_name() const;
+    GLVertexBuffer& points_vbo();
+    GLVertexBuffer& lines_vbo();
+    GLVertexBuffer& triangles_vbo();
 
 public slots:
 
@@ -198,11 +201,15 @@ private:
     ISceneObject* SelectedObject();
     ScenePolytope_3* SelectedPolytope_3();
 
+    GLVertexBuffer points_vbo_;
+    GLVertexBuffer lines_vbo_;
+    GLVertexBuffer triangles_vbo_;
+
     SceneObserver scene_observer_;
     QString selected_name_;
     QSharedPointer<QThread> animation_thread_;
 };
 
-END_NAMESPACE(RCAD)
+} // namespace RCAD
 
 #endif // RC_MANAGER_SCENE_H
