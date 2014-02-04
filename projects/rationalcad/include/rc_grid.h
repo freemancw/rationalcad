@@ -19,11 +19,8 @@
  * @brief Customizable grid type to support precise placement of objects.
  */
 
-#ifndef RC_INTEGER_GRID_H
-#define RC_INTEGER_GRID_H
-
-// Qt
-#include <QOpenGLFunctions_3_3_Core>
+#ifndef RC_GRID_H
+#define RC_GRID_H
 
 // RationalCAD
 #include "rc_common.h"
@@ -96,4 +93,4 @@ private:
 
 } // namespace RCAD
 
-#endif // RC_INTEGER_GRID_H
+#endif // RC_GRID_H

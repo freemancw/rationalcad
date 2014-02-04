@@ -19,13 +19,13 @@
  * @brief Manager type responsible for storing and manipulating scene objects.
  */
 
-#ifndef RC_MANAGER_SCENE_H
-#define RC_MANAGER_SCENE_H
+#ifndef RC_SCENE_H
+#define RC_SCENE_H
 
 // RationalCAD
 #include "rc_common.h"
-#include "rc_manager_config.h"
-#include "rc_manager_gl.h"
+#include "rc_config.h"
+#include "rc_opengl.h"
 
 // mathlib
 #include "ml_polygon.h"
@@ -212,4 +212,4 @@ private:
 
 } // namespace RCAD
 
-#endif // RC_MANAGER_SCENE_H
+#endif // RC_SCENE_H

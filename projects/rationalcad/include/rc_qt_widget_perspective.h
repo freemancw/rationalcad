@@ -28,8 +28,8 @@
 
 // RationalCAD
 #include "rc_common.h"
-#include "rc_manager_gl.h"
-#include "rc_manager_scene.h"
+#include "rc_opengl.h"
+#include "rc_scene.h"
 
 class QBasicTimer;
 class QOpenGLShaderProgram;
@@ -40,13 +40,13 @@ class PerspectiveWidget : public QGLWidget,
     Q_OBJECT
 
 public:
-    PerspectiveWidget(QSharedPointer<RCAD::ShaderManager> shader_manager,
-                      QSharedPointer<RCAD::SceneManager> scene_manager,
-                      QWidget* parent = nullptr,
-                      const QGLWidget* shareWidget = nullptr);
+    PerspectiveWidget(QWidget* parent, const QGLWidget* shareWidget);
 
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
+
+    void initialize(QSharedPointer<RCAD::ShaderManager> shader_manager,
+                    QSharedPointer<RCAD::SceneManager> scene_manager);
 
 protected:
     void initializeGL();
@@ -82,6 +82,8 @@ protected:
     QSharedPointer<RCAD::ShaderManager> shader_manager_;
     QSharedPointer<RCAD::SceneManager> scene_manager_;
     QSharedPointer<QOpenGLShaderProgram> shader_program_;
+
+    QList<RCAD::GLAttributeMeta> attributes_;
 
     QOpenGLVertexArrayObject vao_points_;
     QOpenGLVertexArrayObject vao_lines_;

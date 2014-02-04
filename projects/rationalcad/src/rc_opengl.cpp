@@ -20,7 +20,7 @@
 
 // RationalCAD
 #include "rc_common.h"
-#include "rc_manager_gl.h"
+#include "rc_opengl.h"
 
 namespace RCAD {
 
@@ -28,24 +28,22 @@ namespace RCAD {
 // ShaderManager
 //=============================================================================
 
-ShaderManager::ShaderManager() {}
-
-void ShaderManager::initialize() {
+ShaderManager::ShaderManager() {
     initializeOpenGLFunctions();
 
     // override system locale until shaders are compiled
     setlocale(LC_NUMERIC, "C");
 
     bool shaders_valid =
-               AddProgram("gl2_default",
+               addProgram("gl2_default",
                           ":/shaders/gl2_default.vsh",
                           ":/shaders/gl2_default.fsh")
-            && AddProgram("gl3_default",
+            && addProgram("gl3_default",
                           ":/shaders/gl3_default.vsh",
                           ":/shaders/gl3_default.fsh");
 
     if (!shaders_valid) {
-        rWarning("Shaders did not compile.");
+        qDebug() << "Shaders did not compile.";
     }
 
     // restore system locale
@@ -63,15 +61,40 @@ bool ShaderManager::addProgram(const QString& id, const QString& vert_path,
         programs_.insert(id, sp);
         return true;
     } else {
-        rWarning("%s", id.toStdString().c_str());
+        qDebug() << id;
         return false;
     }
 }
 
 QSharedPointer<QOpenGLShaderProgram> ShaderManager::getProgram(
     const QString& id) {
-    return programs_[id];
+    return programs_.value(id);
 }
+
+//=============================================================================
+// OpenGL abstraction layer
+//=============================================================================
+
+namespace GL {
+
+void EnableAttributes(QSharedPointer<QOpenGLShaderProgram> program,
+                      const QList<GLAttributeMeta>& attributes) {
+    foreach (GLAttributeMeta attr_meta, attributes) {
+        program->enableAttributeArray(attr_meta.name);
+        program->setAttributeBuffer(attr_meta.name,
+                                    attr_meta.type, attr_meta.offset,
+                                    attr_meta.count, GLVertex::kStride);
+    }
+}
+
+void DisableAttributes(QSharedPointer<QOpenGLShaderProgram> program,
+                       const QList<GLAttributeMeta>& attributes) {
+    foreach (GLAttributeMeta attr_meta, attributes) {
+        program->disableAttributeArray(attr_meta.name);
+    }
+}
+
+} // namespace GL
 
 //=============================================================================
 // GLAttributeMeta

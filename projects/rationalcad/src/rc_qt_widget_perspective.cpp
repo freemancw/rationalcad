@@ -15,13 +15,13 @@
 
 /*!
  * @author Clinton Freeman <admin@freemancw.com>
- * @date 01/29/2013
+ * @date 2013-01-29
  */
 
 // RationalCAD
 #include "rc_common.h"
 #include "rc_qt_widget_perspective.h"
-#include "rc_manager_scene.h"
+#include "rc_scene.h"
 
 using namespace RCAD;
 
@@ -35,69 +35,71 @@ const int PerspectiveWidget::kPrefHintHeight = 256;
 // Constructors / Destructors
 //=============================================================================
 
-PerspectiveWidget::PerspectiveWidget(QSharedPointer<GLManager> gl_manager,
-                                     QSharedPointer<SceneManager> scene_manager,
-                                     QWidget *parent,
+PerspectiveWidget::PerspectiveWidget(QWidget *parent,
                                      const QGLWidget *shareWidget) :
     QGLWidget(parent, shareWidget),
-    gl_manager_(gl_manager),
-    scene_manager_(scene_manager),
     camera_active_(false),
-    num_frames_(0) {
+    num_frames_(0) {}
+
+//=============================================================================
+// Initialization
+//=============================================================================
+
+void PerspectiveWidget::initialize(
+    QSharedPointer<ShaderManager> shader_manager,
+    QSharedPointer<SceneManager> scene_manager) {
+    shader_manager_ = shader_manager;
+    scene_manager_ = scene_manager;
+
     setAutoFillBackground(false);
 }
 
-//=============================================================================
-// OpenGL init / draw / resize
-//=============================================================================
-
 void PerspectiveWidget::initializeGL() {
-    rDebug("Initializing OpenGL.");
+    qDebug() << "Initializing perspective OpenGL.";
 
     initializeOpenGLFunctions();
 
-    shader_program_ = gl_manager_->GetProgram("gl3_default");
+    glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+    glDisable(GL_CULL_FACE);
+    glEnable(GL_MULTISAMPLE);
+    glEnable(GL_PROGRAM_POINT_SIZE);
+    glEnable(GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
 
-    gl_manager_->glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
-    gl_manager_->glDisable(GL_CULL_FACE);
-    gl_manager_->glEnable(GL_MULTISAMPLE);
-    gl_manager_->glEnable(GL_PROGRAM_POINT_SIZE);
-    gl_manager_->glEnable(GL_DEPTH_BUFFER_BIT);
-    gl_manager_->glEnable(GL_DEPTH_TEST);
-
+    shader_program_ = shader_manager_->getProgram("gl3_default");
     shader_program_->bind();
 
     modelview_.setToIdentity();
     shader_program_->setUniformValue("m_modelview", modelview_);
+    //! @todo magic numbers
     camera_pos_ = QVector3D(6, -2, 2);
     camera_rot_.setZ(-45.0f);
     camera_rot_.setX(22.5f);
 
-    QList<GLAttributeMeta> persp_attributes;
-    persp_attributes.push_back(GLVertex::kPositionMeta);
-    persp_attributes.push_back(GLVertex::kNormalMeta);
-    persp_attributes.push_back(GLVertex::kMatAmbientMeta);
+    attributes_.push_back(GLVertex::kPositionMeta);
+    attributes_.push_back(GLVertex::kNormalMeta);
+    attributes_.push_back(GLVertex::kMatAmbientMeta);
 
     vao_points_.create();
     vao_points_.bind();
-    //gl_manager_->BindPointsVBO();
-    gl_manager_->EnableAttributes("gl3_default", persp_attributes);
+    scene_manager_->points_vbo().buffer.bind();
+    GL::EnableAttributes(shader_program_, attributes_);
     vao_points_.release();
-    //gl_manager_->ReleasePointsVBO();
+    scene_manager_->points_vbo().buffer.release();
 
     vao_lines_.create();
     vao_lines_.bind();
-    //gl_manager_->BindLinesVBO();
-    gl_manager_->EnableAttributes("gl3_default", persp_attributes);
+    scene_manager_->lines_vbo().buffer.bind();
+    GL::EnableAttributes(shader_program_, attributes_);
     vao_lines_.release();
-    //gl_manager_->ReleaseLinesVBO();
+    scene_manager_->lines_vbo().buffer.release();
 
     vao_triangles_.create();
     vao_triangles_.bind();
-    //gl_manager_->BindTrianglesVBO();
-    gl_manager_->EnableAttributes("gl3_default", persp_attributes);
+    scene_manager_->triangles_vbo().buffer.bind();
+    GL::EnableAttributes(shader_program_, attributes_);
     vao_triangles_.release();
-    //gl_manager_->ReleaseTrianglesVBO();
+    scene_manager_->triangles_vbo().buffer.release();
 
     shader_program_->release();
 
@@ -105,6 +107,10 @@ void PerspectiveWidget::initializeGL() {
     connect(&timer_, SIGNAL(timeout()), this, SLOT(update()));
     timer_.start(kRedrawMsec);
 }
+
+//=============================================================================
+// Rendering
+//=============================================================================
 
 void PerspectiveWidget::paintEvent(QPaintEvent *event) {
     static QTime frametime = QTime::currentTime();
@@ -115,8 +121,7 @@ void PerspectiveWidget::paintEvent(QPaintEvent *event) {
 
     shader_program_->bind();
 
-    gl_manager_->glEnable(GL_DEPTH_TEST);
-
+    glEnable(GL_DEPTH_TEST);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     handleInput();
@@ -132,7 +137,6 @@ void PerspectiveWidget::paintEvent(QPaintEvent *event) {
     drawScene();
 
     shader_program_->release();
-
 
     // setup the QPainter for drawing the overlay (e.g. 2D text)
     QPainter painter;
@@ -188,20 +192,18 @@ void PerspectiveWidget::handleInput() {
 }
 
 void PerspectiveWidget::drawScene() {
-    //gl_manager_->glEnable(GL_BLEND);
-    //gl_manager_->glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-/*
     vao_points_.bind();
-    gl_manager_->DrawPointsVBO();
+    glDrawArrays(GL_POINTS, 0, scene_manager_->points_vbo().num_vertices);
     vao_points_.release();
     vao_lines_.bind();
-    gl_manager_->DrawLinesVBO();
+    glDrawArrays(GL_LINES, 0, scene_manager_->lines_vbo().num_vertices);
     vao_lines_.release();
     vao_triangles_.bind();
-    gl_manager_->DrawTrianglesVBO();
+    glDrawArrays(GL_TRIANGLES, 0, scene_manager_->triangles_vbo().num_vertices);
     vao_triangles_.release();
-    */
 }
 
 void PerspectiveWidget::resizeGL(int width, int height) {

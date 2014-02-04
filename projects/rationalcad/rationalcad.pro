@@ -83,16 +83,16 @@ win32 {
 
 SOURCES += \
     src/rc_main.cpp \
-    src/rc_integer_grid.cpp \
     src/rc_logger.cpp \
-    src/rc_manager_config.cpp \
-    src/rc_manager_gl.cpp \
-    src/rc_manager_scene.cpp \
     src/rc_qt_dialog_about.cpp \
     src/rc_qt_dialog_preferences.cpp \
     src/rc_qt_widget_orthographic.cpp \
     src/rc_qt_widget_perspective.cpp \
-    src/rc_qt_window_main.cpp
+    src/rc_qt_window_main.cpp \
+    src/rc_grid.cpp \
+    src/rc_config.cpp \
+    src/rc_opengl.cpp \
+    src/rc_scene.cpp
 
 # Header files ================================================================
 
@@ -101,16 +101,16 @@ INCLUDEPATH += include/
 HEADERS += \
     include/rc_common.h \
     include/rc_array.h \
-    include/rc_integer_grid.h \
     include/rc_logger.h \
-    include/rc_manager_config.h \
-    include/rc_manager_gl.h \
-    include/rc_manager_scene.h \
     include/rc_qt_dialog_about.h \
     include/rc_qt_dialog_preferences.h \
     include/rc_qt_widget_perspective.h \
     include/rc_qt_widget_orthographic.h \
-    include/rc_qt_window_main.h
+    include/rc_qt_window_main.h \
+    include/rc_opengl.h \
+    include/rc_scene.h \
+    include/rc_config.h \
+    include/rc_grid.h
 
 # Misc files ==================================================================
 

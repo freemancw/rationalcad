@@ -19,13 +19,13 @@
  * @brief Manager type responsible for global configuration settings.
  */
 
-#ifndef RC_MANAGER_CONFIG_H
-#define RC_MANAGER_CONFIG_H
+#ifndef RC_CONFIG_H
+#define RC_CONFIG_H
 
 // RationalCAD
 #include "rc_common.h"
 
-BEGIN_NAMESPACE(RCAD)
+namespace RCAD {
 
 enum InputState {
     SELECT,
@@ -78,6 +78,6 @@ extern RCConfig g_config;
 
 void InitializeGlobalConfig();
 
-END_NAMESPACE(RCAD)
+} // namespace RCAD
 
-#endif // RC_MANAGER_CONFIG_H
+#endif // RC_CONFIG_H

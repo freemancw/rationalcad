@@ -20,9 +20,9 @@
 
 // RationalCAD
 #include "rc_common.h"
-#include "rc_integer_grid.h"
-#include "rc_manager_scene.h"
-#include "rc_manager_config.h"
+#include "rc_grid.h"
+#include "rc_scene.h"
+#include "rc_config.h"
 
 namespace RCAD {
 

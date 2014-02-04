@@ -22,8 +22,8 @@
 #include "rc_common.h"
 #include "rc_qt_window_main.h"
 #include "rc_qt_widget_orthographic.h"
-#include "rc_integer_grid.h"
-#include "rc_manager_config.h"
+#include "rc_grid.h"
+#include "rc_config.h"
 
 // mathlib
 #include "ml_point.h"
@@ -46,7 +46,10 @@ OrthographicWidget::OrthographicWidget(OrthoOrientation orientation,
                                        const QGLWidget *shareWidget) :
     QGLWidget(parent, shareWidget),
     orientation_(orientation),
-    num_frames_(0) {}
+    num_frames_(0) {
+    //qDebug() << "requested: " << this->context()->requestedFormat();
+    //qDebug() << "received: " << this->context()->format();
+}
 
 //=============================================================================
 // Initialization
@@ -69,6 +72,16 @@ void OrthographicWidget::initialize(
             SIGNAL(SelectObject(QVector2D)),
             scene_manager_.data(),
             SLOT(SelectObject(QVector2D)));
+}
+
+void OrthographicWidget::initializeGL() {
+    qDebug() << "Initializing orthographic OpenGL.";
+
+    initializeOpenGLFunctions();
+
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_PROGRAM_POINT_SIZE);
 
     shader_program_ = shader_manager_->getProgram("gl2_default");
     shader_program_->bind();
@@ -80,33 +93,34 @@ void OrthographicWidget::initialize(
     attributes_.push_back(GLVertex::kMatAmbientMeta);
 
     QVector<GLVertex> grid_verts;
+    //! @todo magic numbers
     i_grid_.InitializeGrid(8, 8, 16, 16, grid_verts);
     i_grid_vbo_.UploadVertices(grid_verts);
     i_grid_vao_.create();
     i_grid_vao_.bind();
     i_grid_vbo_.buffer.bind();
-    EnableAttributes(shader_program_, attributes_);
+    GL::EnableAttributes(shader_program_, attributes_);
     i_grid_vao_.release();
     i_grid_vbo_.buffer.release();
 
     vao_points_.create();
     vao_points_.bind();
     scene_manager_->points_vbo().buffer.bind();
-    EnableAttributes(shader_program_, attributes_);
+    GL::EnableAttributes(shader_program_, attributes_);
     vao_points_.release();
     scene_manager_->points_vbo().buffer.release();
 
     vao_lines_.create();
     vao_lines_.bind();
     scene_manager_->lines_vbo().buffer.bind();
-    EnableAttributes(shader_program_, attributes_);
+    GL::EnableAttributes(shader_program_, attributes_);
     vao_lines_.release();
     scene_manager_->lines_vbo().buffer.release();
 
     vao_triangles_.create();
     vao_triangles_.bind();
     scene_manager_->triangles_vbo().buffer.bind();
-    EnableAttributes(shader_program_, attributes_);
+    GL::EnableAttributes(shader_program_, attributes_);
     vao_triangles_.release();
     scene_manager_->triangles_vbo().buffer.release();
 
@@ -115,16 +129,6 @@ void OrthographicWidget::initialize(
     timer_.setTimerType(Qt::PreciseTimer);
     connect(&timer_, SIGNAL(timeout()), this, SLOT(update()));
     timer_.start(kRedrawMsec);
-}
-
-void OrthographicWidget::initializeGL() {
-    rInfo("Initializing orthographic OpenGL.");
-
-    initializeOpenGLFunctions();
-
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-    glEnable(GL_CULL_FACE);
-    glEnable(GL_PROGRAM_POINT_SIZE);
 }
 
 //=============================================================================
@@ -233,6 +237,7 @@ void OrthographicWidget::resizeGL(int width, int height) {
     float halfWidth  = static_cast<float>(width)/2.0f;
     float halfHeight = static_cast<float>(height)/2.0f;
 
+    //! @todo magic numbers
     projection_.setToIdentity();
     projection_.ortho(-halfWidth, halfWidth, -halfHeight, halfHeight,
                       -8192.0f*8, 8192.0f*8);

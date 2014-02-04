@@ -20,8 +20,8 @@
 
 // RationalCAD
 #include "rc_common.h"
-#include "rc_manager_scene.h"
-#include "rc_manager_config.h"
+#include "rc_scene.h"
+#include "rc_config.h"
 
 // mathlib
 #include "ml_common.h"
@@ -296,6 +296,10 @@ SceneManager::SceneManager() {
             SIGNAL(UpdateVboTriangles(QVector<GLVertex>)),
             this,
             SLOT(UpdateVboTriangles(QVector<GLVertex>)));
+
+    UpdateVboPoints(QVector<GLVertex>());
+    UpdateVboLines(QVector<GLVertex>());
+    UpdateVboTriangles(QVector<GLVertex>());
 }
 
 SceneManager::~SceneManager() {

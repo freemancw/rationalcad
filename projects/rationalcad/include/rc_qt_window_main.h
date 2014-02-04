@@ -27,7 +27,7 @@
 
 // RationalCAD
 #include "rc_common.h"
-#include "rc_manager_scene.h"
+#include "rc_scene.h"
 #include "rc_logger.h"
 
 BEGIN_NAMESPACE(Ui)
@@ -74,11 +74,10 @@ private:
     void initializeLogging();
     void initializeConnections();
 
-
     Ui::MainWindow *ui;
 
     QSharedPointer<RCAD::SceneManager> scene_manager_;
-    QSharedPointer<RCAD::GLManager> gl_manager_;
+    QSharedPointer<RCAD::ShaderManager> shader_manager_;
 
     RCAD::RCLogger logger_;
 

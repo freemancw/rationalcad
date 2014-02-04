@@ -23,7 +23,7 @@
 
 // RationalCAD
 #include "rc_common.h"
-#include "rc_manager_config.h"
+#include "rc_config.h"
 
 namespace RCAD {
 
@@ -45,6 +45,8 @@ void InitializeGlobalConfig() {
     glf.setSwapInterval(1);
     QGLFormat::setDefaultFormat(glf);
 
+    //qDebug() << QGLFormat::defaultFormat();
+
     g_config.tag_colors.insert("normal", QColor(0, 0, 0));
     g_config.tag_colors.insert("active", QColor(230, 180, 0));
     g_config.tag_colors.insert("inactive", QColor(200, 200, 200));
@@ -62,7 +64,6 @@ void InitializeGlobalConfig() {
     g_config.grid_minor_color_ = QColor(200, 200, 200);
 
     g_config.input_state_ = SELECT;
-
     g_config.snap_to_grid_ = false;
 }
 

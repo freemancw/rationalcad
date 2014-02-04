@@ -26,7 +26,7 @@
 #include "ui_rc_window_main.h"
 #include "rc_qt_widget_orthographic.h"
 #include "rc_qt_widget_perspective.h"
-#include "rc_manager_scene.h"
+#include "rc_scene.h"
 
 using namespace RCAD;
 
@@ -43,17 +43,38 @@ MainWindow::MainWindow(QWidget *parent) :
     initializeLogging();
     InitializeGlobalConfig();
 
-    rInfo("Creating OpenGL manager.");
-    gl_manager_ = QSharedPointer<GLManager>(new GLManager());
-
-    rInfo("Creating scene manager.");
-    scene_manager_ = QSharedPointer<SceneManager>(new SceneManager());
-
+    // create orthographic widget
     rInfo("Creating orthographic view.");
-    auto ortho_top = new OrthographicWidget(gl_manager_, scene_manager_,
-                                            ui->group_top);
+    qDebug() << "Creating orthographic view";
+    auto ortho_top = new OrthographicWidget(TOP, ui->group_top);
     ui->group_top->layout()->addWidget(ortho_top);
     ortho_top->installEventFilter(this);
+    //qDebug() << ortho_top->format();
+
+    // create perspective widget
+    rInfo("Creating perspective view.");
+    qDebug() << "Creating perspective view";
+    auto perspective = new PerspectiveWidget(ui->group_perspective, ortho_top);
+    ui->group_perspective->layout()->addWidget(perspective);
+    perspective->installEventFilter(this);
+    perspective->context()->makeCurrent();
+    //qDebug() << perspective->format();
+
+    // create shader manager
+    rInfo("Creating shader manager.");
+    qDebug() << "Creating shader manager";
+    shader_manager_ = QSharedPointer<ShaderManager>(new ShaderManager());
+
+    // create perspective widget
+    rInfo("Creating scene manager.");
+    qDebug() << "Creating scene manager";
+    scene_manager_ = QSharedPointer<SceneManager>(new SceneManager());
+
+    // initialize widgets
+    qDebug() << "Initializing ortho.";
+    ortho_top->initialize(shader_manager_, scene_manager_);
+    qDebug() << "Initializing perspective.";
+    perspective->initialize(shader_manager_, scene_manager_);
 
     connect(ortho_top,
             SIGNAL(ChangeMessage(const QString&)),
@@ -61,14 +82,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ortho_top,
             SIGNAL(EndCreatePolytope(bool)),
             SLOT(on_button_polytope_toggled(bool)));
-
-    rInfo("Creating perspective view.");
-    auto perspective = new PerspectiveWidget(gl_manager_, scene_manager_,
-                                             ui->group_perspective, ortho_top);
-    ui->group_perspective->layout()->addWidget(perspective);
-    perspective->installEventFilter(this);
-    perspective->context()->makeCurrent();
-
     connect(this,
             SIGNAL(BeginCreatePolytope(QString,QColor)),
             scene_manager_.data(),

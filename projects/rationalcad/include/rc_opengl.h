@@ -19,8 +19,8 @@
  * @brief Manager type responsible for altering OpenGL states and data.
  */
 
-#ifndef RC_MANAGER_GL_H
-#define RC_MANAGER_GL_H
+#ifndef RC_OPENGL_H
+#define RC_OPENGL_H
 
 // Qt
 #include <QOpenGLFunctions_3_3_Core>
@@ -149,8 +149,6 @@ class ShaderManager : public QOpenGLFunctions_3_3_Core {
 public:
     ShaderManager();
 
-    void initialize();
-
     bool addProgram(const QString& id,
                     const QString& vert_path,
                     const QString& frag_path);
@@ -161,8 +159,22 @@ private:
     QHash<QString, QSharedPointer<QOpenGLShaderProgram>> programs_;
 };
 
- Q_DECLARE_METATYPE(QVector<GLVertex>)
+//=============================================================================
+// OpenGL abstraction layer
+//=============================================================================
+
+namespace GL {
+
+void EnableAttributes(QSharedPointer<QOpenGLShaderProgram> program,
+                      const QList<GLAttributeMeta>& attributes);
+
+void DisableAttributes(QSharedPointer<QOpenGLShaderProgram> program,
+                       const QList<GLAttributeMeta>& attributes);
+
+} // namespace GL
+
+Q_DECLARE_METATYPE(QVector<GLVertex>)
 
 } // namespace RCAD
 
-#endif // RC_GL_ABSTRACTION_H
+#endif // RC_OPENGL_H

@@ -27,7 +27,7 @@
 
 // RationalCAD
 #include "rc_common.h"
-#include "rc_manager_config.h"
+#include "rc_config.h"
 
 namespace Ui {
 class PreferencesDialog;
