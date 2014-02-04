@@ -83,7 +83,7 @@ protected:
     QSharedPointer<RCAD::SceneManager> scene_manager_;
     QSharedPointer<QOpenGLShaderProgram> shader_program_;
 
-    QList<RCAD::GLAttributeMeta> attributes_;
+    QList<RCAD::GL::AttributeMeta> attributes_;
 
     QOpenGLVertexArrayObject vao_points_;
     QOpenGLVertexArrayObject vao_lines_;

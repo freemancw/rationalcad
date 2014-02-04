@@ -15,7 +15,7 @@
 
 /*!
  * @author Clinton Freeman <admin@freemancw.com>
- * @date 06/11/2013
+ * @date 2013-06-11
  */
 
 // RationalCAD
@@ -46,9 +46,9 @@ SceneObserver::SceneObserver() :
 SceneObserver::~SceneObserver() {}
 
 void SceneObserver::GenerateVboPoints() {
-    QVector<GLVertex> points;
+    QVector<GL::Vertex> points;
     for (auto i = viz_points_.begin(); i != viz_points_.end(); ++i) {
-        GLVertex v(approx_points_.value(i.key())->approx());
+        GL::Vertex v(approx_points_.value(i.key())->approx());
         v.set_mat_ambient(i->back().color());
         points.push_back(v);
     }
@@ -56,10 +56,10 @@ void SceneObserver::GenerateVboPoints() {
 }
 
 void SceneObserver::GenerateVboLines() {
-    QVector<GLVertex> lines;
+    QVector<GL::Vertex> lines;
     for (auto i = viz_segments_.begin(); i != viz_segments_.end(); ++i) {
-        GLVertex p(approx_points_.value(i.key().first)->approx());
-        GLVertex q(approx_points_.value(i.key().second)->approx());
+        GL::Vertex p(approx_points_.value(i.key().first)->approx());
+        GL::Vertex q(approx_points_.value(i.key().second)->approx());
         p.set_mat_ambient(i->back().color());
         q.set_mat_ambient(i->back().color());
         lines.push_back(p);
@@ -69,12 +69,12 @@ void SceneObserver::GenerateVboLines() {
 }
 
 void SceneObserver::GenerateVboTriangles() {
-    QVector<GLVertex> triangles;
+    QVector<GL::Vertex> triangles;
     for (auto i = viz_triangles_.begin(); i != viz_triangles_.end(); ++i) {
         auto current_vt = i.value().top();
-        GLVertex a(approx_points_.value(i.key().at(0))->approx());
-        GLVertex b(approx_points_.value(i.key().at(1))->approx());
-        GLVertex c(approx_points_.value(i.key().at(2))->approx());
+        GL::Vertex a(approx_points_.value(i.key().at(0))->approx());
+        GL::Vertex b(approx_points_.value(i.key().at(1))->approx());
+        GL::Vertex c(approx_points_.value(i.key().at(2))->approx());
         a.set_mat_ambient(current_vt.diffuse());
         b.set_mat_ambient(current_vt.diffuse());
         c.set_mat_ambient(current_vt.diffuse());
@@ -86,10 +86,10 @@ void SceneObserver::GenerateVboTriangles() {
 }
 
 void SceneObserver::SlotRegisterPoint_2r(Point_2r &p) {
-    if(!p.unique_id()) {
+    if (!p.unique_id()) {
         p.set_unique_id(cur_point_uid_++);
     }
-    if(!approx_points_.contains(p.unique_id())) {
+    if (!approx_points_.contains(p.unique_id())) {
         auto approx = QSharedPointer<ApproxPoint_3f>(new ApproxPoint_3f(p));
         approx_points_.insert(p.unique_id(), approx);
         p.AddObserver(approx.data());
@@ -110,7 +110,7 @@ void SceneObserver::SlotPopVisualPoint_2r(const Point_2r& p,
     rAssert(!viz_points_.value(p.unique_id()).isEmpty());
     viz_points_[p.unique_id()].pop_back();
 
-    if(viz_points_.value(p.unique_id()).isEmpty()) {
+    if (viz_points_.value(p.unique_id()).isEmpty()) {
         viz_points_.remove(p.unique_id());
     }
 
@@ -135,7 +135,7 @@ void SceneObserver::SlotPopVisualSegment_2r(const Segment_2r& s,
     rAssert(!viz_segments_.value(key).isEmpty());
     viz_segments_[key].pop_back();
 
-    if(viz_segments_.value(key).isEmpty()) {
+    if (viz_segments_.value(key).isEmpty()) {
         viz_segments_.remove(key);
     }
 
@@ -168,7 +168,7 @@ void SceneObserver::SlotPopVisualTriangle_2r(const Triangle_2r &t,
 
     viz_triangles_[key].pop_back();
 
-    if(viz_triangles_.value(key).isEmpty()) {
+    if (viz_triangles_.value(key).isEmpty()) {
         viz_triangles_.remove(key);
     }
 
@@ -178,10 +178,10 @@ void SceneObserver::SlotPopVisualTriangle_2r(const Triangle_2r &t,
 }
 
 void SceneObserver::SlotRegisterPoint_3r(Point_3r &p) {
-    if(!p.unique_id()) {
+    if (!p.unique_id()) {
         p.set_unique_id(cur_point_uid_++);
     }
-    if(!approx_points_.contains(p.unique_id())) {
+    if (!approx_points_.contains(p.unique_id())) {
         auto approx = QSharedPointer<ApproxPoint_3f>(new ApproxPoint_3f(p));
         approx_points_.insert(p.unique_id(), approx);
         p.AddObserver(approx.data());
@@ -202,7 +202,7 @@ void SceneObserver::SlotPopVisualPoint_3r(const Point_3r& p,
     rAssert(!viz_points_.value(p.unique_id()).isEmpty());
     viz_points_[p.unique_id()].pop_back();
 
-    if(viz_points_.value(p.unique_id()).isEmpty()) {
+    if (viz_points_.value(p.unique_id()).isEmpty()) {
         viz_points_.remove(p.unique_id());
     }
 
@@ -227,7 +227,7 @@ void SceneObserver::SlotPopVisualSegment_3r(const Segment_3r& s,
     rAssert(!viz_segments_.value(key).isEmpty());
     viz_segments_[key].pop_back();
 
-    if(viz_segments_.value(key).isEmpty()) {
+    if (viz_segments_.value(key).isEmpty()) {
         viz_segments_.remove(key);
     }
 
@@ -260,7 +260,7 @@ void SceneObserver::SlotPopVisualTriangle_3r(const Triangle_3r &t,
 
     viz_triangles_[key].pop_back();
 
-    if(viz_triangles_.value(key).isEmpty()) {
+    if (viz_triangles_.value(key).isEmpty()) {
         viz_triangles_.remove(key);
     }
 
@@ -285,21 +285,21 @@ SceneManager::SceneManager() {
     animation_thread_->start();
 
     connect(&scene_observer_,
-            SIGNAL(UpdateVboPoints(QVector<GLVertex>)),
+            SIGNAL(UpdateVboPoints(QVector<GL::Vertex>)),
             this,
-            SLOT(UpdateVboPoints(QVector<GLVertex>)));
+            SLOT(UpdateVboPoints(QVector<GL::Vertex>)));
     connect(&scene_observer_,
-            SIGNAL(UpdateVboLines(QVector<GLVertex>)),
+            SIGNAL(UpdateVboLines(QVector<GL::Vertex>)),
             this,
-            SLOT(UpdateVboLines(QVector<GLVertex>)));
+            SLOT(UpdateVboLines(QVector<GL::Vertex>)));
     connect(&scene_observer_,
-            SIGNAL(UpdateVboTriangles(QVector<GLVertex>)),
+            SIGNAL(UpdateVboTriangles(QVector<GL::Vertex>)),
             this,
-            SLOT(UpdateVboTriangles(QVector<GLVertex>)));
+            SLOT(UpdateVboTriangles(QVector<GL::Vertex>)));
 
-    UpdateVboPoints(QVector<GLVertex>());
-    UpdateVboLines(QVector<GLVertex>());
-    UpdateVboTriangles(QVector<GLVertex>());
+    UpdateVboPoints(QVector<GL::Vertex>());
+    UpdateVboLines(QVector<GL::Vertex>());
+    UpdateVboTriangles(QVector<GL::Vertex>());
 }
 
 SceneManager::~SceneManager() {
@@ -307,25 +307,25 @@ SceneManager::~SceneManager() {
     animation_thread_->wait();
 }
 
-void SceneManager::UpdateVboPoints(QVector<GLVertex> verts) {
+void SceneManager::UpdateVboPoints(QVector<GL::Vertex> verts) {
     points_vbo_.UploadVertices(verts);
 }
 
-void SceneManager::UpdateVboLines(QVector<GLVertex> verts) {
+void SceneManager::UpdateVboLines(QVector<GL::Vertex> verts) {
     lines_vbo_.UploadVertices(verts);
 }
 
-void SceneManager::UpdateVboTriangles(QVector<GLVertex> verts) {
+void SceneManager::UpdateVboTriangles(QVector<GL::Vertex> verts) {
     triangles_vbo_.UploadVertices(verts);
 }
 
-GLVertexBuffer& SceneManager::points_vbo() {
+GL::VertexBuffer& SceneManager::points_vbo() {
     return points_vbo_;
 }
-GLVertexBuffer& SceneManager::lines_vbo() {
+GL::VertexBuffer& SceneManager::lines_vbo() {
     return lines_vbo_;
 }
-GLVertexBuffer& SceneManager::triangles_vbo() {
+GL::VertexBuffer& SceneManager::triangles_vbo() {
     return triangles_vbo_;
 }
 
@@ -459,18 +459,18 @@ const Point_3f& ApproxPoint_3f::approx() const {
  * Specifies a lexicographical ordering on two vectors of nonnegative integers.
  */
 bool operator<(const QVector<uint32_t>& a, const QVector<uint32_t>& b) {
-    for(int i = 0; i < qMin(a.size(), b.size()); ++i) {
-        if(a[i] < b[i]) {
+    for (int i = 0; i < qMin(a.size(), b.size()); ++i) {
+        if (a[i] < b[i]) {
             return true;
-        } else if(a.at(i) > b.at(i)) {
+        } else if (a.at(i) > b.at(i)) {
             return false;
         }
     }
 
     // if we reach here they have to be equal
-    if(a.size() == b.size()) {
+    if (a.size() == b.size()) {
         return false;
-    } else if(a.size() < b.size()) {
+    } else if (a.size() < b.size()) {
         return true;
     } else {
         return false;

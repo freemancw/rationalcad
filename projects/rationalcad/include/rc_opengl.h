@@ -53,48 +53,31 @@ struct AttributeMeta {
     const char* name;
 };
 
-} // namespace GL
-
 //=============================================================================
-// Interface: GLAttributeMeta
+// Interface: Vertex
 //=============================================================================
 
-struct GLAttributeMeta {
-    GLAttributeMeta();
-    GLAttributeMeta(const int count, const GLenum type, const int offset,
-                    const char* name);
-
-    int count;
-    GLenum type;
-    int offset;
-    const char* name;
-};
-
-//=============================================================================
-// Interface: GLVertex
-//=============================================================================
-
-class GLVertex {
+class Vertex {
 public:
-    static const GLAttributeMeta kPositionMeta;
-    static const GLAttributeMeta kTangentMeta;
-    static const GLAttributeMeta kNormalMeta;
-    static const GLAttributeMeta kBitangentMeta;
-    static const GLAttributeMeta kUvcoordsMeta;
-    static const GLAttributeMeta kMatAmbientMeta;
+    static const AttributeMeta kPositionMeta;
+    static const AttributeMeta kTangentMeta;
+    static const AttributeMeta kNormalMeta;
+    static const AttributeMeta kBitangentMeta;
+    static const AttributeMeta kUvcoordsMeta;
+    static const AttributeMeta kMatAmbientMeta;
     static const GLsizei kStride;
 
-    GLVertex();
-    GLVertex(const Point_3f& position, const Vector_3f& tangent = Vector_3f(),
-             const Vector_3f& normal = Vector_3f(),
-             const Vector_3f& bitangent = Vector_3f(),
-             const Point_2f& uvcoords = Point_2f(),
-             const QColor& mat_ambient = Qt::black);
-    GLVertex(const Point_3f& position, const QColor& mat_ambient);
-    GLVertex(const Point_3f& position,const Vector_3f& normal);
-    GLVertex(const Point_3f& position, const Vector_3f& normal,
-             const QColor& mat_ambient);
-    GLVertex(const Point_3f& position, const Point_2f& uvcoords);
+    Vertex();
+    Vertex(const Point_3f& position, const Vector_3f& tangent = Vector_3f(),
+           const Vector_3f& normal = Vector_3f(),
+           const Vector_3f& bitangent = Vector_3f(),
+           const Point_2f& uvcoords = Point_2f(),
+           const QColor& mat_ambient = Qt::black);
+    Vertex(const Point_3f& position, const QColor& mat_ambient);
+    Vertex(const Point_3f& position,const Vector_3f& normal);
+    Vertex(const Point_3f& position, const Vector_3f& normal,
+           const QColor& mat_ambient);
+    Vertex(const Point_3f& position, const Point_2f& uvcoords);
 
     void set_position(const Point_3f& position);
     void set_tangent(const Vector_3f& tangent);
@@ -113,45 +96,45 @@ private:
     std::array<GLfloat, 4> mat_ambient_;
 };
 
-typedef GLVertex GLPoint;
+typedef Vertex Point;
 
-struct GLLine {
-    GLLine() {}
-    GLLine(const GLVertex& a, const GLVertex& b) :
+struct Line {
+    Line() {}
+    Line(const Vertex& a, const Vertex& b) :
         a(a),
         b(b) {}
-    GLVertex a;
-    GLVertex b;
+    Vertex a;
+    Vertex b;
 };
 
-struct GLTriangle {
-    GLTriangle() {}
-    GLTriangle(const GLVertex& a, const GLVertex& b, const GLVertex& c) :
+struct Triangle {
+    Triangle() {}
+    Triangle(const Vertex& a, const Vertex& b, const Vertex& c) :
         a(a),
         b(b),
         c(c) {}
-    GLVertex a;
-    GLVertex b;
-    GLVertex c;
+    Vertex a;
+    Vertex b;
+    Vertex c;
 };
 
-struct GLTriangleFan {
-    QVector<GLVertex> vertices;
+struct TriangleFan {
+    QVector<Vertex> vertices;
 };
 
-struct GLVertexBuffer {
-    GLVertexBuffer();
+struct VertexBuffer {
+    VertexBuffer();
 
-    void UploadVertices(const QVector<GLVertex>& vertices);
+    void UploadVertices(const QVector<Vertex>& vertices);
 
     QOpenGLBuffer buffer;
     int num_vertices;
 };
 
-struct GLElementArray {
-    GLElementArray();
-    GLElementArray(const QString& tag, const GLenum mode, const GLsizei count,
-                   const GLenum type, GLvoid* const indices);
+struct ElementArray {
+    ElementArray();
+    ElementArray(const QString& tag, const GLenum mode, const GLsizei count,
+                 const GLenum type, GLvoid* const indices);
 
     QString tag;
     GLenum mode;       // e.g. GL_TRIANGLES
@@ -159,6 +142,16 @@ struct GLElementArray {
     GLenum type;       // e.g. GL_FLOAT
     GLvoid* indices;   // offset pointer from currently bound IBO
 };
+
+void EnableAttributes(QSharedPointer<QOpenGLShaderProgram> program,
+                      const QList<AttributeMeta>& attributes);
+
+void DisableAttributes(QSharedPointer<QOpenGLShaderProgram> program,
+                       const QList<AttributeMeta>& attributes);
+
+Q_DECLARE_METATYPE(QVector<Vertex>)
+
+} // namespace GL
 
 //=============================================================================
 // Interface: ShaderManager
@@ -177,22 +170,6 @@ public:
 private:
     QHash<QString, QSharedPointer<QOpenGLShaderProgram>> programs_;
 };
-
-//=============================================================================
-// OpenGL abstraction layer
-//=============================================================================
-
-namespace GL {
-
-void EnableAttributes(QSharedPointer<QOpenGLShaderProgram> program,
-                      const QList<GLAttributeMeta>& attributes);
-
-void DisableAttributes(QSharedPointer<QOpenGLShaderProgram> program,
-                       const QList<GLAttributeMeta>& attributes);
-
-} // namespace GL
-
-Q_DECLARE_METATYPE(QVector<GLVertex>)
 
 } // namespace RCAD
 

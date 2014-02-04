@@ -86,10 +86,10 @@ void OrthographicWidget::initializeGL() {
     modelview_.setToIdentity();
     shader_program_->setUniformValue("m_modelview", modelview_);
 
-    attributes_.push_back(GLVertex::kPositionMeta);
-    attributes_.push_back(GLVertex::kMatAmbientMeta);
+    attributes_.push_back(GL::Vertex::kPositionMeta);
+    attributes_.push_back(GL::Vertex::kMatAmbientMeta);
 
-    QVector<GLVertex> grid_verts;
+    QVector<GL::Vertex> grid_verts;
     //! @todo magic numbers
     i_grid_.InitializeGrid(8, 8, 16, 16, grid_verts);
     i_grid_vbo_.UploadVertices(grid_verts);

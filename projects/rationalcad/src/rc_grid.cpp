@@ -40,7 +40,7 @@ void IntegerGrid::InitializeGrid(const int min_pixel_spacing,
                                  const int major_line_spacing,
                                  const int n_major_lines,
                                  const int bit_complexity,
-                                 QVector<GLVertex>& grid_verts) {
+                                 QVector<GL::Vertex>& grid_verts) {
     Q_UNUSED(bit_complexity);
 
     rInfo("Initializing coordinate grid.");
@@ -78,22 +78,22 @@ void IntegerGrid::InitializeGrid(const int min_pixel_spacing,
         // vertical top
         v.set_x(cur_pos);
         v.set_y(line_half_length);
-        GLVertex v_top(v, grid_color);
+        GL::Vertex v_top(v, grid_color);
 
         // vertical bottom
         v.set_x(cur_pos);
         v.set_y(-line_half_length);
-        GLVertex v_bottom(v, grid_color);
+        GL::Vertex v_bottom(v, grid_color);
 
         // horizontal left
         v.set_x(-line_half_length);
         v.set_y(cur_pos);
-        GLVertex v_left(v, grid_color);
+        GL::Vertex v_left(v, grid_color);
 
         // horizontal right
         v.set_x(line_half_length);
         v.set_y(cur_pos);
-        GLVertex v_right(v, grid_color);
+        GL::Vertex v_right(v, grid_color);
 
         grid_verts.push_back(v_top);
         grid_verts.push_back(v_bottom);

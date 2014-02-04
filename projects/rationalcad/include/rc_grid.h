@@ -27,7 +27,11 @@
 
 namespace RCAD {
 
-class GLVertex;
+namespace GL {
+
+class Vertex;
+
+}
 
 class IntegerGrid {
 public:
@@ -37,7 +41,7 @@ public:
                         const int major_line_spacing,
                         const int n_major_lines,
                         const int bit_complexity,
-                        QVector<GLVertex>& grid_verts);
+                        QVector<GL::Vertex>& grid_verts);
 
     void IncreaseMagnification();
     void DecreaseMagnification();

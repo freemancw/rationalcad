@@ -75,9 +75,9 @@ void PerspectiveWidget::initializeGL() {
     camera_rot_.setZ(-45.0f);
     camera_rot_.setX(22.5f);
 
-    attributes_.push_back(GLVertex::kPositionMeta);
-    attributes_.push_back(GLVertex::kNormalMeta);
-    attributes_.push_back(GLVertex::kMatAmbientMeta);
+    attributes_.push_back(GL::Vertex::kPositionMeta);
+    attributes_.push_back(GL::Vertex::kNormalMeta);
+    attributes_.push_back(GL::Vertex::kMatAmbientMeta);
 
     vao_points_.create();
     vao_points_.bind();

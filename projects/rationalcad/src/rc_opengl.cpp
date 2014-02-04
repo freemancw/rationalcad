@@ -78,86 +78,84 @@ QSharedPointer<QOpenGLShaderProgram> ShaderManager::getProgram(
 namespace GL {
 
 void EnableAttributes(QSharedPointer<QOpenGLShaderProgram> program,
-                      const QList<GLAttributeMeta>& attributes) {
-    foreach (GLAttributeMeta attr_meta, attributes) {
+                      const QList<AttributeMeta>& attributes) {
+    foreach (AttributeMeta attr_meta, attributes) {
         program->enableAttributeArray(attr_meta.name);
         program->setAttributeBuffer(attr_meta.name,
                                     attr_meta.type, attr_meta.offset,
-                                    attr_meta.count, GLVertex::kStride);
+                                    attr_meta.count, Vertex::kStride);
     }
 }
 
 void DisableAttributes(QSharedPointer<QOpenGLShaderProgram> program,
-                       const QList<GLAttributeMeta>& attributes) {
-    foreach (GLAttributeMeta attr_meta, attributes) {
+                       const QList<AttributeMeta>& attributes) {
+    foreach (AttributeMeta attr_meta, attributes) {
         program->disableAttributeArray(attr_meta.name);
     }
 }
 
-} // namespace GL
-
 //=============================================================================
-// GLAttributeMeta
+// AttributeMeta
 //=============================================================================
 
-GLAttributeMeta::GLAttributeMeta() {}
+AttributeMeta::AttributeMeta() {}
 
-GLAttributeMeta::GLAttributeMeta(const int count, const GLenum type,
-                                 const int offset, const char* name) :
+AttributeMeta::AttributeMeta(const int count, const GLenum type,
+                             const int offset, const char* name) :
     count(count),
     type(type),
     offset(offset),
     name(name) {}
 
 //=============================================================================
-// GLVertex
+// Vertex
 //=============================================================================
 
 // static vertex attribute definitions
 
-const GLAttributeMeta GLVertex::kPositionMeta(3, GL_FLOAT,
-                        offsetof(GLVertex, position_), "v_position");
-const GLAttributeMeta GLVertex::kTangentMeta(3, GL_FLOAT,
-                        offsetof(GLVertex, tangent_), "v_tangent");
-const GLAttributeMeta GLVertex::kNormalMeta(3, GL_FLOAT,
-                        offsetof(GLVertex, normal_), "v_normal");
-const GLAttributeMeta GLVertex::kBitangentMeta(3, GL_FLOAT,
-                        offsetof(GLVertex, bitangent_), "v_bitangent");
-const GLAttributeMeta GLVertex::kUvcoordsMeta(2, GL_FLOAT,
-                        offsetof(GLVertex, uvcoords_), "v_multi_tex_coord_0");
-const GLAttributeMeta GLVertex::kMatAmbientMeta(4, GL_FLOAT,
-                        offsetof(GLVertex, mat_ambient_), "v_mat_ambient");
-const GLsizei GLVertex::kStride = static_cast<GLsizei>(sizeof(GLVertex));
+const AttributeMeta Vertex::kPositionMeta(3, GL_FLOAT,
+                        offsetof(Vertex, position_), "v_position");
+const AttributeMeta Vertex::kTangentMeta(3, GL_FLOAT,
+                        offsetof(Vertex, tangent_), "v_tangent");
+const AttributeMeta Vertex::kNormalMeta(3, GL_FLOAT,
+                        offsetof(Vertex, normal_), "v_normal");
+const AttributeMeta Vertex::kBitangentMeta(3, GL_FLOAT,
+                        offsetof(Vertex, bitangent_), "v_bitangent");
+const AttributeMeta Vertex::kUvcoordsMeta(2, GL_FLOAT,
+                        offsetof(Vertex, uvcoords_), "v_multi_tex_coord_0");
+const AttributeMeta Vertex::kMatAmbientMeta(4, GL_FLOAT,
+                        offsetof(Vertex, mat_ambient_), "v_mat_ambient");
+const GLsizei Vertex::kStride = static_cast<GLsizei>(sizeof(Vertex));
 
 // constructors
 
-GLVertex::GLVertex() {}
+Vertex::Vertex() {}
 
-GLVertex::GLVertex(const Point_3f &position, const Point_2f &uvcoords) {
+Vertex::Vertex(const Point_3f &position, const Point_2f &uvcoords) {
     set_position(position);
     set_uvcoords(uvcoords);
 }
 
-GLVertex::GLVertex(const Point_3f &position, const QColor &mat_ambient) {
+Vertex::Vertex(const Point_3f &position, const QColor &mat_ambient) {
     set_position(position);
     set_mat_ambient(mat_ambient);
 }
 
-GLVertex::GLVertex(const Point_3f &position, const Vector_3f &normal) {
+Vertex::Vertex(const Point_3f &position, const Vector_3f &normal) {
     set_position(position);
     set_normal(normal);
 }
 
-GLVertex::GLVertex(const Point_3f &position, const Vector_3f &normal,
-                   const QColor &mat_ambient) {
+Vertex::Vertex(const Point_3f &position, const Vector_3f &normal,
+               const QColor &mat_ambient) {
     set_position(position);
     set_normal(normal);
     set_mat_ambient(mat_ambient);
 }
 
-GLVertex::GLVertex(const Point_3f &position, const Vector_3f &tangent,
-                   const Vector_3f &normal, const Vector_3f &bitangent,
-                   const Point_2f &uvcoords, const QColor &mat_ambient) {
+Vertex::Vertex(const Point_3f &position, const Vector_3f &tangent,
+               const Vector_3f &normal, const Vector_3f &bitangent,
+               const Point_2f &uvcoords, const QColor &mat_ambient) {
     set_position(position);
     set_tangent(tangent);
     set_normal(normal);
@@ -168,28 +166,28 @@ GLVertex::GLVertex(const Point_3f &position, const Vector_3f &tangent,
 
 // setters
 
-void GLVertex::set_position(const Point_3f &position) {
+void Vertex::set_position(const Point_3f& position) {
     position_ = position.elements();
 }
-void GLVertex::set_tangent(const Vector_3f &tangent) {
+void Vertex::set_tangent(const Vector_3f& tangent) {
     tangent_ = tangent.elements();
 }
-void GLVertex::set_normal(const Vector_3f &normal) {
+void Vertex::set_normal(const Vector_3f& normal) {
     normal_ = normal.elements();
 }
-void GLVertex::set_bitangent(const Vector_3f &bitangent) {
+void Vertex::set_bitangent(const Vector_3f& bitangent) {
     bitangent_ = bitangent.elements();
 }
-void GLVertex::set_uvcoords(const Point_2f &uvcoords) {
+void Vertex::set_uvcoords(const Point_2f& uvcoords) {
     uvcoords_ = uvcoords.elements();
 }
-void GLVertex::set_mat_ambient(const QColor &mat_ambient) {
+void Vertex::set_mat_ambient(const QColor& mat_ambient) {
     mat_ambient_[0] = mat_ambient.redF();
     mat_ambient_[1] = mat_ambient.greenF();
     mat_ambient_[2] = mat_ambient.blueF();
     mat_ambient_[3] = mat_ambient.alphaF();
 }
-void GLVertex::set_mat_ambient(const Visual::Color &mat_ambient) {
+void Vertex::set_mat_ambient(const Visual::Color& mat_ambient) {
     mat_ambient_[0] = static_cast<GLfloat>(mat_ambient.r())/255.0f;
     mat_ambient_[1] = static_cast<GLfloat>(mat_ambient.g())/255.0f;
     mat_ambient_[2] = static_cast<GLfloat>(mat_ambient.b())/255.0f;
@@ -197,38 +195,41 @@ void GLVertex::set_mat_ambient(const Visual::Color &mat_ambient) {
 }
 
 //=============================================================================
-// GLVertexBuffer
+// VertexBuffer
 //=============================================================================
 
-GLVertexBuffer::GLVertexBuffer() :
+VertexBuffer::VertexBuffer() :
     num_vertices(0) {}
 
-void GLVertexBuffer::UploadVertices(const QVector<GLVertex> &vertices) {
+void VertexBuffer::UploadVertices(const QVector<Vertex> &vertices) {
     if(!buffer.isCreated()) {
         buffer.create();
         buffer.bind();
         buffer.setUsagePattern(QOpenGLBuffer::DynamicDraw);
     }
     buffer.bind();
-    buffer.allocate(vertices.data(), vertices.size()*sizeof(GLVertex));
+    buffer.allocate(vertices.data(), vertices.size()*sizeof(Vertex));
     buffer.release();
 
     num_vertices = vertices.size();
 }
 
 //=============================================================================
-// GLElementArray
+// ElementArray
 //=============================================================================
 
-GLElementArray::GLElementArray() {}
+ElementArray::ElementArray() {}
 
-GLElementArray::GLElementArray(const QString &tag, const GLenum mode,
-                               const GLsizei count, const GLenum type,
-                               GLvoid * const indices) :
+ElementArray::ElementArray(const QString &tag, const GLenum mode,
+                           const GLsizei count, const GLenum type,
+                           GLvoid * const indices) :
     tag(tag),
     mode(mode),
     count(count),
     type(type),
     indices(indices) {}
+
+
+} // namespace GL
 
 } // namespace RCAD

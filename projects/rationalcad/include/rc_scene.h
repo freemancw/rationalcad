@@ -146,9 +146,9 @@ public:
     void SlotUpdate() override;
 
 signals:
-    void UpdateVboPoints(QVector<GLVertex> verts);
-    void UpdateVboLines(QVector<GLVertex> verts);
-    void UpdateVboTriangles(QVector<GLVertex> verts);
+    void UpdateVboPoints(QVector<GL::Vertex> verts);
+    void UpdateVboLines(QVector<GL::Vertex> verts);
+    void UpdateVboTriangles(QVector<GL::Vertex> verts);
 
 private:
     void GenerateVboPoints();
@@ -177,15 +177,15 @@ public:
 
     int NumObjects() const;
     const QString& selected_name() const;
-    GLVertexBuffer& points_vbo();
-    GLVertexBuffer& lines_vbo();
-    GLVertexBuffer& triangles_vbo();
+    GL::VertexBuffer& points_vbo();
+    GL::VertexBuffer& lines_vbo();
+    GL::VertexBuffer& triangles_vbo();
 
 public slots:
 
-    void UpdateVboPoints(QVector<GLVertex> verts);
-    void UpdateVboLines(QVector<GLVertex> verts);
-    void UpdateVboTriangles(QVector<GLVertex> verts);
+    void UpdateVboPoints(QVector<GL::Vertex> verts);
+    void UpdateVboLines(QVector<GL::Vertex> verts);
+    void UpdateVboTriangles(QVector<GL::Vertex> verts);
 
     void BeginCreatePolytope(const QString& name, const QColor& face_color);
     void EndCreatePolytope();
@@ -201,9 +201,9 @@ private:
     ISceneObject* SelectedObject();
     ScenePolytope_3* SelectedPolytope_3();
 
-    GLVertexBuffer points_vbo_;
-    GLVertexBuffer lines_vbo_;
-    GLVertexBuffer triangles_vbo_;
+    GL::VertexBuffer points_vbo_;
+    GL::VertexBuffer lines_vbo_;
+    GL::VertexBuffer triangles_vbo_;
 
     SceneObserver scene_observer_;
     QString selected_name_;

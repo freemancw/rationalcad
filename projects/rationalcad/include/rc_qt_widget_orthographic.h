@@ -96,14 +96,14 @@ protected:
     QSharedPointer<RCAD::SceneManager> scene_manager_;
     QSharedPointer<QOpenGLShaderProgram> shader_program_;
 
-    QList<RCAD::GLAttributeMeta> attributes_;
+    QList<RCAD::GL::AttributeMeta> attributes_;
 
     QOpenGLVertexArrayObject vao_points_;
     QOpenGLVertexArrayObject vao_lines_;
     QOpenGLVertexArrayObject vao_triangles_;
 
     RCAD::IntegerGrid i_grid_;
-    RCAD::GLVertexBuffer i_grid_vbo_;
+    RCAD::GL::VertexBuffer i_grid_vbo_;
     QOpenGLVertexArrayObject i_grid_vao_;
 
     quint32 num_frames_;
