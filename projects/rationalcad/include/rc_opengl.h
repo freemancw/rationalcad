@@ -36,6 +36,25 @@
 
 namespace RCAD {
 
+namespace GL {
+
+//=============================================================================
+// Interface: AttributeMeta
+//=============================================================================
+
+struct AttributeMeta {
+    AttributeMeta();
+    AttributeMeta(const int count, const GLenum type, const int offset,
+                  const char* name);
+
+    int count;
+    GLenum type;
+    int offset;
+    const char* name;
+};
+
+} // namespace GL
+
 //=============================================================================
 // Interface: GLAttributeMeta
 //=============================================================================

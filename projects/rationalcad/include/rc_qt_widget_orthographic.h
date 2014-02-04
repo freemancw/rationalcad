@@ -82,8 +82,8 @@ protected:
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
 
-    void setupModelview();
     void drawScene();
+    void drawGrid();
     void draw2DOverlay();
 
     static const int kRedrawMsec;

@@ -50,7 +50,6 @@ void PerspectiveWidget::initialize(
     QSharedPointer<SceneManager> scene_manager) {
     shader_manager_ = shader_manager;
     scene_manager_ = scene_manager;
-
     setAutoFillBackground(false);
 }
 
@@ -125,15 +124,6 @@ void PerspectiveWidget::paintEvent(QPaintEvent *event) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     handleInput();
-
-    modelview_.setToIdentity();
-    modelview_.rotate(-90.0f, 1.0f, 0.0f, 0.0f);
-    modelview_.rotate(camera_rot_.x(), 1.0f, 0.0f, 0.0f);
-    modelview_.rotate(camera_rot_.y(), 0.0f, 1.0f, 0.0f);
-    modelview_.rotate(camera_rot_.z(), 0.0f, 0.0f, 1.0f);
-    modelview_.translate(-camera_pos_);
-    shader_program_->setUniformValue("m_modelview", modelview_);
-
     drawScene();
 
     shader_program_->release();
@@ -143,7 +133,7 @@ void PerspectiveWidget::paintEvent(QPaintEvent *event) {
     painter.begin(this);
     painter.setPen(Qt::white);
 
-    if(camera_active_) {
+    if (camera_active_) {
         painter.setFont(QFont("Segoe UI", 16, QFont::Normal));
         painter.drawText(width()/2-8, height()/2+4, "+");
     }
@@ -161,7 +151,7 @@ void PerspectiveWidget::paintEvent(QPaintEvent *event) {
 
 static const float pi180 = M_PI/180.0f;
 void PerspectiveWidget::handleInput() {
-    if(camera_active_) {
+    if (camera_active_) {
         float sinx = sin(camera_rot_.x()*pi180);
         float cosx = cos(camera_rot_.x()*pi180);
         float sinz = sin(-camera_rot_.z()*pi180);
@@ -176,25 +166,42 @@ void PerspectiveWidget::handleInput() {
         QVector3D right(sinz90*cosx, -cosz90*cosx, 0);
         right.normalize();
 
-        if(key_states_[Qt::Key_W])
+        if (key_states_[Qt::Key_W]) {
             camera_pos_ -= forward;
-        if(key_states_[Qt::Key_A])
+        }
+        if (key_states_[Qt::Key_A]) {
             camera_pos_ -= right;
-        if(key_states_[Qt::Key_S])
+        }
+        if (key_states_[Qt::Key_S]) {
             camera_pos_ += forward;
-        if(key_states_[Qt::Key_D])
+        }
+        if (key_states_[Qt::Key_D]) {
             camera_pos_ += right;
-        if(key_states_[Qt::Key_Space])
+        }
+        if (key_states_[Qt::Key_Space]) {
             camera_pos_ += QVector3D(0.0f, 0.0f, 0.5f);
-        if(key_states_[Qt::Key_C])
+        }
+        if (key_states_[Qt::Key_C]) {
             camera_pos_ -= QVector3D(0.0f, 0.0f, 0.5f);
+        }
     }
 }
 
 void PerspectiveWidget::drawScene() {
+    // setup modelview
+    modelview_.setToIdentity();
+    modelview_.rotate(-90.0f, 1.0f, 0.0f, 0.0f);
+    modelview_.rotate(camera_rot_.x(), 1.0f, 0.0f, 0.0f);
+    modelview_.rotate(camera_rot_.y(), 0.0f, 1.0f, 0.0f);
+    modelview_.rotate(camera_rot_.z(), 0.0f, 0.0f, 1.0f);
+    modelview_.translate(-camera_pos_);
+    shader_program_->setUniformValue("m_modelview", modelview_);
+
+    // restore gl state
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+    // issue render calls
     vao_points_.bind();
     glDrawArrays(GL_POINTS, 0, scene_manager_->points_vbo().num_vertices);
     vao_points_.release();
@@ -204,6 +211,10 @@ void PerspectiveWidget::drawScene() {
     vao_triangles_.bind();
     glDrawArrays(GL_TRIANGLES, 0, scene_manager_->triangles_vbo().num_vertices);
     vao_triangles_.release();
+}
+
+void PerspectiveWidget::draw2DOverlay() {
+
 }
 
 void PerspectiveWidget::resizeGL(int width, int height) {
@@ -219,7 +230,7 @@ void PerspectiveWidget::resizeGL(int width, int height) {
 }
 
 //=============================================================================
-// Input Handlers: Mouse, Keyboard, and Timer Events
+// Input handlers: mouse, keyboard, and timer events
 //=============================================================================
 
 static QPoint last_click_pos;
@@ -230,10 +241,11 @@ void PerspectiveWidget::timerEvent(QTimerEvent *event) {
 }
 
 void PerspectiveWidget::mousePressEvent(QMouseEvent *event) {
-    if(event->button() & Qt::RightButton)
+    if (event->button() & Qt::RightButton) {
         camera_active_ = !camera_active_;
+    }
 
-    if(camera_active_) {
+    if (camera_active_) {
         setCursor(Qt::BlankCursor);
         setMouseTracking(true);
         grabKeyboard();
@@ -250,7 +262,7 @@ void PerspectiveWidget::mouseReleaseEvent(QMouseEvent *event) {
 }
 
 void PerspectiveWidget::mouseMoveEvent(QMouseEvent *event) {
-    if(camera_active_) {
+    if (camera_active_) {
         QPoint delta = last_click_pos - mapToGlobal(event->pos());
         QCursor::setPos(last_click_pos);
 

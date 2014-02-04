@@ -46,10 +46,7 @@ OrthographicWidget::OrthographicWidget(OrthoOrientation orientation,
                                        const QGLWidget *shareWidget) :
     QGLWidget(parent, shareWidget),
     orientation_(orientation),
-    num_frames_(0) {
-    //qDebug() << "requested: " << this->context()->requestedFormat();
-    //qDebug() << "received: " << this->context()->format();
-}
+    num_frames_(0) {}
 
 //=============================================================================
 // Initialization
@@ -136,8 +133,6 @@ void OrthographicWidget::initializeGL() {
 //=============================================================================
 
 void OrthographicWidget::paintEvent(QPaintEvent *event) {
-    static QTime frametime = QTime::currentTime();
-
     Q_UNUSED(event);
 
     makeCurrent();
@@ -147,29 +142,32 @@ void OrthographicWidget::paintEvent(QPaintEvent *event) {
     glEnable(GL_DEPTH_TEST);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    QMatrix4x4 mv;
-    mv.scale(i_grid_.local_scale());
-    mv.translate(-i_grid_.local_pos().x(), -i_grid_.local_pos().y());
-    shader_program_->setUniformValue("m_modelview", mv);
-
-    i_grid_vao_.bind();
-    glDrawArrays(GL_LINES, 0, i_grid_vbo_.num_vertices);
-    i_grid_vao_.release();
-
-    setupModelview();
+    drawGrid();
     drawScene();
 
     shader_program_->release();
 
     draw2DOverlay();
-
-    ++num_frames_;
 }
 
-void OrthographicWidget::setupModelview() {
+void OrthographicWidget::drawGrid() {
+    // setup modelview
+    QMatrix4x4 mv;
+    mv.scale(i_grid_.local_scale());
+    mv.translate(-i_grid_.local_pos().x(), -i_grid_.local_pos().y());
+    shader_program_->setUniformValue("m_modelview", mv);
+
+    // issue render calls
+    i_grid_vao_.bind();
+    glDrawArrays(GL_LINES, 0, i_grid_vbo_.num_vertices);
+    i_grid_vao_.release();
+}
+
+void OrthographicWidget::drawScene() {
+    // setup modelview
     modelview_.setToIdentity();
 
-    switch(orientation_) {
+    switch (orientation_) {
     case RIGHT:
         modelview_.rotate(-90.0f, 0.0f, 0.0f, 1.0f);
         modelview_.rotate(-90.0f, 0.0f, 1.0f, 0.0f);
@@ -187,12 +185,12 @@ void OrthographicWidget::setupModelview() {
     modelview_.translate(position);
 
     shader_program_->setUniformValue("m_modelview", modelview_);
-}
 
-void OrthographicWidget::drawScene() {
+    // restore gl state
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+    // issue render calls
     vao_points_.bind();
     glDrawArrays(GL_POINTS, 0, scene_manager_->points_vbo().num_vertices);
     vao_points_.release();
@@ -247,7 +245,7 @@ void OrthographicWidget::resizeGL(int width, int height) {
 }
 
 //=============================================================================
-// Input Handlers: Mouse, Keyboard, and Timer Events
+// Input handlers: mouse, keyboard, and timer events
 //=============================================================================
 
 void OrthographicWidget::timerEvent(QTimerEvent *event) {
@@ -269,8 +267,8 @@ void OrthographicWidget::mousePressEvent(QMouseEvent *event) {
     int convertedY = height()-event->y();
     QVector2D world_coords = mousePressToWorld(event);
 
-    if(event->buttons() & Qt::LeftButton) {
-        switch(g_config.input_state_) {
+    if (event->buttons() & Qt::LeftButton) {
+        switch (g_config.input_state_) {
         case SELECT:
             if(event->modifiers() & Qt::ShiftModifier) {
                 emit SelectObject(world_coords);
@@ -280,14 +278,14 @@ void OrthographicWidget::mousePressEvent(QMouseEvent *event) {
         }
     }
 
-    if(event->buttons() & Qt::MiddleButton) {
+    if (event->buttons() & Qt::MiddleButton) {
         setCursor(Qt::ClosedHandCursor);
         last_click_pos.setX(event->x());
         last_click_pos.setY(convertedY);
     }
 
-    if(event->buttons() & Qt::RightButton) {
-        switch(g_config.input_state_) {
+    if (event->buttons() & Qt::RightButton) {
+        switch (g_config.input_state_) {
         case SELECT:
         default:
             break;
@@ -296,7 +294,7 @@ void OrthographicWidget::mousePressEvent(QMouseEvent *event) {
 }
 
 void OrthographicWidget::mouseReleaseEvent(QMouseEvent *event) {
-    if(!(event->buttons() & Qt::MiddleButton)) {
+    if (!(event->buttons() & Qt::MiddleButton)) {
         setCursor(Qt::ArrowCursor);
     }
 }
@@ -307,16 +305,16 @@ void OrthographicWidget::mouseMoveEvent(QMouseEvent *event) {
     QVector2D delta(last_click_pos.x()-event->x(),
                     last_click_pos.y()-convertedY);
 
-    switch(g_config.input_state_) {
+    switch (g_config.input_state_) {
     default:
         break;
     }
 
-    if(event->buttons() & Qt::LeftButton) {
+    if (event->buttons() & Qt::LeftButton) {
 
     }
 
-    if(event->buttons() & Qt::MiddleButton) {
+    if (event->buttons() & Qt::MiddleButton) {
         i_grid_.Translate(delta);
     }
 
@@ -326,9 +324,9 @@ void OrthographicWidget::mouseMoveEvent(QMouseEvent *event) {
 }
 
 void OrthographicWidget::wheelEvent(QWheelEvent *event) {
-    if(event->delta() > 0) {
+    if (event->delta() > 0) {
         i_grid_.IncreaseMagnification();   // forward, away from user, zoom in
-    } else if(event->delta() < 0) {
+    } else if (event->delta() < 0) {
         i_grid_.DecreaseMagnification();   // backward, toward user, zoom out
     }
 }
