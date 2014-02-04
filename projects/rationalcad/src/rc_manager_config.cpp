@@ -25,7 +25,7 @@
 #include "rc_common.h"
 #include "rc_manager_config.h"
 
-BEGIN_NAMESPACE(RCAD)
+namespace RCAD {
 
 RCConfig g_config;
 
@@ -66,5 +66,5 @@ void InitializeGlobalConfig() {
     g_config.snap_to_grid_ = false;
 }
 
-END_NAMESPACE(RCAD)
+} // namespace RCAD
 

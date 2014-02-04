@@ -50,16 +50,14 @@ class OrthographicWidget : public QGLWidget,
     Q_OBJECT
 
 public:
-    OrthographicWidget(QSharedPointer<RCAD::GLManager> gl_manager,
-                       QSharedPointer<RCAD::SceneManager> scene_manager,
-                       QWidget* parent = nullptr,
-                       const QGLWidget* shareWidget = nullptr,
-                       OrthoOrientation orientation = TOP);
+    OrthographicWidget(OrthoOrientation orientation, QWidget* parent = nullptr,
+                       const QGLWidget* shareWidget = nullptr);
 
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
 
-    void initializeDrawSettings();
+    void initialize(QSharedPointer<RCAD::ShaderManager> shader_manager,
+                    QSharedPointer<RCAD::SceneManager> scene_manager);
 
 public slots:
     void ShowContextMenu(const QPoint& p);
@@ -94,7 +92,7 @@ protected:
     static const int kPrefHintWidth;
     static const int kPrefHintHeight;
 
-    QSharedPointer<RCAD::GLManager> gl_manager_;
+    QSharedPointer<RCAD::ShaderManager> shader_manager_;
     QSharedPointer<RCAD::SceneManager> scene_manager_;
     QSharedPointer<QOpenGLShaderProgram> shader_program_;
 

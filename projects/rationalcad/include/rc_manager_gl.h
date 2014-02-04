@@ -142,33 +142,23 @@ struct GLElementArray {
 };
 
 //=============================================================================
-// Interface: GLManager
+// Interface: ShaderManager
 //=============================================================================
 
-class GLManager : public QObject, public QOpenGLFunctions_3_3_Core {
-
-    Q_OBJECT
-
+class ShaderManager : public QOpenGLFunctions_3_3_Core {
 public:
-    GLManager();
+    ShaderManager();
 
-    void Initialize();
+    void initialize();
 
-    bool AddProgram(const QString& id, const QString& vert_path,
+    bool addProgram(const QString& id,
+                    const QString& vert_path,
                     const QString& frag_path);
-    void EnableAttributes(const QString& id,
-                          const QList<GLAttributeMeta>& attributes);
-    void DisableAttributes(const QString& id,
-                           const QList<GLAttributeMeta>& attributes);
 
-    QSharedPointer<QOpenGLShaderProgram> GetProgram(const QString& id);
-
-public slots:
-    void LogDebugMessage(const QOpenGLDebugMessage& message);
+    QSharedPointer<QOpenGLShaderProgram> getProgram(const QString& id);
 
 private:
     QHash<QString, QSharedPointer<QOpenGLShaderProgram>> programs_;
-    QOpenGLDebugLogger gl_logger_;
 };
 
  Q_DECLARE_METATYPE(QVector<GLVertex>)

@@ -15,7 +15,7 @@
 
 /*!
  * @author Clinton Freeman <admin@freemancw.com>
- * @date 06/03/2013
+ * @date 2013-06-03
  */
 
 // RationalCAD
@@ -25,23 +25,13 @@
 namespace RCAD {
 
 //=============================================================================
-// GLManager
+// ShaderManager
 //=============================================================================
 
-GLManager::GLManager() {}
+ShaderManager::ShaderManager() {}
 
-void GLManager::Initialize() {
+void ShaderManager::initialize() {
     initializeOpenGLFunctions();
-
-    /*
-    if(gl_logger_.initialize()) {
-        connect(&gl_logger_, SIGNAL(messageLogged(QOpenGLDebugMessage)),
-                this, SLOT(LogDebugMessage(QOpenGLDebugMessage)));
-        gl_logger_.startLogging();
-    } else {
-        rWarning("OpenGL debug logger failed to initialize.");
-    }
-    */
 
     // override system locale until shaders are compiled
     setlocale(LC_NUMERIC, "C");
@@ -53,33 +43,6 @@ void GLManager::Initialize() {
             && AddProgram("gl3_default",
                           ":/shaders/gl3_default.vsh",
                           ":/shaders/gl3_default.fsh");
-//            && AddProgram("gl_fxaa",
-//                          ":/shaders/gl_fxaa.vsh",
-//                          ":/shaders/gl_fxaa.fsh")
-//            && AddProgram("dual_peeling_blend",
-//                          ":/shaders/dual_peeling_blend.vsh",
-//                          ":/shaders/dual_peeling_blend.fsh")
-//            && AddProgram("dual_peeling_final",
-//                          ":/shaders/dual_peeling_final.vsh",
-//                          ":/shaders/dual_peeling_final.fsh")
-//            && AddProgram("dual_peeling_init",
-//                          ":/shaders/dual_peeling_init.vsh",
-//                          ":/shaders/dual_peeling_init.fsh")
-//            && AddProgram("dual_peeling_peel",
-//                          ":/shaders/dual_peeling_peel.vsh",
-//                          ":/shaders/dual_peeling_peel.fsh")
-//            && AddProgram("front_peeling_blend",
-//                          ":/shaders/front_peeling_blend.vsh",
-//                          ":/shaders/front_peeling_blend.fsh")
-//            && AddProgram("front_peeling_final",
-//                          ":/shaders/front_peeling_final.vsh",
-//                          ":/shaders/front_peeling_final.fsh")
-//            && AddProgram("front_peeling_init",
-//                          ":/shaders/front_peeling_init.vsh",
-//                          ":/shaders/front_peeling_init.fsh")
-//            && AddProgram("front_peeling_peel",
-//                          ":/shaders/front_peeling_peel.vsh",
-//                          ":/shaders/front_peeling_peel.fsh");
 
     if (!shaders_valid) {
         rWarning("Shaders did not compile.");
@@ -89,37 +52,8 @@ void GLManager::Initialize() {
     setlocale(LC_ALL, "");
 }
 
-void GLManager::LogDebugMessage(const QOpenGLDebugMessage &message) {
-    rInfo(message.message().toStdString().c_str());
-}
-
-/*
-void GLManager::DrawPoints(const QString &id,
-                           const QList<GLAttributeMeta> &attributes) {
-    vbo_points_.buffer.bind();
-    EnableAttributes(id, attributes);
-    glDrawArrays(GL_POINTS, 0, vbo_points_.num_vertices);
-    DisableAttributes(id, attributes);
-    vbo_points_.buffer.release();
-}
-
-void GLManager::DrawLines(const QString &id,
-                          const QList<GLAttributeMeta> &attributes) {
-    vbo_lines_.buffer.bind();
-    EnableAttributes(id, attributes);
-    glDrawArrays(GL_LINES, 0, vbo_lines_.num_vertices);
-    DisableAttributes(id, attributes);
-    vbo_lines_.buffer.release();
-}
-
-void GLManager::DrawTriangles(const QString &id,
-                              const QList<GLAttributeMeta> &attributes) {
-
-}
-*/
-
-bool GLManager::AddProgram(const QString &id, const QString &vert_path,
-                           const QString &frag_path) {
+bool ShaderManager::addProgram(const QString& id, const QString& vert_path,
+                               const QString &frag_path) {
     QSharedPointer<QOpenGLShaderProgram> sp(new QOpenGLShaderProgram());
     bool v = sp->addShaderFromSourceFile(QOpenGLShader::Vertex, vert_path);
     bool f = sp->addShaderFromSourceFile(QOpenGLShader::Fragment, frag_path);
@@ -134,27 +68,9 @@ bool GLManager::AddProgram(const QString &id, const QString &vert_path,
     }
 }
 
-QSharedPointer<QOpenGLShaderProgram> GLManager::GetProgram(const QString &id) {
+QSharedPointer<QOpenGLShaderProgram> ShaderManager::getProgram(
+    const QString& id) {
     return programs_[id];
-}
-
-void GLManager::EnableAttributes(const QString& id,
-                                 const QList<GLAttributeMeta>& attributes) {
-    auto program = GetProgram(id);
-    foreach(GLAttributeMeta attr_meta, attributes) {
-        program->enableAttributeArray(attr_meta.name);
-        program->setAttributeBuffer(attr_meta.name,
-                                    attr_meta.type, attr_meta.offset,
-                                    attr_meta.count, GLVertex::kStride);
-    }
-}
-
-void GLManager::DisableAttributes(const QString& id,
-                                  const QList<GLAttributeMeta>& attributes) {
-    auto program = GetProgram(id);
-    foreach(GLAttributeMeta attr_meta, attributes) {
-        program->disableAttributeArray(attr_meta.name);
-    }
 }
 
 //=============================================================================

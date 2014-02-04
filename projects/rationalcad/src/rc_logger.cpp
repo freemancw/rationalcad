@@ -28,7 +28,7 @@
 
 using namespace rlog;
 
-BEGIN_NAMESPACE(RCAD)
+namespace RCAD {
 
 RCLogger::RCLogger() :
     RLogNode() {}
@@ -71,4 +71,4 @@ void RCLogger::set_console(QTextEdit *console) {
     console_ = console;
 }
 
-END_NAMESPACE(RCAD)
+}

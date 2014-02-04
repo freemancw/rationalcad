@@ -40,8 +40,8 @@ class PerspectiveWidget : public QGLWidget,
     Q_OBJECT
 
 public:
-    PerspectiveWidget(QSharedPointer<RCAD::GLManager> gl_manager,
-                      QSharedPointer<RCAD::SceneManager> scene,
+    PerspectiveWidget(QSharedPointer<RCAD::ShaderManager> shader_manager,
+                      QSharedPointer<RCAD::SceneManager> scene_manager,
                       QWidget* parent = nullptr,
                       const QGLWidget* shareWidget = nullptr);
 
@@ -79,7 +79,7 @@ protected:
     QVector3D camera_rot_;
     bool camera_active_;
 
-    QSharedPointer<RCAD::GLManager> gl_manager_;
+    QSharedPointer<RCAD::ShaderManager> shader_manager_;
     QSharedPointer<RCAD::SceneManager> scene_manager_;
     QSharedPointer<QOpenGLShaderProgram> shader_program_;
 

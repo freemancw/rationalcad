@@ -36,19 +36,18 @@ using namespace RCAD;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow),
-    gl_manager_(new GLManager()),
-    scene_manager_(new SceneManager()) {
+    ui(new Ui::MainWindow) {
 
     ui->setupUi(this);
 
     initializeLogging();
     InitializeGlobalConfig();
 
+    rInfo("Creating OpenGL manager.");
+    gl_manager_ = QSharedPointer<GLManager>(new GLManager());
 
-
-
-
+    rInfo("Creating scene manager.");
+    scene_manager_ = QSharedPointer<SceneManager>(new SceneManager());
 
     rInfo("Creating orthographic view.");
     auto ortho_top = new OrthographicWidget(gl_manager_, scene_manager_,
@@ -69,10 +68,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->group_perspective->layout()->addWidget(perspective);
     perspective->installEventFilter(this);
     perspective->context()->makeCurrent();
-
-    rInfo("Initializing OpenGL manager.");
-    gl_manager_->Initialize();
-
 
     connect(this,
             SIGNAL(BeginCreatePolytope(QString,QColor)),

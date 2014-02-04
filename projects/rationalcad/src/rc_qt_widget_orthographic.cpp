@@ -41,16 +41,23 @@ const int OrthographicWidget::kPrefHintHeight = 384;
 // Constructors / Destructors
 //=============================================================================
 
-OrthographicWidget::OrthographicWidget(QSharedPointer<GLManager> gl_manager,
-                                       QSharedPointer<SceneManager> scene_manager,
+OrthographicWidget::OrthographicWidget(OrthoOrientation orientation,
                                        QWidget *parent,
-                                       const QGLWidget *shareWidget,
-                                       OrthoOrientation orientation) :
+                                       const QGLWidget *shareWidget) :
     QGLWidget(parent, shareWidget),
-    gl_manager_(gl_manager),
-    scene_manager_(scene_manager),
     orientation_(orientation),
-    num_frames_(0) {
+    num_frames_(0) {}
+
+//=============================================================================
+// Initialization
+//=============================================================================
+
+void OrthographicWidget::initialize(
+    QSharedPointer<ShaderManager> shader_manager,
+    QSharedPointer<SceneManager> scene_manager) {
+    shader_manager_ = shader_manager;
+    scene_manager_ = scene_manager;
+
     setAutoFillBackground(false);
     setContextMenuPolicy(Qt::CustomContextMenu);
 
@@ -62,23 +69,9 @@ OrthographicWidget::OrthographicWidget(QSharedPointer<GLManager> gl_manager,
             SIGNAL(SelectObject(QVector2D)),
             scene_manager_.data(),
             SLOT(SelectObject(QVector2D)));
-}
 
-//=============================================================================
-// OpenGL init / draw / resize
-//=============================================================================
-
-void OrthographicWidget::initializeGL() {
-    rInfo("Initializing orthographic OpenGL.");
-
-    initializeOpenGLFunctions();
-
-    shader_program_ = gl_manager_->GetProgram("gl2_default");
+    shader_program_ = shader_manager_->getProgram("gl2_default");
     shader_program_->bind();
-
-    gl_manager_->glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-    gl_manager_->glEnable(GL_CULL_FACE);
-    gl_manager_->glEnable(GL_PROGRAM_POINT_SIZE);
 
     modelview_.setToIdentity();
     shader_program_->setUniformValue("m_modelview", modelview_);
@@ -92,9 +85,30 @@ void OrthographicWidget::initializeGL() {
     i_grid_vao_.create();
     i_grid_vao_.bind();
     i_grid_vbo_.buffer.bind();
-    gl_manager_->EnableAttributes("gl2_default", attributes_);
+    EnableAttributes(shader_program_, attributes_);
     i_grid_vao_.release();
     i_grid_vbo_.buffer.release();
+
+    vao_points_.create();
+    vao_points_.bind();
+    scene_manager_->points_vbo().buffer.bind();
+    EnableAttributes(shader_program_, attributes_);
+    vao_points_.release();
+    scene_manager_->points_vbo().buffer.release();
+
+    vao_lines_.create();
+    vao_lines_.bind();
+    scene_manager_->lines_vbo().buffer.bind();
+    EnableAttributes(shader_program_, attributes_);
+    vao_lines_.release();
+    scene_manager_->lines_vbo().buffer.release();
+
+    vao_triangles_.create();
+    vao_triangles_.bind();
+    scene_manager_->triangles_vbo().buffer.bind();
+    EnableAttributes(shader_program_, attributes_);
+    vao_triangles_.release();
+    scene_manager_->triangles_vbo().buffer.release();
 
     shader_program_->release();
 
@@ -103,32 +117,19 @@ void OrthographicWidget::initializeGL() {
     timer_.start(kRedrawMsec);
 }
 
-void OrthographicWidget::initializeDrawSettings() {
-    shader_program_->bind();
+void OrthographicWidget::initializeGL() {
+    rInfo("Initializing orthographic OpenGL.");
 
-    vao_points_.create();
-    vao_points_.bind();
-    scene_manager_->points_vbo().buffer.bind();
-    gl_manager_->EnableAttributes("gl2_default", attributes_);
-    vao_points_.release();
-    scene_manager_->points_vbo().buffer.release();
+    initializeOpenGLFunctions();
 
-    vao_lines_.create();
-    vao_lines_.bind();
-    scene_manager_->lines_vbo().buffer.bind();
-    gl_manager_->EnableAttributes("gl2_default", attributes_);
-    vao_lines_.release();
-    scene_manager_->lines_vbo().buffer.release();
-
-    vao_triangles_.create();
-    vao_triangles_.bind();
-    scene_manager_->triangles_vbo().buffer.bind();
-    gl_manager_->EnableAttributes("gl2_default", attributes_);
-    vao_triangles_.release();
-    scene_manager_->triangles_vbo().buffer.release();
-
-    shader_program_->release();
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_PROGRAM_POINT_SIZE);
 }
+
+//=============================================================================
+// Rendering
+//=============================================================================
 
 void OrthographicWidget::paintEvent(QPaintEvent *event) {
     static QTime frametime = QTime::currentTime();
@@ -139,8 +140,8 @@ void OrthographicWidget::paintEvent(QPaintEvent *event) {
 
     shader_program_->bind();
 
-    gl_manager_->glEnable(GL_DEPTH_TEST);
-    gl_manager_->glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     QMatrix4x4 mv;
     mv.scale(i_grid_.local_scale());
@@ -185,8 +186,8 @@ void OrthographicWidget::setupModelview() {
 }
 
 void OrthographicWidget::drawScene() {
-    gl_manager_->glEnable(GL_BLEND);
-    gl_manager_->glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     vao_points_.bind();
     glDrawArrays(GL_POINTS, 0, scene_manager_->points_vbo().num_vertices);
@@ -207,14 +208,14 @@ void OrthographicWidget::draw2DOverlay() {
 
     // label x coordinates
     QVector<QPair<int, int>> x_coords = i_grid_.GetMajorXCoords(width());
-    for(int i = 0; i < x_coords.size(); ++i) {
+    for (int i = 0; i < x_coords.size(); ++i) {
         painter.drawText(x_coords.at(i).first+2, 12,
                          QString::number(x_coords.at(i).second));
     }
 
     // label y coordinates
     QVector<QPair<int, int>> y_coords = i_grid_.GetMajorYCoords(height());
-    for(int i = 0; i < y_coords.size(); ++i) {
+    for (int i = 0; i < y_coords.size(); ++i) {
         int convertedY = height()-y_coords.at(i).first;
         painter.drawText(6, convertedY-2,
                          QString::number(y_coords.at(i).second));
