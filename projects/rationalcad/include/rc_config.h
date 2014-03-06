@@ -29,13 +29,7 @@ namespace RCAD {
 
 enum InputState {
     SELECT,
-    CREATE_POLYGON,
-    CREATE_POLYTOPE,
-    CREATE_2CONE_VERTEX,
-    CREATE_2CONE_RAY_A,
-    CREATE_2CONE_RAY_B,
-    CREATE_MEDIANTSEQUENCE_ORIGIN,
-    CREATE_MEDIANTSEQUENCE_TARGET
+    CREATE_POLYTOPE
 };
 
 class ConfigManager {
@@ -76,7 +70,7 @@ struct RCConfig {
 
 extern RCConfig g_config;
 
-void InitializeGlobalConfig();
+void initializeGlobalConfig();
 
 } // namespace RCAD
 

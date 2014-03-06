@@ -72,7 +72,7 @@ void PreferencesDialog::on_buttonBox_applied() {
 }
 
 void PreferencesDialog::on_buttonBox_defaultsrestored() {
-    InitializeGlobalConfig();
+    initializeGlobalConfig();
     temp_config_ = g_config;
     QString minor_style = QString("border:0;background-color: %1;").arg(temp_config_.grid_minor_color_.name());
     ui->selector_color_minor->setStyleSheet(minor_style);

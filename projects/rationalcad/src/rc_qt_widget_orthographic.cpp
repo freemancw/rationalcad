@@ -273,6 +273,10 @@ void OrthographicWidget::mousePressEvent(QMouseEvent *event) {
             if(event->modifiers() & Qt::ShiftModifier) {
                 emit SelectObject(world_coords);
             }
+            break;
+        case CREATE_POLYTOPE:
+            emit BeginCreatePolytope();
+            break;
         default:
             break;
         }

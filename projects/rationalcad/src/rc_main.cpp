@@ -32,10 +32,10 @@ int main(int argc, char *argv[]) {
     rlog::RLogInit(argc, argv);
 
     // Qt5 provides a nice default GUI stylesheet called Fusion
-    QApplication::setStyle(QStyleFactory::create("Fusion"));
+    //QApplication::setStyle(QStyleFactory::create("Fusion"));
 
     // register any types that will pass through Qt's signal/slot mechanism
-    qRegisterMetaType<QVector<RCAD::GLVertex>>("QVector<RCAD::GLVertex>");
+    qRegisterMetaType<QVector<RCAD::GL::Vertex>>("QVector<RCAD::GL::Vertex>");
 
     QPixmap splash_image(":/splash3.png");
     QSplashScreen splash(splash_image);

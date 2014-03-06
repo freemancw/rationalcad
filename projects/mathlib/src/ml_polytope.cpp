@@ -18,6 +18,14 @@
  * @date 07/21/2013
  */
 
+#include "ml_common.h"
+#include "ml_rational.h"
+#include "ml_matrix.h"
+#include "ml_polytope.h"
+#include "ml_intersection.h"
+
+namespace RCAD {
+
 /*
  * GOAL:
  *
@@ -150,14 +158,6 @@
  * 1. Need ability to create tetrahedra with one vertex at the origin.
  *      - this means that we are first investigating
  */
-
-#include "ml_common.h"
-#include "ml_rational.h"
-#include "ml_matrix.h"
-#include "ml_polytope.h"
-#include "ml_intersection.h"
-
-namespace RCAD {
 
 namespace Construction {
 
@@ -418,7 +418,35 @@ Matrix_3x3i UnimodularBasisForPlane(const Vector_3i& u, const Vector_3i& v) {
 // Polytope_3r
 //=============================================================================
 
-Polytope_3r::Polytope_3r() {}
+Polytope_3r::Polytope_3r() {
+    // create vertices
+    vertices_.push_back(std::make_shared<Point_3r>(0, 0, 0));
+    vertices_.push_back(std::make_shared<Point_3r>(8, 0, 0));
+    vertices_.push_back(std::make_shared<Point_3r>(8, 8, 0));
+    vertices_.push_back(std::make_shared<Point_3r>(0, 8, 0));
+    vertices_.push_back(std::make_shared<Point_3r>(0, 0, 8));
+    vertices_.push_back(std::make_shared<Point_3r>(8, 0, 8));
+    vertices_.push_back(std::make_shared<Point_3r>(8, 8, 8));
+    vertices_.push_back(std::make_shared<Point_3r>(0, 8, 8));
+
+    // create edges
+    edges_.push_back(Segment_3r(vertices_[0], vertices_[1]));
+    edges_.push_back(Segment_3r(vertices_[1], vertices_[2]));
+    edges_.push_back(Segment_3r(vertices_[2], vertices_[3]));
+    edges_.push_back(Segment_3r(vertices_[3], vertices_[0]));
+
+    edges_.push_back(Segment_3r(vertices_[0], vertices_[4]));
+    edges_.push_back(Segment_3r(vertices_[1], vertices_[5]));
+    edges_.push_back(Segment_3r(vertices_[2], vertices_[6]));
+    edges_.push_back(Segment_3r(vertices_[3], vertices_[7]));
+
+    edges_.push_back(Segment_3r(vertices_[4], vertices_[5]));
+    edges_.push_back(Segment_3r(vertices_[5], vertices_[6]));
+    edges_.push_back(Segment_3r(vertices_[6], vertices_[7]));
+    edges_.push_back(Segment_3r(vertices_[7], vertices_[4]));
+
+
+}
 
 /*!
  * INPUT. 2 affine planes, P and Q, that intersect in a line L.

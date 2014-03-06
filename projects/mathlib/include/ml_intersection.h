@@ -15,9 +15,8 @@
 
 /*!
  * @author Clinton Freeman <admin@freemancw.com>
- * @date 07/11/2013
- * @note Code modeled after Eberly's intersection classes,
- *       see geometrictools.com
+ * @date 2013-07-11
+ * @note Code modeled after Eberly's intersection classes (geometrictools.com)
  */
 
 #ifndef RC_ML_INTERSECTION_H

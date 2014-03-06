@@ -29,7 +29,7 @@ namespace RCAD {
 
 RCConfig g_config;
 
-void InitializeGlobalConfig() {
+void initializeGlobalConfig() {
 
     QGLFormat glf = QGLFormat::defaultFormat();
     glf.setRedBufferSize(8);

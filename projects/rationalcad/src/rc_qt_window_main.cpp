@@ -41,7 +41,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     initializeLogging();
-    InitializeGlobalConfig();
+    initializeGlobalConfig();
 
     // create orthographic widget
     rInfo("Creating orthographic view.");
@@ -79,17 +79,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ortho_top,
             SIGNAL(ChangeMessage(const QString&)),
             SLOT(UpdateStatusBarMsg(const QString&)));
-    connect(ortho_top,
-            SIGNAL(EndCreatePolytope(bool)),
-            SLOT(on_button_polytope_toggled(bool)));
-    connect(this,
-            SIGNAL(BeginCreatePolytope(QString,QColor)),
-            scene_manager_.data(),
-            SLOT(BeginCreatePolytope(QString,QColor)));
-    connect(this,
-            SIGNAL(EndCreatePolytope()),
-            scene_manager_.data(),
-            SLOT(EndCreatePolytope()));
     connect(this,
             SIGNAL(Deselect()),
             scene_manager_.data(),
@@ -99,19 +88,7 @@ MainWindow::MainWindow(QWidget *parent) :
             scene_manager_.data(),
             SLOT(DeleteSelectedObject()));
 
-    auto object_color_style = QString("border:0;background-color: rgb(%1, %2, %3);").arg(
-                g_config.tag_colors["face_default"].red()).arg(
-                g_config.tag_colors["face_default"].green()).arg(
-                g_config.tag_colors["face_default"].blue());
-    ui->button_color->setStyleSheet(object_color_style);
     create_object_color_ = g_config.tag_colors["face_default"];
-
-    ui->name_and_color->setDisabled(true);
-    QPalette palette;
-    palette.setColor(QPalette::Disabled, QPalette::WindowText,
-                     QApplication::palette().color(QPalette::Disabled,
-                                                   QPalette::WindowText));
-    ui->name_and_color->setPalette(palette);
 
     QList<int> sizes;
     sizes.push_back(this->height());
@@ -183,38 +160,4 @@ void MainWindow::UpdateStatusBarMsg(const QString &status) {
 
 void MainWindow::on_action_toggle_snaps_toggled(bool checked) {
     g_config.snap_to_grid_ = checked;
-}
-
-void MainWindow::on_button_color_clicked() {
-    create_object_color_ = QColorDialog::getColor(create_object_color_, this);
-    QString color_style = QString("border:0;background-color: rgb(%1, %2, %3);").arg(
-                create_object_color_.red()).arg(
-                create_object_color_.green()).arg(
-                create_object_color_.blue());
-    ui->button_color->setStyleSheet(color_style);
-    emit UpdateSelectedObjectColor(create_object_color_);
-}
-
-void MainWindow::on_button_polytope_toggled(bool checked) {
-    if(checked) {
-        ui->statusbar_main->showMessage("Polytope.");
-        g_config.input_state_ = CREATE_POLYTOPE;
-
-        ui->name_and_color->setDisabled(false);
-        ui->line_edit_name->setText(QString("Object%1").arg(
-                                        scene_manager_->NumObjects()));
-        emit BeginCreatePolytope(ui->line_edit_name->text(),
-                                 create_object_color_);
-    } else {
-        switch(g_config.input_state_) {
-        case CREATE_POLYTOPE:
-            ui->statusbar_main->clearMessage();
-            g_config.input_state_ = SELECT;
-            emit EndCreatePolytope();
-            //ui->button_polygonal_cone->setChecked(false);
-            break;
-        default:
-            break;
-        }
-    }
 }

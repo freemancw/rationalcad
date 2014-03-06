@@ -330,7 +330,7 @@ GL::VertexBuffer& SceneManager::triangles_vbo() {
 }
 
 //=============================================================================
-// SceneManager Polytope_3 Management
+// Polytope_3 management
 //=============================================================================
 
 void SceneManager::BeginCreatePolytope(const QString &name,
@@ -350,7 +350,7 @@ void SceneManager::EndCreatePolytope() {
 }
 
 //=============================================================================
-// Scene Object Management
+// Object management
 //=============================================================================
 
 void SceneManager::UpdateSelectedObjectName(const QString &name) {

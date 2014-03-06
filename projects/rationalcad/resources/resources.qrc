@@ -28,5 +28,7 @@
         <file>shaders/front_peeling_peel.vsh</file>
         <file>splash2.png</file>
         <file>splash3.png</file>
+        <file>icons/select_object.png</file>
+        <file>icons/create_polytope.png</file>
     </qresource>
 </RCC>

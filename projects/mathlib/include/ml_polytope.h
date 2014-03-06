@@ -16,7 +16,7 @@
 /*!
  * @brief 3-dimensional polytope types.
  * @author Clinton Freeman <admin@freemancw.com>
- * @date 10/23/2013
+ * @date 2013-10-23
  */
 
 #ifndef RC_ML_POLYTOPE_H
@@ -41,7 +41,9 @@ public:
     void Update();
     
 private:
-    std::list<SharedPoint_3r> vertices_;
+    std::vector<SharedPoint_3r> vertices_;
+    std::vector<Segment_3r> edges_;
+    std::vector<Triangle_3r> faces_;
 };
 
 namespace Construction {

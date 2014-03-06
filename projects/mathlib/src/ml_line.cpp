@@ -15,7 +15,7 @@
 
 /*!
  * @author Clinton Freeman <admin@freemancw.com>
- * @date 07/24/2013
+ * @date 2013-07-24
  */
 
 #include "ml_common.h"

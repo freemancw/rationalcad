@@ -15,8 +15,7 @@
 
 /*!
  * @brief 2-dimensional polygonal chain and polygon types.
- * @author {David L. Millman <dave@cs.unc.edu>,
- *          Clinton Freeman <admin@freemancw.com>
+ * @author Clinton Freeman <admin@freemancw.com>
  * @date 02/12/2013
  */
 

@@ -64,11 +64,7 @@ private slots:
     void on_action_about_triggered();
     void on_action_preferences_triggered();
     void on_action_toggle_snaps_toggled(bool arg1);
-    void on_button_color_clicked();
-
     void UpdateStatusBarMsg(const QString& status);
-
-    void on_button_polytope_toggled(bool checked);
 
 private:
     void initializeLogging();
