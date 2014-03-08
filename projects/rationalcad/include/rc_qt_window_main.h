@@ -66,7 +66,12 @@ private slots:
     void on_action_toggle_snaps_toggled(bool arg1);
     void UpdateStatusBarMsg(const QString& status);
 
-private:
+    void onSelectObjectsTriggered();
+    void onCreatePolytopeTriggered();
+
+    void on_actionUser_Manual_triggered();
+
+    private:
     void initializeLogging();
     void initializeConnections();
 

@@ -270,7 +270,7 @@ void OrthographicWidget::mousePressEvent(QMouseEvent *event) {
     if (event->buttons() & Qt::LeftButton) {
         switch (g_config.input_state_) {
         case SELECT:
-            if(event->modifiers() & Qt::ShiftModifier) {
+            if (event->modifiers() & Qt::ShiftModifier) {
                 emit SelectObject(world_coords);
             }
             break;

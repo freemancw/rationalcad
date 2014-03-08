@@ -46,14 +46,10 @@ public:
 
     void Initialize();
 
-    const QColor& GetDebugColor(const quint32 key) const;
-    void SetDebugColor(const quint32 key, const QColor& color);
-
     const InputState& input_state() const;
     void set_input_state(const InputState& input_state);
 
 private:
-    QMap<quint32, QColor> dbg_colors_;
     InputState input_state_;
 };
 

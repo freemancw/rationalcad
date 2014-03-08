@@ -43,6 +43,42 @@ MainWindow::MainWindow(QWidget *parent) :
     initializeLogging();
     initializeGlobalConfig();
 
+    ConfigManager::get().Initialize();
+
+    // create toolbar buttons
+    QActionGroup *input_state_buttons = new QActionGroup(ui->toolBar->layout());
+
+    // select objects button
+    QAction* select_objects = new QAction("Select Objects",
+                                          input_state_buttons);
+    select_objects->setIcon(QIcon("://icons/select_object.png"));
+    select_objects->setCheckable(true);
+
+    connect(select_objects,
+            SIGNAL(triggered()),
+            SLOT(onSelectObjectsTriggered()));
+
+    // create polytope button
+    QAction* create_polytope = new QAction("Create Polytope",
+                                           input_state_buttons);
+    create_polytope->setIcon(QIcon("://icons/create_polytope.png"));
+    create_polytope->setCheckable(true);
+    create_polytope->setChecked(true);
+
+    connect(create_polytope,
+            SIGNAL(triggered()),
+            SLOT(onCreatePolytopeTriggered()));
+
+    // add buttons to toolbar
+    QList<QAction*> actions;
+    actions.append(select_objects);
+    actions.append(create_polytope);
+    ui->toolBar->addActions(actions);
+
+
+
+
+
     // create orthographic widget
     rInfo("Creating orthographic view.");
     qDebug() << "Creating orthographic view";
@@ -65,7 +101,7 @@ MainWindow::MainWindow(QWidget *parent) :
     qDebug() << "Creating shader manager";
     shader_manager_ = QSharedPointer<ShaderManager>(new ShaderManager());
 
-    // create perspective widget
+    // create scene manager
     rInfo("Creating scene manager.");
     qDebug() << "Creating scene manager";
     scene_manager_ = QSharedPointer<SceneManager>(new SceneManager());
@@ -98,6 +134,16 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow() {
     delete ui;
+}
+
+void MainWindow::onSelectObjectsTriggered() {
+    ConfigManager::get().set_input_state(SELECT);
+    qDebug() << "select";
+}
+
+void MainWindow::onCreatePolytopeTriggered() {
+    ConfigManager::get().set_input_state(CREATE_POLYTOPE);
+    qDebug() << "create_polytope";
 }
 
 void MainWindow::initializeLogging() {
@@ -160,4 +206,8 @@ void MainWindow::UpdateStatusBarMsg(const QString &status) {
 
 void MainWindow::on_action_toggle_snaps_toggled(bool checked) {
     g_config.snap_to_grid_ = checked;
+}
+
+void MainWindow::on_actionUser_Manual_triggered() {
+    QDesktopServices::openUrl(QUrl("file:///C:/RationalCADUserManual.pdf"));
 }

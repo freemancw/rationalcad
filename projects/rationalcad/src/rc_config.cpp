@@ -27,6 +27,21 @@
 
 namespace RCAD {
 
+ConfigManager::ConfigManager() {}
+ConfigManager::ConfigManager(const ConfigManager&) {}
+ConfigManager& ConfigManager::operator=(const ConfigManager&) { return *this; }
+
+void ConfigManager::Initialize() {
+    input_state_ = CREATE_POLYTOPE;
+}
+
+const InputState& ConfigManager::input_state() const {
+    return input_state_;
+}
+void ConfigManager::set_input_state(const InputState& input_state) {
+    input_state_ = input_state;
+}
+
 RCConfig g_config;
 
 void initializeGlobalConfig() {
