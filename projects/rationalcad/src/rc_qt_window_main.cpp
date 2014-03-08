@@ -75,10 +75,6 @@ MainWindow::MainWindow(QWidget *parent) :
     actions.append(create_polytope);
     ui->toolBar->addActions(actions);
 
-
-
-
-
     // create orthographic widget
     rInfo("Creating orthographic view.");
     qDebug() << "Creating orthographic view";
@@ -138,12 +134,10 @@ MainWindow::~MainWindow() {
 
 void MainWindow::onSelectObjectsTriggered() {
     ConfigManager::get().set_input_state(SELECT);
-    qDebug() << "select";
 }
 
 void MainWindow::onCreatePolytopeTriggered() {
     ConfigManager::get().set_input_state(CREATE_POLYTOPE);
-    qDebug() << "create_polytope";
 }
 
 void MainWindow::initializeLogging() {

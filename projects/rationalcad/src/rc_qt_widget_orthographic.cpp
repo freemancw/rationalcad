@@ -69,6 +69,14 @@ void OrthographicWidget::initialize(
             SIGNAL(SelectObject(QVector2D)),
             scene_manager_.data(),
             SLOT(SelectObject(QVector2D)));
+    connect(this,
+            SIGNAL(BeginCreatePolytope(QVector2D)),
+            scene_manager_.data(),
+            SLOT(BeginCreatePolytope(QVector2D)));
+    connect(this,
+            SIGNAL(UpdateNewPolytope(QVector2D)),
+            scene_manager_.data(),
+            SLOT(UpdateNewPolytope(QVector2D)));
 }
 
 void OrthographicWidget::initializeGL() {
@@ -268,14 +276,16 @@ void OrthographicWidget::mousePressEvent(QMouseEvent *event) {
     QVector2D world_coords = mousePressToWorld(event);
 
     if (event->buttons() & Qt::LeftButton) {
-        switch (g_config.input_state_) {
+        switch (ConfigManager::get().input_state()) {
         case SELECT:
+            /*
             if (event->modifiers() & Qt::ShiftModifier) {
                 emit SelectObject(world_coords);
             }
+            */
             break;
         case CREATE_POLYTOPE:
-            emit BeginCreatePolytope();
+            emit BeginCreatePolytope(world_coords);
             break;
         default:
             break;

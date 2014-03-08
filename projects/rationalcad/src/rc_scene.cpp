@@ -333,8 +333,7 @@ GL::VertexBuffer& SceneManager::triangles_vbo() {
 // Polytope_3 management
 //=============================================================================
 
-void SceneManager::BeginCreatePolytope(const QString &name,
-                                       const QColor &face_color) {
+void SceneManager::BeginCreatePolytope(const QVector2D& coords) {
     Deselect();
 /*
     scene_objects_.insert(name, QSharedPointer<ISceneObject>(
@@ -343,6 +342,10 @@ void SceneManager::BeginCreatePolytope(const QString &name,
     SelectedPolytope_3()->AddObserver(this);
     SelectedPolytope_3()->Update();
     */
+}
+
+void SceneManager::UpdateNewPolytope(const QVector2D& coords) {
+
 }
 
 void SceneManager::EndCreatePolytope() {

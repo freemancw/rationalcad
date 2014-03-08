@@ -67,8 +67,9 @@ signals:
     void SelectObject(const QVector2D& coords);
 
     // polytope
-    void BeginCreatePolytope();
-    void EndCreatePolytope(bool checked);
+    void BeginCreatePolytope(const QVector2D& coords);
+    void UpdateNewPolytope(const QVector2D& coords);
+    void EndCreatePolytope();
 
 protected:
     void initializeGL();

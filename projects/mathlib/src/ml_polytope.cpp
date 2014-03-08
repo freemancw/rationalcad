@@ -15,7 +15,7 @@
 
 /*!
  * @author Clinton Freeman <admin@freemancw.com>
- * @date 07/21/2013
+ * @date 2013-07-21
  */
 
 #include "ml_common.h"
@@ -25,6 +25,10 @@
 #include "ml_intersection.h"
 
 namespace RCAD {
+
+namespace QuadEdge {
+
+} // namespace QuadEdge
 
 /*
  * GOAL:
