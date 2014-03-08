@@ -69,11 +69,21 @@ MainWindow::MainWindow(QWidget *parent) :
             SIGNAL(triggered()),
             SLOT(onCreatePolytopeTriggered()));
 
+    // snap to grid button
+    QAction* snap_to_grid = new QAction("Snap to Grid", ui->toolBar->layout());
+    snap_to_grid->setIcon(QIcon("://icons/snap_to_grid.png"));
+    snap_to_grid->setCheckable(true);
+    snap_to_grid->setChecked(true);
+
+    connect(snap_to_grid,
+            SIGNAL(triggered()),
+            SLOT(onSnapToGridTriggered()));
+
     // add buttons to toolbar
-    QList<QAction*> actions;
-    actions.append(select_objects);
-    actions.append(create_polytope);
-    ui->toolBar->addActions(actions);
+    ui->toolBar->addAction(select_objects);
+    ui->toolBar->addAction(create_polytope);
+    ui->toolBar->addSeparator();
+    ui->toolBar->addAction(snap_to_grid);
 
     // create orthographic widget
     rInfo("Creating orthographic view.");

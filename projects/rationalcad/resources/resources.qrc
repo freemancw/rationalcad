@@ -3,11 +3,9 @@
         <file>shaders/gl3_default.fsh</file>
         <file>shaders/gl3_default.vsh</file>
         <file>aboutext.png</file>
-        <file>icons/appicon.ico</file>
         <file>icons/appicon.png</file>
         <file>shaders/gl_fxaa.fsh</file>
         <file>shaders/gl_fxaa.vsh</file>
-        <file>splash.png</file>
         <file>shaders/gl2_default.fsh</file>
         <file>shaders/gl2_default.vsh</file>
         <file>shaders/dual_peeling_blend.fsh</file>
@@ -30,5 +28,7 @@
         <file>splash3.png</file>
         <file>icons/select_object.png</file>
         <file>icons/create_polytope.png</file>
+        <file>icons/appicon.ico</file>
+        <file>icons/snap_to_grid.png</file>
     </qresource>
 </RCC>

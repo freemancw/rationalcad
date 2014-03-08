@@ -334,8 +334,12 @@ GL::VertexBuffer& SceneManager::triangles_vbo() {
 //=============================================================================
 
 void SceneManager::BeginCreatePolytope(const QVector2D& coords) {
+    qDebug() << "SceneManager BeginCreatePolytope";
     Deselect();
-/*
+
+    ConfigManager::get().set_input_state(UPDATE_POLYTOPE);
+
+    /*
     scene_objects_.insert(name, QSharedPointer<ISceneObject>(
                           new ScenePolytope_3()));
     selected_name_ = name;

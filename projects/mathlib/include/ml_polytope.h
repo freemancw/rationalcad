@@ -43,36 +43,6 @@ class FaceEdgeIterator;
 class QuadEdge;
 
 //=============================================================================
-// Interface: QuadEdge
-//=============================================================================
-
-class QuadEdge {
-public:
-    QuadEdge() {
-        edges[0].index = 0;
-        edges[1].index = 1;
-        edges[2].index = 2;
-        edges[3].index = 3;
-
-        edges[0].next = edges+0;
-        edges[1].next = edges+3;
-        edges[2].next = edges+2;
-        edges[3].next = edges+1;
-
-        unsigned int id = Edge::nextID;
-
-        edges[0].id = id+0;
-        edges[1].id = id+1;
-        edges[2].id = id+2;
-        edges[3].id = id+3;
-
-        Edge::nextID = id+4;
-    }
-
-    Edge edges[4];
-};
-
-//=============================================================================
 // Interface: Vertex
 //=============================================================================
 
@@ -112,45 +82,6 @@ inline Edge *Vertex::getEdge() {
 }
 
 //=============================================================================
-// Interface: VertexEdgeIterator
-//=============================================================================
-
-class VertexEdgeIterator {
-public:
-
-    VertexEdgeIterator(Vertex *vertex) {
-        // pick an arbitrary edge in the vertex orbit
-        start = vertex->getEdge();
-        edge  = start;
-    }
-
-    ~VertexEdgeIterator() {}
-
-    Edge *next() {
-        // check for degeneracy or exhausted iteration
-        Edge *current = edge;
-
-        if (current==0) {
-            return 0;
-        }
-
-        // get the next edge in the counterclockwise orbit of the vertex, but
-        // return the current edge
-        // reset to null if we've come back to the start
-
-        Edge *next = current->Onext();
-
-        edge = next != start ? next : 0;
-
-        return current;
-    }
-
-private:
-    Edge *start;
-    Edge *edge;
-};
-
-//=============================================================================
 // Interface: Face
 //=============================================================================
 
@@ -187,45 +118,6 @@ inline unsigned int Face::getID() {
 inline Edge *Face::getEdge() {
   return edge;
 }
-
-//=============================================================================
-// Interface: FaceEdgeIterator
-//=============================================================================
-
-class FaceEdgeIterator {
-public:
-
-    FaceEdgeIterator(Face *face) {
-
-        start = face->getEdge();
-        edge  = start;
-    }
-
-    ~FaceEdgeIterator() {}
-
-
-    Edge *next() {
-        // check for degeneracy or exhausted iteration
-
-        Edge *current = edge;
-
-        if (current == 0) {
-            return 0;
-        }
-
-        // get the next edge in the left orbit of the face, but return the
-        // current edge. reset to null if we've come back to the start.
-        Edge *next = current->Lnext();
-
-        edge = next!=start ? next : 0;
-
-        return current;
-    }
-
-private:
-    Edge *start;
-    Edge *edge;
-};
 
 //=============================================================================
 // Interface: Edge
@@ -274,7 +166,6 @@ private:
     Face *face;
 
     friend class QuadEdge;
-
 };
 
 inline unsigned int Edge::getID() {
@@ -450,6 +341,84 @@ private:
 
 };
 
+//=============================================================================
+// Interface: VertexEdgeIterator
+//=============================================================================
+
+class VertexEdgeIterator {
+public:
+
+    VertexEdgeIterator(Vertex *vertex) {
+        // pick an arbitrary edge in the vertex orbit
+        start = vertex->getEdge();
+        edge  = start;
+    }
+
+    ~VertexEdgeIterator() {}
+
+    Edge *next() {
+        // check for degeneracy or exhausted iteration
+        Edge *current = edge;
+
+        if (current == 0) {
+            return 0;
+        }
+
+        // get the next edge in the counterclockwise orbit of the vertex, but
+        // return the current edge
+        // reset to null if we've come back to the start
+
+        Edge *next = current->Onext();
+
+        edge = next != start ? next : 0;
+
+        return current;
+    }
+
+private:
+    Edge *start;
+    Edge *edge;
+};
+
+//=============================================================================
+// Interface: FaceEdgeIterator
+//=============================================================================
+
+class FaceEdgeIterator {
+public:
+
+    FaceEdgeIterator(Face *face) {
+
+        start = face->getEdge();
+        edge  = start;
+    }
+
+    ~FaceEdgeIterator() {}
+
+
+    Edge *next() {
+        // check for degeneracy or exhausted iteration
+
+        Edge *current = edge;
+
+        if (current == 0) {
+            return 0;
+        }
+
+        // get the next edge in the left orbit of the face, but return the
+        // current edge. reset to null if we've come back to the start.
+        Edge *next = current->Lnext();
+
+        edge = next != start ? next : 0;
+
+        return current;
+    }
+
+private:
+    Edge *start;
+    Edge *edge;
+};
+
 } // namespace QuadEdge
 
 //=============================================================================
@@ -463,9 +432,7 @@ public:
     void Update();
     
 private:
-    std::vector<SharedPoint_3r> vertices_;
-    std::vector<Segment_3r> edges_;
-    std::vector<Triangle_3r> faces_;
+    QuadEdge::Cell* cell_;
 };
 
 namespace Construction {

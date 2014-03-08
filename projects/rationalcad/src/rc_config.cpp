@@ -41,6 +41,12 @@ const InputState& ConfigManager::input_state() const {
 void ConfigManager::set_input_state(const InputState& input_state) {
     input_state_ = input_state;
 }
+bool ConfigManager::snap_to_grid() const {
+    return snap_to_grid_;
+}
+void ConfigManager::set_snap_to_grid(bool snap_to_grid) {
+    snap_to_grid_ = snap_to_grid;
+}
 
 RCConfig g_config;
 

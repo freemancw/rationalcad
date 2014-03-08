@@ -262,6 +262,7 @@ void OrthographicWidget::timerEvent(QTimerEvent *event) {
 }
 
 static QPoint last_click_pos;
+static QPoint create_polytope_pos;
 
 QVector2D OrthographicWidget::mousePressToWorld(QMouseEvent* event) const {
     int converted_y = height()-event->y();
@@ -277,15 +278,28 @@ void OrthographicWidget::mousePressEvent(QMouseEvent *event) {
 
     if (event->buttons() & Qt::LeftButton) {
         switch (ConfigManager::get().input_state()) {
-        case SELECT:
-            /*
-            if (event->modifiers() & Qt::ShiftModifier) {
-                emit SelectObject(world_coords);
-            }
-            */
-            break;
         case CREATE_POLYTOPE:
-            emit BeginCreatePolytope(world_coords);
+            /* need to save initial click position to determine where to begin
+             * creating the polytope. there are two cases:
+             *
+             * snapping is off. we can either save the screen coords or save
+             * the world coords. then we check inside of mouse move event to see
+             * if the user has dragged some "far enough" distance while holding
+             * down the lmb. far enough is some arbitrary value when snapping is
+             * off, and it would depend upon whether we are doing it in screen
+             * coords or in world coords. it may be better to do it in screen
+             * coords so that we don't create objects "too easily" when a user
+             * is zoomed out.
+             *
+             * snapping is on.
+             *
+             */
+
+             create_polytope_pos = event->pos();
+
+
+            //create_polytope_pos = world_coords;
+            //emit BeginCreatePolytope(world_coords);
             break;
         default:
             break;
@@ -319,13 +333,15 @@ void OrthographicWidget::mouseMoveEvent(QMouseEvent *event) {
     QVector2D delta(last_click_pos.x()-event->x(),
                     last_click_pos.y()-convertedY);
 
-    switch (g_config.input_state_) {
-    default:
-        break;
-    }
-
     if (event->buttons() & Qt::LeftButton) {
-
+        switch (ConfigManager::get().input_state()) {
+        case CREATE_POLYTOPE:
+            //QVector2D
+            //emit BeginCreatePolytope(world_coords);
+            break;
+        default:
+            break;
+        }
     }
 
     if (event->buttons() & Qt::MiddleButton) {

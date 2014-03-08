@@ -29,6 +29,36 @@ namespace RCAD {
 namespace QuadEdge {
 
 //=============================================================================
+// Interface: QuadEdge
+//=============================================================================
+
+class QuadEdge {
+public:
+    QuadEdge() {
+        edges[0].index = 0;
+        edges[1].index = 1;
+        edges[2].index = 2;
+        edges[3].index = 3;
+
+        edges[0].next = edges+0;
+        edges[1].next = edges+3;
+        edges[2].next = edges+2;
+        edges[3].next = edges+1;
+
+        unsigned int id = Edge::nextID;
+
+        edges[0].id = id+0;
+        edges[1].id = id+1;
+        edges[2].id = id+2;
+        edges[3].id = id+3;
+
+        Edge::nextID = id+4;
+    }
+
+    Edge edges[4];
+};
+
+//=============================================================================
 // Implementation: Vertex
 //=============================================================================
 
@@ -139,7 +169,7 @@ Face::Face(Cell *cell) {
     cell->addFace(this);
 }
 
-Face::~Face(){
+Face::~Face() {
     cell->removeFace(this);
 }
 
@@ -1022,6 +1052,7 @@ Matrix_3x3i UnimodularBasisForPlane(const Vector_3i& u, const Vector_3i& v) {
 //=============================================================================
 
 Polytope_3r::Polytope_3r() {
+/*
     // create vertices
     vertices_.push_back(std::make_shared<Point_3r>(0, 0, 0));
     vertices_.push_back(std::make_shared<Point_3r>(8, 0, 0));
@@ -1048,7 +1079,7 @@ Polytope_3r::Polytope_3r() {
     edges_.push_back(Segment_3r(vertices_[6], vertices_[7]));
     edges_.push_back(Segment_3r(vertices_[7], vertices_[4]));
 
-
+*/
 }
 
 /*!
@@ -1142,12 +1173,6 @@ void Polytope_3r::Update() {
     // the 2D algorithm
 
     // vertices identified by the hull algorithm
-
-
-
-
-
-
 
     /*
 
@@ -1342,6 +1367,7 @@ void Polytope_3r::Update() {
     SharedPoint_3r axesY = std::make_shared<Point_3r>(0, 32, 0);
     SharedPoint_3r axesZ = std::make_shared<Point_3r>(0, 0, 32);
 
+/*
     vertices_.push_back(axesO);
     vertices_.push_back(axesX);
     vertices_.push_back(axesY);
@@ -1356,7 +1382,7 @@ void Polytope_3r::Update() {
     SigPushVisualSegment_3r(OX, Visual::Segment(Visual::Color(255, 0, 0, 255)));
     SigPushVisualSegment_3r(OY, Visual::Segment(Visual::Color(0, 255, 0, 255)));
     SigPushVisualSegment_3r(OZ, Visual::Segment(Visual::Color(0, 0, 255, 255)));
-
+*/
 }
 
 } // namespace RCAD

@@ -29,7 +29,8 @@ namespace RCAD {
 
 enum InputState {
     SELECT,
-    CREATE_POLYTOPE
+    CREATE_POLYTOPE,
+    UPDATE_POLYTOPE
 };
 
 class ConfigManager {
@@ -48,9 +49,12 @@ public:
 
     const InputState& input_state() const;
     void set_input_state(const InputState& input_state);
+    bool snap_to_grid() const;
+    void set_snap_to_grid(bool snap_to_grid);
 
 private:
     InputState input_state_;
+    bool snap_to_grid_;
 };
 
 struct RCConfig {
