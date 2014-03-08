@@ -145,6 +145,9 @@ public:
 
     void SlotUpdate() override;
 
+    int NumObjects() const;
+    const QString& selected_name() const;
+
 public slots:
     void onBeginCreatePolytope(const QVector2D& start, const QVector2D& cur);
     void onUpdateNewPolytope(const QVector2D& cur);
@@ -171,6 +174,7 @@ private:
     ScenePolytope_3* SelectedPolytope_3();
 
     QHash<QString, QSharedPointer<ISceneObject>> scene_objects_;
+    QString selected_name_;
     quint32 cur_point_uid_;
     QHash<uint32_t, QSharedPointer<ApproxPoint_3f>> approx_points_;
     QHash<uint32_t, QStack<Visual::Point>> viz_points_;
@@ -190,12 +194,11 @@ public:
     SceneManager();
     ~SceneManager();
 
-    int NumObjects() const;
-    const QString& selected_name() const;
     GL::VertexBuffer& points_vbo();
     GL::VertexBuffer& lines_vbo();
     GL::VertexBuffer& triangles_vbo();
-    SceneObserver& scene_observer() { return scene_observer_; }
+
+    SceneObserver scene_observer_;
 
 public slots:
     void UpdateVboPoints(QVector<GL::Vertex> verts);
@@ -206,9 +209,7 @@ private:
     GL::VertexBuffer points_vbo_;
     GL::VertexBuffer lines_vbo_;
     GL::VertexBuffer triangles_vbo_;
-    SceneObserver scene_observer_;
 
-    QString selected_name_;
     QSharedPointer<QThread> animation_thread_;
 };
 

@@ -67,20 +67,20 @@ void OrthographicWidget::initialize(
             SLOT(ShowContextMenu(const QPoint&)));
     connect(this,
             SIGNAL(SelectObject(QVector2D)),
-            scene_manager_.data(),
-            SLOT(SelectObject(QVector2D)));
+            &scene_manager_->scene_observer_,
+            SLOT(onSelectObject(QVector2D)));
     connect(this,
             SIGNAL(BeginCreatePolytope(QVector2D, QVector2D)),
-            scene_manager_.data(),
-            SLOT(BeginCreatePolytope(QVector2D, QVector2D)));
+            &scene_manager_->scene_observer_,
+            SLOT(onBeginCreatePolytope(QVector2D, QVector2D)));
     connect(this,
             SIGNAL(UpdateNewPolytope(QVector2D)),
-            scene_manager_.data(),
-            SLOT(UpdateNewPolytope(QVector2D)));
+            &scene_manager_->scene_observer_,
+            SLOT(onUpdateNewPolytope(QVector2D)));
     connect(this,
             SIGNAL(EndCreatePolytope()),
-            scene_manager_.data(),
-            SLOT(EndCreatePolytope()));
+            &scene_manager_->scene_observer_,
+            SLOT(onEndCreatePolytope()));
 }
 
 void OrthographicWidget::initializeGL() {

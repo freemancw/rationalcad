@@ -123,12 +123,12 @@ MainWindow::MainWindow(QWidget *parent) :
             SLOT(UpdateStatusBarMsg(const QString&)));
     connect(this,
             SIGNAL(Deselect()),
-            scene_manager_.data(),
-            SLOT(Deselect()));
+            &scene_manager_->scene_observer_,
+            SLOT(onDeselect()));
     connect(this,
             SIGNAL(DeleteSelectedObject()),
-            scene_manager_.data(),
-            SLOT(DeleteSelectedObject()));
+            &scene_manager_->scene_observer_,
+            SLOT(onDeleteSelectedObject()));
 
     create_object_color_ = g_config.tag_colors["face_default"];
 

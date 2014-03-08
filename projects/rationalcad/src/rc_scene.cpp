@@ -276,6 +276,102 @@ void SceneObserver::SlotUpdate() {
 }
 
 //=============================================================================
+// Polytope_3 management
+//=============================================================================
+
+void SceneObserver::onBeginCreatePolytope(const QVector2D& start,
+                                          const QVector2D& cur) {
+    qDebug() << "SceneObserver BeginCreatePolytope " << start << ", " << cur;
+
+    onDeselect();
+
+/*
+    scene_objects_.insert(name, QSharedPointer<ISceneObject>(
+                          new ScenePolytope_3()));
+    selected_name_ = name;
+    SelectedPolytope_3()->AddObserver(this);
+    */
+    //SelectedPolytope_3()->Update();
+
+    ConfigManager::get().set_input_state(UPDATE_POLYTOPE);
+}
+
+void SceneObserver::onUpdateNewPolytope(const QVector2D& cur) {
+    qDebug() << "SceneObserver UpdateNewPolytope " << cur;
+}
+
+void SceneObserver::onEndCreatePolytope() {
+    qDebug() << "SceneObserver EndCreatePolytope";
+    ConfigManager::get().set_input_state(CREATE_POLYTOPE);
+    //SelectedPolytope_3()->Update();
+}
+
+//=============================================================================
+// Object management
+//=============================================================================
+
+void SceneObserver::onUpdateSelectedObjectName(const QString &name) {
+    if (!ObjectIsSelected()) {
+        return;
+    }
+
+    QSharedPointer<ISceneObject> obj_ptr(SelectedObject());
+    //scene_objects_.remove(selected_name_);
+    selected_name_ = name;
+    //scene_objects_.insert(selected_name_, obj_ptr);
+}
+
+void SceneObserver::onUpdateSelectedObjectColor(const QColor &color) {
+    if (!ObjectIsSelected()) {
+        return;
+    }
+
+    SelectedObject()->UpdateColor(color);
+}
+
+void SceneObserver::onDeleteSelectedObject() {
+    if (!ObjectIsSelected()) {
+        return;
+    }
+
+    //scene_objects_.remove(selected_name_);
+    //selected_name_ = "";
+}
+
+void SceneObserver::onSelectObject(const QVector2D& coords) {
+    onDeselect();
+}
+
+void SceneObserver::onDeselect() {
+    if (!ObjectIsSelected()) {
+        return;
+    }
+
+    SelectedObject()->Deselect();
+    selected_name_ = "";
+}
+
+int SceneObserver::NumObjects() const {
+    return 0;
+}
+
+ISceneObject* SceneObserver::SelectedObject() {
+    return nullptr;
+}
+
+ScenePolytope_3* SceneObserver::SelectedPolytope_3() {
+    return nullptr;
+}
+
+bool SceneObserver::ObjectIsSelected() const {
+    return selected_name_ != "";
+}
+
+const QString& SceneObserver::selected_name() const {
+    return selected_name_;
+}
+
+//=============================================================================
 // Implementation: SceneManager
 //=============================================================================
 
@@ -327,101 +423,6 @@ GL::VertexBuffer& SceneManager::lines_vbo() {
 }
 GL::VertexBuffer& SceneManager::triangles_vbo() {
     return triangles_vbo_;
-}
-
-//=============================================================================
-// Polytope_3 management
-//=============================================================================
-
-void SceneManager::BeginCreatePolytope(const QVector2D& start,
-                                       const QVector2D& cur) {
-    qDebug() << "SceneManager BeginCreatePolytope " << start << ", " << cur;
-    Deselect();
-
-    ConfigManager::get().set_input_state(UPDATE_POLYTOPE);
-
-    /*
-    scene_objects_.insert(name, QSharedPointer<ISceneObject>(
-                          new ScenePolytope_3()));
-    selected_name_ = name;
-    SelectedPolytope_3()->AddObserver(this);
-    SelectedPolytope_3()->Update();
-    */
-}
-
-void SceneManager::UpdateNewPolytope(const QVector2D& cur) {
-    qDebug() << "SceneManager UpdateNewPolytope " << cur;
-}
-
-void SceneManager::EndCreatePolytope() {
-    qDebug() << "SceneManager EndCreatePolytope";
-    ConfigManager::get().set_input_state(CREATE_POLYTOPE);
-    //SelectedPolytope_3()->Update();
-}
-
-//=============================================================================
-// Object management
-//=============================================================================
-
-void SceneManager::UpdateSelectedObjectName(const QString &name) {
-    if (!ObjectIsSelected()) {
-        return;
-    }
-
-    QSharedPointer<ISceneObject> obj_ptr(SelectedObject());
-    //scene_objects_.remove(selected_name_);
-    selected_name_ = name;
-    //scene_objects_.insert(selected_name_, obj_ptr);
-}
-
-void SceneManager::UpdateSelectedObjectColor(const QColor &color) {
-    if (!ObjectIsSelected()) {
-        return;
-    }
-
-    SelectedObject()->UpdateColor(color);
-}
-
-void SceneManager::DeleteSelectedObject() {
-    if (!ObjectIsSelected()) {
-        return;
-    }
-
-    //scene_objects_.remove(selected_name_);
-    //selected_name_ = "";
-}
-
-void SceneManager::SelectObject(const QVector2D& coords) {
-    Deselect();
-}
-
-int SceneManager::NumObjects() const {
-    return 0;
-}
-
-ISceneObject* SceneManager::SelectedObject() {
-    return nullptr;
-}
-
-ScenePolytope_3* SceneManager::SelectedPolytope_3() {
-    return nullptr;
-}
-
-void SceneManager::Deselect() {
-    if (!ObjectIsSelected()) {
-        return;
-    }
-
-    SelectedObject()->Deselect();
-    selected_name_ = "";
-}
-
-bool SceneManager::ObjectIsSelected() const {
-    return selected_name_ != "";
-}
-
-const QString& SceneManager::selected_name() const {
-    return selected_name_;
 }
 
 static Point_2f ToPoint_2f(const QVector2D &v, bool snap) {
