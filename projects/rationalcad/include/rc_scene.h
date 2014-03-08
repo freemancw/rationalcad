@@ -145,6 +145,17 @@ public:
 
     void SlotUpdate() override;
 
+public slots:
+    void onBeginCreatePolytope(const QVector2D& start, const QVector2D& cur);
+    void onUpdateNewPolytope(const QVector2D& cur);
+    void onEndCreatePolytope();
+
+    void onUpdateSelectedObjectName(const QString& name);
+    void onUpdateSelectedObjectColor(const QColor& color);
+    void onDeleteSelectedObject();
+    void onSelectObject(const QVector2D& coords);
+    void onDeselect();
+
 signals:
     void UpdateVboPoints(QVector<GL::Vertex> verts);
     void UpdateVboLines(QVector<GL::Vertex> verts);
@@ -154,6 +165,10 @@ private:
     void GenerateVboPoints();
     void GenerateVboLines();
     void GenerateVboTriangles();
+
+    bool ObjectIsSelected() const;
+    ISceneObject* SelectedObject();
+    ScenePolytope_3* SelectedPolytope_3();
 
     QHash<QString, QSharedPointer<ISceneObject>> scene_objects_;
     quint32 cur_point_uid_;
@@ -180,33 +195,19 @@ public:
     GL::VertexBuffer& points_vbo();
     GL::VertexBuffer& lines_vbo();
     GL::VertexBuffer& triangles_vbo();
+    SceneObserver& scene_observer() { return scene_observer_; }
 
 public slots:
-
     void UpdateVboPoints(QVector<GL::Vertex> verts);
     void UpdateVboLines(QVector<GL::Vertex> verts);
     void UpdateVboTriangles(QVector<GL::Vertex> verts);
 
-    void BeginCreatePolytope(const QVector2D& start, const QVector2D& cur);
-    void UpdateNewPolytope(const QVector2D& cur);
-    void EndCreatePolytope();
-
-    void UpdateSelectedObjectName(const QString& name);
-    void UpdateSelectedObjectColor(const QColor& color);
-    void DeleteSelectedObject();
-    void SelectObject(const QVector2D& coords);
-    void Deselect();
-
 private:
-    bool ObjectIsSelected() const;
-    ISceneObject* SelectedObject();
-    ScenePolytope_3* SelectedPolytope_3();
-
     GL::VertexBuffer points_vbo_;
     GL::VertexBuffer lines_vbo_;
     GL::VertexBuffer triangles_vbo_;
-
     SceneObserver scene_observer_;
+
     QString selected_name_;
     QSharedPointer<QThread> animation_thread_;
 };
