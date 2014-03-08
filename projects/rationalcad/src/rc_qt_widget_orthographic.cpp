@@ -70,13 +70,17 @@ void OrthographicWidget::initialize(
             scene_manager_.data(),
             SLOT(SelectObject(QVector2D)));
     connect(this,
-            SIGNAL(BeginCreatePolytope(QVector2D)),
+            SIGNAL(BeginCreatePolytope(QVector2D, QVector2D)),
             scene_manager_.data(),
-            SLOT(BeginCreatePolytope(QVector2D)));
+            SLOT(BeginCreatePolytope(QVector2D, QVector2D)));
     connect(this,
             SIGNAL(UpdateNewPolytope(QVector2D)),
             scene_manager_.data(),
             SLOT(UpdateNewPolytope(QVector2D)));
+    connect(this,
+            SIGNAL(EndCreatePolytope()),
+            scene_manager_.data(),
+            SLOT(EndCreatePolytope()));
 }
 
 void OrthographicWidget::initializeGL() {
@@ -264,17 +268,17 @@ void OrthographicWidget::timerEvent(QTimerEvent *event) {
 static QPoint last_click_pos;
 static QPoint create_polytope_pos;
 
-QVector2D OrthographicWidget::mousePressToWorld(QMouseEvent* event) const {
-    int converted_y = height()-event->y();
+QVector2D OrthographicWidget::mousePressToWorld(const QPoint& pos) const {
+    int converted_y = height()-pos.y();
     qreal halfwidth = static_cast<qreal>(width())/2;
     qreal halfheight = static_cast<qreal>(height())/2;
-    QVector2D screen_coords(event->x()-halfwidth, converted_y-halfheight);
+    QVector2D screen_coords(pos.x()-halfwidth, converted_y-halfheight);
     return i_grid_.GetCoordsForPixel(screen_coords);
 }
 
 void OrthographicWidget::mousePressEvent(QMouseEvent *event) {
     int convertedY = height()-event->y();
-    QVector2D world_coords = mousePressToWorld(event);
+    QVector2D world_coords = mousePressToWorld(event->pos());
 
     if (event->buttons() & Qt::LeftButton) {
         switch (ConfigManager::get().input_state()) {
@@ -297,9 +301,6 @@ void OrthographicWidget::mousePressEvent(QMouseEvent *event) {
 
              create_polytope_pos = event->pos();
 
-
-            //create_polytope_pos = world_coords;
-            //emit BeginCreatePolytope(world_coords);
             break;
         default:
             break;
@@ -325,6 +326,16 @@ void OrthographicWidget::mouseReleaseEvent(QMouseEvent *event) {
     if (!(event->buttons() & Qt::MiddleButton)) {
         setCursor(Qt::ArrowCursor);
     }
+
+    if (!(event->buttons() & Qt::LeftButton)) {
+        switch (ConfigManager::get().input_state()) {
+        case UPDATE_POLYTOPE:
+            emit EndCreatePolytope();
+            break;
+        default:
+            break;
+        }
+    }
 }
 
 void OrthographicWidget::mouseMoveEvent(QMouseEvent *event) {
@@ -333,11 +344,33 @@ void OrthographicWidget::mouseMoveEvent(QMouseEvent *event) {
     QVector2D delta(last_click_pos.x()-event->x(),
                     last_click_pos.y()-convertedY);
 
+    QVector2D cpoly_world = mousePressToWorld(create_polytope_pos);
+    QVector2D cpoly_world_snapped(i_grid_.RoundToNearestMinor(cpoly_world.x()),
+                                  i_grid_.RoundToNearestMinor(cpoly_world.y()));
+
+    QVector2D cur_world = mousePressToWorld(event->pos());
+    QVector2D cur_world_snapped(i_grid_.RoundToNearestMinor(cur_world.x()),
+                                i_grid_.RoundToNearestMinor(cur_world.y()));
+
     if (event->buttons() & Qt::LeftButton) {
         switch (ConfigManager::get().input_state()) {
         case CREATE_POLYTOPE:
-            //QVector2D
-            //emit BeginCreatePolytope(world_coords);
+            if (ConfigManager::get().snap_to_grid()) {
+                if (cur_world_snapped.x() != cpoly_world_snapped.x() &&
+                    cur_world_snapped.y() != cpoly_world_snapped.y()) {
+                    emit BeginCreatePolytope(cpoly_world_snapped,
+                                             cur_world_snapped);
+                }
+            } else {
+
+            }
+            break;
+        case UPDATE_POLYTOPE:
+            if (ConfigManager::get().snap_to_grid()) {
+                emit UpdateNewPolytope(cur_world_snapped);
+            } else {
+
+            }
             break;
         default:
             break;

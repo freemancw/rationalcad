@@ -63,11 +63,11 @@ signals:
 private slots:
     void on_action_about_triggered();
     void on_action_preferences_triggered();
-    void on_action_toggle_snaps_toggled(bool arg1);
     void UpdateStatusBarMsg(const QString& status);
 
     void onSelectObjectsTriggered();
     void onCreatePolytopeTriggered();
+    void onSnapToGridToggled(bool state);
 
     void on_actionUser_Manual_triggered();
 

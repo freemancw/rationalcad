@@ -67,14 +67,14 @@ signals:
     void SelectObject(const QVector2D& coords);
 
     // polytope
-    void BeginCreatePolytope(const QVector2D& coords);
-    void UpdateNewPolytope(const QVector2D& coords);
+    void BeginCreatePolytope(const QVector2D& start, const QVector2D& cur);
+    void UpdateNewPolytope(const QVector2D& cur);
     void EndCreatePolytope();
 
 protected:
     void initializeGL();
     void resizeGL(int width, int height);
-    QVector2D mousePressToWorld(QMouseEvent* event) const;
+    QVector2D mousePressToWorld(const QPoint& pos) const;
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);

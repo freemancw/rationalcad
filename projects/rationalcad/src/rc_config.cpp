@@ -33,6 +33,7 @@ ConfigManager& ConfigManager::operator=(const ConfigManager&) { return *this; }
 
 void ConfigManager::Initialize() {
     input_state_ = CREATE_POLYTOPE;
+    snap_to_grid_ = true;
 }
 
 const InputState& ConfigManager::input_state() const {

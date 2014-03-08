@@ -76,8 +76,8 @@ MainWindow::MainWindow(QWidget *parent) :
     snap_to_grid->setChecked(true);
 
     connect(snap_to_grid,
-            SIGNAL(triggered()),
-            SLOT(onSnapToGridTriggered()));
+            SIGNAL(toggled(bool)),
+            SLOT(onSnapToGridToggled(bool)));
 
     // add buttons to toolbar
     ui->toolBar->addAction(select_objects);
@@ -150,6 +150,10 @@ void MainWindow::onCreatePolytopeTriggered() {
     ConfigManager::get().set_input_state(CREATE_POLYTOPE);
 }
 
+void MainWindow::onSnapToGridToggled(bool state) {
+    ConfigManager::get().set_snap_to_grid(state);
+}
+
 void MainWindow::initializeLogging() {
     logger_.set_console(ui->console);
     logger_.subscribeTo(rlog::GetGlobalChannel("info"));
@@ -206,10 +210,6 @@ void MainWindow::on_action_preferences_triggered() {
 
 void MainWindow::UpdateStatusBarMsg(const QString &status) {
     ui->statusbar_main->showMessage(status);
-}
-
-void MainWindow::on_action_toggle_snaps_toggled(bool checked) {
-    g_config.snap_to_grid_ = checked;
 }
 
 void MainWindow::on_actionUser_Manual_triggered() {

@@ -187,8 +187,8 @@ public slots:
     void UpdateVboLines(QVector<GL::Vertex> verts);
     void UpdateVboTriangles(QVector<GL::Vertex> verts);
 
-    void BeginCreatePolytope(const QVector2D& coords);
-    void UpdateNewPolytope(const QVector2D& coords);
+    void BeginCreatePolytope(const QVector2D& start, const QVector2D& cur);
+    void UpdateNewPolytope(const QVector2D& cur);
     void EndCreatePolytope();
 
     void UpdateSelectedObjectName(const QString& name);

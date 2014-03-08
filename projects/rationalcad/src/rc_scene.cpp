@@ -333,8 +333,9 @@ GL::VertexBuffer& SceneManager::triangles_vbo() {
 // Polytope_3 management
 //=============================================================================
 
-void SceneManager::BeginCreatePolytope(const QVector2D& coords) {
-    qDebug() << "SceneManager BeginCreatePolytope";
+void SceneManager::BeginCreatePolytope(const QVector2D& start,
+                                       const QVector2D& cur) {
+    qDebug() << "SceneManager BeginCreatePolytope " << start << ", " << cur;
     Deselect();
 
     ConfigManager::get().set_input_state(UPDATE_POLYTOPE);
@@ -348,12 +349,14 @@ void SceneManager::BeginCreatePolytope(const QVector2D& coords) {
     */
 }
 
-void SceneManager::UpdateNewPolytope(const QVector2D& coords) {
-
+void SceneManager::UpdateNewPolytope(const QVector2D& cur) {
+    qDebug() << "SceneManager UpdateNewPolytope " << cur;
 }
 
 void SceneManager::EndCreatePolytope() {
-    SelectedPolytope_3()->Update();
+    qDebug() << "SceneManager EndCreatePolytope";
+    ConfigManager::get().set_input_state(CREATE_POLYTOPE);
+    //SelectedPolytope_3()->Update();
 }
 
 //=============================================================================

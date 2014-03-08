@@ -49,6 +49,8 @@ public:
     QVector<QPair<int, int>> GetMajorXCoords(const int width) const;
     QVector<QPair<int, int>> GetMajorYCoords(const int height) const;
     QVector2D GetCoordsForPixel(const QVector2D& pixel) const;
+    int RoundToNearestMinor(const int coord) const;
+    int RoundToNearestMajor(const int coord) const;
 
     const QVector2D& local_pos() const;
     const qreal& local_scale() const;
@@ -57,8 +59,6 @@ public:
 
 private:
     void WrapGrid();
-    int RoundToNearestMinor(const int coord) const;
-    int RoundToNearestMajor(const int coord) const;
     int CoordToPixel(const int a, const qreal global_a,
                      const int length) const;
     int GetMajorCoordIncrement() const;
