@@ -1052,6 +1052,85 @@ Matrix_3x3i UnimodularBasisForPlane(const Vector_3i& u, const Vector_3i& v) {
 //=============================================================================
 
 Polytope_3r::Polytope_3r() {
+
+}
+
+void Polytope_3r::Initialize(const Point_3f &min, const Point_3f &max) {
+    cell_ = QuadEdge::Cell::make();
+
+    // grab the initial vertex
+    QuadEdge::Vertex *vertex1;
+    {
+        QuadEdge::CellVertexIterator iterator(cell_);
+        vertex1 = iterator.next();
+        assert(vertex1 != 0);
+    }
+
+    // grab the initial edge and the initial faces
+    QuadEdge::Edge *edge1 = vertex1->getEdge();
+    QuadEdge::Face *left  = edge1->Left();
+    QuadEdge::Face *right = edge1->Right();
+
+    // drop in eight vertices along the initial edge
+    QuadEdge::Vertex *vertex2 = cell_->makeVertexEdge(vertex1, left, right)->Dest();
+    QuadEdge::Vertex *vertex3 = cell_->makeVertexEdge(vertex2, left, right)->Dest();
+    QuadEdge::Vertex *vertex4 = cell_->makeVertexEdge(vertex3, left, right)->Dest();
+    QuadEdge::Vertex *vertex5 = cell_->makeVertexEdge(vertex4, left, right)->Dest();
+    QuadEdge::Vertex *vertex6 = cell_->makeVertexEdge(vertex5, left, right)->Dest();
+    QuadEdge::Vertex *vertex7 = cell_->makeVertexEdge(vertex6, left, right)->Dest();
+    QuadEdge::Vertex *vertex8 = cell_->makeVertexEdge(vertex7, left, right)->Dest();
+
+    vertex1->pos = std::make_shared<Point_3r>(0, 0, 0);
+    vertex2->pos = std::make_shared<Point_3r>(8, 0, 0);
+    vertex3->pos = std::make_shared<Point_3r>(8, 8, 0);
+    vertex4->pos = std::make_shared<Point_3r>(0, 8, 0);
+    vertex5->pos = std::make_shared<Point_3r>(0, 0, 8);
+    vertex6->pos = std::make_shared<Point_3r>(8, 0, 8);
+    vertex7->pos = std::make_shared<Point_3r>(8, 8, 8);
+    vertex8->pos = std::make_shared<Point_3r>(0, 8, 8);
+
+    SigRegisterPoint_3r(*vertex1->pos);
+    SigRegisterPoint_3r(*vertex2->pos);
+    SigRegisterPoint_3r(*vertex3->pos);
+    SigRegisterPoint_3r(*vertex4->pos);
+    SigRegisterPoint_3r(*vertex5->pos);
+    SigRegisterPoint_3r(*vertex6->pos);
+    SigRegisterPoint_3r(*vertex7->pos);
+    SigRegisterPoint_3r(*vertex8->pos);
+
+    Visual::Color red(255, 0, 0, 255);
+    SigPushVisualPoint_3r(*vertex1->pos, Visual::Point(red));
+    SigPushVisualPoint_3r(*vertex2->pos, Visual::Point(red));
+    SigPushVisualPoint_3r(*vertex3->pos, Visual::Point(red));
+    SigPushVisualPoint_3r(*vertex4->pos, Visual::Point(red));
+    SigPushVisualPoint_3r(*vertex5->pos, Visual::Point(red));
+    SigPushVisualPoint_3r(*vertex6->pos, Visual::Point(red));
+    SigPushVisualPoint_3r(*vertex7->pos, Visual::Point(red));
+    SigPushVisualPoint_3r(*vertex8->pos, Visual::Point(red));
+
+    /*
+    Triangle_3r pTri0(pPt0, pPt1, pPt2);
+    Triangle_3r pTri1(pPt0, pPt2, pPt3);
+
+    Visual::Triangle pVt;
+    pVt.set_diffuse(Visual::Color(50, 200, 200, 255));
+*/
+    /*
+    SigPushVisualTriangle_3r(pTri0, pVt);
+    SigPushVisualTriangle_3r(pTri1, pVt);
+    */
+
+
+    /*
+    QuadEdge::Face *front = cell->makeFaceEdge(left, vertex1, vertex4)->Right();
+    QuadEdge::Face *left  = cell->makeFaceEdge(, vertex1, vertex4)->Right();
+    QuadEdge::Face *front = cell->makeFaceEdge(right, vertex2, vertex7)->Right();
+
+    QuadEdge::Face *front  = cell->makeFaceEdge(left, vertex2, vertex4)->Right();
+    QuadEdge::Face *bottom = cell->makeFaceEdge(right, vertex1, vertex3)->Right();
+*/
+
+
 /*
     // create vertices
     vertices_.push_back(std::make_shared<Point_3r>(0, 0, 0));

@@ -149,9 +149,9 @@ void EnableAttributes(QSharedPointer<QOpenGLShaderProgram> program,
 void DisableAttributes(QSharedPointer<QOpenGLShaderProgram> program,
                        const QList<AttributeMeta>& attributes);
 
-Q_DECLARE_METATYPE(QVector<Vertex>)
-
 } // namespace GL
+
+Q_DECLARE_METATYPE(QVector<GL::Vertex>)
 
 //=============================================================================
 // Interface: ShaderManager

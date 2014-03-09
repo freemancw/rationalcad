@@ -285,13 +285,12 @@ void SceneObserver::onBeginCreatePolytope(const QVector2D& start,
 
     onDeselect();
 
-/*
-    scene_objects_.insert(name, QSharedPointer<ISceneObject>(
-                          new ScenePolytope_3()));
-    selected_name_ = name;
+    static int numPolytopes = 0;
+    selected_name_ = QString("polytope3_%1").arg(numPolytopes++);
+    scene_objects_.insert(selected_name_,
+                          QSharedPointer<ISceneObject>(new ScenePolytope_3()));
     SelectedPolytope_3()->AddObserver(this);
-    */
-    //SelectedPolytope_3()->Update();
+    SelectedPolytope_3()->Initialize();
 
     ConfigManager::get().set_input_state(UPDATE_POLYTOPE);
 }
@@ -356,11 +355,11 @@ int SceneObserver::NumObjects() const {
 }
 
 ISceneObject* SceneObserver::SelectedObject() {
-    return nullptr;
+    return scene_objects_.value(selected_name_).data();
 }
 
 ScenePolytope_3* SceneObserver::SelectedPolytope_3() {
-    return nullptr;
+    return dynamic_cast<ScenePolytope_3*>(SelectedObject());
 }
 
 bool SceneObserver::ObjectIsSelected() const {

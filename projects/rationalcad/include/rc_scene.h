@@ -79,6 +79,10 @@ public:
         model_polytope_.AddObserver(this);
     }
 
+    void Initialize() {
+        model_polytope_.Initialize(Point_3f(), Point_3f());
+    }
+
     void Update() {
         model_polytope_.Update();
     }

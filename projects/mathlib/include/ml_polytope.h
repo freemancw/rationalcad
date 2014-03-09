@@ -429,6 +429,8 @@ class Polytope_3r : public VisualGeometry {
 public:
     Polytope_3r();
 
+    void Initialize(const Point_3f& min, const Point_3f& max);
+
     void Update();
     
 private:
