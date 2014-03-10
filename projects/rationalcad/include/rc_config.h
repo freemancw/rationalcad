@@ -51,26 +51,17 @@ public:
     void set_input_state(const InputState& input_state);
     bool snap_to_grid() const;
     void set_snap_to_grid(bool snap_to_grid);
+    const QColor& grid_minor_color() const;
+    void set_grid_minor_color(const QColor& grid_minor_color);
+    const QColor& grid_major_color() const;
+    void set_grid_major_color(const QColor& grid_major_color);
 
 private:
     InputState input_state_;
     bool snap_to_grid_;
-};
-
-struct RCConfig {
-    QMap<QString, QColor> tag_colors;
     QColor grid_minor_color_;
     QColor grid_major_color_;
-    QColor color_vert_default;
-    QColor color_vert_rounded;
-
-    InputState input_state_;
-    bool snap_to_grid_;
 };
-
-extern RCConfig g_config;
-
-void initializeGlobalConfig();
 
 } // namespace RCAD
 

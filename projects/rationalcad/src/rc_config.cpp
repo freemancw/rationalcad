@@ -32,27 +32,6 @@ ConfigManager::ConfigManager(const ConfigManager&) {}
 ConfigManager& ConfigManager::operator=(const ConfigManager&) { return *this; }
 
 void ConfigManager::Initialize() {
-    input_state_ = CREATE_POLYTOPE;
-    snap_to_grid_ = true;
-}
-
-const InputState& ConfigManager::input_state() const {
-    return input_state_;
-}
-void ConfigManager::set_input_state(const InputState& input_state) {
-    input_state_ = input_state;
-}
-bool ConfigManager::snap_to_grid() const {
-    return snap_to_grid_;
-}
-void ConfigManager::set_snap_to_grid(bool snap_to_grid) {
-    snap_to_grid_ = snap_to_grid;
-}
-
-RCConfig g_config;
-
-void initializeGlobalConfig() {
-
     QGLFormat glf = QGLFormat::defaultFormat();
     glf.setRedBufferSize(8);
     glf.setGreenBufferSize(8);
@@ -67,26 +46,35 @@ void initializeGlobalConfig() {
     glf.setSwapInterval(1);
     QGLFormat::setDefaultFormat(glf);
 
-    //qDebug() << QGLFormat::defaultFormat();
+    input_state_ = CREATE_POLYTOPE;
+    snap_to_grid_ = true;
+    grid_minor_color_ = QColor(175, 175, 175);
+    grid_major_color_ = QColor(75, 75, 75);
+}
 
-    g_config.tag_colors.insert("normal", QColor(0, 0, 0));
-    g_config.tag_colors.insert("active", QColor(230, 180, 0));
-    g_config.tag_colors.insert("inactive", QColor(200, 200, 200));
-    g_config.tag_colors.insert("error", QColor(200, 0, 0));
-    g_config.tag_colors.insert("success", QColor(0, 200, 0));
-
-    g_config.tag_colors.insert("vert_default", QColor(100, 100, 100));
-    g_config.tag_colors.insert("vert_selected", QColor(50, 75, 150));
-    g_config.tag_colors.insert("edge_default", QColor(0, 0, 0));
-    g_config.tag_colors.insert("edge_selected", QColor(50, 160, 255));
-    g_config.tag_colors.insert("face_default", QColor(200, 200, 200));
-    g_config.tag_colors.insert("face_selected", QColor(255, 100, 100));
-
-    g_config.grid_major_color_ = QColor(100, 100, 100);
-    g_config.grid_minor_color_ = QColor(200, 200, 200);
-
-    g_config.input_state_ = SELECT;
-    g_config.snap_to_grid_ = false;
+const InputState& ConfigManager::input_state() const {
+    return input_state_;
+}
+void ConfigManager::set_input_state(const InputState& input_state) {
+    input_state_ = input_state;
+}
+bool ConfigManager::snap_to_grid() const {
+    return snap_to_grid_;
+}
+void ConfigManager::set_snap_to_grid(bool snap_to_grid) {
+    snap_to_grid_ = snap_to_grid;
+}
+const QColor& ConfigManager::grid_minor_color() const {
+    return grid_minor_color_;
+}
+void ConfigManager::set_grid_minor_color(const QColor& grid_minor_color) {
+    grid_minor_color_ = grid_minor_color;
+}
+const QColor& ConfigManager::grid_major_color() const {
+    return grid_major_color_;
+}
+void ConfigManager::set_grid_major_color(const QColor& grid_major_color) {
+    grid_major_color_ = grid_major_color;
 }
 
 } // namespace RCAD

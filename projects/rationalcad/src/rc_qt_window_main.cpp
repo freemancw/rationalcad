@@ -41,7 +41,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     initializeLogging();
-    initializeGlobalConfig();
 
     ConfigManager::get().Initialize();
 
@@ -129,8 +128,6 @@ MainWindow::MainWindow(QWidget *parent) :
             SIGNAL(DeleteSelectedObject()),
             &scene_manager_->scene_observer_,
             SLOT(onDeleteSelectedObject()));
-
-    create_object_color_ = g_config.tag_colors["face_default"];
 
     QList<int> sizes;
     sizes.push_back(this->height());

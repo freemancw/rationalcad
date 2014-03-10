@@ -314,7 +314,7 @@ void OrthographicWidget::mousePressEvent(QMouseEvent *event) {
     }
 
     if (event->buttons() & Qt::RightButton) {
-        switch (g_config.input_state_) {
+        switch (ConfigManager::get().input_state()) {
         case SELECT:
         default:
             break;

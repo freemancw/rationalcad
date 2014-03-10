@@ -68,7 +68,8 @@ void IntegerGrid::InitializeGrid(const int min_pixel_spacing,
 
     for(int i = 0; i < n_along_axis; ++i) {
         QColor grid_color = (i % major_line_spacing_) ?
-                    g_config.grid_minor_color_ : g_config.grid_major_color_;
+                    ConfigManager::get().grid_minor_color() :
+                    ConfigManager::get().grid_major_color();
 
         // start from the negative halfspace and work toward the positive
         int cur_pos = -line_half_length + i;

@@ -53,7 +53,6 @@ private slots:
 
 private:
     Ui::PreferencesDialog *ui;
-    RCAD::RCConfig temp_config_;
 };
 
 #endif // RC_QT_DIALOG_PREFERENCES_H

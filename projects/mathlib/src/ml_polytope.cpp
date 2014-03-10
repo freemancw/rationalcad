@@ -999,7 +999,6 @@ Matrix_3x3i UnimodularBasisForVectorItr(const Vector_3i& v) {
     }
     */
 
-
     // verify output assumptions
     assert(Determinant(basis) == 1 || Determinant(basis) == -1);
     assert(GCD(RowVec(basis, 0)) == 1);
@@ -1098,7 +1097,7 @@ void Polytope_3r::Initialize(const Point_3f &min, const Point_3f &max) {
     SigRegisterPoint_3r(*vertex7->pos);
     SigRegisterPoint_3r(*vertex8->pos);
 
-    Visual::Color red(255, 0, 0, 255);
+    Visual::Color red(0, 151, 255, 255);
     SigPushVisualPoint_3r(*vertex1->pos, Visual::Point(red));
     SigPushVisualPoint_3r(*vertex2->pos, Visual::Point(red));
     SigPushVisualPoint_3r(*vertex3->pos, Visual::Point(red));
