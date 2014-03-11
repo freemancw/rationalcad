@@ -290,7 +290,7 @@ void SceneObserver::onBeginCreatePolytope(const QVector2D& start,
     scene_objects_.insert(selected_name_,
                           QSharedPointer<ISceneObject>(new ScenePolytope_3()));
     SelectedPolytope_3()->AddObserver(this);
-    SelectedPolytope_3()->Initialize();
+    SelectedPolytope_3()->Initialize(start, cur);
 
     ConfigManager::get().set_input_state(UPDATE_POLYTOPE);
 }

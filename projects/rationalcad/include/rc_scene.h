@@ -79,8 +79,9 @@ public:
         model_polytope_.AddObserver(this);
     }
 
-    void Initialize() {
-        model_polytope_.Initialize(Point_3f(), Point_3f());
+    void Initialize(const QVector2D& start, const QVector2D& cur) {
+        model_polytope_.Initialize(Point_3f(start.x(), start.y(), 0),
+                                   Point_3f(cur.x(), cur.y(), 8));
     }
 
     void Update() {

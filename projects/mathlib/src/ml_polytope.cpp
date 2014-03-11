@@ -1078,6 +1078,7 @@ void Polytope_3r::Initialize(const Point_3f &min, const Point_3f &max) {
     QuadEdge::Vertex *vertex7 = cell_->makeVertexEdge(vertex6, left, right)->Dest();
     QuadEdge::Vertex *vertex8 = cell_->makeVertexEdge(vertex7, left, right)->Dest();
 
+    /*
     vertex1->pos = std::make_shared<Point_3r>(0, 0, 0);
     vertex2->pos = std::make_shared<Point_3r>(8, 0, 0);
     vertex3->pos = std::make_shared<Point_3r>(8, 0, 8);
@@ -1086,13 +1087,30 @@ void Polytope_3r::Initialize(const Point_3f &min, const Point_3f &max) {
     vertex6->pos = std::make_shared<Point_3r>(0, 8, 0);
     vertex7->pos = std::make_shared<Point_3r>(0, 8, 8);
     vertex8->pos = std::make_shared<Point_3r>(0, 0, 8);
+    */
+
+    float minX = std::min(min.x(), max.x());
+    float maxX = std::max(min.x(), max.x());
+    float minY = std::min(min.y(), max.y());
+    float maxY = std::max(min.y(), max.y());
+    float minZ = std::min(min.z(), max.z());
+    float maxZ = std::max(min.z(), max.z());
+
+    vertex1->pos = std::make_shared<Point_3r>(maxX, minY, minZ);
+    vertex2->pos = std::make_shared<Point_3r>(minX, minY, minZ);
+    vertex3->pos = std::make_shared<Point_3r>(minX, minY, maxZ);
+    vertex4->pos = std::make_shared<Point_3r>(minX, maxY, maxZ);
+    vertex5->pos = std::make_shared<Point_3r>(minX, maxY, minZ);
+    vertex6->pos = std::make_shared<Point_3r>(maxX, maxY, minZ);
+    vertex7->pos = std::make_shared<Point_3r>(maxX, maxY, maxZ);
+    vertex8->pos = std::make_shared<Point_3r>(maxX, minY, maxZ);
 
     // construct the bottom face
-    auto bfE = cell_->makeFaceEdge(left, vertex1, vertex6);
-    QuadEdge::Face *bottom = bfE->Right();
-    auto rfE = cell_->makeFaceEdge(bottom, vertex2, vertex5);
-    auto fE = cell_->makeFaceEdge(right, vertex4, vertex7);
-    auto tE = cell_->makeFaceEdge(fE->Right(), vertex8, vertex3);
+    auto bfE = cell_->makeFaceEdge(left, vertex6, vertex1);
+    QuadEdge::Face *bottom = bfE->Left();
+    auto rfE = cell_->makeFaceEdge(bottom, vertex5, vertex2);
+    auto fE = cell_->makeFaceEdge(right, vertex7, vertex4);
+    auto tE = cell_->makeFaceEdge(fE->Left(), vertex8, vertex3);
 
     Visual::Color vColor(0, 151, 255, 255);
 
@@ -1116,14 +1134,20 @@ void Polytope_3r::Initialize(const Point_3f &min, const Point_3f &max) {
         auto fan_middle = faceEdges.next()->Org()->pos;
         auto fan_last = faceEdges.next()->Org()->pos;
         Triangle_3r tri0(fan_pivot, fan_middle, fan_last);
-        std::cout << tri0 << "\n";
+        auto v0 = *fan_middle-*fan_pivot;
+        auto v1 = *fan_last-*fan_pivot;
+        auto norm = Cross(v0, v1);
+        std::cout << tri0 << "\n" << norm << "\n";
         std::cout << std::endl;
         SigPushVisualTriangle_3r(tri0, pVt);
         while ((e = faceEdges.next()) != 0) {
             fan_middle = fan_last;
             fan_last = e->Org()->pos;
             Triangle_3r tri(fan_pivot, fan_middle, fan_last);
-            std::cout << tri  << "\n";
+            v0 = *fan_middle-*fan_pivot;
+            v1 = *fan_last-*fan_pivot;
+            norm = Cross(v0, v1);
+            std::cout << tri0 << "\n" << norm << "\n";
             std::cout << std::endl;
             SigPushVisualTriangle_3r(tri, pVt);
         }
