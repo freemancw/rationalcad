@@ -388,7 +388,6 @@ class FaceEdgeIterator {
 public:
 
     FaceEdgeIterator(Face *face) {
-
         start = face->getEdge();
         edge  = start;
     }

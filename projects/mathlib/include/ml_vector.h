@@ -16,7 +16,7 @@
 /*!
  * @brief Integer, floating-point, and rational vector types for 2D and 3D.
  * @author Clinton Freeman <admin@freemancw.com>
- * @date 12/26/2012
+ * @date 2012-12-26
  */
 
 #ifndef RC_ML_VECTOR_H

@@ -15,7 +15,7 @@
 
 /*!
  * @author Clinton Freeman <admin@freemancw.com>
- * @date 04/22/2013
+ * @date 2013-04-22
  */
 
 // Qt

@@ -99,4 +99,5 @@ HEADERS += \
     include/ml_triangle.h \
     include/ml_cone.h \
     include/ml_quadrilateral.h \
-    include/ml_polytope.h
+    include/ml_polytope.h \
+    include/ml_quadedge.h

@@ -1070,7 +1070,6 @@ void Polytope_3r::Initialize(const Point_3f &min, const Point_3f &max) {
     QuadEdge::Face *left  = edge1->Left();
     QuadEdge::Face *right = edge1->Right();
 
-    // drop in eight vertices along the initial edge
     QuadEdge::Vertex *vertex2 = cell_->makeVertexEdge(vertex1, left, right)->Dest();
     QuadEdge::Vertex *vertex3 = cell_->makeVertexEdge(vertex2, left, right)->Dest();
     QuadEdge::Vertex *vertex4 = cell_->makeVertexEdge(vertex3, left, right)->Dest();
@@ -1081,31 +1080,70 @@ void Polytope_3r::Initialize(const Point_3f &min, const Point_3f &max) {
 
     vertex1->pos = std::make_shared<Point_3r>(0, 0, 0);
     vertex2->pos = std::make_shared<Point_3r>(8, 0, 0);
-    vertex3->pos = std::make_shared<Point_3r>(8, 8, 0);
-    vertex4->pos = std::make_shared<Point_3r>(0, 8, 0);
+    vertex3->pos = std::make_shared<Point_3r>(8, 0, 8);
+    vertex4->pos = std::make_shared<Point_3r>(8, 8, 8);
+    vertex5->pos = std::make_shared<Point_3r>(8, 8, 0);
+    vertex6->pos = std::make_shared<Point_3r>(0, 8, 0);
+    vertex7->pos = std::make_shared<Point_3r>(0, 8, 8);
+    vertex8->pos = std::make_shared<Point_3r>(0, 0, 8);
+
+    // construct the bottom face
+    auto bfE = cell_->makeFaceEdge(left, vertex1, vertex6);
+    QuadEdge::Face *bottom = bfE->Right();
+    auto rfE = cell_->makeFaceEdge(bottom, vertex2, vertex5);
+    auto fE = cell_->makeFaceEdge(right, vertex4, vertex7);
+    auto tE = cell_->makeFaceEdge(fE->Right(), vertex8, vertex3);
+
+    Visual::Color vColor(0, 151, 255, 255);
+
+    QuadEdge::CellVertexIterator cellVerts(cell_);
+    QuadEdge::Vertex *v;
+    while ((v = cellVerts.next()) != 0) {
+        SigRegisterPoint_3r(*v->pos);
+        SigPushVisualPoint_3r(*v->pos, Visual::Point(vColor));
+    }
+
+    Visual::Color fColor(200, 200, 200, 255);
+    Visual::Triangle pVt;
+    pVt.set_diffuse(fColor);
+
+    QuadEdge::CellFaceIterator cellFaces(cell_);
+    QuadEdge::Face *f;
+    while ((f = cellFaces.next()) != 0) {
+        QuadEdge::FaceEdgeIterator faceEdges(f);
+        QuadEdge::Edge *e;
+        auto fan_pivot = faceEdges.next()->Org()->pos;
+        auto fan_middle = faceEdges.next()->Org()->pos;
+        auto fan_last = faceEdges.next()->Org()->pos;
+        Triangle_3r tri0(fan_pivot, fan_middle, fan_last);
+        std::cout << tri0 << "\n";
+        std::cout << std::endl;
+        SigPushVisualTriangle_3r(tri0, pVt);
+        while ((e = faceEdges.next()) != 0) {
+            fan_middle = fan_last;
+            fan_last = e->Org()->pos;
+            Triangle_3r tri(fan_pivot, fan_middle, fan_last);
+            std::cout << tri  << "\n";
+            std::cout << std::endl;
+            SigPushVisualTriangle_3r(tri, pVt);
+        }
+    }
+
+
+    /*
+    QuadEdge::Vertex *vertex5 = cell_->makeVertexEdge(vertex4, left, right)->Dest();
+    QuadEdge::Vertex *vertex6 = cell_->makeVertexEdge(vertex5, left, right)->Dest();
+    QuadEdge::Vertex *vertex7 = cell_->makeVertexEdge(vertex6, left, right)->Dest();
+    QuadEdge::Vertex *vertex8 = cell_->makeVertexEdge(vertex7, left, right)->Dest();
+    */
+
+    /*
     vertex5->pos = std::make_shared<Point_3r>(0, 0, 8);
     vertex6->pos = std::make_shared<Point_3r>(8, 0, 8);
     vertex7->pos = std::make_shared<Point_3r>(8, 8, 8);
     vertex8->pos = std::make_shared<Point_3r>(0, 8, 8);
+    */
 
-    SigRegisterPoint_3r(*vertex1->pos);
-    SigRegisterPoint_3r(*vertex2->pos);
-    SigRegisterPoint_3r(*vertex3->pos);
-    SigRegisterPoint_3r(*vertex4->pos);
-    SigRegisterPoint_3r(*vertex5->pos);
-    SigRegisterPoint_3r(*vertex6->pos);
-    SigRegisterPoint_3r(*vertex7->pos);
-    SigRegisterPoint_3r(*vertex8->pos);
-
-    Visual::Color red(0, 151, 255, 255);
-    SigPushVisualPoint_3r(*vertex1->pos, Visual::Point(red));
-    SigPushVisualPoint_3r(*vertex2->pos, Visual::Point(red));
-    SigPushVisualPoint_3r(*vertex3->pos, Visual::Point(red));
-    SigPushVisualPoint_3r(*vertex4->pos, Visual::Point(red));
-    SigPushVisualPoint_3r(*vertex5->pos, Visual::Point(red));
-    SigPushVisualPoint_3r(*vertex6->pos, Visual::Point(red));
-    SigPushVisualPoint_3r(*vertex7->pos, Visual::Point(red));
-    SigPushVisualPoint_3r(*vertex8->pos, Visual::Point(red));
 
     /*
     Triangle_3r pTri0(pPt0, pPt1, pPt2);
@@ -1131,16 +1169,6 @@ void Polytope_3r::Initialize(const Point_3f &min, const Point_3f &max) {
 
 
 /*
-    // create vertices
-    vertices_.push_back(std::make_shared<Point_3r>(0, 0, 0));
-    vertices_.push_back(std::make_shared<Point_3r>(8, 0, 0));
-    vertices_.push_back(std::make_shared<Point_3r>(8, 8, 0));
-    vertices_.push_back(std::make_shared<Point_3r>(0, 8, 0));
-    vertices_.push_back(std::make_shared<Point_3r>(0, 0, 8));
-    vertices_.push_back(std::make_shared<Point_3r>(8, 0, 8));
-    vertices_.push_back(std::make_shared<Point_3r>(8, 8, 8));
-    vertices_.push_back(std::make_shared<Point_3r>(0, 8, 8));
-
     // create edges
     edges_.push_back(Segment_3r(vertices_[0], vertices_[1]));
     edges_.push_back(Segment_3r(vertices_[1], vertices_[2]));

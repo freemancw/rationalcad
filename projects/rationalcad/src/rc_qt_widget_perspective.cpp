@@ -59,7 +59,7 @@ void PerspectiveWidget::initializeGL() {
     initializeOpenGLFunctions();
 
     glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
-    glDisable(GL_CULL_FACE);
+    //glDisable(GL_CULL_FACE);
     glEnable(GL_MULTISAMPLE);
     glEnable(GL_PROGRAM_POINT_SIZE);
     glEnable(GL_DEPTH_BUFFER_BIT);
@@ -121,6 +121,7 @@ void PerspectiveWidget::paintEvent(QPaintEvent *event) {
     shader_program_->bind();
 
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     handleInput();
