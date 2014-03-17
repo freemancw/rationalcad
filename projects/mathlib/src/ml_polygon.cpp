@@ -48,7 +48,7 @@ void Polygon_2r::AppendVertexToBoundary(const Point_2r& v) {
 void Polygon_2r::AppendVertexToBoundary(SharedPoint_2r v) {
     boundary_.AppendVertex(v);
 
-    if(boundary_.vertices().size() > 2) {
+    if (boundary_.vertices().size() > 2) {
         Triangle_2r t(std::prev(end(boundary_.vertices_), 1)->vertex_sptr(),
                       begin(boundary_.vertices_)->vertex_sptr(),
                       std::prev(end(boundary_.vertices_), 2)->vertex_sptr());
