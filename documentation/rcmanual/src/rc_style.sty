@@ -1,0 +1,218 @@
+%==============================================================================
+% @author Clinton Freeman
+% @date 12/18/2013
+%==============================================================================
+
+% Package listing =============================================================
+
+\usepackage{tabularx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage[svgnames]{xcolor}
+\usepackage{unicode-math}
+\setmainfont[Ligatures=TeX,Scale=1.1]{Adobe Caslon Pro}
+%\setmainfont[Ligatures=TeX,Scale=1.1]{Garamond Premier Pro}
+%\setmainfont[Ligatures=TeX,Scale=1.0]{GriffosFont Medium}
+%\setmainfont[Ligatures=TeX,Scale=1.0]{IM FELL English PRO}
+%\setsansfont{Helvetica Neue LT Std 47}
+\setsansfont{Frutiger LT Std}
+%\setmainfont{Adobe Caslon Pro}
+%\setmainfont{Bembo Std}
+%\setmathfont{Latin Modern}
+%\setmainfont{Cambria}
+%\setmathfont{Cambria Math}
+%\setmainfont{Fournier MT Std}
+%\usepackage{fontspec}
+%\setmainfont[Ligatures=TeX,Scale=1.05]{Times Europa LT Std}
+%\setmainfont[Ligatures=TeX,Scale=1.0]{Garamond Premier Pro}
+%\setmainfont[Ligatures=TeX,Scale=1.1]{Fournier MT Std}
+%\setmainfont[Ligatures=TeX,Scale=1.1]{ITC Bookman Std}
+%\setmainfont[Ligatures=TeX,Scale=1.1]{ITC Garamond Handtooled Std}
+\setmathfont{XITS Math}
+\setmathfont[range=\mathbb]{Linux Libertine}
+\usepackage[linktocpage=true, colorlinks=true, linkcolor=DodgerBlue,
+citecolor=DodgerBlue]{hyperref}
+\usepackage{tikz}
+\usepackage{calc}
+\usepackage[framemethod=tikz]{mdframed}
+\usepackage{xfrac}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage{listings} 
+\usepackage{tabularx}
+\usepackage{etoolbox}
+\usepackage{lettrine}
+\usepackage{yfonts}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+\epigraphfontsize{\small\itshape}
+\setlength\epigraphwidth{8cm}
+\setlength\epigraphrule{0pt}
+
+\usetikzlibrary{calc, decorations.pathmorphing, shapes, arrows.new}
+
+\linespread{1.25}
+
+%\usepackage[T1]{fontenc}
+%\usepackage{lmodern}
+%\usepackage{fontspec}
+%\setmainfont{Fournier MT Std}
+%\setmainfont{Garamond Premier Pro}
+%\setmainfont{Helvetica Neue LT Std 33}
+%\setmainfont{ITC New Baskerville Std}
+%\usepackage{newtxtext,newtxmath}
+%\usepackage{mathptmx}
+%\usepackage{times}
+%\usepackage[garamond]{mathdesign}
+
+\definecolor{answerColor}{RGB}{50, 50, 50}
+\mdfdefinestyle{answer} {
+	backgroundcolor = white,
+	linecolor = white,
+	%skipabove = 8px,
+	%skipbelow = 8px,
+	%splittopskip = 22px,
+	%splitbottomskip = \baselineskip,
+	innertopmargin = 1em,
+	innerbottommargin = 1em,
+	innerrightmargin = 1em,
+	innerleftmargin = 1em
+}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+\newtheorem{lemma}{Lemma}
+\newtheorem{invariant}{Invariant}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+%\newenvironment{definition}[1][Definition.]{\begin{mdframed}[linecolor=white]\begin{trivlist}
+%\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}\end{mdframed}}
+ 
+%\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+%\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+\newcommand{\term}[1]{\textit{\textbf{#1}}}
+
+\newcommand{\inthull}[1]{\textit{IH}(#1)}
+\newcommand{\angletuple}[1]{\langle #1 \rangle}
+\newcommand{\parentuple}[1]{(#1)}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\ceiling}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\ttfcn}[2]{\texttt{#1}\left(#2\right)}
+\newcommand{\fcnsign}[1]{\ttfcn{sign}{#1}}
+\newcommand{\fcnccw}[1]{\ttfcn{ccw}{#1}}
+\newcommand{\detrm}[1]{\begin{vmatrix}#1\end{vmatrix}}
+
+\newcommand{\tightoverset}[2]{
+    \mathop{#2}\limits^{\vbox to -.8ex{\kern-0.7ex\hbox{$#1$}\vss}}
+}
+
+\newlength{\mOLineLength}
+\newcommand{\mOLine}[1]{
+    \tightoverset{
+    \setlength{\mOLineLength}{\widthof{#1}}
+    \begin{tikzpicture}
+        \draw [-to new, arrow head = 1.6pt, line width=0.5pt] (0, 0) --
+        +(0.8\mOLineLength, 0);
+    \end{tikzpicture}
+    }{\mathrm{#1}}
+}
+
+\newcommand{\mRay}[1]{
+    \tightoverset{
+    \setlength{\mOLineLength}{\widthof{#1}}
+    \begin{tikzpicture}
+        \draw [* new-to new, arrow head = 1.6pt, line width=0.5pt]
+        (0, 0) -- +(0.8\mOLineLength, 0);
+        %\filldraw (0,0) circle (0.6pt);
+        %\draw [-angle 45 new, arrow head = 2.75pt, line width=0.4pt] (0, 0) --
+        %+(0.8\mOLineLength, 0);
+    \end{tikzpicture}
+    }{\mathrm{#1}}
+}
+
+\newcommand{\mSeg}[1]{
+    \tightoverset{
+    \setlength{\mOLineLength}{\widthof{#1}}
+    \begin{tikzpicture}
+        \draw [* new-* new, arrow head = 1.6pt] (0, 0) -- +(0.8\mOLineLength,
+        0);
+    \end{tikzpicture}
+    }{\mathrm{#1}}
+}
+
+\newcommand{\mR}[1]{\mathbb{R}^{#1}}
+\newcommand{\mZ}[1]{\mathbb{Z}^{#1}}
+\newcommand{\mPoint}[1]{\mathrm{#1}}
+\newcommand{\mPt}[1]{\mPoint{#1}}
+\newcommand{\mVector}[1]{\mathbf{#1}}
+\newcommand{\mVc}[1]{\mVector{#1}}
+%\newcommand{\mSeg}[1]{\overline{\mathrm{#1}}}
+%\newcommand{\mRay}[1]{\tightoverset{\rightharpoonup}{\mathrm{#1}}}
+%\newcommand{\mRay}[1]{\tightoverset{\mapsto}{\mathrm{#1}}}
+%\newcommand{\mOLine}[1]{\tightoverset{\testarrow}{\mathrm{#1}}}
+\newcommand{\mULine}[1]{\tightoverset{\leftrightarrow}{\mathrm{#1}}}
+\newcommand{\mMatrix}[1]{\mathbf{#1}}
+\newcommand{\mMt}[1]{\mMatrix{#1}}
+\newcommand{\mPlane}[1]{\mathrm{#1}}
+\newcommand{\mPolygon}[1]{\mathrm{#1}}
+\newcommand{\mPolytope}[1]{\mathrm{#1}}
+\newcommand{\mSet}[1]{\mathrm{#1}}
+\newcommand{\mField}[1]{\mathrm{#1}}
+\newcommand{\mCompound}[1]{\mathrm{#1}}
+%\newcommand{\mPlane}[1]{#1}
+\newcommand{\mIntHull}[1]{\text{IH}(#1)}
+\newcommand{\mBoundary}[1]{\partial #1}
+\newcommand{\mTernary}[3]{\left( #1 \right) \text{?} #2 \text{:} #3}
+
+
+% Bigger margins ==============================================================
+
+\setlrmarginsandblock{1in}{1in}{*}
+\setulmarginsandblock{1.25in}{1.25in}{*}
+\checkandfixthelayout
+
+\makeatletter
+\makechapterstyle{freeman} {
+	\chapterstyle{default}
+	\renewcommand*{\chapterheadstart}{}
+	\renewcommand*{\printchaptername}{} 
+	\renewcommand*{\chapternamenum}{}
+	%\renewcommand*{\printchapternum}{\Huge\textsf{\thechapter}}
+	\renewcommand*{\printchapternum}{\Huge\textbf{\thechapter}}
+	\renewcommand*{\afterchapternum}{\hspace{.5em}}
+	
+% 	\renewcommand*{\printchaptertitle}[1] {
+% 		\raggedright\Huge\textsf{##1}
+% 	}
+
+	\renewcommand*{\printchaptertitle}[1] {
+ 		\raggedright\Huge{\textbf{\MakeUppercase{##1}}}
+ 	}
+	
+	\renewcommand*{\afterchaptertitle} {
+  		\vskip\onelineskip \hrule height 3pt
+  		\vskip\onelineskip } }%\includegraphics[width=\textwidth,
+  		% page=1]{figs/quote}
+\makeatother
+
+\setsecheadstyle{\LARGE\scshape\bfseries\raggedright\MakeLowercase}%\color{DodgerBlue}
+\setsecnumformat{\textnormal{\textbf{{\small \csname the#1\endcsname}}}\quad}
+\setsubsecheadstyle{\large\scshape\bfseries\raggedright\MakeLowercase}
+%\renewcommand{\thesection}{derp}
+%\setsubsubsecheadstyle{\normalsize\raggedright}
+%\setbeforesecskip{-1.5ex plus -.5ex minus -.2ex}
+%\setaftersecskip{1.3ex plus .2ex}
+%\setbeforesubsecskip{-1.25ex plus -.5ex minus -.2ex}
+%\setaftersubsecskip{1ex plus .2ex}
+
+%\renewcommand{\chapnumfont}{\chaptitlefont}    % To harmonise the font sizes
+%\renewcommand{\chapnamefont}{\chaptitlefont}   % idem
+%\renewcommand{\afterchapternum}{: }        % To set the line
+%\def\afterchapternum{}
+
+%==============================================================================
+

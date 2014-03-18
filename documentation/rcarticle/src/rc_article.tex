@@ -1,0 +1,163 @@
+%==============================================================================
+% @author Clinton Freeman
+% @date 12/18/2013
+%==============================================================================
+
+\documentclass{article}
+
+% Package listing =============================================================
+
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{lmodern}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+%\usepackage{unicode-math} 
+%\setmainfont[Ligatures=TeX,Scale=1.1]{Adobe Jenson Pro}
+%\setsansfont{Frutiger LT Std}
+%\setmathfont{XITS Math} 
+%\setmathfont[range=\mathbb]{Linux Libertine}
+\usepackage{hyperref}
+%\usepackage{tabularx}
+%\usepackage[svgnames]{xcolor}
+
+%\linespread{1.25}
+
+% \newtheorem{theorem}{Theorem}
+% \newtheorem{corollary}{Corollary}
+% \newtheorem{lemma}{Lemma}
+% \newtheorem{invariant}{Invariant}
+% \theoremstyle{definition}
+% \newtheorem{definition}{Definition}
+
+%\newcommand{\term}[1]{\textit{\textbf{#1}}}
+% 
+% \newcommand{\inthull}[1]{\textit{IH}(#1)}
+% \newcommand{\angletuple}[1]{\langle #1 \rangle}
+% \newcommand{\parentuple}[1]{(#1)}
+% \newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+% \newcommand{\ceiling}[1]{\left\lceil #1 \right\rceil}
+% \newcommand{\ttfcn}[2]{\texttt{#1}\left(#2\right)}
+% \newcommand{\fcnsign}[1]{\ttfcn{sign}{#1}}
+% \newcommand{\fcnccw}[1]{\ttfcn{ccw}{#1}}
+% \newcommand{\detrm}[1]{\begin{vmatrix}#1\end{vmatrix}}
+
+% \newcommand{\tightoverset}[2]{
+%     \mathop{#2}\limits^{\vbox to -.8ex{\kern-0.7ex\hbox{$#1$}\vss}}
+% }
+% 
+% \newlength{\mOLineLength}
+% \newcommand{\mOLine}[1]{
+%     \tightoverset{
+%     \setlength{\mOLineLength}{\widthof{#1}}
+%     \begin{tikzpicture}
+%         \draw [-to new, arrow head = 1.6pt, line width=0.5pt] (0, 0) --
+%         +(0.8\mOLineLength, 0);
+%     \end{tikzpicture}
+%     }{\mathrm{#1}}
+% }
+% 
+% \newcommand{\mRay}[1]{
+%     \tightoverset{
+%     \setlength{\mOLineLength}{\widthof{#1}}
+%     \begin{tikzpicture}
+%         \draw [* new-to new, arrow head = 1.6pt, line width=0.5pt]
+%         (0, 0) -- +(0.8\mOLineLength, 0);
+%         %\filldraw (0,0) circle (0.6pt);
+%         %\draw [-angle 45 new, arrow head = 2.75pt, line width=0.4pt] (0, 0) --
+%         %+(0.8\mOLineLength, 0);
+%     \end{tikzpicture}
+%     }{\mathrm{#1}}
+% }
+% 
+% \newcommand{\mSeg}[1]{
+%     \tightoverset{
+%     \setlength{\mOLineLength}{\widthof{#1}}
+%     \begin{tikzpicture}
+%         \draw [* new-* new, arrow head = 1.6pt] (0, 0) -- +(0.8\mOLineLength,
+%         0);
+%     \end{tikzpicture}
+%     }{\mathrm{#1}}
+% }
+% 
+\newcommand{\mR}[1]{\mathbb{R}^{#1}}
+\newcommand{\mZ}[1]{\mathbb{Z}^{#1}}
+\newcommand{\mPoint}[1]{\mathrm{#1}}
+\newcommand{\mPt}[1]{\mPoint{#1}}
+\newcommand{\mVector}[1]{\mathbf{#1}}
+\newcommand{\mVc}[1]{\mVector{#1}}
+%\newcommand{\mSeg}[1]{\overline{\mathrm{#1}}}
+%\newcommand{\mRay}[1]{\tightoverset{\rightharpoonup}{\mathrm{#1}}}
+%\newcommand{\mRay}[1]{\tightoverset{\mapsto}{\mathrm{#1}}}
+%\newcommand{\mOLine}[1]{\tightoverset{\testarrow}{\mathrm{#1}}}
+%\newcommand{\mULine}[1]{\tightoverset{\leftrightarrow}{\mathrm{#1}}}
+\newcommand{\mMatrix}[1]{\mathbf{#1}}
+\newcommand{\mMt}[1]{\mMatrix{#1}}
+\newcommand{\mPlane}[1]{\mathrm{#1}}
+\newcommand{\mPolygon}[1]{\mathrm{#1}}
+\newcommand{\mPolytope}[1]{\mathrm{#1}}
+\newcommand{\mSet}[1]{\mathrm{#1}}
+\newcommand{\mField}[1]{\mathrm{#1}}
+\newcommand{\mCompound}[1]{\mathrm{#1}}
+
+%==============================================================================
+
+\begin{document}
+
+%\title{Computing the integer hull of a simplicial cone in three dimensions}
+\title{Computing a unimodular basis containing a given vector}
+\author{Clinton Freeman}
+
+\maketitle
+
+\section{Introduction}
+
+This document describes an algorithm that solves the following problem:
+given a vector $\mVc{v} \in \mZ{3}$, compute an unimodular basis $\mMt{B}$ for
+$\mZ{3}$ that has $\mVc{v}$ as one of the three basis vectors. In order to
+precisely specify the input, output, and running time of the algorithm, I
+provide a good deal of background material on linear algebra, models of
+computation, and the computational complexity of basic arithmetic and algebraic
+operations. 
+
+\section{Background}
+
+\subsection{Model of computation}
+
+\subsection{Linear algebra}
+
+\section{Algorithm description and analysis}
+
+\begin{algorithm}
+\caption{Constructing a unimodular basis that contains a specified vector}
+\label{alg:UnimodularBasisWithVec}
+\begin{algorithmic}[1]
+    \vspace{0.75em}
+    \Require{Integer vector $\mVector{v} \in \mR{3}$} 
+    \Ensure{Unimodular basis $\mMatrix{B}$}
+    \vspace{0.75em}
+    \Procedure{UnimodularBasisWithVec3}{$\mVector{v}$}
+    \State $\mMatrix{B} := \textsc{identity}$
+    %\State $\mMatrix{B}_{i,i} := \mTernary{v_i < 0}{-1}{+1}$ 
+    \While{$\mVector{v}$ is not a row of $\mMatrix{B}$}
+        \State $\mVector{v}^\prime := \mVector{v} \cdot \mMatrix{B}^{-1}$
+        \State $\mVector{v}^\prime_{\text{min}} :=
+        \min(\mVector{v}^\prime)$, $\mVector{v}^\prime_{\text{mid}} :=
+        \text{mid}(\mVector{v}^\prime)$, $\mVector{v}^\prime_{\text{max}} :=
+        \max(\mVector{v}^\prime)$
+        \State $\mMatrix{B}_{\text{min}, i} := \mMatrix{B}_{\text{min}, i} +
+        \mMatrix{B}_{\text{mid}, i}$
+        \State $\mMatrix{B}_{\text{min}, i} := \mMatrix{B}_{\text{min}, i} +
+        \mMatrix{B}_{\text{max}, i}$
+        \State $\mMatrix{B}_{\text{mid}, i} := \mMatrix{B}_{\text{mid}, i} +
+        \mMatrix{B}_{\text{max}, i}$
+    \EndWhile
+    \State \Return $\mMatrix{B}$
+    \EndProcedure 
+\end{algorithmic}
+\end{algorithm}
+
+\end{document}
