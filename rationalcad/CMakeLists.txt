@@ -3,13 +3,21 @@
 # @date 2014-03-18
 #==============================================================================
 
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_PREFIX_PATH "" CACHE PATH "herp")
+
+find_package(Qt5Core)
+find_package(Qt5Widgets)
+find_package(Qt5Gui)
+find_package(Qt5OpenGL)
+
 include_directories(${RATIONALCAD_SOURCE_DIR}/logging)
 include_directories(${RATIONALCAD_SOURCE_DIR}/mathlib)
 
 link_directories(${RATIONALCAD_BINARY_DIR}/logging)
 link_directories(${RATIONALCAD_BINARY_DIR}/mathlib)
 
-add_executable(rcad 
+add_executable(rationalcad 
 	rc_config.cpp
 	rc_grid.cpp
 	rc_logger.cpp
@@ -23,4 +31,5 @@ add_executable(rcad
 	rc_scene.cpp
 )
 
-target_link_libraries(rcad logging mathlib)
+qt5_use_modules(rationalcad Core Gui Widgets OpenGL)
+target_link_libraries(rationalcad logging mathlib)
