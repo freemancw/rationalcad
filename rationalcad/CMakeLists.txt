@@ -4,7 +4,10 @@
 #==============================================================================
 
 set(CMAKE_AUTOMOC ON)
-set(CMAKE_PREFIX_PATH "" CACHE PATH "herp")
+
+set(QT_INSTALL_DIR "" CACHE PATH "Path to Qt installation directory.")
+set(WINSDK_DIR "" CACHE PATH "Path to Windows SDK directory.")
+set(CMAKE_PREFIX_PATH ${QT_INSTALL_DIR}; ${WINSDK_DIR})
 
 find_package(Qt5Core)
 find_package(Qt5Widgets)
