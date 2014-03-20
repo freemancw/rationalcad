@@ -27,6 +27,9 @@ link_directories(${RATIONALCAD_BINARY_DIR}/mathlib)
 # 	forms/rc_window_main.ui
 # )
 
+#file(GLOB_RECURSE UI_FILES *.ui)
+
+
 qt5_wrap_ui(UI_HEADERS 
 	forms/rc_dialog_about.ui
  	forms/rc_dialog_preferences.ui
