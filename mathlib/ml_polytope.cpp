@@ -974,13 +974,13 @@ Matrix_3x3i UnimodularBasisForVectorItr(const Vector_3i& v) {
             return lhs.first < rhs.first;
         });
 
-        basis(vPrimeElts[0].second, 0) += basis(vPrimeElts[2].second, 0);
-        basis(vPrimeElts[0].second, 1) += basis(vPrimeElts[2].second, 1);
-        basis(vPrimeElts[0].second, 2) += basis(vPrimeElts[2].second, 2);
+//        basis(vPrimeElts[0].second, 0) += basis(vPrimeElts[2].second, 0);
+//        basis(vPrimeElts[0].second, 1) += basis(vPrimeElts[2].second, 1);
+//        basis(vPrimeElts[0].second, 2) += basis(vPrimeElts[2].second, 2);
 
-        basis(vPrimeElts[0].second, 0) += basis(vPrimeElts[1].second, 0);
-        basis(vPrimeElts[0].second, 1) += basis(vPrimeElts[1].second, 1);
-        basis(vPrimeElts[0].second, 2) += basis(vPrimeElts[1].second, 2);
+//        basis(vPrimeElts[0].second, 0) += basis(vPrimeElts[1].second, 0);
+//        basis(vPrimeElts[0].second, 1) += basis(vPrimeElts[1].second, 1);
+//        basis(vPrimeElts[0].second, 2) += basis(vPrimeElts[1].second, 2);
 
         basis(vPrimeElts[1].second, 0) += basis(vPrimeElts[2].second, 0);
         basis(vPrimeElts[1].second, 1) += basis(vPrimeElts[2].second, 1);
@@ -1004,6 +1004,8 @@ Matrix_3x3i UnimodularBasisForVectorItr(const Vector_3i& v) {
     assert(GCD(RowVec(basis, 0)) == 1);
     assert(GCD(RowVec(basis, 1)) == 1);
     assert(GCD(RowVec(basis, 2)) == 1);
+
+    // two rows must be bounded by input length
 
     return basis;
 }
@@ -1036,10 +1038,20 @@ Matrix_2x2i UnimodularBasisForVectorItr(const Vector_2i& v) {
 }
 
 Matrix_3x3i UnimodularBasisForPlane(const Vector_3i& u, const Vector_3i& v) {
+    std::cout << "Starting UnimodularBasisForPlane with u = " << u << " and v = " << v << std::endl;
+
+    // bring u into a unimodular basis
     auto basisU = UnimodularBasisForVectorItr(u);
-    auto vPrime = u*Inverse(basisU);
+    std::cout << "UnimodularBasisForVectorItr produced basisU = \n" << basisU << std::endl;
+
+    // rewrite v in terms of u's basis
+    auto vPrime = v*Inverse(basisU);
+    std::cout << "vPrime " << vPrime << std::endl;
+
+    // bring v into a unimodular basis
     auto basisV = UnimodularBasisForVectorItr(Vector_2i(vPrime.y(),
                                                         vPrime.z()));
+    std::cout << "UnimodularBasisForVectorItr produced basisV = \n" << basisV << std::endl;
 
     return Matrix_3x3i(1, 0, 0,
                        0, basisV(0,0), basisV(0,1),
@@ -1275,6 +1287,8 @@ void Polytope_3r::Update() {
     // compute a basis in which L is the x axis and P is parallel to the
     // xy coordinate plane
     auto basisFinal = UnimodularBasisForPlane(linevecL, spanvecP0);
+    std::cout << "UnimodularBasisForPlane produced \n" << basisFinal << std::endl;
+
     auto inverseBasis = Inverse(basisFinal);
 
     // rewrite P's points

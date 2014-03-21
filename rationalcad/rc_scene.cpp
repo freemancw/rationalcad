@@ -302,7 +302,7 @@ void SceneObserver::onUpdateNewPolytope(const QVector2D& cur) {
 void SceneObserver::onEndCreatePolytope() {
     qDebug() << "SceneObserver EndCreatePolytope";
     ConfigManager::get().set_input_state(CREATE_POLYTOPE);
-    //SelectedPolytope_3()->Update();
+    SelectedPolytope_3()->Update();
 }
 
 //=============================================================================
