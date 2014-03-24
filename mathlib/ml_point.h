@@ -752,7 +752,7 @@ inline bool operator!=(const Point_3f& lhs, const Point_3f& rhs) {
 }
 
 inline std::ostream& operator<<(std::ostream& o, const Point_3f& p) {
-    o << to_string(p);
+    return o << to_string(p);
 }
 
 //! @brief Represents this point using parentheses (x, y).

@@ -1092,7 +1092,7 @@ inline const float Vector_3f::y() const {
     return elements_[1];
 }
 inline const float Vector_3f::z() const {
-    return elements_[1];
+    return elements_[2];
 }
 inline const std::array<float, 3>& Vector_3f::elements() const {
     return elements_;
@@ -1104,7 +1104,7 @@ inline void Vector_3f::set_y(const float y) {
     elements_[1] = y;
 }
 inline void Vector_3f::set_z(const float z) {
-    elements_[1] = z;
+    elements_[2] = z;
 }
 inline void Vector_3f::set_elements(const std::array<float, 3>& elements) {
     elements_ = elements;

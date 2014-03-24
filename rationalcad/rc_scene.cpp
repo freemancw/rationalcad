@@ -72,9 +72,21 @@ void SceneObserver::GenerateVboTriangles() {
     QVector<GL::Vertex> triangles;
     for (auto i = viz_triangles_.begin(); i != viz_triangles_.end(); ++i) {
         auto current_vt = i.value().top();
-        GL::Vertex a(approx_points_.value(i.key().at(0))->approx());
-        GL::Vertex b(approx_points_.value(i.key().at(1))->approx());
-        GL::Vertex c(approx_points_.value(i.key().at(2))->approx());
+        Point_3f ap = approx_points_.value(i.key().at(0))->approx();
+        Point_3f bp = approx_points_.value(i.key().at(1))->approx();
+        Point_3f cp = approx_points_.value(i.key().at(2))->approx();
+        Vector_3f v0 = bp-ap;
+        Vector_3f v1 = cp-ap;
+        Vector_3f n = Cross(v0, v1);
+        std::cout << "ap = " << ap
+                  << " bp = " << bp
+                  << " cp = " << cp
+                  << " v0 = " << v0
+                  << " v1 = " << v1
+                  << " norm = " << n << std::endl;
+        GL::Vertex a(ap);
+        GL::Vertex b(bp);
+        GL::Vertex c(cp);
         a.set_mat_ambient(current_vt.diffuse());
         b.set_mat_ambient(current_vt.diffuse());
         c.set_mat_ambient(current_vt.diffuse());
