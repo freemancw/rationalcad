@@ -3,7 +3,7 @@
 /*
  * Perspective fragment shader
  * @author Clinton Freeman <freeman@cs.unc.edu>
- * @date 03/30/2013
+ * @date 2013-03-30
  */
 
 // input: vertex attributes

@@ -15,7 +15,7 @@
 
 /*!
  * @author Clinton Freeman <admin@freemancw.com>
- * @date 01/13/2013
+ * @date 2013-01-13
  */
 
 // RationalCAD

@@ -1296,9 +1296,13 @@ void Polytope_3r::Update() {
     auto planeptP1Prime = std::make_shared<Point_3r>(*planeptP1*inverseBasis);
     auto planeptP2Prime = std::make_shared<Point_3r>(*planeptP2*inverseBasis);
 
+    std::cout << "planeptP0Prime: " << *planeptP0Prime << std::endl;
+    std::cout << "planeptP1Prime: " << *planeptP1Prime << std::endl;
+    std::cout << "planeptP2Prime: " << *planeptP2Prime << std::endl;
+
     // the z coordinate of all of P's points should be equal, but in general
     // will not be 0
-    assert(planeptP0Prime->z() == planeptP1Prime->z() == planeptP2Prime->z());
+    //assert(planeptP0Prime->z() == planeptP1Prime->z() == planeptP2Prime->z());
 
     // the z coordinate defines a line in the yz plane in the new space
     // we are concerned with grid points above this line
@@ -1308,6 +1312,10 @@ void Polytope_3r::Update() {
     auto planeptQ0Prime = std::make_shared<Point_3r>(*planeptQ0*inverseBasis);
     auto planeptQ1Prime = std::make_shared<Point_3r>(*planeptQ1*inverseBasis);
     auto planeptQ2Prime = std::make_shared<Point_3r>(*planeptQ2*inverseBasis);
+
+    std::cout << "planeptQ0Prime: " << *planeptQ0Prime << std::endl;
+    std::cout << "planeptQ1Prime: " << *planeptQ1Prime << std::endl;
+    std::cout << "planeptQ2Prime: " << *planeptQ2Prime << std::endl;
 
     // the projection of Q onto the yz plane should produce a second line
     // we are concerned with grid points below this line
