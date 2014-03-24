@@ -1062,16 +1062,14 @@ Matrix_3x3i UnimodularBasisForPlane(const Vector_3i& u, const Vector_3i& v) {
 // Polytope_3r
 //=============================================================================
 
-Polytope_3r::Polytope_3r() {
+Polytope_3r::Polytope_3r() {}
 
-}
-
-void Polytope_3r::Initialize(const Point_3f &min, const Point_3f &max) {
+void Polytope_3r::Initialize(const Point_3f& start, const Point_3f& cur) {
     cell_ = QuadEdge::Cell::make();
+    start_ = start;
 
     // grab the initial vertex
-    QuadEdge::Vertex *vertex1;
-    {
+    QuadEdge::Vertex *vertex1; {
         QuadEdge::CellVertexIterator iterator(cell_);
         vertex1 = iterator.next();
         assert(vertex1 != 0);
@@ -1090,23 +1088,12 @@ void Polytope_3r::Initialize(const Point_3f &min, const Point_3f &max) {
     QuadEdge::Vertex *vertex7 = cell_->makeVertexEdge(vertex6, left, right)->Dest();
     QuadEdge::Vertex *vertex8 = cell_->makeVertexEdge(vertex7, left, right)->Dest();
 
-    /*
-    vertex1->pos = std::make_shared<Point_3r>(0, 0, 0);
-    vertex2->pos = std::make_shared<Point_3r>(8, 0, 0);
-    vertex3->pos = std::make_shared<Point_3r>(8, 0, 8);
-    vertex4->pos = std::make_shared<Point_3r>(8, 8, 8);
-    vertex5->pos = std::make_shared<Point_3r>(8, 8, 0);
-    vertex6->pos = std::make_shared<Point_3r>(0, 8, 0);
-    vertex7->pos = std::make_shared<Point_3r>(0, 8, 8);
-    vertex8->pos = std::make_shared<Point_3r>(0, 0, 8);
-    */
-
-    float minX = std::min(min.x(), max.x());
-    float maxX = std::max(min.x(), max.x());
-    float minY = std::min(min.y(), max.y());
-    float maxY = std::max(min.y(), max.y());
-    float minZ = std::min(min.z(), max.z());
-    float maxZ = std::max(min.z(), max.z());
+    float minX = std::min(start.x(), cur.x());
+    float maxX = std::max(start.x(), cur.x());
+    float minY = std::min(start.y(), cur.y());
+    float maxY = std::max(start.y(), cur.y());
+    float minZ = std::min(start.z(), cur.z());
+    float maxZ = std::max(start.z(), cur.z());
 
     vertex1->pos = std::make_shared<Point_3r>(maxX, minY, minZ);
     vertex2->pos = std::make_shared<Point_3r>(minX, minY, minZ);
@@ -1164,64 +1151,58 @@ void Polytope_3r::Initialize(const Point_3f &min, const Point_3f &max) {
             SigPushVisualTriangle_3r(tri, pVt);
         }
     }
+}
 
+void Polytope_3r::Update(const Point_3f& cur) {
+    if (cur == start_) {
+        return;
+    }
 
-    /*
-    QuadEdge::Vertex *vertex5 = cell_->makeVertexEdge(vertex4, left, right)->Dest();
-    QuadEdge::Vertex *vertex6 = cell_->makeVertexEdge(vertex5, left, right)->Dest();
-    QuadEdge::Vertex *vertex7 = cell_->makeVertexEdge(vertex6, left, right)->Dest();
-    QuadEdge::Vertex *vertex8 = cell_->makeVertexEdge(vertex7, left, right)->Dest();
-    */
+    float minX = std::min(start_.x(), cur.x());
+    float maxX = std::max(start_.x(), cur.x());
+    float minY = std::min(start_.y(), cur.y());
+    float maxY = std::max(start_.y(), cur.y());
+    float minZ = std::min(start_.z(), cur.z());
+    float maxZ = std::max(start_.z(), cur.z());
 
-    /*
-    vertex5->pos = std::make_shared<Point_3r>(0, 0, 8);
-    vertex6->pos = std::make_shared<Point_3r>(8, 0, 8);
-    vertex7->pos = std::make_shared<Point_3r>(8, 8, 8);
-    vertex8->pos = std::make_shared<Point_3r>(0, 8, 8);
-    */
+    std::array<rational, 3> v1 = { maxX, minY, minZ };
+    std::array<rational, 3> v2 = { minX, minY, minZ };
+    std::array<rational, 3> v3 = { minX, minY, maxZ };
+    std::array<rational, 3> v4 = { minX, maxY, maxZ };
+    std::array<rational, 3> v5 = { minX, maxY, minZ };
+    std::array<rational, 3> v6 = { maxX, maxY, minZ };
+    std::array<rational, 3> v7 = { maxX, maxY, maxZ };
+    std::array<rational, 3> v8 = { maxX, minY, maxZ };
 
+    QuadEdge::CellVertexIterator cellVerts(cell_);
+    QuadEdge::Vertex *v;
 
-    /*
-    Triangle_3r pTri0(pPt0, pPt1, pPt2);
-    Triangle_3r pTri1(pPt0, pPt2, pPt3);
+    v = cellVerts.next();
+    v->pos->set_elements(v1);
+    v->pos->SigPositionChanged();
+    v = cellVerts.next();
+    v->pos->set_elements(v2);
+    v->pos->SigPositionChanged();
+    v = cellVerts.next();
+    v->pos->set_elements(v3);
+    v->pos->SigPositionChanged();
+    v = cellVerts.next();
+    v->pos->set_elements(v4);
+    v->pos->SigPositionChanged();
+    v = cellVerts.next();
+    v->pos->set_elements(v5);
+    v->pos->SigPositionChanged();
+    v = cellVerts.next();
+    v->pos->set_elements(v6);
+    v->pos->SigPositionChanged();
+    v = cellVerts.next();
+    v->pos->set_elements(v7);
+    v->pos->SigPositionChanged();
+    v = cellVerts.next();
+    v->pos->set_elements(v8);
+    v->pos->SigPositionChanged();
 
-    Visual::Triangle pVt;
-    pVt.set_diffuse(Visual::Color(50, 200, 200, 255));
-*/
-    /*
-    SigPushVisualTriangle_3r(pTri0, pVt);
-    SigPushVisualTriangle_3r(pTri1, pVt);
-    */
-
-
-    /*
-    QuadEdge::Face *front = cell->makeFaceEdge(left, vertex1, vertex4)->Right();
-    QuadEdge::Face *left  = cell->makeFaceEdge(, vertex1, vertex4)->Right();
-    QuadEdge::Face *front = cell->makeFaceEdge(right, vertex2, vertex7)->Right();
-
-    QuadEdge::Face *front  = cell->makeFaceEdge(left, vertex2, vertex4)->Right();
-    QuadEdge::Face *bottom = cell->makeFaceEdge(right, vertex1, vertex3)->Right();
-*/
-
-
-/*
-    // create edges
-    edges_.push_back(Segment_3r(vertices_[0], vertices_[1]));
-    edges_.push_back(Segment_3r(vertices_[1], vertices_[2]));
-    edges_.push_back(Segment_3r(vertices_[2], vertices_[3]));
-    edges_.push_back(Segment_3r(vertices_[3], vertices_[0]));
-
-    edges_.push_back(Segment_3r(vertices_[0], vertices_[4]));
-    edges_.push_back(Segment_3r(vertices_[1], vertices_[5]));
-    edges_.push_back(Segment_3r(vertices_[2], vertices_[6]));
-    edges_.push_back(Segment_3r(vertices_[3], vertices_[7]));
-
-    edges_.push_back(Segment_3r(vertices_[4], vertices_[5]));
-    edges_.push_back(Segment_3r(vertices_[5], vertices_[6]));
-    edges_.push_back(Segment_3r(vertices_[6], vertices_[7]));
-    edges_.push_back(Segment_3r(vertices_[7], vertices_[4]));
-
-*/
+    SigUpdate();
 }
 
 /*!
@@ -1243,7 +1224,7 @@ void Polytope_3r::Initialize(const Point_3f &min, const Point_3f &max) {
  * area, transformed back into the original space, will give the integer hull
  * of the original region.
  */
-void Polytope_3r::Update() {
+void ihull() {
 
     // create plane P from three rational points
     auto planeptP0 = std::make_shared<Point_3r>(1, 2, 0);

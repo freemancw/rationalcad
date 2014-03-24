@@ -84,8 +84,8 @@ public:
                                    Point_3f(cur.x(), cur.y(), 8));
     }
 
-    void Update() {
-        model_polytope_.Update();
+    void Update(const QVector2D& cur) {
+        model_polytope_.Update(Point_3f(cur.x(), cur.y(), 8));
     }
 
     void Select() override {}

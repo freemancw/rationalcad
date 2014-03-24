@@ -298,8 +298,8 @@ void OrthographicWidget::mousePressEvent(QMouseEvent *event) {
              * snapping is on.
              *
              */
-
-             create_polytope_pos = event->pos();
+            qDebug() << "mousePressEvent";
+            create_polytope_pos = event->pos();
 
             break;
         default:
@@ -331,6 +331,7 @@ void OrthographicWidget::mouseReleaseEvent(QMouseEvent *event) {
         switch (ConfigManager::get().input_state()) {
         case UPDATE_POLYTOPE:
             emit EndCreatePolytope();
+            ConfigManager::get().set_input_state(CREATE_POLYTOPE);
             break;
         default:
             break;
@@ -360,6 +361,7 @@ void OrthographicWidget::mouseMoveEvent(QMouseEvent *event) {
                     cur_world_snapped.y() != cpoly_world_snapped.y()) {
                     emit BeginCreatePolytope(cpoly_world_snapped,
                                              cur_world_snapped);
+                    ConfigManager::get().set_input_state(UPDATE_POLYTOPE);
                 }
             } else {
 

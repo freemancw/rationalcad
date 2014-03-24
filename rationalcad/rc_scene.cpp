@@ -291,18 +291,17 @@ void SceneObserver::onBeginCreatePolytope(const QVector2D& start,
                           QSharedPointer<ISceneObject>(new ScenePolytope_3()));
     SelectedPolytope_3()->AddObserver(this);
     SelectedPolytope_3()->Initialize(start, cur);
-
-    ConfigManager::get().set_input_state(UPDATE_POLYTOPE);
 }
 
 void SceneObserver::onUpdateNewPolytope(const QVector2D& cur) {
     qDebug() << "SceneObserver UpdateNewPolytope " << cur;
+    SelectedPolytope_3()->Update(cur);
 }
 
 void SceneObserver::onEndCreatePolytope() {
     qDebug() << "SceneObserver EndCreatePolytope";
-    ConfigManager::get().set_input_state(CREATE_POLYTOPE);
-    SelectedPolytope_3()->Update();
+    //ConfigManager::get().set_input_state(CREATE_POLYTOPE);
+    //SelectedPolytope_3()->Update();
 }
 
 //=============================================================================
