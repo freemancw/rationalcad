@@ -736,6 +736,9 @@ Vector_3f& operator*=(Vector_3f& v, const float r);
 Vector_3f& operator/=(Vector_3f& v, const float r);
 std::ostream& operator<<(std::ostream& o, const Vector_3f& v);
 float Dot(const Vector_3f &lhs, const Vector_3f &rhs);
+float Length(const Vector_3f& v);
+float LengthSqr(const Vector_3f& v);
+Vector_3f Normalized(const Vector_3f& v);
 Vector_3f Cross(const Vector_3f& lhs, const Vector_3f& rhs);
 std::string to_string(const Vector_3f& v);
 
@@ -1068,6 +1071,18 @@ inline std::ostream& operator<<(std::ostream& o, const Vector_3f& v) {
 //! @brief Standard inner product of two vectors.
 inline float Dot(const Vector_3f &lhs, const Vector_3f &rhs) {
     return lhs.x()*rhs.x()+lhs.y()*rhs.y()+lhs.z()*rhs.z();
+}
+
+inline float Length(const Vector_3f &v) {
+    return sqrt(LengthSqr(v));
+}
+
+inline float LengthSqr(const Vector_3f &v) {
+    return Dot(v, v);
+}
+
+inline Vector_3f Normalized(const Vector_3f &v) {
+    return v/Length(v);
 }
 
 inline Vector_3f Cross(const Vector_3f& lhs, const Vector_3f& rhs) {

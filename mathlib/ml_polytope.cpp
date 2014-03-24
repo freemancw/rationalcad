@@ -1120,7 +1120,7 @@ void Polytope_3r::Initialize(const Point_3f& start, const Point_3f& cur) {
         SigPushVisualPoint_3r(*v->pos, Visual::Point(vColor));
     }
 
-    Visual::Color fColor(200, 200, 200, 255);
+    Visual::Color fColor(0, 151, 255, 255);
     Visual::Triangle pVt;
     pVt.set_diffuse(fColor);
 
@@ -1136,8 +1136,8 @@ void Polytope_3r::Initialize(const Point_3f& start, const Point_3f& cur) {
         auto v0 = *fan_middle-*fan_pivot;
         auto v1 = *fan_last-*fan_pivot;
         auto norm = Cross(v0, v1);
-        std::cout << tri0 << "\n" << norm << "\n";
-        std::cout << std::endl;
+        //std::cout << tri0 << "\n" << norm << "\n";
+        //std::cout << std::endl;
         SigPushVisualTriangle_3r(tri0, pVt);
         while ((e = faceEdges.next()) != 0) {
             fan_middle = fan_last;
@@ -1146,8 +1146,8 @@ void Polytope_3r::Initialize(const Point_3f& start, const Point_3f& cur) {
             v0 = *fan_middle-*fan_pivot;
             v1 = *fan_last-*fan_pivot;
             norm = Cross(v0, v1);
-            std::cout << tri0 << "\n" << norm << "\n";
-            std::cout << std::endl;
+            //std::cout << tri0 << "\n" << norm << "\n";
+            //std::cout << std::endl;
             SigPushVisualTriangle_3r(tri, pVt);
         }
     }

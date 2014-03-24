@@ -21,5 +21,6 @@ out vec4 f_color;
 void main(void) {
     gl_PointSize = 4.0;
     gl_Position = m_projection * m_modelview * v_position;
-    f_color = v_mat_ambient;
+    f_color = v_mat_ambient * abs(dot(v_normal, vec4(0.267, 0.535, 0.802, 0)));
+    f_color.a = 1;
 }

@@ -77,19 +77,25 @@ void SceneObserver::GenerateVboTriangles() {
         Point_3f cp = approx_points_.value(i.key().at(2))->approx();
         Vector_3f v0 = bp-ap;
         Vector_3f v1 = cp-ap;
-        Vector_3f n = Cross(v0, v1);
+        Vector_3f n = Normalized(Cross(v0, v1));
+
+        /*
         std::cout << "ap = " << ap
                   << " bp = " << bp
                   << " cp = " << cp
                   << " v0 = " << v0
                   << " v1 = " << v1
                   << " norm = " << n << std::endl;
+                  */
         GL::Vertex a(ap);
         GL::Vertex b(bp);
         GL::Vertex c(cp);
         a.set_mat_ambient(current_vt.diffuse());
+        a.set_normal(n);
         b.set_mat_ambient(current_vt.diffuse());
+        b.set_normal(n);
         c.set_mat_ambient(current_vt.diffuse());
+        c.set_normal(n);
         triangles.push_back(a);
         triangles.push_back(b);
         triangles.push_back(c);
@@ -293,7 +299,7 @@ void SceneObserver::SlotUpdate() {
 
 void SceneObserver::onBeginCreatePolytope(const QVector2D& start,
                                           const QVector2D& cur) {
-    qDebug() << "SceneObserver BeginCreatePolytope " << start << ", " << cur;
+    //qDebug() << "SceneObserver BeginCreatePolytope " << start << ", " << cur;
 
     onDeselect();
 
@@ -306,12 +312,12 @@ void SceneObserver::onBeginCreatePolytope(const QVector2D& start,
 }
 
 void SceneObserver::onUpdateNewPolytope(const QVector2D& cur) {
-    qDebug() << "SceneObserver UpdateNewPolytope " << cur;
+    //qDebug() << "SceneObserver UpdateNewPolytope " << cur;
     SelectedPolytope_3()->Update(cur);
 }
 
 void SceneObserver::onEndCreatePolytope() {
-    qDebug() << "SceneObserver EndCreatePolytope";
+    //qDebug() << "SceneObserver EndCreatePolytope";
     //ConfigManager::get().set_input_state(CREATE_POLYTOPE);
     //SelectedPolytope_3()->Update();
 }

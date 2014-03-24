@@ -298,7 +298,7 @@ void OrthographicWidget::mousePressEvent(QMouseEvent *event) {
              * snapping is on.
              *
              */
-            qDebug() << "mousePressEvent";
+            //qDebug() << "mousePressEvent";
             create_polytope_pos = event->pos();
 
             break;
