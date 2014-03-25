@@ -91,14 +91,41 @@ private:
 
 class Material {
 public:
+    enum Coverage {
+        MC_OPAQUE,
+        MC_TRANSLUCENT
+    };
+
+    enum Lighting {
+        ML_UNLIT,
+        ML_FLAT,
+        ML_GOURAUD,
+        ML_PHONG
+    };
+
     Material();
     Material(const Color& ambient, const Color& diffuse,
              const Color& specular);
+    Material(const Color& ambient, const Color& diffuse,
+             const Color& specular, Coverage coverage, Lighting lighting);
+
+    const Color& ambient() const;
+    const Color& diffuse() const;
+    const Color& specular() const;
+    Coverage coverage() const;
+    Lighting lighting() const;
+    void set_ambient(const Color& ambient);
+    void set_diffuse(const Color& diffuse);
+    void set_specular(const Color& specular);
+    void set_coverage(Coverage coverage);
+    void set_lighting(Lighting lighting);
 
 private:
     Color ambient_;
     Color diffuse_;
     Color specular_;
+    Coverage coverage_;
+    Lighting lighting_;
 };
 
 //=============================================================================
@@ -109,13 +136,19 @@ class Point {
 public:
     Point();
     Point(const Color& color);
+    Point(const Material& material);
 
     const Color& color() const;
     void set_color(const Color& color);
 
+    const Material& material() const;
+    void set_material(const Material& material);
+
 private:
     Color color_;
     std::string sprite_;
+
+    Material material_;
 };
 
 //=============================================================================
@@ -126,12 +159,18 @@ class Segment {
 public:
     Segment();
     Segment(const Color& color);
+    Segment(const Material& material);
 
     const Color& color() const;
     void set_color(const Color& color);
 
+    const Material& material() const;
+    void set_material(const Material& material);
+
 private:
     Color color_;
+
+    Material material_;
 };
 
 //=============================================================================
@@ -142,12 +181,18 @@ class Triangle {
 public:
     Triangle();
     Triangle(const Color& diffuse);
+    Triangle(const Material& material);
 
     const Color& diffuse() const;
     void set_diffuse(const Color& diffuse);
 
+    const Material& material() const;
+    void set_material(const Material& material);
+
 private:
     Color diffuse_;
+
+    Material material_;
 };
 
 } // namespace Visual

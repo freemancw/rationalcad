@@ -75,13 +75,57 @@ void Color::set_rgba(const std::array<unsigned char, 4>& rgba) {
 // Implementation: Material
 //=============================================================================
 
-Material::Material() {}
+Material::Material() :
+    coverage_(MC_OPAQUE),
+    lighting_(ML_UNLIT) {}
 
 Material::Material(const Color& ambient, const Color& diffuse,
                    const Color& specular) :
     ambient_(ambient),
     diffuse_(diffuse),
-    specular_(specular) {}
+    specular_(specular),
+    coverage_(MC_OPAQUE),
+    lighting_(ML_UNLIT) {}
+
+Material::Material(const Color& ambient, const Color& diffuse,
+                   const Color& specular, Coverage coverage,
+                   Lighting lighting) :
+    ambient_(ambient),
+    diffuse_(diffuse),
+    specular_(specular),
+    coverage_(coverage),
+    lighting_(lighting) {}
+
+const Color& Material::ambient() const {
+    return ambient_;
+}
+const Color& Material::diffuse() const {
+    return diffuse_;
+}
+const Color& Material::specular() const {
+    return specular_;
+}
+Material::Coverage Material::coverage() const {
+    return coverage_;
+}
+Material::Lighting Material::lighting() const {
+    return lighting_;
+}
+void Material::set_ambient(const Color& ambient) {
+    ambient_ = ambient;
+}
+void Material::set_diffuse(const Color& diffuse) {
+    diffuse_ = diffuse;
+}
+void Material::set_specular(const Color& specular) {
+    specular_ = specular;
+}
+void Material::set_coverage(Coverage coverage) {
+    coverage_ = coverage;
+}
+void Material::set_lighting(Lighting lighting) {
+    lighting_ = lighting;
+}
 
 //=============================================================================
 // Implementation: Point
@@ -93,11 +137,21 @@ Point::Point() :
 Point::Point(const Color& color) :
     color_(color) {}
 
+Point::Point(const Material& material) :
+    material_(material) {}
+
 const Color& Point::color() const {
     return color_;
 }
 void Point::set_color(const Color& color) {
     color_ = color;
+}
+
+const Material& Point::material() const {
+    return material_;
+}
+void Point::set_material(const Material& material) {
+    material_ = material;
 }
 
 //=============================================================================
@@ -110,11 +164,21 @@ Segment::Segment() :
 Segment::Segment(const Color& color) :
     color_(color) {}
 
+Segment::Segment(const Material& material) :
+    material_(material) {}
+
 const Color& Segment::color() const {
     return color_;
 }
 void Segment::set_color(const Color& color) {
     color_ = color;
+}
+
+const Material& Segment::material() const {
+    return material_;
+}
+void Segment::set_material(const Material& material) {
+    material_ = material;
 }
 
 //=============================================================================
@@ -126,11 +190,21 @@ Triangle::Triangle() {}
 Triangle::Triangle(const Color& diffuse) :
     diffuse_(diffuse) {}
 
+Triangle::Triangle(const Material& material) :
+    material_(material) {}
+
 const Color& Triangle::diffuse() const {
     return diffuse_;
 }
 void Triangle::set_diffuse(const Color& diffuse) {
     diffuse_ = diffuse;
+}
+
+const Material& Triangle::material() const {
+    return material_;
+}
+void Triangle::set_material(const Material& material) {
+    material_ = material;
 }
 
 } // namespace Visual
