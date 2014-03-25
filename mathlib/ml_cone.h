@@ -63,7 +63,7 @@ public:
         SigRegisterPoint_2r(*b);
         SigPushVisualSegment_2r(seg_b_, Visual::Segment());
         Visual::Triangle vt;
-        vt.set_diffuse(Visual::Color(0, 0, 0, 100));
+        //vt.set_diffuse(Visual::Color(0, 0, 0, 100));
         SigPushVisualTriangle_2r(interior_, vt);
     }
     void set_vertex(SharedPoint_2r vertex) {

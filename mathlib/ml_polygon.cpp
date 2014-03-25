@@ -54,7 +54,7 @@ void Polygon_2r::AppendVertexToBoundary(SharedPoint_2r v) {
                       std::prev(end(boundary_.vertices_), 2)->vertex_sptr());
         triangulation_.push_back(t);
         Visual::Triangle vt;
-        vt.set_diffuse(diffuse_);
+        //vt.set_diffuse(diffuse_);
         SigPushVisualTriangle_2r(t, vt);
     }
 }

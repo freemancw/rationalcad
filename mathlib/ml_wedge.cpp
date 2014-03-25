@@ -79,7 +79,7 @@ void Wedge_2r::AttachToOrigin(SharedPoint_2r o) {
         v_tri_.set_a(o_);
 
         Visual::Triangle vt;
-        vt.set_diffuse(diffuse_);
+        //vt.set_diffuse(diffuse_);
         SigPushVisualTriangle_2r(u_tri_, vt);
         SigPushVisualTriangle_2r(v_tri_, vt);
         //SigPushVisualSegment(u_segment_, RSF_ACTIVE);

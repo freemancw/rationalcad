@@ -135,20 +135,14 @@ private:
 class Point {
 public:
     Point();
-    Point(const Color& color);
     Point(const Material& material);
-
-    const Color& color() const;
-    void set_color(const Color& color);
 
     const Material& material() const;
     void set_material(const Material& material);
 
 private:
-    Color color_;
-    std::string sprite_;
-
     Material material_;
+    std::string sprite_;
 };
 
 //=============================================================================
@@ -158,18 +152,12 @@ private:
 class Segment {
 public:
     Segment();
-    Segment(const Color& color);
     Segment(const Material& material);
-
-    const Color& color() const;
-    void set_color(const Color& color);
 
     const Material& material() const;
     void set_material(const Material& material);
 
 private:
-    Color color_;
-
     Material material_;
 };
 
@@ -180,18 +168,12 @@ private:
 class Triangle {
 public:
     Triangle();
-    Triangle(const Color& diffuse);
     Triangle(const Material& material);
-
-    const Color& diffuse() const;
-    void set_diffuse(const Color& diffuse);
 
     const Material& material() const;
     void set_material(const Material& material);
 
 private:
-    Color diffuse_;
-
     Material material_;
 };
 

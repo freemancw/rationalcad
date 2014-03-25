@@ -1115,13 +1115,15 @@ void Polytope_3r::Initialize(const Point_3f& start, const Point_3f& cur) {
     auto tE = cell_->makeFaceEdge(fE->Left(), vertex8, vertex3);
 
     // register vertices
-    Visual::Color vColor(0, 151, 255, 255);
+    Visual::Material vMat;
+    vMat.set_ambient(Visual::Color(0, 151, 255, 255));
+    Visual::Point vPoint(vMat);
 
     QuadEdge::CellVertexIterator cellVerts(cell_);
     QuadEdge::Vertex *v;
     while ((v = cellVerts.next()) != 0) {
         SigRegisterPoint_3r(*v->pos);
-        SigPushVisualPoint_3r(*v->pos, Visual::Point(vColor));
+        SigPushVisualPoint_3r(*v->pos, vPoint);
     }
 
     /* Stepping through the (undirected) edges of a cell is more complex, as
@@ -1152,9 +1154,13 @@ void Polytope_3r::Initialize(const Point_3f& start, const Point_3f& cur) {
     */
 
     // register faces
-    Visual::Triangle pVt;
-    pVt.set_diffuse(Visual::Color(0, 151, 255, 255));
-    Visual::Color eColor(0, 151, 255, 255);
+    Visual::Material eMat;
+    eMat.set_ambient(Visual::Color(0, 151, 255, 255));
+    Visual::Segment vSegment(eMat);
+
+    Visual::Material fMat;
+    fMat.set_ambient(Visual::Color(0, 151, 255, 255));
+    Visual::Triangle vTriangle(fMat);
 
     QuadEdge::CellFaceIterator cellFaces(cell_);
     QuadEdge::Face *f;
@@ -1165,31 +1171,31 @@ void Polytope_3r::Initialize(const Point_3f& start, const Point_3f& cur) {
         e = faceEdges.next();
         if (e->Org() < e->Dest()) {
             SigPushVisualSegment_3r(Segment_3r(e->Org()->pos, e->Dest()->pos),
-                                    Visual::Segment(eColor));
+                                    vSegment);
         }
         auto fan_pivot = e->Org()->pos;
         e = faceEdges.next();
         if (e->Org() < e->Dest()) {
             SigPushVisualSegment_3r(Segment_3r(e->Org()->pos, e->Dest()->pos),
-                                    Visual::Segment(eColor));
+                                    vSegment);
         }
         auto fan_middle = e->Org()->pos;
         e = faceEdges.next();
         if (e->Org() < e->Dest()) {
             SigPushVisualSegment_3r(Segment_3r(e->Org()->pos, e->Dest()->pos),
-                                    Visual::Segment(eColor));
+                                    vSegment);
         }
         auto fan_last = e->Org()->pos;
         Triangle_3r tri0(fan_pivot, fan_middle, fan_last);
-        SigPushVisualTriangle_3r(tri0, pVt);
+        SigPushVisualTriangle_3r(tri0, vTriangle);
         while ((e = faceEdges.next()) != 0) {
             fan_middle = fan_last;
             fan_last = e->Org()->pos;
             Triangle_3r tri(fan_pivot, fan_middle, fan_last);
-            SigPushVisualTriangle_3r(tri, pVt);
+            SigPushVisualTriangle_3r(tri, vTriangle);
             if (e->Org() < e->Dest()) {
                 SigPushVisualSegment_3r(Segment_3r(e->Org()->pos, e->Dest()->pos),
-                                        Visual::Segment(eColor));
+                                        vSegment);
             }
         }
     }

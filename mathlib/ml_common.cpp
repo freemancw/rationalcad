@@ -131,21 +131,10 @@ void Material::set_lighting(Lighting lighting) {
 // Implementation: Point
 //=============================================================================
 
-Point::Point() :
-    color_(0, 0, 0, 255) {}
-
-Point::Point(const Color& color) :
-    color_(color) {}
+Point::Point() {}
 
 Point::Point(const Material& material) :
     material_(material) {}
-
-const Color& Point::color() const {
-    return color_;
-}
-void Point::set_color(const Color& color) {
-    color_ = color;
-}
 
 const Material& Point::material() const {
     return material_;
@@ -158,21 +147,10 @@ void Point::set_material(const Material& material) {
 // Implementation: Segment
 //=============================================================================
 
-Segment::Segment() :
-    color_(0, 0, 0, 255) {}
-
-Segment::Segment(const Color& color) :
-    color_(color) {}
+Segment::Segment() {}
 
 Segment::Segment(const Material& material) :
     material_(material) {}
-
-const Color& Segment::color() const {
-    return color_;
-}
-void Segment::set_color(const Color& color) {
-    color_ = color;
-}
 
 const Material& Segment::material() const {
     return material_;
@@ -187,18 +165,8 @@ void Segment::set_material(const Material& material) {
 
 Triangle::Triangle() {}
 
-Triangle::Triangle(const Color& diffuse) :
-    diffuse_(diffuse) {}
-
 Triangle::Triangle(const Material& material) :
     material_(material) {}
-
-const Color& Triangle::diffuse() const {
-    return diffuse_;
-}
-void Triangle::set_diffuse(const Color& diffuse) {
-    diffuse_ = diffuse;
-}
 
 const Material& Triangle::material() const {
     return material_;

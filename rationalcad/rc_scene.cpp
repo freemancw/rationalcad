@@ -49,7 +49,7 @@ void SceneObserver::GenerateVboPoints() {
     QVector<GL::Vertex> points;
     for (auto i = viz_points_.begin(); i != viz_points_.end(); ++i) {
         GL::Vertex v(approx_points_.value(i.key())->approx());
-        v.set_mat_ambient(i->back().color());
+        v.set_mat_ambient(i->back().material().ambient());
         points.push_back(v);
     }
     emit UpdateVboPoints(points);
@@ -60,8 +60,8 @@ void SceneObserver::GenerateVboLines() {
     for (auto i = viz_segments_.begin(); i != viz_segments_.end(); ++i) {
         GL::Vertex p(approx_points_.value(i.key().first)->approx());
         GL::Vertex q(approx_points_.value(i.key().second)->approx());
-        p.set_mat_ambient(i->back().color());
-        q.set_mat_ambient(i->back().color());
+        p.set_mat_ambient(i->back().material().ambient());
+        q.set_mat_ambient(i->back().material().ambient());
         lines.push_back(p);
         lines.push_back(q);
     }
@@ -81,11 +81,11 @@ void SceneObserver::GenerateVboTriangles() {
         GL::Vertex a(ap);
         GL::Vertex b(bp);
         GL::Vertex c(cp);
-        a.set_mat_ambient(current_vt.diffuse());
+        a.set_mat_ambient(current_vt.material().ambient());
         a.set_normal(n);
-        b.set_mat_ambient(current_vt.diffuse());
+        b.set_mat_ambient(current_vt.material().ambient());
         b.set_normal(n);
-        c.set_mat_ambient(current_vt.diffuse());
+        c.set_mat_ambient(current_vt.material().ambient());
         c.set_normal(n);
         triangles.push_back(a);
         triangles.push_back(b);

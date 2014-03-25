@@ -57,8 +57,8 @@ Parallelogram_2r::Parallelogram_2r(const Vector_2r &north,
         //SigPushVisualSegment(seg_cd_, RSF_NORMAL);
         //SigPushVisualSegment(seg_da_, RSF_NORMAL);
         face_diffuse_ = Visual::Color(0, 0, 0, 100);
-        SigPushVisualTriangle_2r(tri_abc_, Visual::Triangle(face_diffuse_));
-        SigPushVisualTriangle_2r(tri_acd_, Visual::Triangle(face_diffuse_), 1000);
+        //SigPushVisualTriangle_2r(tri_abc_, Visual::Triangle(face_diffuse_));
+        //SigPushVisualTriangle_2r(tri_acd_, Visual::Triangle(face_diffuse_), 1000);
     }
 }
 
@@ -89,8 +89,8 @@ Parallelogram_2r::Parallelogram_2r(std::shared_ptr<Point_2r> a,
         //SigPushVisualSegment(seg_cd_, RSF_NORMAL);
         //SigPushVisualSegment(seg_da_, RSF_NORMAL);
         face_diffuse_ = Visual::Color(0, 0, 0, 100);
-        SigPushVisualTriangle_2r(tri_abc_, Visual::Triangle(face_diffuse_));
-        SigPushVisualTriangle_2r(tri_acd_, Visual::Triangle(face_diffuse_), 4000);
+        //SigPushVisualTriangle_2r(tri_abc_, Visual::Triangle(face_diffuse_));
+        //SigPushVisualTriangle_2r(tri_acd_, Visual::Triangle(face_diffuse_), 4000);
     }
 }
 
