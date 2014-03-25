@@ -93,14 +93,16 @@ class Material {
 public:
     enum Coverage {
         MC_OPAQUE,
-        MC_TRANSLUCENT
+        MC_TRANSLUCENT,
+        MC_NUM
     };
 
     enum Lighting {
         ML_UNLIT,
         ML_FLAT,
         ML_GOURAUD,
-        ML_PHONG
+        ML_PHONG,
+        ML_NUM
     };
 
     Material();

@@ -431,15 +431,6 @@ GL::VertexBuffer& SceneManager::lines_vbo() {
 GL::VertexBuffer& SceneManager::triangles_vbo() {
     return triangles_vbo_;
 }
-GL::VertexBuffer& SceneManager::t_points_vbo() {
-    return t_points_vbo_;
-}
-GL::VertexBuffer& SceneManager::t_lines_vbo() {
-    return t_lines_vbo_;
-}
-GL::VertexBuffer& SceneManager::t_triangles_vbo() {
-    return t_triangles_vbo_;
-}
 
 static Point_2f ToPoint_2f(const QVector2D &v, bool snap) {
     return snap ? Point_2f(qRound(v.x()), qRound(v.y())) :

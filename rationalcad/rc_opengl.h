@@ -169,6 +169,12 @@ public:
 
 private:
     QHash<QString, QSharedPointer<QOpenGLShaderProgram>> programs_;
+
+    QOpenGLShaderProgram unlit_prog_;
+    QList<GL::AttributeMeta> unlit_attributes_;
+
+    QOpenGLShaderProgram flat_prog_;
+    QList<GL::AttributeMeta> flat_attributes_;
 };
 
 } // namespace RCAD

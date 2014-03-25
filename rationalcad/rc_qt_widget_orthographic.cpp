@@ -92,7 +92,7 @@ void OrthographicWidget::initializeGL() {
     glEnable(GL_CULL_FACE);
     glEnable(GL_PROGRAM_POINT_SIZE);
 
-    shader_program_ = shader_manager_->getProgram("gl2_default");
+    shader_program_ = shader_manager_->getProgram("gl3_unlit");
     shader_program_->bind();
 
     modelview_.setToIdentity();

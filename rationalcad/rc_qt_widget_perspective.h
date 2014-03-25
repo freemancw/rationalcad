@@ -81,7 +81,10 @@ protected:
 
     QSharedPointer<RCAD::ShaderManager> shader_manager_;
     QSharedPointer<RCAD::SceneManager> scene_manager_;
-    QSharedPointer<QOpenGLShaderProgram> shader_program_;
+    //QSharedPointer<QOpenGLShaderProgram> shader_program_;
+
+    QSharedPointer<QOpenGLShaderProgram> unlit_program_;
+    QSharedPointer<QOpenGLShaderProgram> flat_program_;
 
     QList<RCAD::GL::AttributeMeta> attributes_;
 

@@ -35,12 +35,12 @@ ShaderManager::ShaderManager() {
     setlocale(LC_NUMERIC, "C");
 
     bool shaders_valid =
-               addProgram("gl2_default",
-                          ":/shaders/gl2_default.vsh",
-                          ":/shaders/gl2_default.fsh")
-            && addProgram("gl3_default",
-                          ":/shaders/gl3_default.vsh",
-                          ":/shaders/gl3_default.fsh");
+               addProgram("gl3_unlit",
+                          ":/shaders/gl3_unlit.vsh",
+                          ":/shaders/gl3_unlit.fsh")
+            && addProgram("gl3_flat",
+                          ":/shaders/gl3_flat.vsh",
+                          ":/shaders/gl3_flat.fsh");
 
     if (!shaders_valid) {
         qDebug() << "Shaders did not compile.";

@@ -30,5 +30,9 @@
         <file>icons/create_polytope.png</file>
         <file>icons/appicon.ico</file>
         <file>icons/snap_to_grid.png</file>
+        <file>shaders/gl3_unlit.vsh</file>
+        <file>shaders/gl3_unlit.fsh</file>
+        <file>shaders/gl3_flat.fsh</file>
+        <file>shaders/gl3_flat.vsh</file>
     </qresource>
 </RCC>

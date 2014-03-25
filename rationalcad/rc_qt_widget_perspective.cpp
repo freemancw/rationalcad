@@ -65,11 +65,13 @@ void PerspectiveWidget::initializeGL() {
     glEnable(GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
 
-    shader_program_ = shader_manager_->getProgram("gl3_default");
-    shader_program_->bind();
+    unlit_program_ = shader_manager_->getProgram("gl3_unlit");
+    flat_program_ = shader_manager_->getProgram("gl3_flat");
+
+    flat_program_->bind();
 
     modelview_.setToIdentity();
-    shader_program_->setUniformValue("m_modelview", modelview_);
+    flat_program_->setUniformValue("m_modelview", modelview_);
     //! @todo magic numbers
     camera_pos_ = QVector3D(6, -2, 2);
     camera_rot_.setZ(-45.0f);
@@ -82,25 +84,25 @@ void PerspectiveWidget::initializeGL() {
     vao_points_.create();
     vao_points_.bind();
     scene_manager_->points_vbo().buffer.bind();
-    GL::EnableAttributes(shader_program_, attributes_);
+    GL::EnableAttributes(flat_program_, attributes_);
     vao_points_.release();
     scene_manager_->points_vbo().buffer.release();
 
     vao_lines_.create();
     vao_lines_.bind();
     scene_manager_->lines_vbo().buffer.bind();
-    GL::EnableAttributes(shader_program_, attributes_);
+    GL::EnableAttributes(flat_program_, attributes_);
     vao_lines_.release();
     scene_manager_->lines_vbo().buffer.release();
 
     vao_triangles_.create();
     vao_triangles_.bind();
     scene_manager_->triangles_vbo().buffer.bind();
-    GL::EnableAttributes(shader_program_, attributes_);
+    GL::EnableAttributes(flat_program_, attributes_);
     vao_triangles_.release();
     scene_manager_->triangles_vbo().buffer.release();
 
-    shader_program_->release();
+    flat_program_->release();
 
     timer_.setTimerType(Qt::PreciseTimer);
     connect(&timer_, SIGNAL(timeout()), this, SLOT(update()));
@@ -118,7 +120,7 @@ void PerspectiveWidget::paintEvent(QPaintEvent *event) {
 
     makeCurrent();
 
-    shader_program_->bind();
+    flat_program_->bind();
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
@@ -127,7 +129,7 @@ void PerspectiveWidget::paintEvent(QPaintEvent *event) {
     handleInput();
     drawScene();
 
-    shader_program_->release();
+    flat_program_->release();
 
     // setup the QPainter for drawing the overlay (e.g. 2D text)
     QPainter painter;
@@ -196,7 +198,7 @@ void PerspectiveWidget::drawScene() {
     modelview_.rotate(camera_rot_.y(), 0.0f, 1.0f, 0.0f);
     modelview_.rotate(camera_rot_.z(), 0.0f, 0.0f, 1.0f);
     modelview_.translate(-camera_pos_);
-    shader_program_->setUniformValue("m_modelview", modelview_);
+    flat_program_->setUniformValue("m_modelview", modelview_);
 
     // restore gl state
     glEnable(GL_BLEND);
@@ -224,13 +226,13 @@ void PerspectiveWidget::draw2DOverlay() {
 void PerspectiveWidget::resizeGL(int width, int height) {
     glViewport(0, 0, width, height);
 
-    shader_program_->bind();
+    flat_program_->bind();
 
     projection_.setToIdentity();
     projection_.perspective(80.0f, (float)width/height, 0.125f, 1024.0f);
-    shader_program_->setUniformValue("m_projection", projection_);
+    flat_program_->setUniformValue("m_projection", projection_);
 
-    shader_program_->release();
+    flat_program_->release();
 }
 
 //=============================================================================
