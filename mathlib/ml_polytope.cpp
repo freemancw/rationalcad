@@ -1038,11 +1038,13 @@ Matrix_2x2i UnimodularBasisForVectorItr(const Vector_2i& v) {
 }
 
 Matrix_3x3i UnimodularBasisForPlane(const Vector_3i& u, const Vector_3i& v) {
-    std::cout << "Starting UnimodularBasisForPlane with u = " << u << " and v = " << v << std::endl;
+    std::cout << "Starting UnimodularBasisForPlane with u = "
+              << u << " and v = " << v << std::endl;
 
     // bring u into a unimodular basis
     auto basisU = UnimodularBasisForVectorItr(u);
-    std::cout << "UnimodularBasisForVectorItr produced basisU = \n" << basisU << std::endl;
+    std::cout << "UnimodularBasisForVectorItr produced basisU = \n"
+              << basisU << std::endl;
 
     // rewrite v in terms of u's basis
     auto vPrime = v*Inverse(basisU);
@@ -1051,7 +1053,8 @@ Matrix_3x3i UnimodularBasisForPlane(const Vector_3i& u, const Vector_3i& v) {
     // bring v into a unimodular basis
     auto basisV = UnimodularBasisForVectorItr(Vector_2i(vPrime.y(),
                                                         vPrime.z()));
-    std::cout << "UnimodularBasisForVectorItr produced basisV = \n" << basisV << std::endl;
+    std::cout << "UnimodularBasisForVectorItr produced basisV = \n"
+              << basisV << std::endl;
 
     return Matrix_3x3i(1, 0, 0,
                        0, basisV(0,0), basisV(0,1),
@@ -1111,6 +1114,7 @@ void Polytope_3r::Initialize(const Point_3f& start, const Point_3f& cur) {
     auto fE = cell_->makeFaceEdge(right, vertex7, vertex4);
     auto tE = cell_->makeFaceEdge(fE->Left(), vertex8, vertex3);
 
+    // register vertices
     Visual::Color vColor(0, 151, 255, 255);
 
     QuadEdge::CellVertexIterator cellVerts(cell_);
@@ -1118,37 +1122,76 @@ void Polytope_3r::Initialize(const Point_3f& start, const Point_3f& cur) {
     while ((v = cellVerts.next()) != 0) {
         SigRegisterPoint_3r(*v->pos);
         SigPushVisualPoint_3r(*v->pos, Visual::Point(vColor));
+        //SigPushVisualSegment_3r(Segment_3r(v->pos, v->getEdge()->Dest()->pos), Visual::Segment(vColor));
     }
 
-    Visual::Color fColor(0, 151, 255, 255);
+    /* Stepping through the (undirected) edges of a cell is more complex, as
+     * we have things set up. Note that there are twice as many directed edges
+     * as undirected edges. The above code visits all directed edges once, so
+     * it visits each undirected edge twice. But for wireframe drawing and many
+     * other purposes you would want to operate on each undirected edge just
+     * once. A clever way to guarantee this, without marking edges or any
+     * additional arrays or lists, is to visit each undirected edge twice, but
+     * use the fact that the pointers to the two vertices are addresses, one of
+     * which is larger than the other:
+
+    CellFaceIterator cellFaces(c);
+    Face *f;
+    while ((f = cellFaces.next()) != 0) {
+        // visit each face of cell c
+        FaceEdgeIterator faceEdges(f);
+        Edge *edge;
+        while ((edge = faceEdges.next()) != 0) {
+            // visit each edge of face f
+            // if edge passes the following, its Sym will not,
+            // and vice-versa
+            if (edge->Org() < edge->Dest())
+                <do something with edge>
+        }
+    }
+
+    */
+
+
+    // register faces
     Visual::Triangle pVt;
-    pVt.set_diffuse(fColor);
+    pVt.set_diffuse(Visual::Color(0, 151, 255, 255));
+    Visual::Color eColor(0, 151, 255, 255);
 
     QuadEdge::CellFaceIterator cellFaces(cell_);
     QuadEdge::Face *f;
     while ((f = cellFaces.next()) != 0) {
         QuadEdge::FaceEdgeIterator faceEdges(f);
         QuadEdge::Edge *e;
-        auto fan_pivot = faceEdges.next()->Org()->pos;
-        auto fan_middle = faceEdges.next()->Org()->pos;
-        auto fan_last = faceEdges.next()->Org()->pos;
+
+        e = faceEdges.next();
+        if (e->Org() < e->Dest()) {
+            SigPushVisualSegment_3r(Segment_3r(e->Org()->pos, e->Dest()->pos),
+                                    Visual::Segment(eColor));
+        }
+        auto fan_pivot = e->Org()->pos;
+        e = faceEdges.next();
+        if (e->Org() < e->Dest()) {
+            SigPushVisualSegment_3r(Segment_3r(e->Org()->pos, e->Dest()->pos),
+                                    Visual::Segment(eColor));
+        }
+        auto fan_middle = e->Org()->pos;
+        e = faceEdges.next();
+        if (e->Org() < e->Dest()) {
+            SigPushVisualSegment_3r(Segment_3r(e->Org()->pos, e->Dest()->pos),
+                                    Visual::Segment(eColor));
+        }
+        auto fan_last = e->Org()->pos;
         Triangle_3r tri0(fan_pivot, fan_middle, fan_last);
-        auto v0 = *fan_middle-*fan_pivot;
-        auto v1 = *fan_last-*fan_pivot;
-        auto norm = Cross(v0, v1);
-        //std::cout << tri0 << "\n" << norm << "\n";
-        //std::cout << std::endl;
         SigPushVisualTriangle_3r(tri0, pVt);
         while ((e = faceEdges.next()) != 0) {
             fan_middle = fan_last;
             fan_last = e->Org()->pos;
             Triangle_3r tri(fan_pivot, fan_middle, fan_last);
-            v0 = *fan_middle-*fan_pivot;
-            v1 = *fan_last-*fan_pivot;
-            norm = Cross(v0, v1);
-            //std::cout << tri0 << "\n" << norm << "\n";
-            //std::cout << std::endl;
             SigPushVisualTriangle_3r(tri, pVt);
+            if (e->Org() < e->Dest()) {
+                SigPushVisualSegment_3r(Segment_3r(e->Org()->pos, e->Dest()->pos), Visual::Segment(eColor));
+            }
         }
     }
 }

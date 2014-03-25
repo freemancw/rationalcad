@@ -199,6 +199,7 @@ void OrthographicWidget::drawScene() {
     shader_program_->setUniformValue("m_modelview", modelview_);
 
     // restore gl state
+    //glClear(GL_DEPTH_BUFFER_BIT);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -209,9 +210,11 @@ void OrthographicWidget::drawScene() {
     vao_lines_.bind();
     glDrawArrays(GL_LINES, 0, scene_manager_->lines_vbo().num_vertices);
     vao_lines_.release();
+    /*
     vao_triangles_.bind();
     glDrawArrays(GL_TRIANGLES, 0, scene_manager_->triangles_vbo().num_vertices);
     vao_triangles_.release();
+    */
 }
 
 void OrthographicWidget::draw2DOverlay() {

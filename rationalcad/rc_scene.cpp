@@ -78,15 +78,6 @@ void SceneObserver::GenerateVboTriangles() {
         Vector_3f v0 = bp-ap;
         Vector_3f v1 = cp-ap;
         Vector_3f n = Normalized(Cross(v0, v1));
-
-        /*
-        std::cout << "ap = " << ap
-                  << " bp = " << bp
-                  << " cp = " << cp
-                  << " v0 = " << v0
-                  << " v1 = " << v1
-                  << " norm = " << n << std::endl;
-                  */
         GL::Vertex a(ap);
         GL::Vertex b(bp);
         GL::Vertex c(cp);
@@ -439,6 +430,15 @@ GL::VertexBuffer& SceneManager::lines_vbo() {
 }
 GL::VertexBuffer& SceneManager::triangles_vbo() {
     return triangles_vbo_;
+}
+GL::VertexBuffer& SceneManager::t_points_vbo() {
+    return t_points_vbo_;
+}
+GL::VertexBuffer& SceneManager::t_lines_vbo() {
+    return t_lines_vbo_;
+}
+GL::VertexBuffer& SceneManager::t_triangles_vbo() {
+    return t_triangles_vbo_;
 }
 
 static Point_2f ToPoint_2f(const QVector2D &v, bool snap) {

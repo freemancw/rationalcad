@@ -203,6 +203,10 @@ public:
     GL::VertexBuffer& lines_vbo();
     GL::VertexBuffer& triangles_vbo();
 
+    GL::VertexBuffer& t_points_vbo();
+    GL::VertexBuffer& t_lines_vbo();
+    GL::VertexBuffer& t_triangles_vbo();
+
     SceneObserver scene_observer_;
 
 public slots:
@@ -211,9 +215,14 @@ public slots:
     void UpdateVboTriangles(QVector<GL::Vertex> verts);
 
 private:
+    // opaque
     GL::VertexBuffer points_vbo_;
     GL::VertexBuffer lines_vbo_;
     GL::VertexBuffer triangles_vbo_;
+    // transparent
+    GL::VertexBuffer t_points_vbo_;
+    GL::VertexBuffer t_lines_vbo_;
+    GL::VertexBuffer t_triangles_vbo_;
 
     QSharedPointer<QThread> animation_thread_;
 };
