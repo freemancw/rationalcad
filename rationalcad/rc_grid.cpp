@@ -66,40 +66,52 @@ void IntegerGrid::InitializeGrid(const int min_pixel_spacing,
     //int line_half_length = min_pixel_spacing_ * n_in_halfspace;
     int line_half_length = n_in_halfspace;
 
-    for(int i = 0; i < n_along_axis; ++i) {
-        QColor grid_color = (i % major_line_spacing_) ?
-                    ConfigManager::get().grid_minor_color() :
-                    ConfigManager::get().grid_major_color();
-
-        // start from the negative halfspace and work toward the positive
-        int cur_pos = -line_half_length + i;
-
+    auto CreateVerts = [&](const int cur_pos, const QColor& color) {
         Point_3f v;
 
         // vertical top
         v.set_x(cur_pos);
         v.set_y(line_half_length);
-        GL::Vertex v_top(v, grid_color);
-
+        GL::Vertex v_top(v, color);
         // vertical bottom
         v.set_x(cur_pos);
         v.set_y(-line_half_length);
-        GL::Vertex v_bottom(v, grid_color);
-
+        GL::Vertex v_bottom(v, color);
         // horizontal left
         v.set_x(-line_half_length);
         v.set_y(cur_pos);
-        GL::Vertex v_left(v, grid_color);
-
+        GL::Vertex v_left(v, color);
         // horizontal right
         v.set_x(line_half_length);
         v.set_y(cur_pos);
-        GL::Vertex v_right(v, grid_color);
+        GL::Vertex v_right(v, color);
 
         grid_verts.push_back(v_top);
         grid_verts.push_back(v_bottom);
         grid_verts.push_back(v_left);
         grid_verts.push_back(v_right);
+    };
+
+    // create major lines first so that they'll render on top of minor lines
+
+    // major lines
+    for (int i = 0; i < n_along_axis; ++i) {
+        if (i % major_line_spacing_) {
+            continue;
+        }
+
+        CreateVerts(-line_half_length + i,
+                    ConfigManager::get().grid_major_color());
+    }
+
+    // minor lines
+    for (int i = 0; i < n_along_axis; ++i) {
+        if (!(i % major_line_spacing_)) {
+            continue;
+        }
+
+        CreateVerts(-line_half_length + i,
+                    ConfigManager::get().grid_minor_color());
     }
 
     // setup modelview matrix
@@ -122,7 +134,7 @@ QVector<QPair<int, int>> IntegerGrid::GetMajorXCoords(const int width) const {
     int end_x   = RoundToNearestMajor(right_x);
     int coord_inc = GetMajorCoordIncrement();
 
-    while(sweep_x <= end_x) {
+    while (sweep_x <= end_x) {
         int x_pixel = CoordToPixel(sweep_x, global_pos_.x(), width);
         out.push_back(QPair<int, int>(x_pixel, sweep_x));
         sweep_x += coord_inc;
@@ -147,7 +159,7 @@ QVector<QPair<int, int>> IntegerGrid::GetMajorYCoords(const int height) const {
     int end_y    = RoundToNearestMajor(bottom_y);
     int major_inc = GetMajorCoordIncrement();
 
-    while(sweep_y <= end_y) {
+    while (sweep_y <= end_y) {
         int y_pixel = CoordToPixel(sweep_y, global_pos_.y(), height);
         out.push_back(QPair<int, int>(y_pixel, sweep_y));
         sweep_y += major_inc;
@@ -164,15 +176,17 @@ QVector<QPair<int, int>> IntegerGrid::GetMajorYCoords(const int height) const {
  * @brief IntegerGrid::IncreaseMagnification
  */
 void IntegerGrid::IncreaseMagnification() {
-    if(local_mag_ == local_mag_max_-1 && global_mag_ == global_mag_max_-1)
+    if (local_mag_ == local_mag_max_-1 && global_mag_ == global_mag_max_-1) {
         return;
+    }
 
-    if(++local_mag_ == local_mag_max_) {
+    if (++local_mag_ == local_mag_max_) {
         local_mag_ = 0;
         local_pos_ *= major_line_spacing_;
 
-        if(++global_mag_ == global_mag_max_)
+        if (++global_mag_ == global_mag_max_) {
             global_mag_ = global_mag_max_-1;
+        }
     }
 
     // ensure magnifications are within [0, MAX)
@@ -186,15 +200,17 @@ void IntegerGrid::IncreaseMagnification() {
  * @brief IntegerGrid::DecreaseMagnification
  */
 void IntegerGrid::DecreaseMagnification() {
-    if(local_mag_ == 0 && global_mag_ == 0)
+    if (local_mag_ == 0 && global_mag_ == 0) {
         return;
+    }
 
-    if(--local_mag_ < 0) {
+    if (--local_mag_ < 0) {
         local_mag_ = local_mag_max_-1;
         local_pos_ /= major_line_spacing_;
 
-        if(--global_mag_ < 0)
+        if (--global_mag_ < 0) {
             global_mag_ = 0;
+        }
     }
 
     // ensure magnifications are within [0, MAX)
