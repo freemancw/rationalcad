@@ -439,6 +439,7 @@ private:
 namespace Construction {
 
 Polytope_3r ConvexHull(const std::vector<SharedPoint_3r>& P);
+Polytope_3r IntegerHull(const Polytope_3r& P);
 
 }
 

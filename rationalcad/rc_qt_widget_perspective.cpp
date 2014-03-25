@@ -202,6 +202,9 @@ void PerspectiveWidget::drawScene() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+    //QOpenGLFramebufferObject fb0(width(), height());
+    //fb0.bind();
+
     // issue render calls
     vao_points_.bind();
     glDrawArrays(GL_POINTS, 0, scene_manager_->points_vbo().num_vertices);

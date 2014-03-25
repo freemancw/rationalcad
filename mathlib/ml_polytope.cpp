@@ -1122,7 +1122,6 @@ void Polytope_3r::Initialize(const Point_3f& start, const Point_3f& cur) {
     while ((v = cellVerts.next()) != 0) {
         SigRegisterPoint_3r(*v->pos);
         SigPushVisualPoint_3r(*v->pos, Visual::Point(vColor));
-        //SigPushVisualSegment_3r(Segment_3r(v->pos, v->getEdge()->Dest()->pos), Visual::Segment(vColor));
     }
 
     /* Stepping through the (undirected) edges of a cell is more complex, as
@@ -1151,7 +1150,6 @@ void Polytope_3r::Initialize(const Point_3f& start, const Point_3f& cur) {
     }
 
     */
-
 
     // register faces
     Visual::Triangle pVt;
@@ -1190,7 +1188,8 @@ void Polytope_3r::Initialize(const Point_3f& start, const Point_3f& cur) {
             Triangle_3r tri(fan_pivot, fan_middle, fan_last);
             SigPushVisualTriangle_3r(tri, pVt);
             if (e->Org() < e->Dest()) {
-                SigPushVisualSegment_3r(Segment_3r(e->Org()->pos, e->Dest()->pos), Visual::Segment(eColor));
+                SigPushVisualSegment_3r(Segment_3r(e->Org()->pos, e->Dest()->pos),
+                                        Visual::Segment(eColor));
             }
         }
     }
@@ -1246,6 +1245,16 @@ void Polytope_3r::Update(const Point_3f& cur) {
     v->pos->SigPositionChanged();
 
     SigUpdate();
+}
+
+namespace Construction {
+
+Polytope_3r IntegerHull(const Polytope_3r& P) {
+    Polytope_3r IHP;
+
+    return IHP;
+}
+
 }
 
 /*!
