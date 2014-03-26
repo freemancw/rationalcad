@@ -1,9 +1,9 @@
 #version 330
 
 /*
- * Perspective fragment shader
+ * Unlit fragment shader
  * @author Clinton Freeman <freeman@cs.unc.edu>
- * @date 03/30/2013
+ * @date 2014-03-25
  */
 
 // input: fragment color

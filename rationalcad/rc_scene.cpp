@@ -388,21 +388,26 @@ SceneManager::SceneManager() {
     animation_thread_->start();
 
     connect(&scene_observer_,
-            SIGNAL(UpdateVboPoints(QVector<GL::Vertex>)),
+            SIGNAL(UpdateVertexBuffer(GL::PrimitiveType,
+                                      Visual::Material::Coverage,
+                                      Visual::Material::Lighting,
+                                      QVector<GL::Vertex>)),
             this,
-            SLOT(UpdateVboPoints(QVector<GL::Vertex>)));
-    connect(&scene_observer_,
-            SIGNAL(UpdateVboLines(QVector<GL::Vertex>)),
-            this,
-            SLOT(UpdateVboLines(QVector<GL::Vertex>)));
-    connect(&scene_observer_,
-            SIGNAL(UpdateVboTriangles(QVector<GL::Vertex>)),
-            this,
-            SLOT(UpdateVboTriangles(QVector<GL::Vertex>)));
+            SLOT(onUpdateVertexBuffer(GL::PrimitiveType,
+                                      Visual::Material::Coverage,
+                                      Visual::Material::Lighting,
+                                      QVector<GL::Vertex>)));
 
-    UpdateVboPoints(QVector<GL::Vertex>());
-    UpdateVboLines(QVector<GL::Vertex>());
-    UpdateVboTriangles(QVector<GL::Vertex>());
+    for (int i = 0; i < GL::PRIM_NUM; ++i) {
+        for (int j = 0; j < Visual::Material::MC_NUM; ++j) {
+            for (int k = 0; k < Visual::Material::ML_NUM; ++k) {
+                onUpdateVertexBuffer(static_cast<GL::PrimitiveType>(i),
+                                     static_cast<Visual::Material::Coverage>(j),
+                                     static_cast<Visual::Material::Lighting>(k),
+                                     QVector<GL::Vertex>());
+            }
+        }
+    }
 }
 
 SceneManager::~SceneManager() {
@@ -410,26 +415,17 @@ SceneManager::~SceneManager() {
     animation_thread_->wait();
 }
 
-void SceneManager::UpdateVboPoints(QVector<GL::Vertex> verts) {
-    points_vbo_.UploadVertices(verts);
+void SceneManager::onUpdateVertexBuffer(GL::PrimitiveType prim_type,
+                                        Visual::Material::Coverage coverage,
+                                        Visual::Material::Lighting lighting,
+                                        QVector<GL::Vertex> verts) {
+    vertex_buffers_[prim_type][coverage][lighting].UploadVertices(verts);
 }
 
-void SceneManager::UpdateVboLines(QVector<GL::Vertex> verts) {
-    lines_vbo_.UploadVertices(verts);
-}
-
-void SceneManager::UpdateVboTriangles(QVector<GL::Vertex> verts) {
-    triangles_vbo_.UploadVertices(verts);
-}
-
-GL::VertexBuffer& SceneManager::points_vbo() {
-    return points_vbo_;
-}
-GL::VertexBuffer& SceneManager::lines_vbo() {
-    return lines_vbo_;
-}
-GL::VertexBuffer& SceneManager::triangles_vbo() {
-    return triangles_vbo_;
+GL::VertexBuffer& SceneManager::GetVertexBuffer(GL::PrimitiveType prim_type,
+                                        Visual::Material::Coverage coverage,
+                                        Visual::Material::Lighting lighting) {
+    return vertex_buffers_[prim_type][coverage][lighting];
 }
 
 static Point_2f ToPoint_2f(const QVector2D &v, bool snap) {

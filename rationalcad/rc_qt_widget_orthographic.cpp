@@ -126,12 +126,14 @@ void OrthographicWidget::initializeGL() {
     vao_lines_.release();
     scene_manager_->lines_vbo().buffer.release();
 
+    /*
     vao_triangles_.create();
     vao_triangles_.bind();
     scene_manager_->triangles_vbo().buffer.bind();
     GL::EnableAttributes(shader_program_, attributes_);
     vao_triangles_.release();
     scene_manager_->triangles_vbo().buffer.release();
+    */
 
     shader_program_->release();
 

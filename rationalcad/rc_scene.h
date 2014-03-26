@@ -165,9 +165,16 @@ public slots:
     void onDeselect();
 
 signals:
+    void UpdateVertexBuffer(GL::PrimitiveType prim_type,
+                            Visual::Material::Coverage coverage,
+                            Visual::Material::Lighting lighting,
+                            QVector<GL::Vertex> verts);
+
+    /*
     void UpdateVboPoints(QVector<GL::Vertex> verts);
     void UpdateVboLines(QVector<GL::Vertex> verts);
     void UpdateVboTriangles(QVector<GL::Vertex> verts);
+    */
 
 private:
     void GenerateVboPoints();
@@ -199,29 +206,22 @@ public:
     SceneManager();
     ~SceneManager();
 
-    GL::VertexBuffer& points_vbo();
-    GL::VertexBuffer& lines_vbo();
-    GL::VertexBuffer& triangles_vbo();
+    GL::VertexBuffer& GetVertexBuffer(GL::PrimitiveType prim_type,
+                                      Visual::Material::Coverage coverage,
+                                      Visual::Material::Lighting lighting);
 
     SceneObserver scene_observer_;
 
 public slots:
-    void UpdateVboPoints(QVector<GL::Vertex> verts);
-    void UpdateVboLines(QVector<GL::Vertex> verts);
-    void UpdateVboTriangles(QVector<GL::Vertex> verts);
+    void onUpdateVertexBuffer(GL::PrimitiveType prim_type,
+                              Visual::Material::Coverage coverage,
+                              Visual::Material::Lighting lighting,
+                              QVector<GL::Vertex> verts);
 
 private:
-    // opaque
-    GL::VertexBuffer points_vbo_;
-    GL::VertexBuffer lines_vbo_;
-    GL::VertexBuffer triangles_vbo_;
-
-    GL::VertexBuffer point_buffers_[Visual::Material::MC_NUM]
-                                   [Visual::Material::ML_NUM];
-    GL::VertexBuffer line_buffers_[Visual::Material::MC_NUM]
-                                  [Visual::Material::ML_NUM];
-    GL::VertexBuffer triangle_buffers_[Visual::Material::MC_NUM]
-                                      [Visual::Material::ML_NUM];
+    GL::VertexBuffer vertex_buffers_[GL::PRIM_NUM]
+                                    [Visual::Material::MC_NUM]
+                                    [Visual::Material::ML_NUM];
 
     QSharedPointer<QThread> animation_thread_;
 };

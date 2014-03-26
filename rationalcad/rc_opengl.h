@@ -143,6 +143,13 @@ struct ElementArray {
     GLvoid* indices;   // offset pointer from currently bound IBO
 };
 
+enum PrimitiveType {
+    PRIM_POINTS,
+    PRIM_LINES,
+    PRIM_TRIANGLES,
+    PRIM_NUM
+};
+
 void EnableAttributes(QSharedPointer<QOpenGLShaderProgram> program,
                       const QList<AttributeMeta>& attributes);
 
@@ -170,11 +177,10 @@ public:
 private:
     QHash<QString, QSharedPointer<QOpenGLShaderProgram>> programs_;
 
-    QOpenGLShaderProgram unlit_prog_;
-    QList<GL::AttributeMeta> unlit_attributes_;
-
-    QOpenGLShaderProgram flat_prog_;
-    QList<GL::AttributeMeta> flat_attributes_;
+    QOpenGLShaderProgram mat_programs_[Visual::Material::MC_NUM]
+                                      [Visual::Material::ML_NUM];
+    QList<GL::AttributeMeta> mat_attributes_[Visual::Material::MC_NUM]
+                                            [Visual::Material::ML_NUM];
 };
 
 } // namespace RCAD

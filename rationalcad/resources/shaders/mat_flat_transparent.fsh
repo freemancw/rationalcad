@@ -1,9 +1,9 @@
 #version 330
 
 /*
- * Orthographic wireframe fragment shader
+ * Flat lighting fragment shader
  * @author Clinton Freeman <freeman@cs.unc.edu>
- * @date 03/30/2013
+ * @date 2014-03-25
  */
 
 // input: fragment color
@@ -12,4 +12,3 @@ in vec4 f_color;
 void main() {
     gl_FragColor = f_color;
 }
-
