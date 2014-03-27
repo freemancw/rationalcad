@@ -130,6 +130,13 @@ private:
     Lighting lighting_;
 };
 
+struct MaterialDescriptor {
+    Material::Coverage coverage;
+    Material::Lighting lighting;
+};
+
+extern MaterialDescriptor mat_list[Material::MC_NUM * Material::ML_NUM];
+
 //=============================================================================
 // Interface: Point
 //=============================================================================

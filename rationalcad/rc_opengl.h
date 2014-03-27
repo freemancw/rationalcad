@@ -128,6 +128,7 @@ struct VertexBuffer {
     void UploadVertices(const QVector<Vertex>& vertices);
 
     QOpenGLBuffer buffer;
+    /* QOpenGLVertexArrayObject vao */
     int num_vertices;
 };
 

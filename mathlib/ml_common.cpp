@@ -127,6 +127,13 @@ void Material::set_lighting(Lighting lighting) {
     lighting_ = lighting;
 }
 
+MaterialDescriptor mat_list[Material::MC_NUM * Material::ML_NUM] = {
+    {Material::MC_OPAQUE, Material::ML_UNLIT},
+    {Material::MC_OPAQUE, Material::ML_FLAT},
+    {Material::MC_TRANSPARENT, Material::ML_UNLIT},
+    {Material::MC_TRANSPARENT, Material::ML_FLAT}
+};
+
 //=============================================================================
 // Implementation: Point
 //=============================================================================
