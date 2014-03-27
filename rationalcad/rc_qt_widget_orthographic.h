@@ -99,9 +99,9 @@ protected:
     QSharedPointer<RCAD::ShaderManager> shader_manager_;
     QSharedPointer<RCAD::SceneManager> scene_manager_;
 
-    QOpenGLVertexArrayObject prim_vaos_[RCAD::GL::PRIM_NUM]
-                                       [RCAD::Visual::Material::MC_NUM]
-                                       [RCAD::Visual::Material::ML_NUM];
+    QOpenGLVertexArrayObject vertex_arrays_[RCAD::GL::PRIM_NUM]
+                                           [RCAD::Visual::Material::MC_NUM]
+                                           [RCAD::Visual::Material::ML_NUM];
 
     RCAD::IntegerGrid i_grid_;
     RCAD::GL::VertexBuffer i_grid_vbo_;

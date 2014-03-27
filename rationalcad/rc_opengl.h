@@ -168,14 +168,18 @@ class ShaderManager : public QOpenGLFunctions_3_3_Core {
 public:
     ShaderManager();
 
+    QOpenGLShaderProgram& GetProgram(Visual::Material::Coverage coverage,
+                                     Visual::Material::Lighting lighting);
+    /*
     bool addProgram(const QString& id,
                     const QString& vert_path,
                     const QString& frag_path);
 
     QSharedPointer<QOpenGLShaderProgram> getProgram(const QString& id);
+    */
 
 private:
-    QHash<QString, QSharedPointer<QOpenGLShaderProgram>> programs_;
+    //QHash<QString, QSharedPointer<QOpenGLShaderProgram>> programs_;
 
     QOpenGLShaderProgram mat_programs_[Visual::Material::MC_NUM]
                                       [Visual::Material::ML_NUM];

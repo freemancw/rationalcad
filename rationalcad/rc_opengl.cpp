@@ -34,13 +34,40 @@ ShaderManager::ShaderManager() {
     // override system locale until shaders are compiled
     setlocale(LC_NUMERIC, "C");
 
+    auto AddProgram = [&](Visual::Material::Coverage coverage,
+                          Visual::Material::Lighting lighting,
+                          const QString& vpath, const QString& fpath) {
+        QSharedPointer<QOpenGLShaderProgram> sp(new QOpenGLShaderProgram());
+        bool v = sp->addShaderFromSourceFile(QOpenGLShader::Vertex, vpath);
+        bool f = sp->addShaderFromSourceFile(QOpenGLShader::Fragment, fpath);
+        bool l = sp->link();
+
+        if (v && f && l) {
+            programs_.insert(id, sp);
+            return true;
+        } else {
+            qDebug() << id;
+            return false;
+        }
+    };
+
     bool shaders_valid =
-               addProgram("gl3_unlit",
-                          ":/shaders/gl3_unlit.vsh",
-                          ":/shaders/gl3_unlit.fsh")
-            && addProgram("gl3_flat",
-                          ":/shaders/gl3_flat.vsh",
-                          ":/shaders/gl3_flat.fsh");
+               AddProgram(Visual::Material::MC_OPAQUE,
+                          Visual::Material::ML_UNLIT,
+                          ":/shaders/mat_unlit_opaque.vsh",
+                          ":/shaders/mat_unlit_opaque.fsh")
+            && AddProgram(Visual::Material::MC_OPAQUE,
+                          Visual::Material::ML_FLAT,
+                          ":/shaders/mat_flat_opaque.vsh",
+                          ":/shaders/mat_flat_opaque.fsh")
+            && AddProgram(Visual::Material::MC_TRANSPARENT,
+                          Visual::Material::ML_UNLIT,
+                          ":/shaders/mat_unlit_transparent.vsh",
+                          ":/shaders/mat_unlit_transparent.fsh")
+            && AddProgram(Visual::Material::MC_TRANSPARENT,
+                          Visual::Material::ML_FLAT,
+                          ":/shaders/mat_flat_transparent.vsh",
+                          ":/shaders/mat_flat_transparent.fsh");
 
     if (!shaders_valid) {
         qDebug() << "Shaders did not compile.";
@@ -50,6 +77,7 @@ ShaderManager::ShaderManager() {
     setlocale(LC_ALL, "");
 }
 
+/*
 bool ShaderManager::addProgram(const QString& id, const QString& vert_path,
                                const QString &frag_path) {
     QSharedPointer<QOpenGLShaderProgram> sp(new QOpenGLShaderProgram());
@@ -70,6 +98,7 @@ QSharedPointer<QOpenGLShaderProgram> ShaderManager::getProgram(
     const QString& id) {
     return programs_.value(id);
 }
+*/
 
 //=============================================================================
 // OpenGL abstraction layer

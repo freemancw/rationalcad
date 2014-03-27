@@ -81,16 +81,10 @@ protected:
 
     QSharedPointer<RCAD::ShaderManager> shader_manager_;
     QSharedPointer<RCAD::SceneManager> scene_manager_;
-    //QSharedPointer<QOpenGLShaderProgram> shader_program_;
 
-    QSharedPointer<QOpenGLShaderProgram> unlit_program_;
-    QSharedPointer<QOpenGLShaderProgram> flat_program_;
-
-    QList<RCAD::GL::AttributeMeta> attributes_;
-
-    QOpenGLVertexArrayObject vao_points_;
-    QOpenGLVertexArrayObject vao_lines_;
-    QOpenGLVertexArrayObject vao_triangles_;
+    QOpenGLVertexArrayObject vertex_arrays_[RCAD::GL::PRIM_NUM]
+                                           [RCAD::Visual::Material::MC_NUM]
+                                           [RCAD::Visual::Material::ML_NUM];
 };
 
 #endif // RCAD_RC_QT_WIDGET_PERSPECTIVE_H
