@@ -177,8 +177,8 @@ public:
                 Vertex::kStride
             );
         }
-        vao_.release();
         vbo_.release();
+        vao_.release();
     }
 
     void UploadVertices(const QVector<Vertex>& vertices) {
@@ -258,7 +258,9 @@ public:
     }
 
     void UploadVertices(const quint32 ptype, const QVector<Vertex>& vertices) {
+        program_.bind();
         vertex_cache_[ptype].UploadVertices(vertices);
+        program_.release();
     }
 
     quint32 NumVertices(const quint32 ptype) {
@@ -284,7 +286,6 @@ public:
     Renderer() {
         initializeOpenGLFunctions();
 
-        /*
         QVector<GL::AttributeMeta> attributes;
         attributes.push_back(GL::Vertex::kPositionMeta);
         attributes.push_back(GL::Vertex::kMatAmbientMeta);
@@ -293,6 +294,7 @@ public:
             ":shaders/mat_unlit_opaque.fsh",
             attributes
         );
+        /*
         render_groups_[Visual::MC_TRANSPARENT][Visual::ML_UNLIT].Initialize(
             ":shaders/mat_unlit_transparent.vsh",
             ":shaders/mat_unlit_transparent.fsh",
@@ -312,13 +314,22 @@ public:
         */
     }
 
+    void UpdateRenderGroup(const quint32 coverage_idx,
+                           const quint32 lighting_idx,
+                           const quint32 primtype_idx,
+                           const QVector<GL::Vertex>& vertices) {
+        render_groups_[coverage_idx][lighting_idx].UploadVertices(
+            primtype_idx,
+            vertices
+        );
+    }
 
     /*
     GL::RenderGroup& GetRenderGroup(const quint32 coverage,
                                     const quint32 lighting);
                                     */
 
-private:
+//private:
     GL::RenderGroup render_groups_[Visual::MC_MAX][Visual::ML_MAX];
 };
 

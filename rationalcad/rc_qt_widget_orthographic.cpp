@@ -124,7 +124,7 @@ void OrthographicWidget::paintEvent(QPaintEvent *event) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     drawGrid();
-    //drawScene();
+    drawScene();
 
     draw2DOverlay();
 }
@@ -142,6 +142,11 @@ void OrthographicWidget::drawGrid() {
 }
 
 void OrthographicWidget::drawScene() {
+    // restore gl state
+    //glClear(GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     // setup modelview
     modelview_.setToIdentity();
 
@@ -162,10 +167,12 @@ void OrthographicWidget::drawScene() {
     modelview_.scale(i_grid_.global_scale());
     modelview_.translate(position);
 
-    // restore gl state
-    //glClear(GL_DEPTH_BUFFER_BIT);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    renderer_->render_groups_[Visual::MC_OPAQUE][Visual::ML_UNLIT].Bind(GL::PRIM_POINTS);
+    renderer_->render_groups_[Visual::MC_OPAQUE][Visual::ML_UNLIT].program_.setUniformValue("m_modelview", modelview_);
+    glDrawArrays(GL_POINTS, 0, renderer_->render_groups_[Visual::MC_OPAQUE][Visual::ML_UNLIT].NumVertices(GL::PRIM_POINTS));
+
+    qDebug() << renderer_->render_groups_[Visual::MC_OPAQUE][Visual::ML_UNLIT].NumVertices(GL::PRIM_POINTS);
+    renderer_->render_groups_[Visual::MC_OPAQUE][Visual::ML_UNLIT].Release(GL::PRIM_POINTS);
 
 }
 
@@ -207,6 +214,9 @@ void OrthographicWidget::resizeGL(int width, int height) {
     i_grid_rg_.program_.bind();
     i_grid_rg_.program_.setUniformValue("m_projection", projection_);
     i_grid_rg_.program_.release();
+    renderer_->render_groups_[Visual::MC_OPAQUE][Visual::ML_UNLIT].program_.bind();
+    renderer_->render_groups_[Visual::MC_OPAQUE][Visual::ML_UNLIT].program_.setUniformValue("m_projection", projection_);
+    renderer_->render_groups_[Visual::MC_OPAQUE][Visual::ML_UNLIT].program_.release();
 }
 
 //=============================================================================

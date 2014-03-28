@@ -165,9 +165,9 @@ public slots:
     void onDeselect();
 
 signals:
-    void UpdateVertexBuffer(GL::PrimitiveType prim_type,
-                            Visual::Coverage coverage,
-                            Visual::Lighting lighting,
+    void UpdateVertexBuffer(const quint32 coverage_idx,
+                            const quint32 lighting_idx,
+                            const quint32 primtype_idx,
                             QVector<GL::Vertex> verts);
 
 private:
@@ -203,9 +203,9 @@ public:
     SceneObserver scene_observer_;
 
 public slots:
-    void onUpdateVertexBuffer(GL::PrimitiveType prim_type,
-                              Visual::Coverage coverage,
-                              Visual::Lighting lighting,
+    void onUpdateVertexBuffer(const quint32 coverage_idx,
+                              const quint32 lighting_idx,
+                              const quint32 primtype_idx,
                               QVector<GL::Vertex> verts);
 
 private:

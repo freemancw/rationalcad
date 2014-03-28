@@ -52,7 +52,9 @@ void SceneObserver::GenerateVboPoints() {
         v.set_mat_ambient(i->back().material().ambient());
         points.push_back(v);
     }
-    //emit UpdateVboPoints(points);
+    emit UpdateVertexBuffer(Visual::MC_OPAQUE, Visual::ML_UNLIT,
+                            GL::PRIM_POINTS, points);
+    qDebug() << "updatevertexbuffer emitted";
 }
 
 void SceneObserver::GenerateVboLines() {
@@ -389,14 +391,14 @@ SceneManager::SceneManager(QSharedPointer<Renderer> renderer) :
     animation_thread_->start();
 
     connect(&scene_observer_,
-            SIGNAL(UpdateVertexBuffer(GL::PrimitiveType,
-                                      Visual::Coverage,
-                                      Visual::Lighting,
+            SIGNAL(UpdateVertexBuffer(const quint32,
+                                      const quint32,
+                                      const quint32,
                                       QVector<GL::Vertex>)),
             this,
-            SLOT(onUpdateVertexBuffer(GL::PrimitiveType,
-                                      Visual::Coverage,
-                                      Visual::Lighting,
+            SLOT(onUpdateVertexBuffer(const quint32,
+                                      const quint32,
+                                      const quint32,
                                       QVector<GL::Vertex>)));
 }
 
@@ -405,11 +407,13 @@ SceneManager::~SceneManager() {
     animation_thread_->wait();
 }
 
-void SceneManager::onUpdateVertexBuffer(GL::PrimitiveType prim_type,
-                                        Visual::Coverage coverage,
-                                        Visual::Lighting lighting,
+void SceneManager::onUpdateVertexBuffer(const quint32 coverage_idx,
+                                        const quint32 lighting_idx,
+                                        const quint32 primtype_idx,
                                         QVector<GL::Vertex> verts) {
-
+    qDebug() << "updating render group";
+    renderer_->UpdateRenderGroup(coverage_idx, lighting_idx,
+                                 primtype_idx, verts);
 }
 
 static Point_2f ToPoint_2f(const QVector2D &v, bool snap) {
