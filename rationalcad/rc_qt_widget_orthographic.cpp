@@ -124,7 +124,7 @@ void OrthographicWidget::paintEvent(QPaintEvent *event) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     drawGrid();
-    drawScene();
+    //drawScene();
 
     draw2DOverlay();
 }
@@ -134,7 +134,9 @@ void OrthographicWidget::drawGrid() {
     QMatrix4x4 mv;
     mv.scale(i_grid_.local_scale());
     mv.translate(-i_grid_.local_pos().x(), -i_grid_.local_pos().y());
+
     i_grid_rg_.Bind(GL::PRIM_LINES);
+    i_grid_rg_.program_.setUniformValue("m_modelview", mv);
     glDrawArrays(GL_LINES, 0, i_grid_rg_.NumVertices(GL::PRIM_LINES));
     i_grid_rg_.Release(GL::PRIM_LINES);
 }
@@ -202,6 +204,9 @@ void OrthographicWidget::resizeGL(int width, int height) {
     projection_.ortho(-halfWidth, halfWidth, -halfHeight, halfHeight,
                       -8192.0f*8, 8192.0f*8);
 
+    i_grid_rg_.program_.bind();
+    i_grid_rg_.program_.setUniformValue("m_projection", projection_);
+    i_grid_rg_.program_.release();
 }
 
 //=============================================================================

@@ -197,7 +197,7 @@ class SceneManager : public QObject {
     Q_OBJECT
 
 public:
-    SceneManager();
+    SceneManager(QSharedPointer<Renderer> renderer);
     ~SceneManager();
 
     SceneObserver scene_observer_;

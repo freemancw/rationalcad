@@ -101,15 +101,15 @@ MainWindow::MainWindow(QWidget *parent) :
     perspective->context()->makeCurrent();
     //qDebug() << perspective->format();
 
-    // create shader manager
-    rInfo("Creating shader manager.");
-    qDebug() << "Creating shader manager";
+    // create renderer
+    rInfo("Creating renderer.");
+    qDebug() << "Creating renderer.";
     renderer_ = QSharedPointer<Renderer>(new Renderer());
 
     // create scene manager
     rInfo("Creating scene manager.");
-    qDebug() << "Creating scene manager";
-    scene_manager_ = QSharedPointer<SceneManager>(new SceneManager());
+    qDebug() << "Creating scene manager.";
+    scene_manager_ = QSharedPointer<SceneManager>(new SceneManager(renderer_));
 
     // initialize widgets
     qDebug() << "Initializing ortho.";

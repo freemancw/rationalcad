@@ -382,7 +382,8 @@ const QString& SceneObserver::selected_name() const {
 // Implementation: SceneManager
 //=============================================================================
 
-SceneManager::SceneManager() {
+SceneManager::SceneManager(QSharedPointer<Renderer> renderer) :
+    renderer_(renderer) {
     animation_thread_ = QSharedPointer<QThread>(new QThread());
     scene_observer_.moveToThread(animation_thread_.data());
     animation_thread_->start();

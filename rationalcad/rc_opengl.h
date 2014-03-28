@@ -265,7 +265,7 @@ public:
         return vertex_cache_[ptype].num_vertices();
     }
 
-private:
+//private:
     QOpenGLShaderProgram program_;
     QVector<AttributeMeta> vertex_attributes_;
     VertexCache vertex_cache_[NUM_PRIMITIVES];
@@ -284,6 +284,7 @@ public:
     Renderer() {
         initializeOpenGLFunctions();
 
+        /*
         QVector<GL::AttributeMeta> attributes;
         attributes.push_back(GL::Vertex::kPositionMeta);
         attributes.push_back(GL::Vertex::kMatAmbientMeta);
@@ -308,6 +309,7 @@ public:
             ":shaders/mat_flat_transparent.fsh",
             attributes
         );
+        */
     }
 
 

@@ -87,14 +87,13 @@ void PerspectiveWidget::paintEvent(QPaintEvent *event) {
 
     makeCurrent();
 
-    //flat_program_->bind();
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     handleInput();
-    drawScene();
+    //drawScene();
 
     //flat_program_->release();
 
@@ -173,16 +172,6 @@ void PerspectiveWidget::drawScene() {
     //QOpenGLFramebufferObject fb0(width(), height());
     //fb0.bind();
 
-    // issue render calls
-//    vao_points_.bind();
-//    glDrawArrays(GL_POINTS, 0, scene_manager_->points_vbo().num_vertices);
-//    vao_points_.release();
-//    vao_lines_.bind();
-//    glDrawArrays(GL_LINES, 0, scene_manager_->lines_vbo().num_vertices);
-//    vao_lines_.release();
-//    vao_triangles_.bind();
-//    glDrawArrays(GL_TRIANGLES, 0, scene_manager_->triangles_vbo().num_vertices);
-//    vao_triangles_.release();
 }
 
 void PerspectiveWidget::draw2DOverlay() {
@@ -192,13 +181,8 @@ void PerspectiveWidget::draw2DOverlay() {
 void PerspectiveWidget::resizeGL(int width, int height) {
     glViewport(0, 0, width, height);
 
-    //flat_program_->bind();
-
     projection_.setToIdentity();
     projection_.perspective(80.0f, (float)width/height, 0.125f, 1024.0f);
-    //flat_program_->setUniformValue("m_projection", projection_);
-
-    //flat_program_->release();
 }
 
 //=============================================================================
