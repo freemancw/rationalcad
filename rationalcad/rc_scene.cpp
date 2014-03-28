@@ -52,7 +52,7 @@ void SceneObserver::GenerateVboPoints() {
         v.set_mat_ambient(i->back().material().ambient());
         points.push_back(v);
     }
-    emit UpdateVboPoints(points);
+    //emit UpdateVboPoints(points);
 }
 
 void SceneObserver::GenerateVboLines() {
@@ -65,7 +65,7 @@ void SceneObserver::GenerateVboLines() {
         lines.push_back(p);
         lines.push_back(q);
     }
-    emit UpdateVboLines(lines);
+    //emit UpdateVboLines(lines);
 }
 
 void SceneObserver::GenerateVboTriangles() {
@@ -91,7 +91,7 @@ void SceneObserver::GenerateVboTriangles() {
         triangles.push_back(b);
         triangles.push_back(c);
     }
-    emit UpdateVboTriangles(triangles);
+    //emit UpdateVboTriangles(triangles);
 }
 
 void SceneObserver::SlotRegisterPoint_2r(Point_2r &p) {
@@ -389,25 +389,14 @@ SceneManager::SceneManager() {
 
     connect(&scene_observer_,
             SIGNAL(UpdateVertexBuffer(GL::PrimitiveType,
-                                      Visual::Material::Coverage,
-                                      Visual::Material::Lighting,
+                                      Visual::Coverage,
+                                      Visual::Lighting,
                                       QVector<GL::Vertex>)),
             this,
             SLOT(onUpdateVertexBuffer(GL::PrimitiveType,
-                                      Visual::Material::Coverage,
-                                      Visual::Material::Lighting,
+                                      Visual::Coverage,
+                                      Visual::Lighting,
                                       QVector<GL::Vertex>)));
-
-    for (int i = 0; i < GL::PRIM_NUM; ++i) {
-        for (int j = 0; j < Visual::Material::MC_NUM; ++j) {
-            for (int k = 0; k < Visual::Material::ML_NUM; ++k) {
-                onUpdateVertexBuffer(static_cast<GL::PrimitiveType>(i),
-                                     static_cast<Visual::Material::Coverage>(j),
-                                     static_cast<Visual::Material::Lighting>(k),
-                                     QVector<GL::Vertex>());
-            }
-        }
-    }
 }
 
 SceneManager::~SceneManager() {
@@ -416,16 +405,10 @@ SceneManager::~SceneManager() {
 }
 
 void SceneManager::onUpdateVertexBuffer(GL::PrimitiveType prim_type,
-                                        Visual::Material::Coverage coverage,
-                                        Visual::Material::Lighting lighting,
+                                        Visual::Coverage coverage,
+                                        Visual::Lighting lighting,
                                         QVector<GL::Vertex> verts) {
-    vertex_buffers_[prim_type][coverage][lighting].UploadVertices(verts);
-}
 
-GL::VertexBuffer& SceneManager::GetVertexBuffer(GL::PrimitiveType prim_type,
-                                        Visual::Material::Coverage coverage,
-                                        Visual::Material::Lighting lighting) {
-    return vertex_buffers_[prim_type][coverage][lighting];
 }
 
 static Point_2f ToPoint_2f(const QVector2D &v, bool snap) {

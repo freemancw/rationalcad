@@ -77,9 +77,8 @@ private slots:
 
     Ui::MainWindow *ui;
 
+    QSharedPointer<RCAD::Renderer> renderer_;
     QSharedPointer<RCAD::SceneManager> scene_manager_;
-    QSharedPointer<RCAD::ShaderManager> shader_manager_;
-
     RCAD::RCLogger logger_;
 
     QColor create_object_color_;

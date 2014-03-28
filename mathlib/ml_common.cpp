@@ -105,10 +105,10 @@ const Color& Material::diffuse() const {
 const Color& Material::specular() const {
     return specular_;
 }
-Material::Coverage Material::coverage() const {
+Coverage Material::coverage() const {
     return coverage_;
 }
-Material::Lighting Material::lighting() const {
+Lighting Material::lighting() const {
     return lighting_;
 }
 void Material::set_ambient(const Color& ambient) {
@@ -126,13 +126,6 @@ void Material::set_coverage(Coverage coverage) {
 void Material::set_lighting(Lighting lighting) {
     lighting_ = lighting;
 }
-
-MaterialDescriptor mat_list[Material::MC_NUM * Material::ML_NUM] = {
-    {Material::MC_OPAQUE, Material::ML_UNLIT},
-    {Material::MC_OPAQUE, Material::ML_FLAT},
-    {Material::MC_TRANSPARENT, Material::ML_UNLIT},
-    {Material::MC_TRANSPARENT, Material::ML_FLAT}
-};
 
 //=============================================================================
 // Implementation: Point

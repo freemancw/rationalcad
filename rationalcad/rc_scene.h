@@ -166,15 +166,9 @@ public slots:
 
 signals:
     void UpdateVertexBuffer(GL::PrimitiveType prim_type,
-                            Visual::Material::Coverage coverage,
-                            Visual::Material::Lighting lighting,
+                            Visual::Coverage coverage,
+                            Visual::Lighting lighting,
                             QVector<GL::Vertex> verts);
-
-    /*
-    void UpdateVboPoints(QVector<GL::Vertex> verts);
-    void UpdateVboLines(QVector<GL::Vertex> verts);
-    void UpdateVboTriangles(QVector<GL::Vertex> verts);
-    */
 
 private:
     void GenerateVboPoints();
@@ -206,23 +200,16 @@ public:
     SceneManager();
     ~SceneManager();
 
-    GL::VertexBuffer& GetVertexBuffer(GL::PrimitiveType prim_type,
-                                      Visual::Material::Coverage coverage,
-                                      Visual::Material::Lighting lighting);
-
     SceneObserver scene_observer_;
 
 public slots:
     void onUpdateVertexBuffer(GL::PrimitiveType prim_type,
-                              Visual::Material::Coverage coverage,
-                              Visual::Material::Lighting lighting,
+                              Visual::Coverage coverage,
+                              Visual::Lighting lighting,
                               QVector<GL::Vertex> verts);
 
 private:
-    GL::VertexBuffer vertex_buffers_[GL::PRIM_NUM]
-                                    [Visual::Material::MC_NUM]
-                                    [Visual::Material::ML_NUM];
-
+    QSharedPointer<Renderer> renderer_;
     QSharedPointer<QThread> animation_thread_;
 };
 

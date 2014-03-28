@@ -58,7 +58,7 @@ public:
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
 
-    void initialize(QSharedPointer<RCAD::ShaderManager> shader_manager,
+    void initialize(QSharedPointer<RCAD::Renderer> renderer,
                     QSharedPointer<RCAD::SceneManager> scene_manager);
 
 public slots:
@@ -96,16 +96,11 @@ protected:
     static const int kPrefHintWidth;
     static const int kPrefHintHeight;
 
-    QSharedPointer<RCAD::ShaderManager> shader_manager_;
+    QSharedPointer<RCAD::Renderer> renderer_;
     QSharedPointer<RCAD::SceneManager> scene_manager_;
 
-    QOpenGLVertexArrayObject vertex_arrays_[RCAD::GL::PRIM_NUM]
-                                           [RCAD::Visual::Material::MC_NUM]
-                                           [RCAD::Visual::Material::ML_NUM];
-
     RCAD::IntegerGrid i_grid_;
-    RCAD::GL::VertexBuffer i_grid_vbo_;
-    QOpenGLVertexArrayObject i_grid_vao_;
+    RCAD::GL::RenderGroup i_grid_rg_;
 
     quint32 num_frames_;
     QTimer timer_;

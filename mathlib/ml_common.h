@@ -89,22 +89,31 @@ private:
 // Interface: Material
 //=============================================================================
 
+enum Coverage {
+    MC_OPAQUE,
+    MC_TRANSPARENT,
+    MC_MAX
+};
+
+enum Lighting {
+    ML_UNLIT,
+    ML_FLAT,
+    //ML_GOURAUD,
+    //ML_PHONG,
+    ML_MAX
+};
+
+/*
+ * I would like to say:
+ *
+ * for (auto i = begin(CoverageTypes); i != end(CoverageTypes); ++i) {
+ *
+ * }
+ *
+ */
+
 class Material {
 public:
-    enum Coverage {
-        MC_OPAQUE,
-        MC_TRANSPARENT,
-        MC_NUM
-    };
-
-    enum Lighting {
-        ML_UNLIT,
-        ML_FLAT,
-        //ML_GOURAUD,
-        //ML_PHONG,
-        ML_NUM
-    };
-
     Material();
     Material(const Color& ambient, const Color& diffuse,
              const Color& specular);
@@ -129,13 +138,6 @@ private:
     Coverage coverage_;
     Lighting lighting_;
 };
-
-struct MaterialDescriptor {
-    Material::Coverage coverage;
-    Material::Lighting lighting;
-};
-
-extern MaterialDescriptor mat_list[Material::MC_NUM * Material::ML_NUM];
 
 //=============================================================================
 // Interface: Point

@@ -159,7 +159,60 @@ void DisableAttributes(QSharedPointer<QOpenGLShaderProgram> program,
 
 class VertexCache {
 public:
-    VertexCache();
+    VertexCache(){}
+
+    void Initialize(QOpenGLShaderProgram& program,
+                    const QVector<AttributeMeta>& attributes) {
+        UploadVertices(QVector<Vertex>());
+        vao_.create();
+        vao_.bind();
+        vbo_.bind();
+        foreach (AttributeMeta attr_meta, attributes) {
+            program.enableAttributeArray(attr_meta.name);
+            program.setAttributeBuffer(
+                attr_meta.name,
+                attr_meta.type,
+                attr_meta.offset,
+                attr_meta.count,
+                Vertex::kStride
+            );
+        }
+        vao_.release();
+        vbo_.release();
+    }
+
+    void UploadVertices(const QVector<Vertex>& vertices) {
+        if (!vbo_.isCreated()) {
+            vbo_.create();
+            vbo_.bind();
+            vbo_.setUsagePattern(QOpenGLBuffer::DynamicDraw);
+        }
+        vbo_.bind();
+        vbo_.allocate(vertices.data(), vertices.size()*sizeof(Vertex));
+        vbo_.release();
+
+        num_vertices_ = vertices.size();
+    }
+
+    void Bind() {
+        vao_.bind();
+    }
+
+    void Release() {
+        vao_.release();
+    }
+
+    quint32 num_vertices() const {
+        return num_vertices_;
+    }
+
+/*
+    void Draw(const quint32 gltype) {
+        vao_.bind();
+        glDrawArrays(gltype, 0, num_vertices_);
+        vao_.release();
+    }
+    */
 
 private:
     QOpenGLBuffer vbo_;
@@ -169,10 +222,48 @@ private:
 
 class RenderGroup {
 public:
-    RenderGroup();
+    RenderGroup(){}
 
-    void Bind(const quint32 ptype);
-    void Unbind(const quint32 ptype);
+    void Initialize(const QString& vpath, const QString& fpath,
+                    const QVector<AttributeMeta>& attributes) {
+        bool v = program_.addShaderFromSourceFile(
+            QOpenGLShader::Vertex, vpath
+        );
+        bool f = program_.addShaderFromSourceFile(
+            QOpenGLShader::Fragment, fpath
+        );
+        bool l = program_.link();
+
+        if (v && f && l) {
+            qDebug() << "rendergroup successfully compiled.";
+        } else {
+            qDebug() << "rendergroup failed";
+        }
+
+        program_.bind();
+        for (int i = 0; i < NUM_PRIMITIVES; ++i) {
+            vertex_cache_[i].Initialize(program_, attributes);
+        }
+        program_.release();
+    }
+
+    void Bind(const quint32 ptype) {
+        program_.bind();
+        vertex_cache_[ptype].Bind();
+    }
+
+    void Release(const quint32 ptype) {
+        vertex_cache_[ptype].Release();
+        program_.release();
+    }
+
+    void UploadVertices(const quint32 ptype, const QVector<Vertex>& vertices) {
+        vertex_cache_[ptype].UploadVertices(vertices);
+    }
+
+    quint32 NumVertices(const quint32 ptype) {
+        return vertex_cache_[ptype].num_vertices();
+    }
 
 private:
     QOpenGLShaderProgram program_;
@@ -190,29 +281,44 @@ Q_DECLARE_METATYPE(QVector<GL::Vertex>)
 
 class Renderer : public QOpenGLFunctions_3_3_Core {
 public:
-    Renderer();
+    Renderer() {
+        initializeOpenGLFunctions();
 
+        QVector<GL::AttributeMeta> attributes;
+        attributes.push_back(GL::Vertex::kPositionMeta);
+        attributes.push_back(GL::Vertex::kMatAmbientMeta);
+        render_groups_[Visual::MC_OPAQUE][Visual::ML_UNLIT].Initialize(
+            ":shaders/mat_unlit_opaque.vsh",
+            ":shaders/mat_unlit_opaque.fsh",
+            attributes
+        );
+        render_groups_[Visual::MC_TRANSPARENT][Visual::ML_UNLIT].Initialize(
+            ":shaders/mat_unlit_transparent.vsh",
+            ":shaders/mat_unlit_transparent.fsh",
+            attributes
+        );
+        attributes.push_back(GL::Vertex::kNormalMeta);
+        render_groups_[Visual::MC_OPAQUE][Visual::ML_FLAT].Initialize(
+            ":shaders/mat_flat_opaque.vsh",
+            ":shaders/mat_flat_opaque.fsh",
+            attributes
+        );
+        render_groups_[Visual::MC_TRANSPARENT][Visual::ML_FLAT].Initialize(
+            ":shaders/mat_flat_transparent.vsh",
+            ":shaders/mat_flat_transparent.fsh",
+            attributes
+        );
+    }
+
+
+    /*
     GL::RenderGroup& GetRenderGroup(const quint32 coverage,
                                     const quint32 lighting);
+                                    */
 
 private:
-    GL::RenderGroup render_groups_[Visual::Material::MC_NUM]
-                                  [Visual::Material::ML_NUM];
+    GL::RenderGroup render_groups_[Visual::MC_MAX][Visual::ML_MAX];
 };
-
-/*
-class ShaderManager : public QOpenGLFunctions_3_3_Core {
-public:
-    ShaderManager();
-
-private:
-
-    QOpenGLShaderProgram mat_programs_[Visual::Material::MC_NUM]
-                                      [Visual::Material::ML_NUM];
-    QList<GL::AttributeMeta> mat_attributes_[Visual::Material::MC_NUM]
-                                            [Visual::Material::ML_NUM];
-};
-*/
 
 } // namespace RCAD
 

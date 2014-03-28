@@ -28,6 +28,7 @@ namespace RCAD {
 // ShaderManager
 //=============================================================================
 
+/*
 ShaderManager::ShaderManager() {
     initializeOpenGLFunctions();
 
@@ -76,6 +77,7 @@ ShaderManager::ShaderManager() {
     // restore system locale
     setlocale(LC_ALL, "");
 }
+*/
 
 /*
 bool ShaderManager::addProgram(const QString& id, const QString& vert_path,

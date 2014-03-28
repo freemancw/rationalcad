@@ -45,7 +45,7 @@ public:
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
 
-    void initialize(QSharedPointer<RCAD::ShaderManager> shader_manager,
+    void initialize(QSharedPointer<RCAD::Renderer> renderer,
                     QSharedPointer<RCAD::SceneManager> scene_manager);
 
 protected:
@@ -79,12 +79,8 @@ protected:
     QVector3D camera_rot_;
     bool camera_active_;
 
-    QSharedPointer<RCAD::ShaderManager> shader_manager_;
+    QSharedPointer<RCAD::Renderer> renderer_;
     QSharedPointer<RCAD::SceneManager> scene_manager_;
-
-    QOpenGLVertexArrayObject vertex_arrays_[RCAD::GL::PRIM_NUM]
-                                           [RCAD::Visual::Material::MC_NUM]
-                                           [RCAD::Visual::Material::ML_NUM];
 };
 
 #endif // RCAD_RC_QT_WIDGET_PERSPECTIVE_H
