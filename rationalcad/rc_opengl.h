@@ -148,7 +148,7 @@ enum PrimitiveType {
     PRIM_POINTS,
     PRIM_LINES,
     PRIM_TRIANGLES,
-    PRIM_NUM
+    NUM_PRIMITIVES
 };
 
 void EnableAttributes(QSharedPointer<QOpenGLShaderProgram> program,
@@ -156,6 +156,29 @@ void EnableAttributes(QSharedPointer<QOpenGLShaderProgram> program,
 
 void DisableAttributes(QSharedPointer<QOpenGLShaderProgram> program,
                        const QList<AttributeMeta>& attributes);
+
+class VertexCache {
+public:
+    VertexCache();
+
+private:
+    QOpenGLBuffer vbo_;
+    QOpenGLVertexArrayObject vao_;
+    quint32 num_vertices_;
+};
+
+class RenderGroup {
+public:
+    RenderGroup();
+
+    void Bind(const quint32 ptype);
+    void Unbind(const quint32 ptype);
+
+private:
+    QOpenGLShaderProgram program_;
+    QVector<AttributeMeta> vertex_attributes_;
+    VertexCache vertex_cache_[NUM_PRIMITIVES];
+};
 
 } // namespace GL
 
@@ -165,28 +188,31 @@ Q_DECLARE_METATYPE(QVector<GL::Vertex>)
 // Interface: ShaderManager
 //=============================================================================
 
+class Renderer : public QOpenGLFunctions_3_3_Core {
+public:
+    Renderer();
+
+    GL::RenderGroup& GetRenderGroup(const quint32 coverage,
+                                    const quint32 lighting);
+
+private:
+    GL::RenderGroup render_groups_[Visual::Material::MC_NUM]
+                                  [Visual::Material::ML_NUM];
+};
+
+/*
 class ShaderManager : public QOpenGLFunctions_3_3_Core {
 public:
     ShaderManager();
 
-    QOpenGLShaderProgram& GetProgram(Visual::Material::Coverage coverage,
-                                     Visual::Material::Lighting lighting);
-    /*
-    bool addProgram(const QString& id,
-                    const QString& vert_path,
-                    const QString& frag_path);
-
-    QSharedPointer<QOpenGLShaderProgram> getProgram(const QString& id);
-    */
-
 private:
-    //QHash<QString, QSharedPointer<QOpenGLShaderProgram>> programs_;
 
     QOpenGLShaderProgram mat_programs_[Visual::Material::MC_NUM]
                                       [Visual::Material::ML_NUM];
     QList<GL::AttributeMeta> mat_attributes_[Visual::Material::MC_NUM]
                                             [Visual::Material::ML_NUM];
 };
+*/
 
 } // namespace RCAD
 
