@@ -170,8 +170,6 @@ void OrthographicWidget::drawScene() {
     renderer_->render_groups_[Visual::MC_OPAQUE][Visual::ML_UNLIT].Bind(GL::PRIM_POINTS);
     renderer_->render_groups_[Visual::MC_OPAQUE][Visual::ML_UNLIT].program_.setUniformValue("m_modelview", modelview_);
     glDrawArrays(GL_POINTS, 0, renderer_->render_groups_[Visual::MC_OPAQUE][Visual::ML_UNLIT].NumVertices(GL::PRIM_POINTS));
-
-    qDebug() << renderer_->render_groups_[Visual::MC_OPAQUE][Visual::ML_UNLIT].NumVertices(GL::PRIM_POINTS);
     renderer_->render_groups_[Visual::MC_OPAQUE][Visual::ML_UNLIT].Release(GL::PRIM_POINTS);
 
 }

@@ -144,6 +144,15 @@ struct ElementArray {
     GLvoid* indices;   // offset pointer from currently bound IBO
 };
 
+namespace Primitive {
+    enum Type {
+        POINTS,
+        LINES,
+        TRIANGLES,
+        MAX
+    };
+}
+
 enum PrimitiveType {
     PRIM_POINTS,
     PRIM_LINES,
@@ -205,14 +214,6 @@ public:
     quint32 num_vertices() const {
         return num_vertices_;
     }
-
-/*
-    void Draw(const quint32 gltype) {
-        vao_.bind();
-        glDrawArrays(gltype, 0, num_vertices_);
-        vao_.release();
-    }
-    */
 
 private:
     QOpenGLBuffer vbo_;

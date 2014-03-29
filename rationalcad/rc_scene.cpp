@@ -50,6 +50,10 @@ void SceneObserver::GenerateVboPoints() {
     for (auto i = viz_points_.begin(); i != viz_points_.end(); ++i) {
         GL::Vertex v(approx_points_.value(i.key())->approx());
         v.set_mat_ambient(i->back().material().ambient());
+        qDebug() << i->back().material().ambient().r() << " "
+                 << i->back().material().ambient().g() << " "
+                 << i->back().material().ambient().b() << " "
+                 << i->back().material().ambient().a();
         points.push_back(v);
     }
     emit UpdateVertexBuffer(Visual::MC_OPAQUE, Visual::ML_UNLIT,
