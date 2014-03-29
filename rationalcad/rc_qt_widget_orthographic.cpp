@@ -172,6 +172,7 @@ void OrthographicWidget::drawScene() {
     rg.program_.setUniformValue("m_modelview", modelview_);
     glDrawArrays(GL_POINTS, 0, rg.NumVertices(GL::Primitive::ePOINTS));
     rg.Release(GL::Primitive::ePOINTS);
+
 }
 
 void OrthographicWidget::draw2DOverlay() {
