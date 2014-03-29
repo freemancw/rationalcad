@@ -89,6 +89,23 @@ private:
 // Interface: Material
 //=============================================================================
 
+namespace Coverage {
+    enum Type {
+        eOPAQUE,
+        eTRANSPARENT,
+        eMAX
+    };
+}
+
+namespace Lighting {
+    enum Type {
+        eUNLIT,
+        eFLAT,
+        eMAX
+    };
+}
+
+/*
 enum Coverage {
     MC_OPAQUE,
     MC_TRANSPARENT,
@@ -102,6 +119,7 @@ enum Lighting {
     //ML_PHONG,
     ML_MAX
 };
+*/
 
 /*
  * I would like to say:
@@ -118,25 +136,26 @@ public:
     Material(const Color& ambient, const Color& diffuse,
              const Color& specular);
     Material(const Color& ambient, const Color& diffuse,
-             const Color& specular, Coverage coverage, Lighting lighting);
+             const Color& specular, Coverage::Type coverage,
+             Lighting::Type lighting);
 
     const Color& ambient() const;
     const Color& diffuse() const;
     const Color& specular() const;
-    Coverage coverage() const;
-    Lighting lighting() const;
+    Coverage::Type coverage() const;
+    Lighting::Type lighting() const;
     void set_ambient(const Color& ambient);
     void set_diffuse(const Color& diffuse);
     void set_specular(const Color& specular);
-    void set_coverage(Coverage coverage);
-    void set_lighting(Lighting lighting);
+    void set_coverage(Coverage::Type coverage);
+    void set_lighting(Lighting::Type lighting);
 
 private:
     Color ambient_;
     Color diffuse_;
     Color specular_;
-    Coverage coverage_;
-    Lighting lighting_;
+    Coverage::Type coverage_;
+    Lighting::Type lighting_;
 };
 
 //=============================================================================

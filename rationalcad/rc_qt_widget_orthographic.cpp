@@ -15,7 +15,7 @@
 
 /*!
  * @author Clinton Freeman <admin@freemancw.com>
- * @date 01/29/2013
+ * @date 2013-01-29
  */
 
 // RationalCAD
@@ -30,6 +30,7 @@
 #include "ml_vector.h"
 
 using namespace RCAD;
+using namespace RCAD::Visual;
 
 const int OrthographicWidget::kRedrawMsec = 16;
 const int OrthographicWidget::kMinHintWidth = 64;
@@ -104,7 +105,7 @@ void OrthographicWidget::initializeGL() {
     );
     QVector<GL::Vertex> grid_verts;
     i_grid_.InitializeGrid(8, 8, 16, 16, grid_verts);
-    i_grid_rg_.UploadVertices(GL::PRIM_LINES, grid_verts);
+    i_grid_rg_.UploadVertices(GL::Primitive::eLINES, grid_verts);
 
     timer_.setTimerType(Qt::PreciseTimer);
     connect(&timer_, SIGNAL(timeout()), this, SLOT(update()));
@@ -135,15 +136,14 @@ void OrthographicWidget::drawGrid() {
     mv.scale(i_grid_.local_scale());
     mv.translate(-i_grid_.local_pos().x(), -i_grid_.local_pos().y());
 
-    i_grid_rg_.Bind(GL::PRIM_LINES);
+    i_grid_rg_.Bind(GL::Primitive::eLINES);
     i_grid_rg_.program_.setUniformValue("m_modelview", mv);
-    glDrawArrays(GL_LINES, 0, i_grid_rg_.NumVertices(GL::PRIM_LINES));
-    i_grid_rg_.Release(GL::PRIM_LINES);
+    glDrawArrays(GL_LINES, 0, i_grid_rg_.NumVertices(GL::Primitive::eLINES));
+    i_grid_rg_.Release(GL::Primitive::eLINES);
 }
 
 void OrthographicWidget::drawScene() {
     // restore gl state
-    //glClear(GL_DEPTH_BUFFER_BIT);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -167,11 +167,11 @@ void OrthographicWidget::drawScene() {
     modelview_.scale(i_grid_.global_scale());
     modelview_.translate(position);
 
-    renderer_->render_groups_[Visual::MC_OPAQUE][Visual::ML_UNLIT].Bind(GL::PRIM_POINTS);
-    renderer_->render_groups_[Visual::MC_OPAQUE][Visual::ML_UNLIT].program_.setUniformValue("m_modelview", modelview_);
-    glDrawArrays(GL_POINTS, 0, renderer_->render_groups_[Visual::MC_OPAQUE][Visual::ML_UNLIT].NumVertices(GL::PRIM_POINTS));
-    renderer_->render_groups_[Visual::MC_OPAQUE][Visual::ML_UNLIT].Release(GL::PRIM_POINTS);
-
+    auto& rg = renderer_->render_groups_[Coverage::eOPAQUE][Lighting::eUNLIT];
+    rg.Bind(GL::Primitive::ePOINTS);
+    rg.program_.setUniformValue("m_modelview", modelview_);
+    glDrawArrays(GL_POINTS, 0, rg.NumVertices(GL::Primitive::ePOINTS));
+    rg.Release(GL::Primitive::ePOINTS);
 }
 
 void OrthographicWidget::draw2DOverlay() {
@@ -212,9 +212,10 @@ void OrthographicWidget::resizeGL(int width, int height) {
     i_grid_rg_.program_.bind();
     i_grid_rg_.program_.setUniformValue("m_projection", projection_);
     i_grid_rg_.program_.release();
-    renderer_->render_groups_[Visual::MC_OPAQUE][Visual::ML_UNLIT].program_.bind();
-    renderer_->render_groups_[Visual::MC_OPAQUE][Visual::ML_UNLIT].program_.setUniformValue("m_projection", projection_);
-    renderer_->render_groups_[Visual::MC_OPAQUE][Visual::ML_UNLIT].program_.release();
+    auto& rg = renderer_->render_groups_[Coverage::eOPAQUE][Lighting::eUNLIT];
+    rg.program_.bind();
+    rg.program_.setUniformValue("m_projection", projection_);
+    rg.program_.release();
 }
 
 //=============================================================================

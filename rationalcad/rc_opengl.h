@@ -146,19 +146,12 @@ struct ElementArray {
 
 namespace Primitive {
     enum Type {
-        POINTS,
-        LINES,
-        TRIANGLES,
-        MAX
+        ePOINTS,
+        eLINES,
+        eTRIANGLES,
+        eMAX
     };
 }
-
-enum PrimitiveType {
-    PRIM_POINTS,
-    PRIM_LINES,
-    PRIM_TRIANGLES,
-    NUM_PRIMITIVES
-};
 
 void EnableAttributes(QSharedPointer<QOpenGLShaderProgram> program,
                       const QList<AttributeMeta>& attributes);
@@ -242,7 +235,7 @@ public:
         }
 
         program_.bind();
-        for (int i = 0; i < NUM_PRIMITIVES; ++i) {
+        for (int i = 0; i < Primitive::eMAX; ++i) {
             vertex_cache_[i].Initialize(program_, attributes);
         }
         program_.release();
@@ -271,7 +264,7 @@ public:
 //private:
     QOpenGLShaderProgram program_;
     QVector<AttributeMeta> vertex_attributes_;
-    VertexCache vertex_cache_[NUM_PRIMITIVES];
+    VertexCache vertex_cache_[Primitive::eMAX];
 };
 
 } // namespace GL
@@ -279,7 +272,7 @@ public:
 Q_DECLARE_METATYPE(QVector<GL::Vertex>)
 
 //=============================================================================
-// Interface: ShaderManager
+// Interface: Renderer
 //=============================================================================
 
 class Renderer : public QOpenGLFunctions_3_3_Core {
@@ -290,7 +283,8 @@ public:
         QVector<GL::AttributeMeta> attributes;
         attributes.push_back(GL::Vertex::kPositionMeta);
         attributes.push_back(GL::Vertex::kMatAmbientMeta);
-        render_groups_[Visual::MC_OPAQUE][Visual::ML_UNLIT].Initialize(
+        render_groups_[Visual::Coverage::eOPAQUE]
+                      [Visual::Lighting::eUNLIT].Initialize(
             ":shaders/mat_unlit_opaque.vsh",
             ":shaders/mat_unlit_opaque.fsh",
             attributes
@@ -331,7 +325,8 @@ public:
                                     */
 
 //private:
-    GL::RenderGroup render_groups_[Visual::MC_MAX][Visual::ML_MAX];
+    GL::RenderGroup render_groups_[Visual::Coverage::eMAX]
+                                  [Visual::Lighting::eMAX];
 };
 
 } // namespace RCAD

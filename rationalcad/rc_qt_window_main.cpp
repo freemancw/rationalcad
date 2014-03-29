@@ -101,6 +101,14 @@ MainWindow::MainWindow(QWidget *parent) :
     perspective->context()->makeCurrent();
     //qDebug() << perspective->format();
 
+    QOpenGLDebugLogger *logger = new QOpenGLDebugLogger(this);
+    logger->initialize();
+    connect(logger,
+            &QOpenGLDebugLogger::messageLogged,
+            this,
+            &MainWindow::onLogMessage);
+    logger->startLogging();
+
     // create renderer
     rInfo("Creating renderer.");
     qDebug() << "Creating renderer.";
@@ -133,6 +141,10 @@ MainWindow::MainWindow(QWidget *parent) :
     sizes.push_back(this->height());
     sizes.push_back(0);
     ui->vsplit_console->setSizes(sizes);
+}
+
+void MainWindow::onLogMessage(const QOpenGLDebugMessage &message) {
+    qDebug() << message.message();
 }
 
 MainWindow::~MainWindow() {

@@ -70,8 +70,9 @@ private slots:
     void onSnapToGridToggled(bool state);
 
     void on_actionUser_Manual_triggered();
+    void onLogMessage(const QOpenGLDebugMessage& message);
 
-    private:
+private:
     void initializeLogging();
     void initializeConnections();
 

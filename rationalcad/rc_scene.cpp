@@ -56,8 +56,9 @@ void SceneObserver::GenerateVboPoints() {
                  << i->back().material().ambient().a();
         points.push_back(v);
     }
-    emit UpdateVertexBuffer(Visual::MC_OPAQUE, Visual::ML_UNLIT,
-                            GL::PRIM_POINTS, points);
+    emit UpdateVertexBuffer(Visual::Coverage::eOPAQUE,
+                            Visual::Lighting::eUNLIT,
+                            GL::Primitive::ePOINTS, points);
     qDebug() << "updatevertexbuffer emitted";
 }
 

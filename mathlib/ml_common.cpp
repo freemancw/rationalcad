@@ -76,20 +76,20 @@ void Color::set_rgba(const std::array<unsigned char, 4>& rgba) {
 //=============================================================================
 
 Material::Material() :
-    coverage_(MC_OPAQUE),
-    lighting_(ML_UNLIT) {}
+    coverage_(Coverage::eOPAQUE),
+    lighting_(Lighting::eUNLIT) {}
 
 Material::Material(const Color& ambient, const Color& diffuse,
                    const Color& specular) :
     ambient_(ambient),
     diffuse_(diffuse),
     specular_(specular),
-    coverage_(MC_OPAQUE),
-    lighting_(ML_UNLIT) {}
+    coverage_(Coverage::eOPAQUE),
+    lighting_(Lighting::eUNLIT) {}
 
 Material::Material(const Color& ambient, const Color& diffuse,
-                   const Color& specular, Coverage coverage,
-                   Lighting lighting) :
+                   const Color& specular, Coverage::Type coverage,
+                   Lighting::Type lighting) :
     ambient_(ambient),
     diffuse_(diffuse),
     specular_(specular),
@@ -105,10 +105,10 @@ const Color& Material::diffuse() const {
 const Color& Material::specular() const {
     return specular_;
 }
-Coverage Material::coverage() const {
+Coverage::Type Material::coverage() const {
     return coverage_;
 }
-Lighting Material::lighting() const {
+Lighting::Type Material::lighting() const {
     return lighting_;
 }
 void Material::set_ambient(const Color& ambient) {
@@ -120,10 +120,10 @@ void Material::set_diffuse(const Color& diffuse) {
 void Material::set_specular(const Color& specular) {
     specular_ = specular;
 }
-void Material::set_coverage(Coverage coverage) {
+void Material::set_coverage(Coverage::Type coverage) {
     coverage_ = coverage;
 }
-void Material::set_lighting(Lighting lighting) {
+void Material::set_lighting(Lighting::Type lighting) {
     lighting_ = lighting;
 }
 
