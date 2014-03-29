@@ -107,6 +107,8 @@ void OrthographicWidget::initializeGL() {
     i_grid_.InitializeGrid(8, 8, 16, 16, grid_verts);
     i_grid_rg_.UploadVertices(GL::Primitive::eLINES, grid_verts);
 
+    renderer_->Initialize();
+
     timer_.setTimerType(Qt::PreciseTimer);
     connect(&timer_, SIGNAL(timeout()), this, SLOT(update()));
     timer_.start(kRedrawMsec);
@@ -172,7 +174,9 @@ void OrthographicWidget::drawScene() {
     rg.program_.setUniformValue("m_modelview", modelview_);
     glDrawArrays(GL_POINTS, 0, rg.NumVertices(GL::Primitive::ePOINTS));
     rg.Release(GL::Primitive::ePOINTS);
-
+    rg.Bind(GL::Primitive::eLINES);
+    glDrawArrays(GL_LINES, 0, rg.NumVertices(GL::Primitive::eLINES));
+    rg.Release(GL::Primitive::eLINES);
 }
 
 void OrthographicWidget::draw2DOverlay() {
@@ -213,10 +217,10 @@ void OrthographicWidget::resizeGL(int width, int height) {
     i_grid_rg_.program_.bind();
     i_grid_rg_.program_.setUniformValue("m_projection", projection_);
     i_grid_rg_.program_.release();
-    auto& rg = renderer_->render_groups_[Coverage::eOPAQUE][Lighting::eUNLIT];
-    rg.program_.bind();
-    rg.program_.setUniformValue("m_projection", projection_);
-    rg.program_.release();
+    auto rg = &renderer_->render_groups_[Coverage::eOPAQUE][Lighting::eUNLIT];
+    rg->program_.bind();
+    rg->program_.setUniformValue("m_projection", projection_);
+    rg->program_.release();
 }
 
 //=============================================================================

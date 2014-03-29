@@ -50,16 +50,17 @@ void SceneObserver::GenerateVboPoints() {
     for (auto i = viz_points_.begin(); i != viz_points_.end(); ++i) {
         GL::Vertex v(approx_points_.value(i.key())->approx());
         v.set_mat_ambient(i->back().material().ambient());
+        /*
         qDebug() << i->back().material().ambient().r() << " "
                  << i->back().material().ambient().g() << " "
                  << i->back().material().ambient().b() << " "
-                 << i->back().material().ambient().a();
+                 << i->back().material().ambient().a(); */
         points.push_back(v);
     }
     emit UpdateVertexBuffer(Visual::Coverage::eOPAQUE,
                             Visual::Lighting::eUNLIT,
                             GL::Primitive::ePOINTS, points);
-    qDebug() << "updatevertexbuffer emitted";
+    //qDebug() << "updatevertexbuffer emitted";
 }
 
 void SceneObserver::GenerateVboLines() {
@@ -72,6 +73,9 @@ void SceneObserver::GenerateVboLines() {
         lines.push_back(p);
         lines.push_back(q);
     }
+    emit UpdateVertexBuffer(Visual::Coverage::eOPAQUE,
+                            Visual::Lighting::eUNLIT,
+                            GL::Primitive::eLINES, lines);
     //emit UpdateVboLines(lines);
 }
 
@@ -98,6 +102,9 @@ void SceneObserver::GenerateVboTriangles() {
         triangles.push_back(b);
         triangles.push_back(c);
     }
+    emit UpdateVertexBuffer(Visual::Coverage::eOPAQUE,
+                            Visual::Lighting::eUNLIT,
+                            GL::Primitive::eTRIANGLES, triangles);
     //emit UpdateVboTriangles(triangles);
 }
 
@@ -416,7 +423,7 @@ void SceneManager::onUpdateVertexBuffer(const quint32 coverage_idx,
                                         const quint32 lighting_idx,
                                         const quint32 primtype_idx,
                                         QVector<GL::Vertex> verts) {
-    qDebug() << "updating render group";
+    //qDebug() << "updating render group";
     renderer_->UpdateRenderGroup(coverage_idx, lighting_idx,
                                  primtype_idx, verts);
 }

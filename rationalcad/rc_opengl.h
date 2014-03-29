@@ -159,6 +159,10 @@ void EnableAttributes(QSharedPointer<QOpenGLShaderProgram> program,
 void DisableAttributes(QSharedPointer<QOpenGLShaderProgram> program,
                        const QList<AttributeMeta>& attributes);
 
+//=============================================================================
+// Interface: VertexCache
+//=============================================================================
+
 class VertexCache {
 public:
     VertexCache(){}
@@ -213,6 +217,10 @@ private:
     QOpenGLVertexArrayObject vao_;
     quint32 num_vertices_;
 };
+
+//=============================================================================
+// Interface: RenderGroup
+//=============================================================================
 
 class RenderGroup {
 public:
@@ -277,7 +285,9 @@ Q_DECLARE_METATYPE(QVector<GL::Vertex>)
 
 class Renderer : public QOpenGLFunctions_3_3_Core {
 public:
-    Renderer() {
+    Renderer() {}
+
+    void Initialize() {
         initializeOpenGLFunctions();
 
         QVector<GL::AttributeMeta> attributes;
@@ -289,24 +299,25 @@ public:
             ":shaders/mat_unlit_opaque.fsh",
             attributes
         );
-        /*
-        render_groups_[Visual::MC_TRANSPARENT][Visual::ML_UNLIT].Initialize(
+        render_groups_[Visual::Coverage::eTRANSPARENT]
+                      [Visual::Lighting::eUNLIT].Initialize(
             ":shaders/mat_unlit_transparent.vsh",
             ":shaders/mat_unlit_transparent.fsh",
             attributes
         );
         attributes.push_back(GL::Vertex::kNormalMeta);
-        render_groups_[Visual::MC_OPAQUE][Visual::ML_FLAT].Initialize(
+        render_groups_[Visual::Coverage::eOPAQUE]
+                      [Visual::Lighting::eFLAT].Initialize(
             ":shaders/mat_flat_opaque.vsh",
             ":shaders/mat_flat_opaque.fsh",
             attributes
         );
-        render_groups_[Visual::MC_TRANSPARENT][Visual::ML_FLAT].Initialize(
+        render_groups_[Visual::Coverage::eTRANSPARENT]
+                      [Visual::Lighting::eFLAT].Initialize(
             ":shaders/mat_flat_transparent.vsh",
             ":shaders/mat_flat_transparent.fsh",
             attributes
         );
-        */
     }
 
     void UpdateRenderGroup(const quint32 coverage_idx,
