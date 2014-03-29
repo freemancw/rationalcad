@@ -84,30 +84,25 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->toolBar->addSeparator();
     ui->toolBar->addAction(snap_to_grid);
 
-    // create orthographic widget
-    rInfo("Creating orthographic view.");
-    qDebug() << "Creating orthographic view";
-    auto ortho_top = new OrthographicWidget(TOP, ui->group_top);
-    ui->group_top->layout()->addWidget(ortho_top);
-    ortho_top->installEventFilter(this);
-    //qDebug() << ortho_top->format();
-
     // create perspective widget
     rInfo("Creating perspective view.");
     qDebug() << "Creating perspective view";
-    auto perspective = new PerspectiveWidget(ui->group_perspective, ortho_top);
+    auto perspective = new PerspectiveWidget(ui->group_perspective);
     ui->group_perspective->layout()->addWidget(perspective);
     perspective->installEventFilter(this);
-    perspective->context()->makeCurrent();
+    //perspective->context()->makeCurrent();
     //qDebug() << perspective->format();
 
-    QOpenGLDebugLogger *logger = new QOpenGLDebugLogger(this);
-    logger->initialize();
-    connect(logger,
-            &QOpenGLDebugLogger::messageLogged,
-            this,
-            &MainWindow::onLogMessage);
-    logger->startLogging();
+
+    // create orthographic widget
+    rInfo("Creating orthographic view.");
+    qDebug() << "Creating orthographic view";
+    auto ortho_top = new OrthographicWidget(TOP, ui->group_top, perspective);
+    ui->group_top->layout()->addWidget(ortho_top);
+    ortho_top->installEventFilter(this);
+    qDebug() << "persp is sharing? " << perspective->context()->isSharing();
+    //qDebug() << ortho_top->format();
+
 
     // create renderer
     rInfo("Creating renderer.");
@@ -124,6 +119,14 @@ MainWindow::MainWindow(QWidget *parent) :
     ortho_top->initialize(renderer_, scene_manager_);
     qDebug() << "Initializing perspective.";
     perspective->initialize(renderer_, scene_manager_);
+
+    QOpenGLDebugLogger *logger = new QOpenGLDebugLogger(this);
+    logger->initialize();
+    connect(logger,
+            &QOpenGLDebugLogger::messageLogged,
+            this,
+            &MainWindow::onLogMessage);
+    logger->startLogging();
 
     connect(ortho_top,
             SIGNAL(ChangeMessage(const QString&)),

@@ -218,6 +218,8 @@ void OrthographicWidget::resizeGL(int width, int height) {
     i_grid_rg_.program_.setUniformValue("m_projection", projection_);
     i_grid_rg_.program_.release();
     auto rg = &renderer_->render_groups_[Coverage::eOPAQUE][Lighting::eUNLIT];
+    qDebug() << "is program? " << glIsProgram(rg->program_.programId());
+    qDebug() << "is vertex array? " << glIsVertexArray(rg->vertex_cache_[GL::Primitive::ePOINTS].vao_.objectId());
     rg->program_.bind();
     rg->program_.setUniformValue("m_projection", projection_);
     rg->program_.release();

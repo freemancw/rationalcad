@@ -24,6 +24,7 @@
 #include "rc_scene.h"
 
 using namespace RCAD;
+using namespace RCAD::Visual;
 
 const int PerspectiveWidget::kRedrawMsec = 16;
 const int PerspectiveWidget::kMinHintWidth = 64;
@@ -65,6 +66,8 @@ void PerspectiveWidget::initializeGL() {
     glEnable(GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
 
+    renderer_->Initialize();
+
     modelview_.setToIdentity();
     //! @todo magic numbers
     camera_pos_ = QVector3D(6, -2, 2);
@@ -87,15 +90,12 @@ void PerspectiveWidget::paintEvent(QPaintEvent *event) {
 
     makeCurrent();
 
-
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     handleInput();
-    //drawScene();
-
-    //flat_program_->release();
+    drawScene();
 
     // setup the QPainter for drawing the overlay (e.g. 2D text)
     QPainter painter;
@@ -169,9 +169,14 @@ void PerspectiveWidget::drawScene() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    //QOpenGLFramebufferObject fb0(width(), height());
-    //fb0.bind();
-
+    auto& rg = renderer_->render_groups_[Coverage::eOPAQUE][Lighting::eUNLIT];
+    rg.Bind(GL::Primitive::ePOINTS);
+    rg.program_.setUniformValue("m_modelview", modelview_);
+    glDrawArrays(GL_POINTS, 0, rg.NumVertices(GL::Primitive::ePOINTS));
+    rg.Release(GL::Primitive::ePOINTS);
+    rg.Bind(GL::Primitive::eLINES);
+    glDrawArrays(GL_LINES, 0, rg.NumVertices(GL::Primitive::eLINES));
+    rg.Release(GL::Primitive::eLINES);
 }
 
 void PerspectiveWidget::draw2DOverlay() {
@@ -183,6 +188,11 @@ void PerspectiveWidget::resizeGL(int width, int height) {
 
     projection_.setToIdentity();
     projection_.perspective(80.0f, (float)width/height, 0.125f, 1024.0f);
+
+    auto rg = &renderer_->render_groups_[Coverage::eOPAQUE][Lighting::eUNLIT];
+    rg->program_.bind();
+    rg->program_.setUniformValue("m_projection", projection_);
+    rg->program_.release();
 }
 
 //=============================================================================

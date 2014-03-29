@@ -40,7 +40,7 @@ class PerspectiveWidget : public QGLWidget,
     Q_OBJECT
 
 public:
-    PerspectiveWidget(QWidget* parent, const QGLWidget* shareWidget);
+    PerspectiveWidget(QWidget* parent, const QGLWidget* shareWidget = nullptr);
 
     QSize minimumSizeHint() const;
     QSize sizeHint() const;

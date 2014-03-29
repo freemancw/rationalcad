@@ -212,7 +212,7 @@ public:
         return num_vertices_;
     }
 
-private:
+//private:
     QOpenGLBuffer vbo_;
     QOpenGLVertexArrayObject vao_;
     quint32 num_vertices_;
@@ -285,9 +285,15 @@ Q_DECLARE_METATYPE(QVector<GL::Vertex>)
 
 class Renderer : public QOpenGLFunctions_3_3_Core {
 public:
-    Renderer() {}
+    Renderer() : is_initialized_(false) {}
 
     void Initialize() {
+        if (is_initialized_) {
+            return;
+        }
+
+        qDebug() << "init renderer";
+
         initializeOpenGLFunctions();
 
         QVector<GL::AttributeMeta> attributes;
@@ -318,6 +324,8 @@ public:
             ":shaders/mat_flat_transparent.fsh",
             attributes
         );
+
+        is_initialized_ = true;
     }
 
     void UpdateRenderGroup(const quint32 coverage_idx,
@@ -338,6 +346,7 @@ public:
 //private:
     GL::RenderGroup render_groups_[Visual::Coverage::eMAX]
                                   [Visual::Lighting::eMAX];
+    bool is_initialized_;
 };
 
 } // namespace RCAD
