@@ -423,9 +423,12 @@ void SceneManager::onUpdateVertexBuffer(const quint32 coverage_idx,
                                         const quint32 lighting_idx,
                                         const quint32 primtype_idx,
                                         QVector<GL::Vertex> verts) {
-    //qDebug() << "updating render group";
-    renderer_->UpdateRenderGroup(coverage_idx, lighting_idx,
-                                 primtype_idx, verts);
+    renderer_->UpdateRenderGroup(
+        static_cast<Visual::Coverage::Type>(coverage_idx),
+        static_cast<Visual::Lighting::Type>(lighting_idx),
+        static_cast<GL::Primitive::Type>(primtype_idx),
+        verts
+    );
 }
 
 static Point_2f ToPoint_2f(const QVector2D &v, bool snap) {

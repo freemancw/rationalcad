@@ -66,7 +66,8 @@ void PerspectiveWidget::initializeGL() {
     glEnable(GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
 
-    renderer_->Initialize();
+    renderer_->InitCommon();
+    renderer_->InitContext(GL::Context::ePERSPECTIVE);
 
     modelview_.setToIdentity();
     //! @todo magic numbers
@@ -170,13 +171,13 @@ void PerspectiveWidget::drawScene() {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     auto& rg = renderer_->render_groups_[Coverage::eOPAQUE][Lighting::eUNLIT];
-    rg.Bind(GL::Primitive::ePOINTS);
+    rg.BindContextPrimitive(GL::Context::ePERSPECTIVE, GL::Primitive::ePOINTS);
     rg.program_.setUniformValue("m_modelview", modelview_);
     glDrawArrays(GL_POINTS, 0, rg.NumVertices(GL::Primitive::ePOINTS));
-    rg.Release(GL::Primitive::ePOINTS);
-    rg.Bind(GL::Primitive::eLINES);
+    rg.ReleaseContextPrimitive(GL::Context::ePERSPECTIVE, GL::Primitive::ePOINTS);
+    rg.BindContextPrimitive(GL::Context::ePERSPECTIVE, GL::Primitive::eLINES);
     glDrawArrays(GL_LINES, 0, rg.NumVertices(GL::Primitive::eLINES));
-    rg.Release(GL::Primitive::eLINES);
+    rg.ReleaseContextPrimitive(GL::Context::ePERSPECTIVE, GL::Primitive::eLINES);
 }
 
 void PerspectiveWidget::draw2DOverlay() {
