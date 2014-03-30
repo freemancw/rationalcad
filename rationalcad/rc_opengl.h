@@ -338,6 +338,7 @@ public:
         );
     }
 
+
     /*
     GL::RenderGroup& GetRenderGroup(const quint32 coverage,
                                     const quint32 lighting);
