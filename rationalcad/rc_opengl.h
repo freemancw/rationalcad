@@ -221,8 +221,8 @@ public:
     }
 
     QOpenGLBuffer vbo_;
-    QOpenGLVertexArrayObject vao_[Context::eMAX];
     quint32 num_vertices_;
+    QOpenGLVertexArrayObject vao_[Context::eMAX];
 };
 
 //=============================================================================
@@ -236,45 +236,44 @@ public:
     void InitCommon(const QString& vpath, const QString& fpath,
                     const QVector<AttributeMeta>& attributes) {
         vertex_attributes_ = attributes;
-        bool v = program_.addShaderFromSourceFile(
-            QOpenGLShader::Vertex, vpath
+        vpath_ = vpath;
+        fpath_ = fpath;
+        for (int i = 0; i < Primitive::eMAX; ++i) {
+            vertex_cache_[i].UploadVertices(QVector<Vertex>());
+        }
+    }
+
+    void InitContext(GL::Context::Name cname) {
+        bool v = program_[cname].addShaderFromSourceFile(
+            QOpenGLShader::Vertex, vpath_
         );
-        bool f = program_.addShaderFromSourceFile(
-            QOpenGLShader::Fragment, fpath
+        bool f = program_[cname].addShaderFromSourceFile(
+            QOpenGLShader::Fragment, fpath_
         );
-        bool l = program_.link();
+        bool l = program_[cname].link();
 
         if (v && f && l) {
             qDebug() << "rendergroup successfully compiled.";
         } else {
             qDebug() << "rendergroup failed";
         }
-
-        //program_.bind();
+        program_[cname].bind();
         for (int i = 0; i < Primitive::eMAX; ++i) {
-            vertex_cache_[i].UploadVertices(QVector<Vertex>());
+            vertex_cache_[i].InitContext(cname, program_[cname], vertex_attributes_);
         }
-        //program_.release();
-    }
-
-    void InitContext(GL::Context::Name cname) {
-        program_.bind();
-        for (int i = 0; i < Primitive::eMAX; ++i) {
-            vertex_cache_[i].InitContext(cname, program_, vertex_attributes_);
-        }
-        program_.release();
+        program_[cname].release();
     }
 
     void BindContextPrimitive(GL::Context::Name cname,
                               GL::Primitive::Type ptype) {
-        program_.bind();
+        program_[cname].bind();
         vertex_cache_[ptype].BindContextSettings(cname);
     }
 
     void ReleaseContextPrimitive(GL::Context::Name cname,
                                  GL::Primitive::Type ptype) {
         vertex_cache_[ptype].ReleaseContextSettings(cname);
-        program_.release();
+        program_[cname].release();
     }
 
     void UploadVertices(GL::Primitive::Type ptype,
@@ -286,6 +285,8 @@ public:
         return vertex_cache_[ptype].num_vertices();
     }
 
+    QString vpath_;
+    QString fpath_;
     QOpenGLShaderProgram program_[Context::eMAX];
     QVector<AttributeMeta> vertex_attributes_;
     VertexCache vertex_cache_[Primitive::eMAX];

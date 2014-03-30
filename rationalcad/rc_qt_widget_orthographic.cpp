@@ -142,7 +142,7 @@ void OrthographicWidget::drawGrid() {
 
     i_grid_rg_.BindContextPrimitive(GL::Context::eORTHOGRAPHIC,
                                     GL::Primitive::eLINES);
-    i_grid_rg_.program_.setUniformValue("m_modelview", mv);
+    i_grid_rg_.program_[GL::Context::eORTHOGRAPHIC].setUniformValue("m_modelview", mv);
     glDrawArrays(GL_LINES, 0, i_grid_rg_.NumVertices(GL::Primitive::eLINES));
     i_grid_rg_.ReleaseContextPrimitive(GL::Context::eORTHOGRAPHIC,
                                        GL::Primitive::eLINES);
@@ -175,7 +175,7 @@ void OrthographicWidget::drawScene() {
 
     auto& rg = renderer_->render_groups_[Coverage::eOPAQUE][Lighting::eUNLIT];
     rg.BindContextPrimitive(GL::Context::eORTHOGRAPHIC, GL::Primitive::ePOINTS);
-    rg.program_.setUniformValue("m_modelview", modelview_);
+    rg.program_[GL::Context::eORTHOGRAPHIC].setUniformValue("m_modelview", modelview_);
     glDrawArrays(GL_POINTS, 0, rg.NumVertices(GL::Primitive::ePOINTS));
     rg.ReleaseContextPrimitive(GL::Context::eORTHOGRAPHIC, GL::Primitive::ePOINTS);
     rg.BindContextPrimitive(GL::Context::eORTHOGRAPHIC, GL::Primitive::eLINES);
@@ -218,13 +218,13 @@ void OrthographicWidget::resizeGL(int width, int height) {
     projection_.ortho(-halfWidth, halfWidth, -halfHeight, halfHeight,
                       -8192.0f*8, 8192.0f*8);
 
-    i_grid_rg_.program_.bind();
-    i_grid_rg_.program_.setUniformValue("m_projection", projection_);
-    i_grid_rg_.program_.release();
+    i_grid_rg_.program_[GL::Context::eORTHOGRAPHIC].bind();
+    i_grid_rg_.program_[GL::Context::eORTHOGRAPHIC].setUniformValue("m_projection", projection_);
+    i_grid_rg_.program_[GL::Context::eORTHOGRAPHIC].release();
     auto rg = &renderer_->render_groups_[Coverage::eOPAQUE][Lighting::eUNLIT];
-    rg->program_.bind();
-    rg->program_.setUniformValue("m_projection", projection_);
-    rg->program_.release();
+    rg->program_[GL::Context::eORTHOGRAPHIC].bind();
+    rg->program_[GL::Context::eORTHOGRAPHIC].setUniformValue("m_projection", projection_);
+    rg->program_[GL::Context::eORTHOGRAPHIC].release();
 }
 
 //=============================================================================

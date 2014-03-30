@@ -172,7 +172,7 @@ void PerspectiveWidget::drawScene() {
 
     auto& rg = renderer_->render_groups_[Coverage::eOPAQUE][Lighting::eUNLIT];
     rg.BindContextPrimitive(GL::Context::ePERSPECTIVE, GL::Primitive::ePOINTS);
-    rg.program_.setUniformValue("m_modelview", modelview_);
+    rg.program_[GL::Context::ePERSPECTIVE].setUniformValue("m_modelview", modelview_);
     glDrawArrays(GL_POINTS, 0, rg.NumVertices(GL::Primitive::ePOINTS));
     rg.ReleaseContextPrimitive(GL::Context::ePERSPECTIVE, GL::Primitive::ePOINTS);
     rg.BindContextPrimitive(GL::Context::ePERSPECTIVE, GL::Primitive::eLINES);
@@ -191,9 +191,9 @@ void PerspectiveWidget::resizeGL(int width, int height) {
     projection_.perspective(80.0f, (float)width/height, 0.125f, 1024.0f);
 
     auto rg = &renderer_->render_groups_[Coverage::eOPAQUE][Lighting::eUNLIT];
-    rg->program_.bind();
-    rg->program_.setUniformValue("m_projection", projection_);
-    rg->program_.release();
+    rg->program_[GL::Context::ePERSPECTIVE].bind();
+    rg->program_[GL::Context::ePERSPECTIVE].setUniformValue("m_projection", projection_);
+    rg->program_[GL::Context::ePERSPECTIVE].release();
 }
 
 //=============================================================================
