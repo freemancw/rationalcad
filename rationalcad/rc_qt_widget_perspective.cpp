@@ -170,14 +170,21 @@ void PerspectiveWidget::drawScene() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    auto& rg = renderer_->render_groups_[Coverage::eOPAQUE][Lighting::eUNLIT];
-    rg.BindContextPrimitive(GL::Context::ePERSPECTIVE, GL::Primitive::ePOINTS);
-    rg.program_[GL::Context::ePERSPECTIVE].setUniformValue("m_modelview", modelview_);
-    glDrawArrays(GL_POINTS, 0, rg.NumVertices(GL::Primitive::ePOINTS));
-    rg.ReleaseContextPrimitive(GL::Context::ePERSPECTIVE, GL::Primitive::ePOINTS);
-    rg.BindContextPrimitive(GL::Context::ePERSPECTIVE, GL::Primitive::eLINES);
-    glDrawArrays(GL_LINES, 0, rg.NumVertices(GL::Primitive::eLINES));
-    rg.ReleaseContextPrimitive(GL::Context::ePERSPECTIVE, GL::Primitive::eLINES);
+    auto rg = &renderer_->render_groups_[Coverage::eOPAQUE][Lighting::eUNLIT];
+    rg->BindContextPrimitive(GL::Context::ePERSPECTIVE, GL::Primitive::ePOINTS);
+    rg->program_[GL::Context::ePERSPECTIVE].setUniformValue("m_modelview", modelview_);
+    glDrawArrays(GL_POINTS, 0, rg->NumVertices(GL::Primitive::ePOINTS));
+    rg->ReleaseContextPrimitive(GL::Context::ePERSPECTIVE, GL::Primitive::ePOINTS);
+    rg->BindContextPrimitive(GL::Context::ePERSPECTIVE, GL::Primitive::eLINES);
+    glDrawArrays(GL_LINES, 0, rg->NumVertices(GL::Primitive::eLINES));
+    rg->ReleaseContextPrimitive(GL::Context::ePERSPECTIVE, GL::Primitive::eLINES);
+
+
+    rg = &renderer_->render_groups_[Coverage::eOPAQUE][Lighting::eFLAT];
+    rg->BindContextPrimitive(GL::Context::ePERSPECTIVE, GL::Primitive::eTRIANGLES);
+    rg->program_[GL::Context::ePERSPECTIVE].setUniformValue("m_modelview", modelview_);
+    glDrawArrays(GL_TRIANGLES, 0, rg->NumVertices(GL::Primitive::eTRIANGLES));
+    rg->ReleaseContextPrimitive(GL::Context::ePERSPECTIVE, GL::Primitive::eTRIANGLES);
 }
 
 void PerspectiveWidget::draw2DOverlay() {
@@ -191,6 +198,11 @@ void PerspectiveWidget::resizeGL(int width, int height) {
     projection_.perspective(80.0f, (float)width/height, 0.125f, 1024.0f);
 
     auto rg = &renderer_->render_groups_[Coverage::eOPAQUE][Lighting::eUNLIT];
+    rg->program_[GL::Context::ePERSPECTIVE].bind();
+    rg->program_[GL::Context::ePERSPECTIVE].setUniformValue("m_projection", projection_);
+    rg->program_[GL::Context::ePERSPECTIVE].release();
+
+    rg = &renderer_->render_groups_[Coverage::eOPAQUE][Lighting::eFLAT];
     rg->program_[GL::Context::ePERSPECTIVE].bind();
     rg->program_[GL::Context::ePERSPECTIVE].setUniformValue("m_projection", projection_);
     rg->program_[GL::Context::ePERSPECTIVE].release();

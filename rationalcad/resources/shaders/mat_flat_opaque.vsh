@@ -14,8 +14,8 @@ layout (location = 2) in vec4 v_mat_ambient;
 // input: transformation matrices
 uniform mat4 m_modelview;
 uniform mat4 m_projection;
-uniform vec4 camera_position;
-uniform vec4 camera_view_direction;
+//uniform vec4 camera_position;
+//uniform vec4 camera_view_direction;
 
 // output: fragment color
 out vec4 f_color;

@@ -103,7 +103,7 @@ void SceneObserver::GenerateVboTriangles() {
         triangles.push_back(c);
     }
     emit UpdateVertexBuffer(Visual::Coverage::eOPAQUE,
-                            Visual::Lighting::eUNLIT,
+                            Visual::Lighting::eFLAT,
                             GL::Primitive::eTRIANGLES, triangles);
     //emit UpdateVboTriangles(triangles);
 }
