@@ -13,8 +13,10 @@ add_library(mathlib
     ml_point.cpp
     ml_polygon.cpp
     ml_polytope.cpp
+    ml_quadedge.cpp
     ml_quadrilateral.cpp
     ml_triangle.cpp
-    ml_vector.h
+    ml_triangulation.cpp
     ml_wedge.cpp
+    ml_vector.h
 )

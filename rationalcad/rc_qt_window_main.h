@@ -67,6 +67,7 @@ private slots:
 
     void onSelectObjectsTriggered();
     void onCreatePolytopeTriggered();
+    void onCreateTerrainTriggered();
     void onSnapToGridToggled(bool state);
 
     void on_actionUser_Manual_triggered();

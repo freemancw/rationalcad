@@ -68,6 +68,15 @@ MainWindow::MainWindow(QWidget *parent) :
             SIGNAL(triggered()),
             SLOT(onCreatePolytopeTriggered()));
 
+    // create terrain button
+    QAction* create_terrain = new QAction("Create Terrain", input_state_buttons);
+    create_terrain->setIcon(QIcon("://icons/create_terrain.png"));
+    create_terrain->setCheckable(true);
+
+    connect(create_terrain,
+            SIGNAL(triggered()),
+            SLOT(onCreateTerrainTriggered()));
+
     // snap to grid button
     QAction* snap_to_grid = new QAction("Snap to Grid", ui->toolBar->layout());
     snap_to_grid->setIcon(QIcon("://icons/snap_to_grid.png"));
@@ -81,6 +90,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // add buttons to toolbar
     ui->toolBar->addAction(select_objects);
     ui->toolBar->addAction(create_polytope);
+    ui->toolBar->addAction(create_terrain);
     ui->toolBar->addSeparator();
     ui->toolBar->addAction(snap_to_grid);
 
@@ -160,6 +170,10 @@ void MainWindow::onSelectObjectsTriggered() {
 
 void MainWindow::onCreatePolytopeTriggered() {
     ConfigManager::get().set_input_state(CREATE_POLYTOPE);
+}
+
+void MainWindow::onCreateTerrainTriggered() {
+
 }
 
 void MainWindow::onSnapToGridToggled(bool state) {

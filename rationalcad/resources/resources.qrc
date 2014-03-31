@@ -16,5 +16,6 @@
         <file>shaders/mat_flat_transparent.vsh</file>
         <file>shaders/mat_unlit_transparent.fsh</file>
         <file>shaders/mat_unlit_transparent.vsh</file>
+        <file>icons/create_terrain.png</file>
     </qresource>
 </RCC>

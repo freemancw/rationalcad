@@ -30,6 +30,7 @@
 // mathlib
 #include "ml_polygon.h"
 #include "ml_polytope.h"
+#include "ml_triangulation.h"
 #include "ml_rational.h"
 #include "ml_line.h"
 #include "ml_observer.h"
@@ -94,6 +95,28 @@ public:
 
 private:
     Polytope_3r model_polytope_;
+};
+
+//=============================================================================
+// Interface: SceneTerrainMesh_3
+//=============================================================================
+
+class SceneTerrainMesh_3 : public ISceneObject, public VisualGeometry {
+public:
+    SceneTerrainMesh_3() {
+        model_terrain_mesh_.AddObserver(this);
+    }
+
+    void Initialize() {
+        model_terrain_mesh_.Initialize();
+    }
+
+    void Select() override {}
+    void Deselect() override {}
+    void UpdateColor(const QColor &color) override {}
+
+private:
+    TerrainMesh_3r model_terrain_mesh_;
 };
 
 //=============================================================================
@@ -178,6 +201,7 @@ private:
     bool ObjectIsSelected() const;
     ISceneObject* SelectedObject();
     ScenePolytope_3* SelectedPolytope_3();
+    SceneTerrainMesh_3* SelectedTerrainMesh_3();
 
     QHash<QString, QSharedPointer<ISceneObject>> scene_objects_;
     QString selected_name_;

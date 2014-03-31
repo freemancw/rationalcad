@@ -384,6 +384,10 @@ ScenePolytope_3* SceneObserver::SelectedPolytope_3() {
     return dynamic_cast<ScenePolytope_3*>(SelectedObject());
 }
 
+SceneTerrainMesh_3* SceneObserver::SelectedTerrainMesh_3() {
+    return dynamic_cast<SceneTerrainMesh_3*>(SelectedObject());
+}
+
 bool SceneObserver::ObjectIsSelected() const {
     return selected_name_ != "";
 }

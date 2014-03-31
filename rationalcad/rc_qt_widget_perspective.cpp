@@ -179,7 +179,6 @@ void PerspectiveWidget::drawScene() {
     glDrawArrays(GL_LINES, 0, rg->NumVertices(GL::Primitive::eLINES));
     rg->ReleaseContextPrimitive(GL::Context::ePERSPECTIVE, GL::Primitive::eLINES);
 
-
     rg = &renderer_->render_groups_[Coverage::eOPAQUE][Lighting::eFLAT];
     rg->BindContextPrimitive(GL::Context::ePERSPECTIVE, GL::Primitive::eTRIANGLES);
     rg->program_[GL::Context::ePERSPECTIVE].setUniformValue("m_modelview", modelview_);
