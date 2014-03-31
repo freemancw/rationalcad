@@ -107,8 +107,8 @@ public:
         model_terrain_mesh_.AddObserver(this);
     }
 
-    void Initialize() {
-        model_terrain_mesh_.Initialize();
+    void Initialize(const std::vector<Point_3f>& data) {
+        model_terrain_mesh_.Initialize(data);
     }
 
     void Select() override {}
@@ -180,6 +180,8 @@ public slots:
     void onBeginCreatePolytope(const QVector2D& start, const QVector2D& cur);
     void onUpdateNewPolytope(const QVector2D& cur);
     void onEndCreatePolytope();
+
+    void onCreateTerrainMesh(const QVector<QVector3D>& data);
 
     void onUpdateSelectedObjectName(const QString& name);
     void onUpdateSelectedObjectColor(const QColor& color);

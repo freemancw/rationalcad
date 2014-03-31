@@ -29,11 +29,12 @@ namespace RCAD {
 
 class TerrainMesh_3r : public VisualGeometry {
 public:
-    TerrainMesh_3r() {
+    TerrainMesh_3r() {}
+
+    void Initialize(const std::vector<Point_3f>& samples) {
+         // compute a bounding box of the input points xy coordinates
 
     }
-
-    void Initialize() {}
 
 private:
     QuadEdge::Cell* cell_;

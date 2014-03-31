@@ -53,6 +53,8 @@ signals:
     void BeginCreatePolytope(const QString& name, const QColor& face_color);
     void EndCreatePolytope();
 
+    void CreateTerrainMesh(const QVector<QVector3D>& data);
+
     // all objects
     void UpdateSelectedObjectName(const QString& name);
     void UpdateSelectedObjectColor(const QColor& color);

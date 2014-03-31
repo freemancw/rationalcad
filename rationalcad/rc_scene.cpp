@@ -328,6 +328,40 @@ void SceneObserver::onEndCreatePolytope() {
 }
 
 //=============================================================================
+// TerrainMesh_3 management
+//=============================================================================
+
+void SceneObserver::onCreateTerrainMesh(const QVector<QVector3D>& data) {
+
+    onDeselect();
+
+    std::vector<Point_3f> points;
+    foreach(QVector3D p, data) {
+        points.push_back(Point_3f(p.x(), p.y(), p.z()));
+    }
+
+    static int numTerrain = 0;
+    selected_name_ = QString("terrain3_%1").arg(numTerrain++);
+    scene_objects_.insert(selected_name_,
+                          QSharedPointer<ISceneObject>(new SceneTerrainMesh_3()));
+    SelectedTerrainMesh_3()->AddObserver(this);
+    SelectedTerrainMesh_3()->Initialize(points);
+}
+
+/*
+void SceneObserver::onUpdateNewPolytope(const QVector2D& cur) {
+    //qDebug() << "SceneObserver UpdateNewPolytope " << cur;
+    SelectedPolytope_3()->Update(cur);
+}
+
+void SceneObserver::onEndCreatePolytope() {
+    //qDebug() << "SceneObserver EndCreatePolytope";
+    //ConfigManager::get().set_input_state(CREATE_POLYTOPE);
+    //SelectedPolytope_3()->Update();
+}
+*/
+
+//=============================================================================
 // Object management
 //=============================================================================
 

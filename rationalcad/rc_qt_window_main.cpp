@@ -28,6 +28,8 @@
 #include "rc_qt_widget_perspective.h"
 #include "rc_scene.h"
 
+#include "ml_point.h"
+
 using namespace RCAD;
 
 //=============================================================================
@@ -124,6 +126,11 @@ MainWindow::MainWindow(QWidget *parent) :
     qDebug() << "Creating scene manager.";
     scene_manager_ = QSharedPointer<SceneManager>(new SceneManager(renderer_));
 
+    connect(this,
+            SIGNAL(CreateTerrainMesh(const QVector<QVector3D>&)),
+            &scene_manager_->scene_observer_,
+            SLOT(onCreateTerrainMesh(const QVector<QVector3D>&)));
+
     // initialize widgets
     qDebug() << "Initializing ortho.";
     ortho_top->initialize(renderer_, scene_manager_);
@@ -173,7 +180,35 @@ void MainWindow::onCreatePolytopeTriggered() {
 }
 
 void MainWindow::onCreateTerrainTriggered() {
+    QString fileName = QFileDialog::getOpenFileName(
+        this,
+        tr("Open terrain data"),
+        "./",
+        tr("Text files (*.txt)")
+    );
 
+    QFile file(fileName);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        rInfo("Could not open file %s.", fileName.toUtf8().data());
+        return;
+    } else {
+        rInfo("Successfully opened file %s.", fileName.toUtf8().data());
+    }
+
+    QVector<QVector3D> points;
+
+    QTextStream in(&file);
+    while (!in.atEnd()) {
+        QString line = in.readLine();
+        auto tokens = line.split(QRegularExpression("\\s+"), QString::SkipEmptyParts);
+        //qDebug() << tokens << " size: " << tokens.size();
+        points.push_back(QVector3D(tokens.at(0).toFloat(),
+                                   tokens.at(1).toFloat(),
+                                   tokens.at(2).toFloat()));
+        qDebug() << points.back();
+    }
+
+    emit CreateTerrainMesh(points);
 }
 
 void MainWindow::onSnapToGridToggled(bool state) {

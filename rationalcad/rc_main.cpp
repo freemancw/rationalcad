@@ -36,6 +36,7 @@ int main(int argc, char *argv[]) {
 
     // register any types that will pass through Qt's signal/slot mechanism
     qRegisterMetaType<QVector<RCAD::GL::Vertex>>("QVector<RCAD::GL::Vertex>");
+    qRegisterMetaType<QVector<QVector3D>>("QVector<QVector3D>");
 
     QPixmap splash_image(":/splash3.png");
     QSplashScreen splash(splash_image);
