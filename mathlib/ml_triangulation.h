@@ -27,6 +27,20 @@
 
 namespace RCAD {
 
+namespace Predicate {
+
+inline rational InCircle(const Point_3r& a, const Point_3r& b,
+                         const Point_3r& c, const Point_3r& d) {
+    return 0;
+}
+
+inline rational Orient2D(const Point_3r& p, const Point_3r& q,
+                         const Point_3r& r) {
+    return 0;
+}
+
+}
+
 class TerrainMesh_3r : public VisualGeometry {
 public:
     TerrainMesh_3r() {}
@@ -131,75 +145,63 @@ public:
         }
 
         // incrementally construct the triangulation
+        /*
         for (auto i = begin(samples); i != end(samples); ++i) {
             AddPoint(*i);
         }
+        */
     }
 
     void AddPoint(const Point_3f& sample) {
+        SharedPoint_3r sample_r = std::make_shared<Point_3r>(
+            sample.x(), sample.y(), sample.z()
+        );
+
         // locate point
         QuadEdge::Edge *e0;
-        QuadEdge::CellFaceIterator fitr(c);
+        QuadEdge::CellFaceIterator fitr(cell_);
         e0 = fitr.next()->getEdge();
+        QuadEdge::Edge *e1 = LocalizePoint(*sample_r);
 
-        QuadEdge::Edge *e1 = LocalizePoint(sample);
-
-        QuadEdge::Vertex *v1 = e1->Org(), *v2 = e1->Dest();
+        QuadEdge::Vertex *v1 = e1->Org();
+        QuadEdge::Vertex *v2 = e1->Dest();
         QuadEdge::Face *f = e1->Left();
         QuadEdge::Edge *e2 = e1->Lnext();
         QuadEdge::Edge *e3 = e1->Lprev();
         QuadEdge::Vertex *v3 = e2->Dest();
         QuadEdge::Face *f2 = cell_->makeFaceEdge(f, v1, v2)->Right();
         QuadEdge::Vertex *vnew = cell_->makeVertexEdge(v2, f2, f)->Dest();
-        //vnew->pos.set(pt.x,pt.y,pt.z);
+        vnew->pos = sample_r;
         cell_->makeFaceEdge(f, vnew, v3);
-        std::vector<Edge*> neighbors;
+        std::vector<QuadEdge::Edge*> neighbors;
         neighbors.push_back(e1->Sym());
         neighbors.push_back(e2->Sym());
         neighbors.push_back(e3->Sym());
-        TestAndSwapEdges(neighbors, sample);
+        TestAndSwapEdges(neighbors, *sample_r);
     }
 
-    QuadEdge::Edge LocalizePoint(const Point_3f& sample) {
-        cout << "Now inserting point " << newPoint << " in cell with vertices:\n";
-        CellVertexIterator iter(c);
-        Vertex *v = iter.next();
-        for (; v != NULL; v = iter.next()) {
-            cout << v->pos << endl;
-        }
-        CellFaceIterator faces(c);
-        Face *f = NULL;
-        pos p[4];
-        p[3][0] = newPoint.x;
-        p[3][1] = newPoint.y;
-        p[3][2] = newPoint.z;
+    QuadEdge::Edge* LocalizePoint(const Point_3r& sample) {
+        QuadEdge::CellFaceIterator faces(cell_);
+        QuadEdge::Face *f = NULL;
+
         while ((f = faces.next())) {
-            Edge *e1 = f->getEdge();
-            Edge *e2 = e1->Lnext();
-            Vertex *v1 = e1->Org();
-            Vertex *v2 = e1->Dest();
-            Vertex *v3 = e2->Dest();
-            p[0][0] = v1->pos.x;
-            p[0][1] = v1->pos.y;
-            p[0][2] = v1->pos.z;
-            p[1][0] = v2->pos.x;
-            p[1][1] = v2->pos.y;
-            p[1][2] = v2->pos.z;
-            p[2][0] = v3->pos.x;
-            p[2][1] = v3->pos.y;
-            p[2][2] = v3->pos.z;
-            if ((orient2d(p[0], p[1], p[3]) >= 0) &&
-                (orient2d(p[1], p[2], p[3]) >= 0) &&
-                (orient2d(p[2], p[0], p[3]) >= 0)) {
+            QuadEdge::Edge *e1 = f->getEdge();
+            QuadEdge::Edge *e2 = e1->Lnext();
+            QuadEdge::Vertex *v1 = e1->Org();
+            QuadEdge::Vertex *v2 = e1->Dest();
+            QuadEdge::Vertex *v3 = e2->Dest();
+            if (Predicate::Orient2D(*v1->pos, *v2->pos, sample) >= 0 &&
+                Predicate::Orient2D(*v2->pos, *v3->pos, sample) >= 0 &&
+                Predicate::Orient2D(*v3->pos, *v1->pos, sample) >= 0) {
                 return e1;
             }
         }
-        cout << "Returned NULL!" << endl;
-        return NULL;
+
+        return nullptr;
     }
 
     void TestAndSwapEdges(std::vector<QuadEdge::Edge*>& edges,
-                          const Point_3f& newPoint) {
+                          const Point_3r& sample) {
         while (!edges.empty()) {
             QuadEdge::Edge *e1 = edges.back();
             edges.pop_back();
@@ -209,21 +211,8 @@ public:
             QuadEdge::Vertex *v3 = e2->Dest();
             QuadEdge::Edge *e4 = e1->Rnext();
             QuadEdge::Edge *e5 = e1->Rprev();
-            pos p[4];
-            p[0][0] = v1->pos.x;
-            p[0][1] = v1->pos.y;
-            p[0][2] = v1->pos.z;
-            p[1][0] = v2->pos.x;
-            p[1][1] = v2->pos.y;
-            p[1][2] = v2->pos.z;
-            p[2][0] = v3->pos.x;
-            p[2][1] = v3->pos.y;
-            p[2][2] = v3->pos.z;
-            p[3][0] = newPoint.x;
-            p[3][1] = newPoint.y;
-            p[3][2] = newPoint.z;
 
-            if (incircle(p[0],p[1],p[2],p[3]) > 0) {
+            if (Predicate::InCircle(*v1->pos, *v2->pos, *v3->pos, sample) > 0) {
                 QuadEdge::Face *left = e1->Left();
                 cell_->killFaceEdge(e1);
                 cell_->makeFaceEdge(left, e2->Dest(), e5->Dest());
