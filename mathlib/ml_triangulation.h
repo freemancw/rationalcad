@@ -116,10 +116,18 @@ public:
         v3->pos = std::make_shared<Point_3r>(cx, cy + 20.0f * dmax, 0);
         SigRegisterPoint_3r(*v3->pos);
 
+        //ConstructViz();
+
         // incrementally construct the triangulation
         for (auto i = begin(samples); i != end(samples); ++i) {
+            //ClearViz();
             AddPoint(*i);
+            //ConstructViz();
         }
+
+        //ClearViz();
+        //DeleteSetupVertices(cell_, v1, v2, v3);
+        ConstructViz();
     }
 
     void ClearViz() {
@@ -127,7 +135,7 @@ public:
         QuadEdge::CellVertexIterator cellVerts(cell_);
         QuadEdge::Vertex *v;
         while ((v = cellVerts.next()) != 0) {
-            SigPopVisualPoint_3r(*v->pos, viz_point_);
+            SigPopVisualPoint_3r(*v->pos);
         }
 
         // remove edges
@@ -172,6 +180,12 @@ public:
         while ((f = cellFaces.next()) != 0) {
             SigPushFace(f);
         }
+        /*
+        cellFaces = QuadEdge::CellFaceIterator(cell_);
+        f = cellFaces.next();
+        SigPopFace(f);
+        SigPushFace(f);
+        */
     }
 
     void SigPushFace(QuadEdge::Face* f) {
@@ -228,6 +242,71 @@ public:
         }
     }
 
+    // deletes the vertex at the origin of the given edge
+    void DeleteVertexFromTriangulation(QuadEdge::Cell *c,
+                                       QuadEdge::Edge *startEdge) {
+        // the next line (commented) is only there for understanding
+        //Vertex *vertexToDelete = startEdge->Org();
+        QuadEdge::Edge *endEdge = startEdge->Oprev();
+        QuadEdge::Edge *currentEdge = startEdge;
+        QuadEdge::Vertex *lastVertex = NULL;
+    //    Face *f = currentEdge->Left();
+        while (currentEdge != endEdge) {
+            // save values
+            QuadEdge::Edge *next = currentEdge->Onext();
+            QuadEdge::Vertex *nextDest = next->Dest();
+            QuadEdge::Vertex *dest = currentEdge->Dest();
+
+            // delete the current edge
+            c->killFaceEdge(currentEdge);
+
+            // fix the dest vertices' triangulation
+            // to change to deleting internal points, fix this section
+            if (lastVertex != NULL) {
+                // if a turn to the left, then dest is not on the convex hull and
+                // the triangulation needs a triangle to fix the convex hull
+                if (Predicate::Orient2D(*lastVertex->pos,
+                                        *dest->pos,
+                                        *nextDest->pos) > 0) {
+                    c->makeFaceEdge(next->Right(), nextDest, lastVertex);
+                }
+            }
+
+            // use saved values
+            currentEdge = next;
+            lastVertex = dest;
+        }
+        // only endEdge is left of the edges containing vertexToDelete
+        // this line also should effectively delete vertexToDelete
+        c->killVertexEdge(endEdge->Sym());
+    }
+
+    // deletes the vertices for the initial face created in setUpInitialCell,
+    // leaving the result of the Delauney triangulation of the input points
+    // as the remainder
+    // This function assumes that the three vertices passed in have edges between
+    // them and a face that is made up of only these edges (infinite face), so that
+    // the selections of edges to do deletions from works correctly
+    void DeleteSetupVertices(QuadEdge::Cell *c,
+                             QuadEdge::Vertex *initialVertex1,
+                             QuadEdge::Vertex *initialVertex2,
+                             QuadEdge::Vertex *initialVertex3) {
+        QuadEdge::VertexEdgeIterator vei(initialVertex1);
+        QuadEdge::Edge *e = NULL;
+        while (e == NULL || e->Dest() != initialVertex2) {
+            e = vei.next();
+        }
+        if (e->Onext()->Dest() == initialVertex3) {
+            e = e->Onext();
+        }
+        QuadEdge::Edge *e1 = e;
+        QuadEdge::Edge *e2 = e1->Sym()->Onext();
+        QuadEdge::Edge *e3 = e2->Sym()->Onext()->Onext();
+        DeleteVertexFromTriangulation(c, e1);
+        DeleteVertexFromTriangulation(c, e2);
+        DeleteVertexFromTriangulation(c, e3);
+    }
+
     void AddPoint(const Point_3f& sample) {
         SharedPoint_3r sample_r = std::make_shared<Point_3r>(
             sample.x(), sample.y(), sample.z()
@@ -246,36 +325,10 @@ public:
         QuadEdge::Edge *e2 = e1->Lnext();
         QuadEdge::Edge *e3 = e1->Lprev();
         QuadEdge::Vertex *v3 = e2->Dest();
-
-//        SigPopFace(f);
         QuadEdge::Edge *newEdge1 = cell_->makeFaceEdge(f, v1, v2);
-  //      SigPushDirectedEdge(newEdge1);
-    //    SigPushFace(newEdge1->Right());
-      //  SigPushFace(newEdge1->Left());
         QuadEdge::Face *f2 = newEdge1->Right();
-
-/*
-        QuadEdge::VertexEdgeIterator v2Edges(v2);
-        QuadEdge::Edge* v2e;
-        while ((v2e = v2Edges.next()) != 0) {
-            SigPopFace(v2e->Left());
-            SigPopDirectedEdge(v2e);
-            SigPopDirectedEdge(v2e->Sym());
-        }
-*/
         QuadEdge::Vertex *vnew = cell_->makeVertexEdge(v2, f2, f)->Dest();
         vnew->pos = sample_r;
-/*
-        v2Edges = QuadEdge::VertexEdgeIterator(v2);
-        while ((v2e = v2Edges.next()) != 0) {
-            SigPushFace(v2e->Left());
-            SigPushDirectedEdge(v2e);
-            SigPushDirectedEdge(v2e->Sym());
-        }
-
-        QuadEdge::VertexEdgeIterator vnewEdges(vnew);
-  */
-
         cell_->makeFaceEdge(f, vnew, v3);
 
         std::vector<QuadEdge::Edge*> neighbors;

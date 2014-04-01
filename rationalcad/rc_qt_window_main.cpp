@@ -102,6 +102,7 @@ MainWindow::MainWindow(QWidget *parent) :
     auto perspective = new PerspectiveWidget(ui->group_perspective);
     ui->group_perspective->layout()->addWidget(perspective);
     perspective->installEventFilter(this);
+    qDebug() << "persp is sharing? " << perspective->context()->isSharing();
     //perspective->context()->makeCurrent();
     //qDebug() << perspective->format();
 
@@ -113,6 +114,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->group_top->layout()->addWidget(ortho_top);
     ortho_top->installEventFilter(this);
     qDebug() << "persp is sharing? " << perspective->context()->isSharing();
+    qDebug() << "ortho is sharing?" << ortho_top->context()->isSharing();
     //qDebug() << ortho_top->format();
 
 
@@ -137,6 +139,9 @@ MainWindow::MainWindow(QWidget *parent) :
     qDebug() << "Initializing perspective.";
     perspective->initialize(renderer_, scene_manager_);
 
+    //perspective->context()->makeCurrent();
+
+    /*
     QOpenGLDebugLogger *logger = new QOpenGLDebugLogger(this);
     logger->initialize();
     connect(logger,
@@ -144,6 +149,7 @@ MainWindow::MainWindow(QWidget *parent) :
             this,
             &MainWindow::onLogMessage);
     logger->startLogging();
+    */
 
     connect(ortho_top,
             SIGNAL(ChangeMessage(const QString&)),
@@ -205,7 +211,7 @@ void MainWindow::onCreateTerrainTriggered() {
         points.push_back(QVector3D(tokens.at(0).toFloat(),
                                    tokens.at(1).toFloat(),
                                    tokens.at(2).toFloat()));
-        qDebug() << points.back();
+        //qDebug() << points.back();
     }
 
     emit CreateTerrainMesh(points);

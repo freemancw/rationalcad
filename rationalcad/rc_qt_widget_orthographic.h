@@ -54,6 +54,9 @@ class OrthographicWidget : public QGLWidget,
 public:
     OrthographicWidget(OrthoOrientation orientation, QWidget* parent = nullptr,
                        const QGLWidget* shareWidget = nullptr);
+    ~OrthographicWidget() {
+        qDebug() << "ortho delete!";
+    }
 
     QSize minimumSizeHint() const;
     QSize sizeHint() const;

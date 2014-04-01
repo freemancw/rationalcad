@@ -41,6 +41,9 @@ class PerspectiveWidget : public QGLWidget,
 
 public:
     PerspectiveWidget(QWidget* parent, const QGLWidget* shareWidget = nullptr);
+    ~PerspectiveWidget() {
+        qDebug() << "perspective delete!";
+    }
 
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
