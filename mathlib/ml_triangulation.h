@@ -24,6 +24,7 @@
 #include "ml_common.h"
 #include "ml_observer.h"
 #include "ml_quadedge.h"
+#include "ml_matrix.h"
 
 namespace RCAD {
 
@@ -31,19 +32,43 @@ namespace Predicate {
 
 inline rational InCircle(const Point_3r& a, const Point_3r& b,
                          const Point_3r& c, const Point_3r& d) {
-    return 0;
+    auto m00 = a.x()-d.x();
+    auto m01 = a.y()-d.y();
+    auto m02 = m00*m00+m01*m01;
+    auto m10 = b.x()-d.x();
+    auto m11 = b.y()-d.y();
+    auto m12 = m10*m10+m11*m11;
+    auto m20 = c.x()-d.x();
+    auto m21 = c.y()-d.y();
+    auto m22 = m20*m20+m21*m21;
+    return Determinant(Matrix_3x3r(
+        m00, m01, m02,
+        m10, m11, m12,
+        m20, m21, m22
+    ));
 }
 
-inline rational Orient2D(const Point_3r& p, const Point_3r& q,
-                         const Point_3r& r) {
-    return 0;
+inline rational Orient2D(const Point_3r& a, const Point_3r& b,
+                         const Point_3r& c) {
+    return Determinant(Matrix_2x2r(
+        a.x()-c.x(), a.y()-c.y(),
+        b.x()-c.x(), b.y()-c.y()
+    ));
 }
 
 }
 
 class TerrainMesh_3r : public VisualGeometry {
 public:
-    TerrainMesh_3r() {}
+    TerrainMesh_3r() {
+        Visual::Color blue(0, 151, 255, 255);
+        Visual::Material blue_mat;
+        blue_mat.set_ambient(blue);
+
+        viz_point_.set_material(blue_mat);
+        viz_segment_.set_material(blue_mat);
+        viz_triangle_.set_material(blue_mat);
+    }
 
     void Initialize(const std::vector<Point_3f>& samples) {
         assert(!samples.empty());
@@ -88,23 +113,12 @@ public:
         v2->pos = std::make_shared<Point_3r>(cx + 20.0f * dmax, cy - dmax, 0);
         v3->pos = std::make_shared<Point_3r>(cx, cy + 20.0f * dmax, 0);
 
-        // define materials for vertices, edges, and faces
-        Visual::Material vMat;
-        vMat.set_ambient(Visual::Color(0, 151, 255, 255));
-        Visual::Point vPoint(vMat);
-        Visual::Material eMat;
-        eMat.set_ambient(Visual::Color(0, 151, 255, 255));
-        Visual::Segment vSegment(eMat);
-        Visual::Material fMat;
-        fMat.set_ambient(Visual::Color(0, 151, 255, 255));
-        Visual::Triangle vTriangle(fMat);
-
         // register vertices
         QuadEdge::CellVertexIterator cellVerts(cell_);
         QuadEdge::Vertex *v;
         while ((v = cellVerts.next()) != 0) {
             SigRegisterPoint_3r(*v->pos);
-            SigPushVisualPoint_3r(*v->pos, vPoint);
+            SigPushVisualPoint_3r(*v->pos, viz_point_);
         }
 
         // define convenience lambda for edge viz
@@ -112,7 +126,7 @@ public:
             if (e->Org() < e->Dest()) {
                 SigPushVisualSegment_3r(
                     Segment_3r(e->Org()->pos, e->Dest()->pos),
-                    vSegment
+                    viz_segment_
                 );
             }
         };
@@ -134,28 +148,36 @@ public:
             SigPushDirectedEdge(e);
             auto fan_last = e->Org()->pos;
             Triangle_3r tri0(fan_pivot, fan_middle, fan_last);
-            SigPushVisualTriangle_3r(tri0, vTriangle);
+            SigPushVisualTriangle_3r(tri0, viz_triangle_);
+            f->triangulation_.push_back(tri0);
             while ((e = faceEdges.next()) != 0) {
                 fan_middle = fan_last;
                 fan_last = e->Org()->pos;
                 Triangle_3r tri(fan_pivot, fan_middle, fan_last);
-                SigPushVisualTriangle_3r(tri, vTriangle);
+                SigPushVisualTriangle_3r(tri, viz_triangle_);
+                f->triangulation_.push_back(tri);
                 SigPushDirectedEdge(e);
             }
         }
 
         // incrementally construct the triangulation
-        /*
         for (auto i = begin(samples); i != end(samples); ++i) {
             AddPoint(*i);
         }
-        */
     }
+
+
 
     void AddPoint(const Point_3f& sample) {
         SharedPoint_3r sample_r = std::make_shared<Point_3r>(
             sample.x(), sample.y(), sample.z()
         );
+        Visual::Material vMat;
+        vMat.set_ambient(Visual::Color(0, 151, 255, 255));
+        Visual::Point vPoint(vMat);
+
+        SigRegisterPoint_3r(*sample_r);
+        SigPushVisualPoint_3r(*sample_r, vPoint, 2000);
 
         // locate point
         QuadEdge::Edge *e0;
@@ -169,7 +191,11 @@ public:
         QuadEdge::Edge *e2 = e1->Lnext();
         QuadEdge::Edge *e3 = e1->Lprev();
         QuadEdge::Vertex *v3 = e2->Dest();
+
         QuadEdge::Face *f2 = cell_->makeFaceEdge(f, v1, v2)->Right();
+
+
+
         QuadEdge::Vertex *vnew = cell_->makeVertexEdge(v2, f2, f)->Dest();
         vnew->pos = sample_r;
         cell_->makeFaceEdge(f, vnew, v3);
@@ -224,6 +250,9 @@ public:
 
 private:
     QuadEdge::Cell* cell_;
+    Visual::Point viz_point_;
+    Visual::Segment viz_segment_;
+    Visual::Triangle viz_triangle_;
 };
 
 } // namespace RCAD
