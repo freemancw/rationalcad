@@ -90,7 +90,6 @@ public:
     static void kill(Face *face);
 
     const void *data;
-    std::vector<Triangle_3r> triangulation_;
 
     Cell *getCell();
     unsigned int getID();
@@ -128,8 +127,6 @@ public:
     static Edge *make();
     static void kill(Edge *edge);
     static void splice(Edge *a, Edge *b);
-
-    Segment_3r segment_;
 
     unsigned int getID();
     void setID(unsigned int id);

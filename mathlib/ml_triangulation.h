@@ -110,55 +110,11 @@ public:
 
         // set triangle vertex positions
         v1->pos = std::make_shared<Point_3r>(cx - 20.0f * dmax, cy - dmax, 0);
+        SigRegisterPoint_3r(*v1->pos);
         v2->pos = std::make_shared<Point_3r>(cx + 20.0f * dmax, cy - dmax, 0);
+        SigRegisterPoint_3r(*v2->pos);
         v3->pos = std::make_shared<Point_3r>(cx, cy + 20.0f * dmax, 0);
-
-        // register vertices
-        QuadEdge::CellVertexIterator cellVerts(cell_);
-        QuadEdge::Vertex *v;
-        while ((v = cellVerts.next()) != 0) {
-            SigRegisterPoint_3r(*v->pos);
-            SigPushVisualPoint_3r(*v->pos, viz_point_);
-        }
-
-        // define convenience lambda for edge viz
-        auto SigPushDirectedEdge = [&](QuadEdge::Edge* e) {
-            if (e->Org() < e->Dest()) {
-                SigPushVisualSegment_3r(
-                    Segment_3r(e->Org()->pos, e->Dest()->pos),
-                    viz_segment_
-                );
-            }
-        };
-
-        // register edges and faces
-        QuadEdge::CellFaceIterator cellFaces(cell_);
-        QuadEdge::Face *f;
-        while ((f = cellFaces.next()) != 0) {
-            QuadEdge::FaceEdgeIterator faceEdges(f);
-            QuadEdge::Edge *e;
-
-            e = faceEdges.next();
-            SigPushDirectedEdge(e);
-            auto fan_pivot = e->Org()->pos;
-            e = faceEdges.next();
-            SigPushDirectedEdge(e);
-            auto fan_middle = e->Org()->pos;
-            e = faceEdges.next();
-            SigPushDirectedEdge(e);
-            auto fan_last = e->Org()->pos;
-            Triangle_3r tri0(fan_pivot, fan_middle, fan_last);
-            SigPushVisualTriangle_3r(tri0, viz_triangle_);
-            f->triangulation_.push_back(tri0);
-            while ((e = faceEdges.next()) != 0) {
-                fan_middle = fan_last;
-                fan_last = e->Org()->pos;
-                Triangle_3r tri(fan_pivot, fan_middle, fan_last);
-                SigPushVisualTriangle_3r(tri, viz_triangle_);
-                f->triangulation_.push_back(tri);
-                SigPushDirectedEdge(e);
-            }
-        }
+        SigRegisterPoint_3r(*v3->pos);
 
         // incrementally construct the triangulation
         for (auto i = begin(samples); i != end(samples); ++i) {
@@ -166,18 +122,117 @@ public:
         }
     }
 
+    void ClearViz() {
+        // remove vertices
+        QuadEdge::CellVertexIterator cellVerts(cell_);
+        QuadEdge::Vertex *v;
+        while ((v = cellVerts.next()) != 0) {
+            SigPopVisualPoint_3r(*v->pos, viz_point_);
+        }
 
+        // remove edges
+        QuadEdge::CellFaceIterator cellFaces(cell_);
+        QuadEdge::Face *f;
+        while ((f = cellFaces.next()) != 0) {
+            QuadEdge::FaceEdgeIterator faceEdges(f);
+            QuadEdge::Edge *e;
+            while ((e = faceEdges.next()) != 0) {
+                SigPopDirectedEdge(e);
+            }
+        }
+
+        // remove faces
+        cellFaces = QuadEdge::CellFaceIterator(cell_);
+        while ((f = cellFaces.next()) != 0) {
+            SigPopFace(f);
+        }
+    }
+
+    void ConstructViz() {
+        // visualize vertices
+        QuadEdge::CellVertexIterator cellVerts(cell_);
+        QuadEdge::Vertex *v;
+        while ((v = cellVerts.next()) != 0) {
+            SigPushVisualPoint_3r(*v->pos, viz_point_);
+        }
+
+        // visualize edges
+        QuadEdge::CellFaceIterator cellFaces(cell_);
+        QuadEdge::Face *f;
+        while ((f = cellFaces.next()) != 0) {
+            QuadEdge::FaceEdgeIterator faceEdges(f);
+            QuadEdge::Edge *e;
+            while ((e = faceEdges.next()) != 0) {
+                SigPushDirectedEdge(e);
+            }
+        }
+
+        // visualize faces
+        cellFaces = QuadEdge::CellFaceIterator(cell_);
+        while ((f = cellFaces.next()) != 0) {
+            SigPushFace(f);
+        }
+    }
+
+    void SigPushFace(QuadEdge::Face* f) {
+        QuadEdge::FaceEdgeIterator faceEdges(f);
+        QuadEdge::Edge *e;
+
+        e = faceEdges.next();
+        auto fan_pivot = e->Org()->pos;
+        e = faceEdges.next();
+        auto fan_middle = e->Org()->pos;
+        e = faceEdges.next();
+        auto fan_last = e->Org()->pos;
+        Triangle_3r tri0(fan_pivot, fan_middle, fan_last);
+        SigPushVisualTriangle_3r(tri0, viz_triangle_);
+        while ((e = faceEdges.next()) != 0) {
+            fan_middle = fan_last;
+            fan_last = e->Org()->pos;
+            Triangle_3r tri(fan_pivot, fan_middle, fan_last);
+            SigPushVisualTriangle_3r(tri, viz_triangle_);
+        }
+    }
+
+    void SigPopFace(QuadEdge::Face* f) {
+        QuadEdge::FaceEdgeIterator faceEdges(f);
+        QuadEdge::Edge *e;
+
+        e = faceEdges.next();
+        auto fan_pivot = e->Org()->pos;
+        e = faceEdges.next();
+        auto fan_middle = e->Org()->pos;
+        e = faceEdges.next();
+        auto fan_last = e->Org()->pos;
+        Triangle_3r tri0(fan_pivot, fan_middle, fan_last);
+        SigPopVisualTriangle_3r(tri0);
+        while ((e = faceEdges.next()) != 0) {
+            fan_middle = fan_last;
+            fan_last = e->Org()->pos;
+            Triangle_3r tri(fan_pivot, fan_middle, fan_last);
+            SigPopVisualTriangle_3r(tri);
+        }
+    }
+
+    void SigPushDirectedEdge(QuadEdge::Edge* e) {
+        Segment_3r s(e->Org()->pos, e->Dest()->pos);
+        if (e->Org() < e->Dest()) {
+            SigPushVisualSegment_3r(s, viz_segment_);
+        }
+    }
+
+    void SigPopDirectedEdge(QuadEdge::Edge* e) {
+        Segment_3r s(e->Org()->pos, e->Dest()->pos);
+        if (e->Org() < e->Dest()) {
+            SigPopVisualSegment_3r(s);
+        }
+    }
 
     void AddPoint(const Point_3f& sample) {
         SharedPoint_3r sample_r = std::make_shared<Point_3r>(
             sample.x(), sample.y(), sample.z()
         );
-        Visual::Material vMat;
-        vMat.set_ambient(Visual::Color(0, 151, 255, 255));
-        Visual::Point vPoint(vMat);
-
         SigRegisterPoint_3r(*sample_r);
-        SigPushVisualPoint_3r(*sample_r, vPoint, 2000);
 
         // locate point
         QuadEdge::Edge *e0;
@@ -192,13 +247,37 @@ public:
         QuadEdge::Edge *e3 = e1->Lprev();
         QuadEdge::Vertex *v3 = e2->Dest();
 
-        QuadEdge::Face *f2 = cell_->makeFaceEdge(f, v1, v2)->Right();
+//        SigPopFace(f);
+        QuadEdge::Edge *newEdge1 = cell_->makeFaceEdge(f, v1, v2);
+  //      SigPushDirectedEdge(newEdge1);
+    //    SigPushFace(newEdge1->Right());
+      //  SigPushFace(newEdge1->Left());
+        QuadEdge::Face *f2 = newEdge1->Right();
 
-
-
+/*
+        QuadEdge::VertexEdgeIterator v2Edges(v2);
+        QuadEdge::Edge* v2e;
+        while ((v2e = v2Edges.next()) != 0) {
+            SigPopFace(v2e->Left());
+            SigPopDirectedEdge(v2e);
+            SigPopDirectedEdge(v2e->Sym());
+        }
+*/
         QuadEdge::Vertex *vnew = cell_->makeVertexEdge(v2, f2, f)->Dest();
         vnew->pos = sample_r;
+/*
+        v2Edges = QuadEdge::VertexEdgeIterator(v2);
+        while ((v2e = v2Edges.next()) != 0) {
+            SigPushFace(v2e->Left());
+            SigPushDirectedEdge(v2e);
+            SigPushDirectedEdge(v2e->Sym());
+        }
+
+        QuadEdge::VertexEdgeIterator vnewEdges(vnew);
+  */
+
         cell_->makeFaceEdge(f, vnew, v3);
+
         std::vector<QuadEdge::Edge*> neighbors;
         neighbors.push_back(e1->Sym());
         neighbors.push_back(e2->Sym());
