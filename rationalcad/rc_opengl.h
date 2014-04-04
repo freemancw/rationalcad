@@ -303,6 +303,8 @@ Q_DECLARE_METATYPE(QVector<GL::Vertex>)
 class Renderer : public QOpenGLFunctions_3_3_Core {
 public:
     Renderer() : common_is_initialized_(false) {}
+
+
     ~Renderer() {
         qDebug() << "renderer delete!";
     }

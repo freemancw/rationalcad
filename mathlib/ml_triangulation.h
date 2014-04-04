@@ -116,19 +116,24 @@ public:
         v3->pos = std::make_shared<Point_3r>(cx, cy + 20.0f * dmax, 0);
         SigRegisterPoint_3r(*v3->pos);
 
-        //ConstructViz();
+
+        dummy_ = std::make_shared<Point_3r>(0, 0, 0);
+        SigRegisterPoint_3r(*dummy_);
+        ConstructViz();
 
         // incrementally construct the triangulation
         for (auto i = begin(samples); i != end(samples); ++i) {
-            //ClearViz();
+            ClearViz();
             AddPoint(*i);
-            //ConstructViz();
+            ConstructViz();
         }
 
         //ClearViz();
         //DeleteSetupVertices(cell_, v1, v2, v3);
-        ConstructViz();
+        //ConstructViz();
     }
+
+    SharedPoint_3r dummy_;
 
     void ClearViz() {
         // remove vertices
@@ -180,6 +185,10 @@ public:
         while ((f = cellFaces.next()) != 0) {
             SigPushFace(f);
         }
+
+        SigPushVisualPoint_3r(*dummy_, viz_point_);
+        SigPopVisualPoint_3r(*dummy_, 1000);
+
         /*
         cellFaces = QuadEdge::CellFaceIterator(cell_);
         f = cellFaces.next();

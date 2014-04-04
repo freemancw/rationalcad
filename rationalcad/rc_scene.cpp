@@ -32,6 +32,8 @@
 #include "ml_line.h"
 #include "ml_intersection.h"
 
+#include <ctime>
+
 namespace RCAD {
 
 Point_2f ToPoint_2f(const QVector2D& v, bool snap = false);
@@ -330,7 +332,7 @@ void SceneObserver::onEndCreatePolytope() {
 //=============================================================================
 // TerrainMesh_3 management
 //=============================================================================
-
+//#include <ctime>
 void SceneObserver::onCreateTerrainMesh(const QVector<QVector3D>& data) {
 
     onDeselect();
@@ -339,6 +341,9 @@ void SceneObserver::onCreateTerrainMesh(const QVector<QVector3D>& data) {
     foreach(QVector3D p, data) {
         points.push_back(Point_3f(p.x(), p.y(), p.z()));
     }
+
+    std::srand ( unsigned ( std::time(0) ) );
+    std::random_shuffle ( points.begin(), points.end() );
 
     static int numTerrain = 0;
     selected_name_ = QString("terrain3_%1").arg(numTerrain++);

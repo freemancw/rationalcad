@@ -103,6 +103,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->group_perspective->layout()->addWidget(perspective);
     perspective->installEventFilter(this);
     qDebug() << "persp is sharing? " << perspective->context()->isSharing();
+    qDebug() << "persp is valid? " << perspective->context()->isValid();
     //perspective->context()->makeCurrent();
     //qDebug() << perspective->format();
 
@@ -117,11 +118,13 @@ MainWindow::MainWindow(QWidget *parent) :
     qDebug() << "ortho is sharing?" << ortho_top->context()->isSharing();
     //qDebug() << ortho_top->format();
 
+    perspective->context()->makeCurrent();
 
     // create renderer
     rInfo("Creating renderer.");
     qDebug() << "Creating renderer.";
     renderer_ = QSharedPointer<Renderer>(new Renderer());
+    renderer_->InitCommon();
 
     // create scene manager
     rInfo("Creating scene manager.");
@@ -208,9 +211,9 @@ void MainWindow::onCreateTerrainTriggered() {
         QString line = in.readLine();
         auto tokens = line.split(QRegularExpression("\\s+"), QString::SkipEmptyParts);
         //qDebug() << tokens << " size: " << tokens.size();
-        points.push_back(QVector3D(tokens.at(0).toFloat(),
-                                   tokens.at(1).toFloat(),
-                                   tokens.at(2).toFloat()));
+        points.push_back(QVector3D(tokens.at(1).toFloat(),
+                                   tokens.at(2).toFloat(),
+                                   tokens.at(3).toFloat()));
         //qDebug() << points.back();
     }
 

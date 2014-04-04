@@ -66,14 +66,15 @@ void PerspectiveWidget::initializeGL() {
     glEnable(GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
 
-    renderer_->InitCommon();
+    //renderer_->InitCommon();
     renderer_->InitContext(GL::Context::ePERSPECTIVE);
 
     modelview_.setToIdentity();
     //! @todo magic numbers
-    camera_pos_ = QVector3D(6, -2, 2);
-    camera_rot_.setZ(-45.0f);
-    camera_rot_.setX(22.5f);
+    camera_pos_ = QVector3D(6, 6, 4);
+    camera_pos_ *= 24;
+    camera_rot_.setZ(-135.0f);
+    camera_rot_.setX(30.0f);
 
     timer_.setTimerType(Qt::PreciseTimer);
     connect(&timer_, SIGNAL(timeout()), this, SLOT(update()));
