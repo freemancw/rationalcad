@@ -108,7 +108,6 @@ void OrthographicWidget::initializeGL() {
     i_grid_.InitializeGrid(8, 8, 16, 16, grid_verts);
     i_grid_rg_.UploadVertices(GL::Primitive::eLINES, grid_verts);
 
-    //renderer_->InitCommon();
     renderer_->InitContext(GL::Context::eORTHOGRAPHIC);
 
     timer_.setTimerType(Qt::PreciseTimer);

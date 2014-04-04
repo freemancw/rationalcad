@@ -22,6 +22,7 @@
 #include "rc_common.h"
 #include "rc_logger.h"
 
+/*
 // logger
 #include "RLogPublisher.h"
 #include "RLogChannel.h"
@@ -72,3 +73,4 @@ void RCLogger::set_console(QTextEdit *console) {
 }
 
 }
+*/

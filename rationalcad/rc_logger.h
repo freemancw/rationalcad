@@ -25,6 +25,7 @@
 
 BEGIN_NAMESPACE(RCAD)
 
+/*
 class RLOG_DECL RCLogger : public rlog::RLogNode {
 public:
     RCLogger();
@@ -43,7 +44,7 @@ protected:
 private:
     QTextEdit* console_;
 };
-
+*/
 END_NAMESPACE(RCAD)
 
 #endif // RC_LOGGER_H

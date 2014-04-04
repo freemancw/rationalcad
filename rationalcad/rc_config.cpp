@@ -46,7 +46,7 @@ void ConfigManager::Initialize() {
     glf.setSwapInterval(1);
     QGLFormat::setDefaultFormat(glf);
 
-    rInfo("Setting default GL format.");
+    //rInfo("Setting default GL format.");
 
     input_state_ = CREATE_POLYTOPE;
     snap_to_grid_ = true;

@@ -46,10 +46,13 @@
 #include <tuple>
 
 // logging
-//#include "rlog.h"
-//#include "rloglocation.h"
-//#include "RLogChannel.h"
-//#include "RLogTime.h"
+#include "../logging/easylogging++.h"
+/*
+#include "../logging/rlog.h"
+#include "../logging/rloglocation.h"
+#include "../logging/RLogChannel.h"
+#include "../logging/RLogTime.h"
+*/
 
 #define UNUSED(x) (void)x;
 
@@ -104,22 +107,6 @@ namespace Lighting {
         eMAX
     };
 }
-
-/*
-enum Coverage {
-    MC_OPAQUE,
-    MC_TRANSPARENT,
-    MC_MAX
-};
-
-enum Lighting {
-    ML_UNLIT,
-    ML_FLAT,
-    //ML_GOURAUD,
-    //ML_PHONG,
-    ML_MAX
-};
-*/
 
 /*
  * I would like to say:

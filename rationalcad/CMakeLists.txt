@@ -46,6 +46,7 @@ add_executable(
     rc_qt_widget_perspective.cpp
     rc_qt_window_main.cpp
     rc_scene.cpp
+    rc_common.h
     ${UI_HEADERS}
     ${UI_RESOURCES}
 )
@@ -60,7 +61,6 @@ qt5_use_modules(
 
 target_link_libraries(
     rationalcad
-    logging
     mathlib
     mpir
     mpirxx

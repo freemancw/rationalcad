@@ -132,7 +132,7 @@ void SceneObserver::SlotPushVisualPoint_2r(const Point_2r& p,
 
 void SceneObserver::SlotPopVisualPoint_2r(const Point_2r& p,
                                           const uint32_t msec_delay) {
-    rAssert(!viz_points_.value(p.unique_id()).isEmpty());
+    //rAssert(!viz_points_.value(p.unique_id()).isEmpty());
     viz_points_[p.unique_id()].pop_back();
 
     if (viz_points_.value(p.unique_id()).isEmpty()) {
@@ -157,7 +157,7 @@ void SceneObserver::SlotPushVisualSegment_2r(const Segment_2r& s,
 void SceneObserver::SlotPopVisualSegment_2r(const Segment_2r& s,
                                             const uint32_t msec_delay) {
     QPair<uint32_t, uint32_t> key(s.p().unique_id(), s.q().unique_id());
-    rAssert(!viz_segments_.value(key).isEmpty());
+    //rAssert(!viz_segments_.value(key).isEmpty());
     viz_segments_[key].pop_back();
 
     if (viz_segments_.value(key).isEmpty()) {
@@ -224,7 +224,7 @@ void SceneObserver::SlotPushVisualPoint_3r(const Point_3r& p,
 
 void SceneObserver::SlotPopVisualPoint_3r(const Point_3r& p,
                                       const uint32_t msec_delay) {
-    rAssert(!viz_points_.value(p.unique_id()).isEmpty());
+    //rAssert(!viz_points_.value(p.unique_id()).isEmpty());
     viz_points_[p.unique_id()].pop_back();
 
     if (viz_points_.value(p.unique_id()).isEmpty()) {
@@ -249,7 +249,7 @@ void SceneObserver::SlotPushVisualSegment_3r(const Segment_3r& s,
 void SceneObserver::SlotPopVisualSegment_3r(const Segment_3r& s,
                                             const uint32_t msec_delay) {
     QPair<uint32_t, uint32_t> key(s.p().unique_id(), s.q().unique_id());
-    rAssert(!viz_segments_.value(key).isEmpty());
+    //rAssert(!viz_segments_.value(key).isEmpty());
     viz_segments_[key].pop_back();
 
     if (viz_segments_.value(key).isEmpty()) {

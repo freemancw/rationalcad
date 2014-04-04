@@ -302,18 +302,7 @@ Q_DECLARE_METATYPE(QVector<GL::Vertex>)
 
 class Renderer : public QOpenGLFunctions_3_3_Core {
 public:
-    Renderer() : common_is_initialized_(false) {}
-
-
-    ~Renderer() {
-        qDebug() << "renderer delete!";
-    }
-
-    void InitCommon() {
-        if (common_is_initialized_) {
-            return;
-        }
-
+    Renderer() {
         qDebug() << "Renderer: initializing common gl resources.";
 
         initializeOpenGLFunctions();
@@ -346,8 +335,10 @@ public:
             ":shaders/mat_flat_transparent.fsh",
             attributes
         );
+    }
 
-        common_is_initialized_ = true;
+    ~Renderer() {
+        qDebug() << "renderer delete!";
     }
 
     void InitContext(GL::Context::Name cname) {
@@ -379,7 +370,6 @@ public:
 
     GL::RenderGroup render_groups_[Visual::Coverage::eMAX]
                                   [Visual::Lighting::eMAX];
-    bool common_is_initialized_;
 };
 
 } // namespace RCAD

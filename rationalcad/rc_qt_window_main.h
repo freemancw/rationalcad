@@ -83,7 +83,7 @@ private:
 
     QSharedPointer<RCAD::Renderer> renderer_;
     QSharedPointer<RCAD::SceneManager> scene_manager_;
-    RCAD::RCLogger logger_;
+    //RCAD::RCLogger logger_;
 
     QColor create_object_color_;
 };

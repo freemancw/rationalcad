@@ -97,7 +97,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->toolBar->addAction(snap_to_grid);
 
     // create perspective widget
-    rInfo("Creating perspective view.");
+    //rInfo("Creating perspective view.");
     qDebug() << "Creating perspective view";
     auto perspective = new PerspectiveWidget(ui->group_perspective);
     ui->group_perspective->layout()->addWidget(perspective);
@@ -109,7 +109,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     // create orthographic widget
-    rInfo("Creating orthographic view.");
+    //rInfo("Creating orthographic view.");
     qDebug() << "Creating orthographic view";
     auto ortho_top = new OrthographicWidget(TOP, ui->group_top, perspective);
     ui->group_top->layout()->addWidget(ortho_top);
@@ -121,13 +121,12 @@ MainWindow::MainWindow(QWidget *parent) :
     perspective->context()->makeCurrent();
 
     // create renderer
-    rInfo("Creating renderer.");
+    //rInfo("Creating renderer.");
     qDebug() << "Creating renderer.";
     renderer_ = QSharedPointer<Renderer>(new Renderer());
-    renderer_->InitCommon();
 
     // create scene manager
-    rInfo("Creating scene manager.");
+    //rInfo("Creating scene manager.");
     qDebug() << "Creating scene manager.";
     scene_manager_ = QSharedPointer<SceneManager>(new SceneManager(renderer_));
 
@@ -177,6 +176,7 @@ void MainWindow::onLogMessage(const QOpenGLDebugMessage &message) {
 }
 
 MainWindow::~MainWindow() {
+
     delete ui;
 }
 
@@ -198,10 +198,10 @@ void MainWindow::onCreateTerrainTriggered() {
 
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        rInfo("Could not open file %s.", fileName.toUtf8().data());
+        //rInfo("Could not open file %s.", fileName.toUtf8().data());
         return;
     } else {
-        rInfo("Successfully opened file %s.", fileName.toUtf8().data());
+        //rInfo("Successfully opened file %s.", fileName.toUtf8().data());
     }
 
     QVector<QVector3D> points;
@@ -225,10 +225,12 @@ void MainWindow::onSnapToGridToggled(bool state) {
 }
 
 void MainWindow::initializeLogging() {
+    /*
     logger_.set_console(ui->console);
     logger_.subscribeTo(rlog::GetGlobalChannel("info"));
     logger_.subscribeTo(rlog::GetGlobalChannel("debug"));
     logger_.subscribeTo(rlog::GetGlobalChannel("error"));
+    */
 }
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event) {

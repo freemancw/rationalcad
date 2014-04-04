@@ -66,7 +66,6 @@ void PerspectiveWidget::initializeGL() {
     glEnable(GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
 
-    //renderer_->InitCommon();
     renderer_->InitContext(GL::Context::ePERSPECTIVE);
 
     modelview_.setToIdentity();
