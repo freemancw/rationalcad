@@ -15,17 +15,17 @@ find_package(Qt5Widgets)
 find_package(Qt5Gui)
 find_package(Qt5OpenGL)
 
-include_directories(${RATIONALCAD_SOURCE_DIR}/logging)
-include_directories(${RATIONALCAD_SOURCE_DIR}/mathlib)
+#include_directories(${RATIONALCAD_SOURCE_DIR}/logging)
+#include_directories(${RATIONALCAD_SOURCE_DIR}/kernel)
 
 link_directories(${RATIONALCAD_BINARY_DIR}/logging)
-link_directories(${RATIONALCAD_BINARY_DIR}/mathlib)
+link_directories(${RATIONALCAD_BINARY_DIR}/kernel)
 
 qt5_wrap_ui(
     UI_HEADERS
-    forms/rc_dialog_about.ui
-    forms/rc_dialog_preferences.ui
-    forms/rc_window_main.ui
+    forms/dialog_about.ui
+    forms/dialog_preferences.ui
+    forms/window_main.ui
 )
 
 qt5_add_resources(
@@ -35,18 +35,18 @@ qt5_add_resources(
 
 add_executable(
     rationalcad
-    rc_config.cpp
-    rc_grid.cpp
-    rc_logger.cpp
-    rc_main.cpp
-    rc_opengl.cpp
-    rc_qt_dialog_about.cpp
-    rc_qt_dialog_preferences.cpp
-    rc_qt_widget_orthographic.cpp
-    rc_qt_widget_perspective.cpp
-    rc_qt_window_main.cpp
-    rc_scene.cpp
-    rc_common.h
+    config.cpp
+    grid.cpp
+    logger.cpp
+    main.cpp
+    opengl.cpp
+    qt_dialog_about.cpp
+    qt_dialog_preferences.cpp
+    qt_widget_orthographic.cpp
+    qt_widget_perspective.cpp
+    qt_window_main.cpp
+    scene.cpp
+    common.h
     ${UI_HEADERS}
     ${UI_RESOURCES}
 )
@@ -61,7 +61,7 @@ qt5_use_modules(
 
 target_link_libraries(
     rationalcad
-    mathlib
+    kernel
     mpir
     mpirxx
 )

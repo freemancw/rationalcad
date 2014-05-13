@@ -11,5 +11,5 @@ include_directories(${RATIONALCAD_SOURCE_DIR}/dependencies/mpir/Win32/Debug)
 link_directories(${RATIONALCAD_SOURCE_DIR}/dependencies/mpir/Win32/Debug)
 
 add_subdirectory(logging)
-add_subdirectory(mathlib)
+add_subdirectory(kernel)
 add_subdirectory(rationalcad)
