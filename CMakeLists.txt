@@ -7,8 +7,8 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)
  
 project(RATIONALCAD)
 
-include_directories(${RATIONALCAD_SOURCE_DIR}/dependencies/mpir/Win32/Debug)
-link_directories(${RATIONALCAD_SOURCE_DIR}/dependencies/mpir/Win32/Debug)
+include_directories(${RATIONALCAD_SOURCE_DIR}/dependencies/mpir/)
+link_directories(${RATIONALCAD_SOURCE_DIR}/dependencies/mpir/build.vc12/Win32/Debug)
 
 add_subdirectory(logging)
 add_subdirectory(kernel)
