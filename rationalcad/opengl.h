@@ -145,6 +145,13 @@ struct ElementArray {
     GLvoid* indices;   // offset pointer from currently bound IBO
 };
 
+enum class Prim {
+    POINTS,
+    LINES,
+    TRIANGLES,
+    ELAST
+};
+
 namespace Primitive {
     enum Type {
         ePOINTS,
