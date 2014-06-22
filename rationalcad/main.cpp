@@ -31,6 +31,7 @@
 _INITIALIZE_EASYLOGGINGPP
 
 int main(int argc, char *argv[]) {
+
     LOG(INFO) << "===========================================================";
 
     QApplication a(argc, argv);

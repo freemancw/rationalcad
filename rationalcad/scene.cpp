@@ -24,13 +24,13 @@
 #include "config.h"
 
 // geometry kernel
-#include "../kernel/common.h"
-#include "../kernel/arithmetic.h"
-#include "../kernel/vector.h"
-#include "../kernel/polygon.h"
-#include "../kernel/matrix.h"
-#include "../kernel/line.h"
-#include "../kernel/intersection.h"
+#include "../geometry/common.h"
+#include "../geometry/arithmetic.h"
+#include "../geometry/vector.h"
+#include "../geometry/polygon.h"
+#include "../geometry/matrix.h"
+#include "../geometry/line.h"
+#include "../geometry/intersection.h"
 
 #include <ctime>
 

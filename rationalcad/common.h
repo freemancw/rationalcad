@@ -54,13 +54,7 @@
 #include <cstdlib>
 
 // logging
-#include "../logging/easylogging++.h"
-/*
-#include "rlog.h"
-#include "rloglocation.h"
-#include "RLogChannel.h"
-#include "RLogTime.h"
-#include "StdioNode.h"
-*/
+#define NOMINMAX
+#include "../utility/easylogging++.h"
 
 #endif // RC_COMMON_H

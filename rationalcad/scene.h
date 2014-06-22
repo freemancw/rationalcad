@@ -28,13 +28,13 @@
 #include "opengl.h"
 
 // geometry kernel
-#include "../kernel/polygon.h"
-#include "../kernel/polytope.h"
-#include "../kernel/triangulation.h"
-#include "../kernel/arithmetic.h"
-#include "../kernel/line.h"
-#include "../kernel/visual.h"
-#include "../kernel/triangle.h"
+#include "../geometry/polygon.h"
+#include "../geometry/polytope.h"
+#include "../geometry/triangulation.h"
+#include "../geometry/arithmetic.h"
+#include "../geometry/line.h"
+#include "../geometry/visual.h"
+#include "../geometry/triangle.h"
 
 bool operator<(const QVector<uint32_t>& a, const QVector<uint32_t>& b);
 

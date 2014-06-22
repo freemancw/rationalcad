@@ -28,7 +28,7 @@
 #include "qt_widget_perspective.h"
 #include "scene.h"
 
-#include "../kernel/point.h"
+#include "../geometry/point.h"
 
 using namespace RCAD;
 

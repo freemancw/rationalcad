@@ -10,6 +10,6 @@ project(RATIONALCAD)
 include_directories(${RATIONALCAD_SOURCE_DIR}/dependencies/mpir/)
 link_directories(${RATIONALCAD_SOURCE_DIR}/dependencies/mpir/build.vc12/Win32/Debug)
 
-add_subdirectory(logging)
-add_subdirectory(kernel)
+add_subdirectory(geometry)
+add_subdirectory(utility)
 add_subdirectory(rationalcad)

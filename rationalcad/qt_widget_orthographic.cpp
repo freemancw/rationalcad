@@ -26,8 +26,8 @@
 #include "config.h"
 
 // kernel
-#include "../kernel/point.h"
-#include "../kernel/vector.h"
+#include "../geometry/point.h"
+#include "../geometry/vector.h"
 
 using namespace RCAD;
 using namespace RCAD::Visual;

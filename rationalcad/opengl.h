@@ -31,9 +31,9 @@
 #include "common.h"
 
 // kernel
-#include "../kernel/point.h"
-#include "../kernel/vector.h"
-#include "../kernel/visual.h"
+#include "../geometry/point.h"
+#include "../geometry/vector.h"
+#include "../geometry/visual.h"
 
 namespace RCAD {
 
