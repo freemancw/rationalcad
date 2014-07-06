@@ -36,8 +36,8 @@ Polygon_2r::Polygon_2r() {
 }
 
 Polygon_2r::~Polygon_2r() {
-    for(auto i = begin(triangulation_); i != end(triangulation_); ++i) {
-        SigPopVisualTriangle_2r(*i);
+    for (const Triangle_2r& t : triangulation_) {
+        SigPopVisualTriangle_2r(t);
     }
 }
 

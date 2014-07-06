@@ -26,7 +26,6 @@ namespace RCAD {
 
 namespace Predicate {
 
-//! \degree 2
 Orientation OrientationPQR(const Point_2i &p, const Point_2i &q,
                            const Point_2i &r) {
     rational det = Determinant(Matrix_2x2r(q.x()-p.x(), q.y()-p.y(),
@@ -41,7 +40,6 @@ Orientation OrientationPQR(const Point_2i &p, const Point_2i &q,
     }
 }
 
-//! \degree 2
 Orientation OrientationPQR(const Point_2r &p, const Point_2r &q,
                            const Point_2r &r) {
     rational det = Determinant(Matrix_2x2r(q.x()-p.x(), q.y()-p.y(),
@@ -56,7 +54,6 @@ Orientation OrientationPQR(const Point_2r &p, const Point_2r &q,
     }
 }
 
-//! \degree 2
 Orientation OrientationPQR(const Point_2f &p, const Point_2f &q,
                            const Point_2f &r) {
     rational det = Determinant(Matrix_2x2r(q.x()-p.x(), q.y()-p.y(),
@@ -69,6 +66,10 @@ Orientation OrientationPQR(const Point_2f &p, const Point_2f &q,
     } else {
         return ORIENTATION_COLINEAR;
     }
+}
+
+rational Orient2D(const Point_3r &a, const Point_3r &b, const Point_3r &c) {
+    return Determinant(Matrix_2x2r());
 }
 
 } // namespace Predicate
