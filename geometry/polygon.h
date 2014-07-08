@@ -117,6 +117,8 @@ private:
     Visual::Color diffuse_;
 };
 
+Polygon_2r Melkman(const PolyChain_2r& P, Visual::IGeometryObserver* observer = nullptr);
+
 //Polygon_2r IntegerHull(const Polygon_2r& P, IGeometryObserver* observer = nullptr);
 
 } // namespace RCAD

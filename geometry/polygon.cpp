@@ -28,6 +28,18 @@
 namespace RCAD {
 
 //=============================================================================
+// Algorithms
+//=============================================================================
+
+Polygon_2r Melkman(const PolyChain_2r& P, Visual::IGeometryObserver* observer) {
+    Polygon_2r hull;
+
+
+
+    return hull;
+}
+
+//=============================================================================
 // Polygon_2r
 //=============================================================================
 
@@ -96,22 +108,24 @@ void Polygon_2r::ComputeIntegerHull() {
     auto vert_itr_P = vert_itr_max_x;
     auto L = Line_2r(SLOPE_PINFINITY, vert_itr_P->vertex().x());
 
-    while(!wstack.empty()) {
+    while (!wstack.empty()) {
         auto wtop = wstack.Pop();
         auto ray_zv = Ray_2r(tentative_hull.back().vertex_sptr(), wtop->v());
         auto isect_L_zv = Intersection::Line_2rRay_2r(&L, &ray_zv);
 
-        if(Predicate::AreParallel(L, ray_zv) || !Predicate::IsEmpty(isect_L_zv)) {
-            while(Predicate::OrientationPQR(ray_zv, vert_itr_P->vertex()) != ORIENTATION_LEFT) {
-                if(vert_itr_P == std::prev(end(boundary_.vertices())))
+        if (Predicate::AreParallel(L, ray_zv) || !Predicate::IsEmpty(isect_L_zv)) {
+            while (Predicate::OrientationPQR(ray_zv, vert_itr_P->vertex()) != ORIENTATION_LEFT) {
+                if (vert_itr_P == std::prev(end(boundary_.vertices()))) {
                     vert_itr_P = begin(boundary_.vertices());
-                else
+                } else {
                     vert_itr_P++;
+                }
 
                 L = vert_itr_P->edge_prev().support();
 
-                if(Predicate::AIsRightOfB(z, L))
+                if (Predicate::AIsRightOfB(z, L)) {
                     return;
+                }
             }
             z = Construction::LastBefore(L, ray_zv);
             tentative_hull.AppendVertex(z);
@@ -124,8 +138,8 @@ void Polygon_2r::ComputeIntegerHull() {
 
     do {
         tentative_hull.RemoveFront();
-    } while(begin(tentative_hull.vertices())->vertex() !=
-            std::prev(end(tentative_hull.vertices()))->vertex());
+    } while (begin(tentative_hull.vertices())->vertex() !=
+             std::prev(end(tentative_hull.vertices()))->vertex());
 }
 
 void Polygon_2r::CloseBoundary() {
@@ -167,7 +181,7 @@ void PolyChain_2r::AppendVertex(SharedPoint_2r v) {
     SigRegisterPoint_2r(*chain_vertex.vertex_sptr());
     SigPushVisualPoint_2r(chain_vertex.vertex(), Visual::Point());
 
-    if(vertices_.size() > 1) {
+    if (vertices_.size() > 1) {
         auto e0 = std::prev(end(vertices_), 2);
         auto e1 = std::prev(end(vertices_), 1);
         Segment_2r edge(e0->vertex_sptr(), e1->vertex_sptr());

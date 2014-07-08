@@ -600,10 +600,11 @@ std::ostream& operator<<(std::ostream& o, const Point_3r& p);
 std::string to_string(const Point_3r& p);
 
 namespace Predicate {
-
+/*
 rational InCircle(const Point_3r& a, const Point_3r& b, const Point_3r& c,
                   const Point_3r& d);
 rational Orient2D(const Point_3r& a, const Point_3r& b, const Point_3r& c);
+*/
 
 }
 
