@@ -70,6 +70,17 @@ MainWindow::MainWindow(QWidget *parent) :
             SIGNAL(triggered()),
             SLOT(onCreatePolytopeTriggered()));
 
+    // create polyline button
+    QAction* create_polyline = new QAction("Create Polyline",
+                                           input_state_buttons);
+    //create_polyline->setIcon(QIcon("://icons/create_polytope.png"));
+    create_polyline->setCheckable(true);
+    //create_polyline->setChecked(true);
+
+    connect(create_polyline,
+            SIGNAL(triggered()),
+            SLOT(onCreatePolylineTriggered()));
+
     // create terrain button
     QAction* create_terrain = new QAction("Create Terrain", input_state_buttons);
     create_terrain->setIcon(QIcon("://icons/create_terrain.png"));
@@ -186,6 +197,10 @@ void MainWindow::onSelectObjectsTriggered() {
 
 void MainWindow::onCreatePolytopeTriggered() {
     ConfigManager::get().set_input_state(CREATE_POLYTOPE);
+}
+
+void MainWindow::onCreatePolylineTriggered() {
+    ConfigManager::get().set_input_state(CREATE_POLYLINE);
 }
 
 void MainWindow::onCreateTerrainTriggered() {

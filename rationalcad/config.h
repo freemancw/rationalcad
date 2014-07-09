@@ -30,7 +30,9 @@ namespace RCAD {
 enum InputState {
     SELECT,
     CREATE_POLYTOPE,
-    UPDATE_POLYTOPE
+    UPDATE_POLYTOPE,
+    CREATE_POLYLINE,
+    UPDATE_POLYLINE
 };
 
 class ConfigManager {

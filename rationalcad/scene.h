@@ -70,6 +70,36 @@ struct ISceneObject {
 };
 
 //=============================================================================
+// Interface: ScenePolyline_2
+//=============================================================================
+
+class ScenePolyline_2 : public ISceneObject, public Visual::Geometry {
+public:
+    ScenePolyline_2() {
+        model_polyline_.AddObserver(this);
+    }
+    const Polyline_2r& polyline() {
+        return model_polyline_;
+    }
+
+    void Initialize(const QVector2D& start) {
+        model_polyline_.AppendVertex(Point_2r(start.x(), start.y()));
+    }
+
+    void Update(const QVector2D& cur) {
+        //model_polyline_.Update(Point_3f(cur.x(), cur.y(), 64));
+        model_polyline_.AppendVertex(Point_2r(cur.x(), cur.y()));
+    }
+
+    void Select() override {}
+    void Deselect() override {}
+    void UpdateColor(const QColor &color) override {}
+
+private:
+    Polyline_2r model_polyline_;
+};
+
+//=============================================================================
 // Interface: ScenePolytope_3
 //=============================================================================
 

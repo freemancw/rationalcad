@@ -14,7 +14,7 @@
  */
 
 /*!
- * @brief 2-dimensional polygonal chain and polygon types.
+ * @brief 2-dimensional polyline and polygon types.
  * @author Clinton Freeman <freeman@cs.unc.edu>
  * @date 2013-02-12
  */
@@ -31,63 +31,40 @@
 namespace RCAD {
 
 //=============================================================================
-// Interface: PolyChainVertex_2r
+// Interface: Polyline_2r
 //=============================================================================
 
-class PolyChainVertex_2r {
+class Polyline_2r : public Visual::Geometry {
 public:
-    PolyChainVertex_2r();
-    explicit PolyChainVertex_2r(const Point_2r& vertex);
-    explicit PolyChainVertex_2r(SharedPoint_2r vertex);
+    Polyline_2r();
+    ~Polyline_2r();
 
-    const Point_2r& vertex() const;
-    const Segment_2r& edge_prev() const;
-    const Segment_2r& edge_next() const;
-    SharedPoint_2r vertex_sptr();
-
-    void set_vertex(const Point_2r& v);
-    void set_edge_prev(const Segment_2r& e);
-    void set_edge_next(const Segment_2r& e);
-    void set_vertex_sptr(SharedPoint_2r v);
-
-private:
-    SharedPoint_2r vertex_;
-    Segment_2r edge_prev_;
-    Segment_2r edge_next_;
-};
-
-namespace Predicate {
-    bool AIsLeftOfB(const PolyChainVertex_2r& a, const PolyChainVertex_2r& b);
-    bool AIsBelowB(const PolyChainVertex_2r& a, const PolyChainVertex_2r& b);
-}
-
-//=============================================================================
-// Interface: PolyChain_2r
-//=============================================================================
-
-class PolyChain_2r : public Visual::Geometry {
-public:
-    PolyChain_2r();
-    ~PolyChain_2r();
-
-    void AppendVertex(const Point_2r& v);
-    void AppendVertex(SharedPoint_2r v);
-    void RemoveFront();
     void Close();
+    void Open();
     void RotateToMaxX();
-    PolyChainVertex_2r& back();
 
-    const std::list<PolyChainVertex_2r>& vertices() const;
+    void push_back(const Point_2r& v);
+    void push_back(SharedPoint_2r v);
+    SharedPoint_2r pop_back();
+    SharedPoint_2r back();
+
+    void push_front(const Point_2r& v);
+    void push_front(SharedPoint_2r v);
+    SharedPoint_2r pop_front();
+    SharedPoint_2r front();
+
+    const std::list<SharedPoint_2r>& vertices() const;
+    void set_vertices(const std::list<SharedPoint_2r>& vertices);
     const bool closed() const;
-    void set_vertices(const std::list<PolyChainVertex_2r>& vertices);
-    void set_closed(const bool closed);
 
-    typedef std::list<PolyChainVertex_2r>::const_iterator const_iterator;
+    typedef std::list<SharedPoint_2r>::const_iterator const_iterator;
 
     friend class Polygon_2r;
 
 private:
-    std::list<PolyChainVertex_2r> vertices_;
+    std::list<SharedPoint_2r> vertices_;
+    Visual::Material mat_vertex_;
+    Visual::Material mat_edge_;
     bool closed_;
 };
 
@@ -100,26 +77,28 @@ public:
     Polygon_2r();
     ~Polygon_2r();
 
-    void AppendVertexToBoundary(const Point_2r& v);
-    void AppendVertexToBoundary(SharedPoint_2r v);
+    void push_back(const Point_2r& v);
+    void push_back(SharedPoint_2r v);
+    SharedPoint_2r pop_back();
+    SharedPoint_2r back();
+
+    void push_front(const Point_2r& v);
+    void push_front(SharedPoint_2r v);
+    SharedPoint_2r pop_front();
+    SharedPoint_2r front();
+
     void CloseBoundary();
-    void ComputeIntegerHull();
     const size_t NumVertices() const;
 
-    const PolyChain_2r& boundary() const;
-
-    const Visual::Color& diffuse() const { return diffuse_; }
-    void set_diffuse(const Visual::Color& diffuse) { diffuse_ = diffuse; }
+    const Polyline_2r& boundary() const;
 
 private:
-    PolyChain_2r boundary_;
-    std::vector<Triangle_2r> triangulation_;
-    Visual::Color diffuse_;
+    Polyline_2r boundary_;
+    Visual::Material mat_face_;
 };
 
-Polygon_2r Melkman(const PolyChain_2r& P, Visual::IGeometryObserver* observer = nullptr);
-
-//Polygon_2r IntegerHull(const Polygon_2r& P, IGeometryObserver* observer = nullptr);
+Polygon_2r Melkman(const Polyline_2r& P, Visual::IGeometryObserver* observer = nullptr);
+//Polygon_2r IntegerHull(const Polygon_2r& P, Visual::IGeometryObserver* observer = nullptr);
 
 } // namespace RCAD
 

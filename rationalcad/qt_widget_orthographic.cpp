@@ -272,6 +272,12 @@ void OrthographicWidget::mousePressEvent(QMouseEvent *event) {
             create_polytope_pos = event->pos();
 
             break;
+        case CREATE_POLYLINE:
+            emit BeginCreatePolyline(world_coords);
+            break;
+        case UPDATE_POLYLINE:
+            emit UpdateNewPolyline(world_coords);
+            break;
         default:
             break;
         }
@@ -285,7 +291,9 @@ void OrthographicWidget::mousePressEvent(QMouseEvent *event) {
 
     if (event->buttons() & Qt::RightButton) {
         switch (ConfigManager::get().input_state()) {
-        case SELECT:
+        case UPDATE_POLYLINE:
+            emit EndCreatePolyline();
+            break;
         default:
             break;
         }
