@@ -45,12 +45,12 @@ public:
 
     void push_back(const Point_2r& v);
     void push_back(SharedPoint_2r v);
-    SharedPoint_2r pop_back();
+    void pop_back();
     SharedPoint_2r back();
 
     void push_front(const Point_2r& v);
     void push_front(SharedPoint_2r v);
-    SharedPoint_2r pop_front();
+    void pop_front();
     SharedPoint_2r front();
 
     const std::list<SharedPoint_2r>& vertices() const;
@@ -79,12 +79,12 @@ public:
 
     void push_back(const Point_2r& v);
     void push_back(SharedPoint_2r v);
-    SharedPoint_2r pop_back();
+    void pop_back();
     SharedPoint_2r back();
 
     void push_front(const Point_2r& v);
     void push_front(SharedPoint_2r v);
-    SharedPoint_2r pop_front();
+    void pop_front();
     SharedPoint_2r front();
 
     void CloseBoundary();
@@ -98,7 +98,7 @@ private:
 };
 
 Polygon_2r Melkman(const Polyline_2r& P, Visual::IGeometryObserver* observer = nullptr);
-//Polygon_2r IntegerHull(const Polygon_2r& P, Visual::IGeometryObserver* observer = nullptr);
+Polygon_2r IntegerHull(const Polygon_2r& P, Visual::IGeometryObserver* observer = nullptr);
 
 } // namespace RCAD
 

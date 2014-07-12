@@ -41,47 +41,11 @@ Polygon_2r Melkman(const Polyline_2r& P, Visual::IGeometryObserver* observer) {
     return hull;
 }
 
-//=============================================================================
-// Polygon_2r
-//=============================================================================
+Polygon_2r IntegerHull(const Polygon_2r& P, Visual::IGeometryObserver *observer) {
+    Polygon_2r ihull;
+    ihull.AddObserver(observer);
 
-Polygon_2r::Polygon_2r() {
-    boundary_.AddObserver(this);
-}
-
-Polygon_2r::~Polygon_2r() {
     /*
-    for (const Triangle_2r& t : triangulation_) {
-        SigPopVisualTriangle_2r(t);
-    }
-    */
-}
-
-void Polygon_2r::AppendVertexToBoundary(const Point_2r& v) {
-    AppendVertexToBoundary(std::make_shared<Point_2r>(v));
-}
-
-void Polygon_2r::AppendVertexToBoundary(SharedPoint_2r v) {
-    boundary_.AppendVertex(v);
-
-    if (boundary_.vertices().size() > 2) {
-        /*
-        Triangle_2r t(std::prev(end(boundary_.vertices_), 1)->vertex_sptr(),
-                      begin(boundary_.vertices_)->vertex_sptr(),
-                      std::prev(end(boundary_.vertices_), 2)->vertex_sptr());
-        triangulation_.push_back(t);
-        Visual::Triangle vt;
-        //vt.set_diffuse(diffuse_);
-        SigPushVisualTriangle_2r(t, vt);
-        */
-    }
-}
-
-/*!
- * @brief Polygon_2r::ComputeIntegerHull
- */
-/*
-void Polygon_2r::ComputeIntegerHull() {
     // canonicalize the boundary chain
     boundary_.RotateToMaxX();
 
@@ -147,8 +111,58 @@ void Polygon_2r::ComputeIntegerHull() {
         tentative_hull.RemoveFront();
     } while (begin(tentative_hull.vertices())->vertex() !=
              std::prev(end(tentative_hull.vertices()))->vertex());
+             */
+
+    return ihull;
 }
-*/
+
+//=============================================================================
+// Polygon_2r
+//=============================================================================
+
+Polygon_2r::Polygon_2r() {
+    boundary_.AddObserver(this);
+}
+
+Polygon_2r::~Polygon_2r() {
+    /*
+    for (const Triangle_2r& t : triangulation_) {
+        SigPopVisualTriangle_2r(t);
+    }
+    */
+}
+
+void Polygon_2r::push_back(const Point_2r& v) {
+    push_back(std::make_shared<Point_2r>(v));
+}
+
+void Polygon_2r::push_back(SharedPoint_2r v) {
+    boundary_.push_back(v);
+}
+
+void Polygon_2r::pop_back() {
+    boundary_.pop_back();
+}
+
+SharedPoint_2r Polygon_2r::back() {
+    return boundary_.back();
+}
+
+void Polygon_2r::push_front(const Point_2r& v) {
+    push_front(std::make_shared<Point_2r>(v));
+}
+
+void Polygon_2r::push_front(SharedPoint_2r v) {
+    boundary_.push_front(v);
+}
+
+void Polygon_2r::pop_front() {
+    boundary_.pop_front();
+}
+
+SharedPoint_2r Polygon_2r::front() {
+    return boundary_.front();
+}
 
 void Polygon_2r::CloseBoundary() {
     boundary_.Close();
@@ -159,11 +173,35 @@ const Polyline_2r& Polygon_2r::boundary() const {
 }
 
 const size_t Polygon_2r::NumVertices() const {
-    return boundary().vertices().size();
+    return boundary_.vertices().size();
 }
 
+/*
+void Polygon_2r::AppendVertexToBoundary(const Point_2r& v) {
+    AppendVertexToBoundary(std::make_shared<Point_2r>(v));
+}
+*/
+
+/*
+void Polygon_2r::AppendVertexToBoundary(SharedPoint_2r v) {
+    boundary_.AppendVertex(v);
+
+    if (boundary_.vertices().size() > 2) {
+
+        Triangle_2r t(std::prev(end(boundary_.vertices_), 1)->vertex_sptr(),
+                      begin(boundary_.vertices_)->vertex_sptr(),
+                      std::prev(end(boundary_.vertices_), 2)->vertex_sptr());
+        triangulation_.push_back(t);
+        Visual::Triangle vt;
+        //vt.set_diffuse(diffuse_);
+        SigPushVisualTriangle_2r(t, vt);
+
+    }
+}
+*/
+
 //=============================================================================
-// Implementation: PolyChain_2r
+// Polyline_2r
 //=============================================================================
 
 Polyline_2r::Polyline_2r() :
@@ -171,11 +209,6 @@ Polyline_2r::Polyline_2r() :
 
 Polyline_2r::~Polyline_2r() {
 
-    /*
-    for (SharedPoint_2r p : vertices_) {
-        SigPopVisualPoint_2r(*p);
-    }
-    */
 
     /*
     for (auto i = begin(vertices_); i != end(vertices_); ++i) {
@@ -185,39 +218,6 @@ Polyline_2r::~Polyline_2r() {
             SigPopVisualSegment_2r(i->edge_next());
         }
     }
-    */
-}
-
-void Polyline_2r::AppendVertex(const Point_2r& v) {
-    AppendVertex(std::make_shared<Point_2r>(v));
-}
-
-void Polyline_2r::AppendVertex(SharedPoint_2r v) {
-
-
-    /*
-    PolyChainVertex_2r chain_vertex(v);
-    vertices_.push_back(chain_vertex);
-    SigRegisterPoint_2r(*chain_vertex.vertex_sptr());
-    SigPushVisualPoint_2r(chain_vertex.vertex(), Visual::Point());
-
-    if (vertices_.size() > 1) {
-        auto e0 = std::prev(end(vertices_), 2);
-        auto e1 = std::prev(end(vertices_), 1);
-        Segment_2r edge(e0->vertex_sptr(), e1->vertex_sptr());
-        e0->set_edge_next(edge);
-        e1->set_edge_prev(edge);
-        SigPushVisualSegment_2r(edge, Visual::Segment());
-    }
-    */
-}
-
-void Polyline_2r::RemoveFront() {
-    /*
-    SigPopVisualPoint_2r(vertices_.front().vertex());
-    SigPopVisualSegment_2r(vertices_.front().edge_next(), 2000);
-    vertices_.pop_front();
-    begin(vertices_)->set_edge_prev(Segment_2r());
     */
 }
 
@@ -233,6 +233,10 @@ void Polyline_2r::Close() {
     */
 }
 
+void Polyline_2r::Open() {
+
+}
+
 void Polyline_2r::RotateToMaxX() {
     /*
     bool (*compare)(const PolyChainVertex_2r&,
@@ -243,20 +247,82 @@ void Polyline_2r::RotateToMaxX() {
     */
 }
 
+void Polyline_2r::push_back(const Point_2r& v) {
+    push_back(std::make_shared<Point_2r>(v));
+}
+
+void Polyline_2r::push_back(SharedPoint_2r v) {
+    vertices_.push_back(v);
+}
+
+void Polyline_2r::pop_back() {
+    vertices_.pop_back();
+}
+
 SharedPoint_2r Polyline_2r::back() {
     return vertices_.back();
 }
+
+void Polyline_2r::push_front(const Point_2r& v) {
+    push_front(std::make_shared<Point_2r>(v));
+}
+
+void Polyline_2r::push_front(SharedPoint_2r v) {
+    vertices_.push_front(v);
+}
+
+void Polyline_2r::pop_front() {
+    vertices_.pop_front();
+}
+
+SharedPoint_2r Polyline_2r::front() {
+    return vertices_.front();
+}
+
 const std::list<SharedPoint_2r>& Polyline_2r::vertices() const {
     return vertices_;
 }
-const bool Polyline_2r::closed() const {
-    return closed_;
-}
+
 void Polyline_2r::set_vertices(const std::list<SharedPoint_2r>& vertices) {
     vertices_ = vertices;
 }
-void Polyline_2r::set_closed(const bool closed) {
-    closed_ = closed;
+
+const bool Polyline_2r::closed() const {
+    return closed_;
 }
+
+/*
+void Polyline_2r::AppendVertex(const Point_2r& v) {
+    AppendVertex(std::make_shared<Point_2r>(v));
+}
+
+void Polyline_2r::AppendVertex(SharedPoint_2r v) {
+
+
+
+    PolyChainVertex_2r chain_vertex(v);
+    vertices_.push_back(chain_vertex);
+    SigRegisterPoint_2r(*chain_vertex.vertex_sptr());
+    SigPushVisualPoint_2r(chain_vertex.vertex(), Visual::Point());
+
+    if (vertices_.size() > 1) {
+        auto e0 = std::prev(end(vertices_), 2);
+        auto e1 = std::prev(end(vertices_), 1);
+        Segment_2r edge(e0->vertex_sptr(), e1->vertex_sptr());
+        e0->set_edge_next(edge);
+        e1->set_edge_prev(edge);
+        SigPushVisualSegment_2r(edge, Visual::Segment());
+    }
+}
+
+void Polyline_2r::RemoveFront() {
+
+    SigPopVisualPoint_2r(vertices_.front().vertex());
+    SigPopVisualSegment_2r(vertices_.front().edge_next(), 2000);
+    vertices_.pop_front();
+    begin(vertices_)->set_edge_prev(Segment_2r());
+
+}
+*/
 
 } // namespace RCAD
