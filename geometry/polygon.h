@@ -46,23 +46,22 @@ public:
     void push_back(const Point_2r& v);
     void push_back(SharedPoint_2r v);
     void pop_back();
-    SharedPoint_2r back();
+    SharedPoint_2r back(const size_t i = 0) const;
 
     void push_front(const Point_2r& v);
     void push_front(SharedPoint_2r v);
     void pop_front();
-    SharedPoint_2r front();
+    SharedPoint_2r front(const size_t i = 0) const;
 
-    const std::list<SharedPoint_2r>& vertices() const;
-    void set_vertices(const std::list<SharedPoint_2r>& vertices);
+    SharedPoint_2r operator[](const size_t i) const;
+    const size_t size() const;
+
+    const std::deque<SharedPoint_2r>& vertices() const;
+    void set_vertices(const std::deque<SharedPoint_2r>& vertices);
     const bool closed() const;
 
-    typedef std::list<SharedPoint_2r>::const_iterator const_iterator;
-
-    friend class Polygon_2r;
-
 private:
-    std::list<SharedPoint_2r> vertices_;
+    std::deque<SharedPoint_2r> vertices_;
     Visual::Material mat_vertex_;
     Visual::Material mat_edge_;
     bool closed_;
@@ -80,15 +79,17 @@ public:
     void push_back(const Point_2r& v);
     void push_back(SharedPoint_2r v);
     void pop_back();
-    SharedPoint_2r back();
+    SharedPoint_2r back(const size_t i = 0) const;
 
     void push_front(const Point_2r& v);
     void push_front(SharedPoint_2r v);
     void pop_front();
-    SharedPoint_2r front();
+    SharedPoint_2r front(const size_t i = 0) const;
+
+    SharedPoint_2r operator[](const size_t i) const;
+    const size_t size() const;
 
     void CloseBoundary();
-    const size_t NumVertices() const;
 
     const Polyline_2r& boundary() const;
 

@@ -25,6 +25,8 @@
 #include "polygon.h"
 #include "wedge.h"
 
+using namespace RCAD::Predicate;
+
 namespace RCAD {
 
 //=============================================================================
@@ -36,7 +38,23 @@ Polygon_2r Melkman(const Polyline_2r& P, Visual::IGeometryObserver* observer) {
     hull.AddObserver(observer);
 
     // initialize hull
-    //hull.AppendVertexToBoundary();
+    hull.push_back(P[0]);
+    hull.push_back(P[1]);
+    hull.push_back(P[0]);
+
+    for (size_t i = 2; i < P.size(); ++i) {
+        if (!RIsLeftOrInsidePQ(*hull.back(1), *hull.back(0), *P[i]) ||
+            !RIsLeftOrInsidePQ(*P[i], *hull.front(1), *hull.front(0))) {
+            while (!RIsLeftOrInsidePQ(*hull.back(1), *hull.back(0), *P[i])) {
+                hull.pop_back();
+            }
+            while (!RIsLeftOrInsidePQ(*P[i], *hull.front(0), *hull.front(1))) {
+                hull.pop_front();
+            }
+            hull.push_back(P[i]);
+            hull.push_front(P[i]);
+        }
+    }
 
     return hull;
 }
@@ -125,11 +143,7 @@ Polygon_2r::Polygon_2r() {
 }
 
 Polygon_2r::~Polygon_2r() {
-    /*
-    for (const Triangle_2r& t : triangulation_) {
-        SigPopVisualTriangle_2r(t);
-    }
-    */
+
 }
 
 void Polygon_2r::push_back(const Point_2r& v) {
@@ -144,8 +158,8 @@ void Polygon_2r::pop_back() {
     boundary_.pop_back();
 }
 
-SharedPoint_2r Polygon_2r::back() {
-    return boundary_.back();
+SharedPoint_2r Polygon_2r::back(const size_t i) const {
+    return boundary_.back(i);
 }
 
 void Polygon_2r::push_front(const Point_2r& v) {
@@ -160,8 +174,16 @@ void Polygon_2r::pop_front() {
     boundary_.pop_front();
 }
 
-SharedPoint_2r Polygon_2r::front() {
-    return boundary_.front();
+SharedPoint_2r Polygon_2r::front(const size_t i) const {
+    return boundary_.front(i);
+}
+
+const size_t Polygon_2r::size() const {
+    return boundary_.size();
+}
+
+SharedPoint_2r Polygon_2r::operator[](const size_t i) const {
+    return boundary_[i];
 }
 
 void Polygon_2r::CloseBoundary() {
@@ -172,34 +194,6 @@ const Polyline_2r& Polygon_2r::boundary() const {
     return boundary_;
 }
 
-const size_t Polygon_2r::NumVertices() const {
-    return boundary_.vertices().size();
-}
-
-/*
-void Polygon_2r::AppendVertexToBoundary(const Point_2r& v) {
-    AppendVertexToBoundary(std::make_shared<Point_2r>(v));
-}
-*/
-
-/*
-void Polygon_2r::AppendVertexToBoundary(SharedPoint_2r v) {
-    boundary_.AppendVertex(v);
-
-    if (boundary_.vertices().size() > 2) {
-
-        Triangle_2r t(std::prev(end(boundary_.vertices_), 1)->vertex_sptr(),
-                      begin(boundary_.vertices_)->vertex_sptr(),
-                      std::prev(end(boundary_.vertices_), 2)->vertex_sptr());
-        triangulation_.push_back(t);
-        Visual::Triangle vt;
-        //vt.set_diffuse(diffuse_);
-        SigPushVisualTriangle_2r(t, vt);
-
-    }
-}
-*/
-
 //=============================================================================
 // Polyline_2r
 //=============================================================================
@@ -209,28 +203,10 @@ Polyline_2r::Polyline_2r() :
 
 Polyline_2r::~Polyline_2r() {
 
-
-    /*
-    for (auto i = begin(vertices_); i != end(vertices_); ++i) {
-        SigPopVisualPoint_2r(i->vertex());
-
-        if(i != std::prev(end(vertices_))) {
-            SigPopVisualSegment_2r(i->edge_next());
-        }
-    }
-    */
 }
 
 void Polyline_2r::Close() {
-    /*
-    auto e0 = std::prev(end(vertices_), 1);
-    auto e1 = begin(vertices_);
-    Segment_2r edge(e0->vertex_sptr(), e1->vertex_sptr());
-    e0->set_edge_next(edge);
-    e1->set_edge_prev(edge);
-    SigPushVisualSegment_2r(edge, Visual::Segment());
-    set_closed(true);
-    */
+
 }
 
 void Polyline_2r::Open() {
@@ -259,8 +235,8 @@ void Polyline_2r::pop_back() {
     vertices_.pop_back();
 }
 
-SharedPoint_2r Polyline_2r::back() {
-    return vertices_.back();
+SharedPoint_2r Polyline_2r::back(const size_t i) const {
+    return vertices_[vertices_.size()-1-i];
 }
 
 void Polyline_2r::push_front(const Point_2r& v) {
@@ -275,54 +251,28 @@ void Polyline_2r::pop_front() {
     vertices_.pop_front();
 }
 
-SharedPoint_2r Polyline_2r::front() {
-    return vertices_.front();
+SharedPoint_2r Polyline_2r::front(const size_t i) const {
+    return vertices_[i];
 }
 
-const std::list<SharedPoint_2r>& Polyline_2r::vertices() const {
+const size_t Polyline_2r::size() const {
+    return vertices_.size();
+}
+
+SharedPoint_2r Polyline_2r::operator [](const size_t i) const {
+    return vertices_[i];
+}
+
+const std::deque<SharedPoint_2r>& Polyline_2r::vertices() const {
     return vertices_;
 }
 
-void Polyline_2r::set_vertices(const std::list<SharedPoint_2r>& vertices) {
+void Polyline_2r::set_vertices(const std::deque<SharedPoint_2r>& vertices) {
     vertices_ = vertices;
 }
 
 const bool Polyline_2r::closed() const {
     return closed_;
 }
-
-/*
-void Polyline_2r::AppendVertex(const Point_2r& v) {
-    AppendVertex(std::make_shared<Point_2r>(v));
-}
-
-void Polyline_2r::AppendVertex(SharedPoint_2r v) {
-
-
-
-    PolyChainVertex_2r chain_vertex(v);
-    vertices_.push_back(chain_vertex);
-    SigRegisterPoint_2r(*chain_vertex.vertex_sptr());
-    SigPushVisualPoint_2r(chain_vertex.vertex(), Visual::Point());
-
-    if (vertices_.size() > 1) {
-        auto e0 = std::prev(end(vertices_), 2);
-        auto e1 = std::prev(end(vertices_), 1);
-        Segment_2r edge(e0->vertex_sptr(), e1->vertex_sptr());
-        e0->set_edge_next(edge);
-        e1->set_edge_prev(edge);
-        SigPushVisualSegment_2r(edge, Visual::Segment());
-    }
-}
-
-void Polyline_2r::RemoveFront() {
-
-    SigPopVisualPoint_2r(vertices_.front().vertex());
-    SigPopVisualSegment_2r(vertices_.front().edge_next(), 2000);
-    vertices_.pop_front();
-    begin(vertices_)->set_edge_prev(Segment_2r());
-
-}
-*/
 
 } // namespace RCAD

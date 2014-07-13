@@ -172,6 +172,9 @@ bool AIsLeftOfB(const Point_2r& a, const Point_2r& b);
 bool AIsBelowB(const Point_2r& a, const Point_2r& b);
 Orientation OrientationPQR(const Point_2r& p, const Point_2r& q,
                            const Point_2r& r);
+
+bool RIsLeftOrInsidePQ(const Point_2r& p, const Point_2r& q, const Point_2r& r);
+
 }
 
 //=============================================================================

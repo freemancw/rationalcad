@@ -68,6 +68,11 @@ Orientation OrientationPQR(const Point_2f &p, const Point_2f &q,
     }
 }
 
+bool RIsLeftOrInsidePQ(const Point_2r &p, const Point_2r &q,
+                       const Point_2r &r) {
+    return false;
+}
+
 /*
 rational Orient2D(const Point_3r &a, const Point_3r &b, const Point_3r &c) {
     return Determinant(Matrix_2x2r());
