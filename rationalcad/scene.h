@@ -83,12 +83,12 @@ public:
     }
 
     void Initialize(const QVector2D& start) {
-        //model_polyline_.AppendVertex(Point_2r(start.x(), start.y()));
+        model_polyline_.push_back(Point_2r(start.x(), start.y()));
     }
 
     void Update(const QVector2D& cur) {
         //model_polyline_.Update(Point_3f(cur.x(), cur.y(), 64));
-        //model_polyline_.AppendVertex(Point_2r(cur.x(), cur.y()));
+        model_polyline_.push_back(Point_2r(cur.x(), cur.y()));
     }
 
     void Select() override {}
