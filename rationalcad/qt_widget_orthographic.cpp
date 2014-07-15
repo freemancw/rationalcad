@@ -53,9 +53,8 @@ OrthographicWidget::OrthographicWidget(OrthoOrientation orientation,
 // Initialization
 //=============================================================================
 
-void OrthographicWidget::initialize(
-    QSharedPointer<Renderer> renderer,
-    QSharedPointer<SceneManager> scene_manager) {
+void OrthographicWidget::initialize(Renderer* renderer,
+                                    SceneManager* scene_manager) {
     renderer_ = renderer;
     scene_manager_ = scene_manager;
 

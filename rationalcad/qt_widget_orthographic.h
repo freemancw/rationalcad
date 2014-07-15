@@ -59,8 +59,8 @@ public:
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
 
-    void initialize(QSharedPointer<RCAD::Renderer> renderer,
-                    QSharedPointer<RCAD::SceneManager> scene_manager);
+    void initialize(RCAD::Renderer* renderer,
+                    RCAD::SceneManager* scene_manager);
 
 public slots:
     void ShowContextMenu(const QPoint& p);
@@ -102,8 +102,8 @@ protected:
     static const int kPrefHintWidth;
     static const int kPrefHintHeight;
 
-    QSharedPointer<RCAD::Renderer> renderer_;
-    QSharedPointer<RCAD::SceneManager> scene_manager_;
+    RCAD::Renderer* renderer_;
+    RCAD::SceneManager* scene_manager_;
 
     RCAD::IntegerGrid i_grid_;
     RCAD::GL::RenderGroup i_grid_rg_;

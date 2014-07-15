@@ -78,16 +78,14 @@ public:
     ScenePolyline_2() {
         model_polyline_.AddObserver(this);
     }
-    const Polyline_2r& polyline() {
-        return model_polyline_;
-    }
 
     void Initialize(const QVector2D& start) {
+        LOG(INFO) << "initializing polyline.";
         model_polyline_.push_back(Point_2r(start.x(), start.y()));
     }
 
     void Update(const QVector2D& cur) {
-        //model_polyline_.Update(Point_3f(cur.x(), cur.y(), 64));
+        LOG(INFO) << "updating polyline.";
         model_polyline_.push_back(Point_2r(cur.x(), cur.y()));
     }
 
@@ -252,7 +250,7 @@ class SceneManager : public QObject {
     Q_OBJECT
 
 public:
-    SceneManager(QSharedPointer<Renderer> renderer);
+    SceneManager(Renderer* renderer);
     ~SceneManager();
 
     SceneObserver scene_observer_;
@@ -264,7 +262,7 @@ public slots:
                               QVector<GL::Vertex> verts);
 
 private:
-    QSharedPointer<Renderer> renderer_;
+    Renderer* renderer_;
     QSharedPointer<QThread> animation_thread_;
 };
 

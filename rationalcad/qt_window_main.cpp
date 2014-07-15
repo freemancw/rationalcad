@@ -135,12 +135,12 @@ MainWindow::MainWindow(QWidget *parent) :
     // create renderer
     //rInfo("Creating renderer.");
     qDebug() << "Creating renderer.";
-    renderer_ = QSharedPointer<Renderer>(new Renderer());
+    renderer_ = new Renderer();
 
     // create scene manager
     //rInfo("Creating scene manager.");
     qDebug() << "Creating scene manager.";
-    scene_manager_ = QSharedPointer<SceneManager>(new SceneManager(renderer_));
+    scene_manager_ = new SceneManager(renderer_);
 
     connect(this,
             SIGNAL(CreateTerrainMesh(const QVector<QVector3D>&)),
@@ -188,7 +188,8 @@ void MainWindow::onLogMessage(const QOpenGLDebugMessage &message) {
 }
 
 MainWindow::~MainWindow() {
-
+    delete scene_manager_;
+    delete renderer_;
     delete ui;
 }
 

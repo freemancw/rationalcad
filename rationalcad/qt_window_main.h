@@ -82,9 +82,8 @@ private:
 
     Ui::MainWindow *ui;
 
-    QSharedPointer<RCAD::Renderer> renderer_;
-    QSharedPointer<RCAD::SceneManager> scene_manager_;
-    //RCAD::RCLogger logger_;
+    RCAD::Renderer* renderer_;
+    RCAD::SceneManager* scene_manager_;
 
     QColor create_object_color_;
 };

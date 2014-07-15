@@ -47,9 +47,8 @@ PerspectiveWidget::PerspectiveWidget(QWidget *parent,
 // Initialization
 //=============================================================================
 
-void PerspectiveWidget::initialize(
-    QSharedPointer<Renderer> renderer,
-    QSharedPointer<SceneManager> scene_manager) {
+void PerspectiveWidget::initialize(Renderer* renderer,
+                                   SceneManager* scene_manager) {
     renderer_ = renderer;
     scene_manager_ = scene_manager;
     setAutoFillBackground(false);
