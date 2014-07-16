@@ -204,6 +204,10 @@ public:
     const QString& selected_name() const;
 
 public slots:
+    void onBeginCreatePolyline(const QVector2D& cur);
+    void onUpdateNewPolyline(const QVector2D& cur);
+    void onEndCreatePolyline();
+
     void onBeginCreatePolytope(const QVector2D& start, const QVector2D& cur);
     void onUpdateNewPolytope(const QVector2D& cur);
     void onEndCreatePolytope();
@@ -229,6 +233,7 @@ private:
 
     bool ObjectIsSelected() const;
     ISceneObject* SelectedObject();
+    ScenePolyline_2* SelectedPolyline_2();
     ScenePolytope_3* SelectedPolytope_3();
     SceneTerrainMesh_3* SelectedTerrainMesh_3();
 

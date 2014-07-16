@@ -69,6 +69,22 @@ void OrthographicWidget::initialize(Renderer* renderer,
             SIGNAL(SelectObject(QVector2D)),
             &scene_manager_->scene_observer_,
             SLOT(onSelectObject(QVector2D)));
+
+    // polyline
+    connect(this,
+            SIGNAL(BeginCreatePolyline(QVector2D)),
+            &scene_manager_->scene_observer_,
+            SLOT(onBeginCreatePolyline(QVector2D)));
+    connect(this,
+            SIGNAL(UpdateNewPolyline(QVector2D)),
+            &scene_manager_->scene_observer_,
+            SLOT(onUpdateNewPolyline(QVector2D)));
+    connect(this,
+            SIGNAL(EndCreatePolyline()),
+            &scene_manager_->scene_observer_,
+            SLOT(onEndCreatePolyline()));
+
+    // polytope
     connect(this,
             SIGNAL(BeginCreatePolytope(QVector2D, QVector2D)),
             &scene_manager_->scene_observer_,
