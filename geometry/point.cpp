@@ -70,7 +70,11 @@ Orientation OrientationPQR(const Point_2f &p, const Point_2f &q,
 
 bool RIsLeftOrInsidePQ(const Point_2r &p, const Point_2r &q,
                        const Point_2r &r) {
-    return false;
+    bool is_left = OrientationPQR(p, q, r) == ORIENTATION_LEFT;
+
+    bool is_inside = false;
+
+    return is_left || is_inside;
 }
 
 /*

@@ -228,7 +228,6 @@ void Polyline_2r::push_back(const Point_2r& v) {
 }
 
 void Polyline_2r::push_back(SharedPoint_2r v) {
-    LOG(INFO) << "push_back vertex to polyline_2r";
     vertices_.push_back(v);
 
     SigRegisterPoint_2r(*v);
@@ -241,6 +240,12 @@ void Polyline_2r::push_back(SharedPoint_2r v) {
 }
 
 void Polyline_2r::pop_back() {
+    if (vertices_.size() > 1) {
+        SigPopVisualSegment_2r(Segment_2r(back(1), back(0)));
+    }
+
+    SigPopVisualPoint_2r(*back(0), 1000);
+
     vertices_.pop_back();
 }
 
@@ -265,6 +270,12 @@ void Polyline_2r::push_front(SharedPoint_2r v) {
 }
 
 void Polyline_2r::pop_front() {
+    if (vertices_.size() > 1) {
+        SigPopVisualSegment_2r(Segment_2r(front(0), front(1)));
+    }
+
+    SigPopVisualPoint_2r(*front(0), 1000);
+
     vertices_.pop_front();
 }
 

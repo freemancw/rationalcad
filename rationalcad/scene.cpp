@@ -322,7 +322,7 @@ void SceneObserver::onUpdateNewPolyline(const QVector2D& v) {
 }
 
 void SceneObserver::onEndCreatePolyline() {
-
+    RCAD::Melkman(SelectedPolyline_2()->model_polyline(), this);
 }
 
 //=============================================================================

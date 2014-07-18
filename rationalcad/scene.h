@@ -93,6 +93,10 @@ public:
     void Deselect() override {}
     void UpdateColor(const QColor &color) override {}
 
+    const Polyline_2r& model_polyline() const {
+        return model_polyline_;
+    }
+
 private:
     Polyline_2r model_polyline_;
 };
