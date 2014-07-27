@@ -35,6 +35,12 @@ namespace RCAD {
 
 Polygon_2r Melkman(const Polyline_2r& P, Visual::IGeometryObserver* observer) {
     Polygon_2r hull;
+
+    Visual::Material hull_mat;
+    hull_mat.set_ambient(Visual::Color(255, 0, 0, 255));
+    hull.set_mat_vertex(hull_mat);
+    hull.set_mat_edge(hull_mat);
+
     hull.AddObserver(observer);
 
     // initialize hull
@@ -44,11 +50,11 @@ Polygon_2r Melkman(const Polyline_2r& P, Visual::IGeometryObserver* observer) {
 
     for (size_t i = 2; i < P.size(); ++i) {
         if (!RIsLeftOrInsidePQ(*hull.back(1), *hull.back(0), *P[i]) ||
-            !RIsLeftOrInsidePQ(*P[i], *hull.front(1), *hull.front(0))) {
+            !RIsLeftOrInsidePQ(*hull.front(0), *hull.front(1), *P[i])) {
             while (!RIsLeftOrInsidePQ(*hull.back(1), *hull.back(0), *P[i])) {
                 hull.pop_back();
             }
-            while (!RIsLeftOrInsidePQ(*P[i], *hull.front(0), *hull.front(1))) {
+            while (!RIsLeftOrInsidePQ(*hull.front(0), *hull.front(1), *P[i])) {
                 hull.pop_front();
             }
             hull.push_back(P[i]);
@@ -152,9 +158,20 @@ void Polygon_2r::push_back(const Point_2r& v) {
 
 void Polygon_2r::push_back(SharedPoint_2r v) {
     boundary_.push_back(v);
+
+    if (size() > 3) {
+        LOG(INFO) << "push_back " << back(0)->unique_id() << ", " << back(1)->unique_id() << ", " << back(2)->unique_id();
+        SigPushVisualTriangle_2r(Triangle_2r(back(0), back(1), back(2)),
+                                 Visual::Triangle(mat_face_));
+    }
 }
 
 void Polygon_2r::pop_back() {
+    if (size() > 3) {
+        LOG(INFO) << "pop_back " << back(0)->unique_id() << ", " << back(1)->unique_id() << ", " << back(2)->unique_id();
+        SigPopVisualTriangle_2r(Triangle_2r(back(0), back(1), back(2)));
+    }
+
     boundary_.pop_back();
 }
 
@@ -168,9 +185,20 @@ void Polygon_2r::push_front(const Point_2r& v) {
 
 void Polygon_2r::push_front(SharedPoint_2r v) {
     boundary_.push_front(v);
+
+    if (size() > 3) {
+        LOG(INFO) << "push_front " << front(0)->unique_id() << ", " << front(2)->unique_id() << ", " << front(1)->unique_id();
+        SigPushVisualTriangle_2r(Triangle_2r(front(0), front(2), front(1)),
+                                 Visual::Triangle(mat_face_));
+    }
 }
 
 void Polygon_2r::pop_front() {
+    if (size() > 3) {
+        LOG(INFO) << "pop_front " << front(0)->unique_id() << ", " << front(2)->unique_id() << ", " << front(1)->unique_id();
+        SigPopVisualTriangle_2r(Triangle_2r(front(0), front(2), front(1)));
+    }
+
     boundary_.pop_front();
 }
 
@@ -235,7 +263,7 @@ void Polyline_2r::push_back(SharedPoint_2r v) {
 
     if (vertices_.size() > 1) {
         SigPushVisualSegment_2r(Segment_2r(back(1), back(0)),
-                                Visual::Segment(mat_edge_));
+                                Visual::Segment(mat_edge_), 1000);
     }
 }
 
@@ -244,7 +272,7 @@ void Polyline_2r::pop_back() {
         SigPopVisualSegment_2r(Segment_2r(back(1), back(0)));
     }
 
-    SigPopVisualPoint_2r(*back(0), 1000);
+    SigPopVisualPoint_2r(*back(0));
 
     vertices_.pop_back();
 }
@@ -265,7 +293,7 @@ void Polyline_2r::push_front(SharedPoint_2r v) {
 
     if (vertices_.size() > 1) {
         SigPushVisualSegment_2r(Segment_2r(front(0), front(1)),
-                                Visual::Segment(mat_edge_));
+                                Visual::Segment(mat_edge_), 1000);
     }
 }
 
@@ -274,7 +302,7 @@ void Polyline_2r::pop_front() {
         SigPopVisualSegment_2r(Segment_2r(front(0), front(1)));
     }
 
-    SigPopVisualPoint_2r(*front(0), 1000);
+    SigPopVisualPoint_2r(*front(0));
 
     vertices_.pop_front();
 }

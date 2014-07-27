@@ -59,6 +59,8 @@ public:
     const std::deque<SharedPoint_2r>& vertices() const;
     void set_vertices(const std::deque<SharedPoint_2r>& vertices);
     const bool closed() const;
+    void set_mat_vertex(const Visual::Material mat_vertex) { mat_vertex_ = mat_vertex; }
+    void set_mat_edge(const Visual::Material mat_edge) { mat_edge_ = mat_edge; }
 
 private:
     std::deque<SharedPoint_2r> vertices_;
@@ -92,6 +94,10 @@ public:
     void CloseBoundary();
 
     const Polyline_2r& boundary() const;
+
+    void set_mat_vertex(const Visual::Material mat_vertex) { boundary_.set_mat_vertex(mat_vertex); }
+    void set_mat_edge(const Visual::Material mat_edge) { boundary_.set_mat_edge(mat_edge); }
+    void set_mat_face(const Visual::Material mat_face) { mat_face_ = mat_face; }
 
 private:
     Polyline_2r boundary_;

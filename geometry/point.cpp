@@ -70,9 +70,16 @@ Orientation OrientationPQR(const Point_2f &p, const Point_2f &q,
 
 bool RIsLeftOrInsidePQ(const Point_2r &p, const Point_2r &q,
                        const Point_2r &r) {
-    bool is_left = OrientationPQR(p, q, r) == ORIENTATION_LEFT;
+    Orientation orientation = OrientationPQR(p, q, r);
 
-    bool is_inside = false;
+    bool is_left = orientation == ORIENTATION_LEFT;
+
+    auto v0 = q-p;
+    auto v1 = r-p;
+    auto dist = Dot(v0, v1);
+    //LOG(INFO) << v0 << v1 << dist;
+
+    bool is_inside = orientation == ORIENTATION_COLINEAR && dist >= 0 && dist <= Dot(v0, v0);
 
     return is_left || is_inside;
 }
