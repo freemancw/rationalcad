@@ -40,6 +40,11 @@ public:
     static const Color RED;
     static const Color GREEN;
     static const Color BLUE;
+    static const Color BLACK;
+    static const Color WHITE;
+    static const Color CYAN;
+    static const Color YELLOW;
+    static const Color MAGENTA;
 
     Color();
     Color(const unsigned char r, const unsigned char g,
