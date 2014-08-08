@@ -52,17 +52,11 @@ void SceneObserver::GenerateVboPoints() {
     for (auto i = viz_points_.begin(); i != viz_points_.end(); ++i) {
         GL::Vertex v(approx_points_.value(i.key())->approx());
         v.set_mat_ambient(i->back().material().ambient());
-        /*
-        qDebug() << i->back().material().ambient().r() << " "
-                 << i->back().material().ambient().g() << " "
-                 << i->back().material().ambient().b() << " "
-                 << i->back().material().ambient().a(); */
         points.push_back(v);
     }
     emit UpdateVertexBuffer(Visual::Coverage::eOPAQUE,
                             Visual::Lighting::eUNLIT,
                             GL::Primitive::ePOINTS, points);
-    //qDebug() << "updatevertexbuffer emitted";
 }
 
 void SceneObserver::GenerateVboLines() {
@@ -78,7 +72,6 @@ void SceneObserver::GenerateVboLines() {
     emit UpdateVertexBuffer(Visual::Coverage::eOPAQUE,
                             Visual::Lighting::eUNLIT,
                             GL::Primitive::eLINES, lines);
-    //emit UpdateVboLines(lines);
 }
 
 void SceneObserver::GenerateVboTriangles() {
@@ -107,7 +100,6 @@ void SceneObserver::GenerateVboTriangles() {
     emit UpdateVertexBuffer(Visual::Coverage::eOPAQUE,
                             Visual::Lighting::eFLAT,
                             GL::Primitive::eTRIANGLES, triangles);
-    //emit UpdateVboTriangles(triangles);
 }
 
 void SceneObserver::SlotRegisterPoint_2r(Point_2r &p) {
@@ -125,6 +117,7 @@ void SceneObserver::SlotPushVisualPoint_2r(const Point_2r& p,
                                            const Visual::Point& vp,
                                            const uint32_t msec_delay) {
     viz_points_[p.unique_id()].push_back(vp);
+    approx_points_[p.unique_id()]->set_z_order(vp.z_order());
     GenerateVboPoints();
     thread()->msleep(msec_delay);
     QApplication::processEvents();
@@ -132,11 +125,12 @@ void SceneObserver::SlotPushVisualPoint_2r(const Point_2r& p,
 
 void SceneObserver::SlotPopVisualPoint_2r(const Point_2r& p,
                                           const uint32_t msec_delay) {
-    //rAssert(!viz_points_.value(p.unique_id()).isEmpty());
     viz_points_[p.unique_id()].pop_back();
 
     if (viz_points_.value(p.unique_id()).isEmpty()) {
         viz_points_.remove(p.unique_id());
+    } else {
+        approx_points_[p.unique_id()]->set_z_order(viz_points_[p.unique_id()].back().z_order());
     }
 
     GenerateVboPoints();
@@ -157,7 +151,6 @@ void SceneObserver::SlotPushVisualSegment_2r(const Segment_2r& s,
 void SceneObserver::SlotPopVisualSegment_2r(const Segment_2r& s,
                                             const uint32_t msec_delay) {
     QPair<uint32_t, uint32_t> key(s.p().unique_id(), s.q().unique_id());
-    //rAssert(!viz_segments_.value(key).isEmpty());
     viz_segments_[key].pop_back();
 
     if (viz_segments_.value(key).isEmpty()) {
@@ -224,7 +217,6 @@ void SceneObserver::SlotPushVisualPoint_3r(const Point_3r& p,
 
 void SceneObserver::SlotPopVisualPoint_3r(const Point_3r& p,
                                       const uint32_t msec_delay) {
-    //rAssert(!viz_points_.value(p.unique_id()).isEmpty());
     viz_points_[p.unique_id()].pop_back();
 
     if (viz_points_.value(p.unique_id()).isEmpty()) {
@@ -249,7 +241,6 @@ void SceneObserver::SlotPushVisualSegment_3r(const Segment_3r& s,
 void SceneObserver::SlotPopVisualSegment_3r(const Segment_3r& s,
                                             const uint32_t msec_delay) {
     QPair<uint32_t, uint32_t> key(s.p().unique_id(), s.q().unique_id());
-    //rAssert(!viz_segments_.value(key).isEmpty());
     viz_segments_[key].pop_back();
 
     if (viz_segments_.value(key).isEmpty()) {

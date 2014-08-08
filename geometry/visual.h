@@ -37,6 +37,10 @@ namespace Visual {
 
 class Color {
 public:
+    static const Color RED;
+    static const Color GREEN;
+    static const Color BLUE;
+
     Color();
     Color(const unsigned char r, const unsigned char g,
           const unsigned char b, const unsigned char a);
@@ -120,14 +124,17 @@ private:
 class Point {
 public:
     Point();
-    Point(const Material& material);
+    Point(const Material& material, const int32_t z_order = 0);
 
     const Material& material() const;
     void set_material(const Material& material);
+    const int32_t z_order() const { return z_order_; }
+    void set_z_order(const int32_t z_order) { z_order_ = z_order; }
 
 private:
     Material material_;
     std::string sprite_;
+    int32_t z_order_;
 };
 
 //=============================================================================

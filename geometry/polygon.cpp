@@ -37,16 +37,17 @@ Polygon_2r Melkman(const Polyline_2r& P, Visual::IGeometryObserver* observer) {
     Polygon_2r hull;
 
     Visual::Material hull_mat;
-    hull_mat.set_ambient(Visual::Color(255, 0, 0, 255));
+    hull_mat.set_ambient(Visual::Color::RED);
     hull.set_mat_vertex(hull_mat);
     hull.set_mat_edge(hull_mat);
+    hull.set_z_order(1);
 
     hull.AddObserver(observer);
 
     // initialize hull
-    hull.push_back(P[0]);
-    hull.push_back(P[1]);
-    hull.push_back(P[0]);
+    hull.push_back(*P[1]);
+    hull.push_back(*P[0]);
+    hull.push_back(*P[1]);
 
     for (size_t i = 2; i < P.size(); ++i) {
         if (!RIsLeftOrInsidePQ(*hull.back(1), *hull.back(0), *P[i]) ||
@@ -57,8 +58,8 @@ Polygon_2r Melkman(const Polyline_2r& P, Visual::IGeometryObserver* observer) {
             while (!RIsLeftOrInsidePQ(*hull.front(0), *hull.front(1), *P[i])) {
                 hull.pop_front();
             }
-            hull.push_back(P[i]);
-            hull.push_front(P[i]);
+            hull.push_back(*P[i]);
+            hull.push_front(*P[i]);
         }
     }
 
@@ -144,7 +145,8 @@ Polygon_2r IntegerHull(const Polygon_2r& P, Visual::IGeometryObserver *observer)
 // Polygon_2r
 //=============================================================================
 
-Polygon_2r::Polygon_2r() {
+Polygon_2r::Polygon_2r() :
+    z_order_(0) {
     boundary_.AddObserver(this);
 }
 
@@ -153,24 +155,28 @@ Polygon_2r::~Polygon_2r() {
 }
 
 void Polygon_2r::push_back(const Point_2r& v) {
-    push_back(std::make_shared<Point_2r>(v));
+    push_back(std::make_shared<Point_2r>(v.x(), v.y()));
 }
 
 void Polygon_2r::push_back(SharedPoint_2r v) {
     boundary_.push_back(v);
 
+    /*
     if (size() > 3) {
         LOG(INFO) << "push_back " << back(0)->unique_id() << ", " << back(1)->unique_id() << ", " << back(2)->unique_id();
         SigPushVisualTriangle_2r(Triangle_2r(back(0), back(1), back(2)),
                                  Visual::Triangle(mat_face_));
     }
+    */
 }
 
 void Polygon_2r::pop_back() {
+    /*
     if (size() > 3) {
         LOG(INFO) << "pop_back " << back(0)->unique_id() << ", " << back(1)->unique_id() << ", " << back(2)->unique_id();
         SigPopVisualTriangle_2r(Triangle_2r(back(0), back(1), back(2)));
     }
+    */
 
     boundary_.pop_back();
 }
@@ -180,24 +186,28 @@ SharedPoint_2r Polygon_2r::back(const size_t i) const {
 }
 
 void Polygon_2r::push_front(const Point_2r& v) {
-    push_front(std::make_shared<Point_2r>(v));
+    push_front(std::make_shared<Point_2r>(v.x(), v.y()));
 }
 
 void Polygon_2r::push_front(SharedPoint_2r v) {
     boundary_.push_front(v);
 
+    /*
     if (size() > 3) {
         LOG(INFO) << "push_front " << front(0)->unique_id() << ", " << front(2)->unique_id() << ", " << front(1)->unique_id();
         SigPushVisualTriangle_2r(Triangle_2r(front(0), front(2), front(1)),
                                  Visual::Triangle(mat_face_));
     }
+    */
 }
 
 void Polygon_2r::pop_front() {
+    /*
     if (size() > 3) {
         LOG(INFO) << "pop_front " << front(0)->unique_id() << ", " << front(2)->unique_id() << ", " << front(1)->unique_id();
         SigPopVisualTriangle_2r(Triangle_2r(front(0), front(2), front(1)));
     }
+    */
 
     boundary_.pop_front();
 }
@@ -227,7 +237,8 @@ const Polyline_2r& Polygon_2r::boundary() const {
 //=============================================================================
 
 Polyline_2r::Polyline_2r() :
-    closed_(false) {}
+    closed_(false),
+    z_order_(0) {}
 
 Polyline_2r::~Polyline_2r() {
 
@@ -259,7 +270,7 @@ void Polyline_2r::push_back(SharedPoint_2r v) {
     vertices_.push_back(v);
 
     SigRegisterPoint_2r(*v);
-    SigPushVisualPoint_2r(*v, Visual::Point(mat_vertex_));
+    SigPushVisualPoint_2r(*v, Visual::Point(mat_vertex_, z_order_));
 
     if (vertices_.size() > 1) {
         SigPushVisualSegment_2r(Segment_2r(back(1), back(0)),
@@ -289,7 +300,7 @@ void Polyline_2r::push_front(SharedPoint_2r v) {
     vertices_.push_front(v);
 
     SigRegisterPoint_2r(*v);
-    SigPushVisualPoint_2r(*v, Visual::Point(mat_vertex_));
+    SigPushVisualPoint_2r(*v, Visual::Point(mat_vertex_, z_order_));
 
     if (vertices_.size() > 1) {
         SigPushVisualSegment_2r(Segment_2r(front(0), front(1)),

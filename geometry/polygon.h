@@ -61,11 +61,13 @@ public:
     const bool closed() const;
     void set_mat_vertex(const Visual::Material mat_vertex) { mat_vertex_ = mat_vertex; }
     void set_mat_edge(const Visual::Material mat_edge) { mat_edge_ = mat_edge; }
+    void set_z_order(const int32_t z_order) { z_order_ = z_order; }
 
 private:
     std::deque<SharedPoint_2r> vertices_;
     Visual::Material mat_vertex_;
     Visual::Material mat_edge_;
+    int32_t z_order_;
     bool closed_;
 };
 
@@ -98,10 +100,12 @@ public:
     void set_mat_vertex(const Visual::Material mat_vertex) { boundary_.set_mat_vertex(mat_vertex); }
     void set_mat_edge(const Visual::Material mat_edge) { boundary_.set_mat_edge(mat_edge); }
     void set_mat_face(const Visual::Material mat_face) { mat_face_ = mat_face; }
+    void set_z_order(const uint32_t z_order) { z_order_ = z_order; boundary_.set_z_order(z_order); }
 
 private:
     Polyline_2r boundary_;
     Visual::Material mat_face_;
+    uint32_t z_order_;
 };
 
 Polygon_2r Melkman(const Polyline_2r& P, Visual::IGeometryObserver* observer = nullptr);

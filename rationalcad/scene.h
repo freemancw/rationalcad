@@ -52,6 +52,7 @@ public:
 
     void SlotPositionChanged_2r(const Point_2r& p) override;
     void SlotPositionChanged_3r(const Point_3r& p) override;
+    void set_z_order(const int32_t z_order) { approx_.set_z(z_order); }
 
     const Point_3f& approx() const;
 

@@ -143,6 +143,9 @@ void OrthographicWidget::paintEvent(QPaintEvent *event) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     drawGrid();
+
+    glClear(GL_DEPTH_BUFFER_BIT);
+
     drawScene();
 
     draw2DOverlay();
