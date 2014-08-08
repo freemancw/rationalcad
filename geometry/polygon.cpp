@@ -37,7 +37,7 @@ Polygon_2r Melkman(const Polyline_2r& P, Visual::IGeometryObserver* observer) {
     Polygon_2r hull;
 
     Visual::Material hull_mat;
-    hull_mat.set_ambient(Visual::Color::RED);
+    hull_mat.set_ambient(Visual::Color::MAGENTA);
     hull.set_mat_vertex(hull_mat);
     hull.set_mat_edge(hull_mat);
     hull.set_z_order(1);
