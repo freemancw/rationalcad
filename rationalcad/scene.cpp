@@ -54,9 +54,9 @@ void SceneObserver::GenerateVboPoints() {
         v.set_mat_ambient(i->back().material().ambient());
         points.push_back(v);
     }
-    emit UpdateVertexBuffer(Visual::Coverage::eOPAQUE,
-                            Visual::Lighting::eUNLIT,
-                            GL::Primitive::ePOINTS, points);
+    emit UpdateVertexBuffer(Visual::Coverage::E_OPAQUE,
+                            Visual::Lighting::E_UNLIT,
+                            GL::Primitive::E_POINTS, points);
 }
 
 void SceneObserver::GenerateVboLines() {
@@ -69,9 +69,9 @@ void SceneObserver::GenerateVboLines() {
         lines.push_back(p);
         lines.push_back(q);
     }
-    emit UpdateVertexBuffer(Visual::Coverage::eOPAQUE,
-                            Visual::Lighting::eUNLIT,
-                            GL::Primitive::eLINES, lines);
+    emit UpdateVertexBuffer(Visual::Coverage::E_OPAQUE,
+                            Visual::Lighting::E_UNLIT,
+                            GL::Primitive::E_LINES, lines);
 }
 
 void SceneObserver::GenerateVboTriangles() {
@@ -97,9 +97,9 @@ void SceneObserver::GenerateVboTriangles() {
         triangles.push_back(b);
         triangles.push_back(c);
     }
-    emit UpdateVertexBuffer(Visual::Coverage::eOPAQUE,
-                            Visual::Lighting::eFLAT,
-                            GL::Primitive::eTRIANGLES, triangles);
+    emit UpdateVertexBuffer(Visual::Coverage::E_OPAQUE,
+                            Visual::Lighting::E_FLAT,
+                            GL::Primitive::E_TRIANGLES, triangles);
 }
 
 void SceneObserver::SlotRegisterPoint_2r(Point_2r &p) {
