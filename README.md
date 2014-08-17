@@ -7,13 +7,11 @@ Analysis of what is happening in floating-point implementations is often muddled
 
 Arbitrary precision (AP) integers and rational numbers offer an attractive alternative to floating-point arithmetic from a robustness point of view. RationalCAD explores the use of these number types for solid modeling with convex polytopes.
 
-#### Prerequisite Software ####
-
-* Visual Studio 2013
-* CMake 2.8.12
-* Qt 5.3 32-bit (Desktop OpenGL)
-
 #### Compiling ####
 
+1. Install prerequisite software
+  * Visual Studio 2013
+  * CMake 2.8.12
+  * Qt 5.3 32-bit (Desktop OpenGL)
 1. Compile MPIR in dependencies/mpir
 1. Open RationalCAD in QtCreator
