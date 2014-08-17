@@ -71,28 +71,19 @@ private:
 
 namespace Coverage {
     enum Type {
-        eOPAQUE,
-        eTRANSPARENT,
-        eMAX
+        E_OPAQUE,
+        E_TRANSPARENT,
+        E_MAX
     };
 }
 
 namespace Lighting {
     enum Type {
-        eUNLIT,
-        eFLAT,
-        eMAX
+        E_UNLIT,
+        E_FLAT,
+        E_MAX
     };
 }
-
-/*
- * I would like to say:
- *
- * for (auto i = begin(CoverageTypes); i != end(CoverageTypes); ++i) {
- *
- * }
- *
- */
 
 class Material {
 public:
@@ -367,22 +358,23 @@ public:
     void SigRegisterPoint_3r(Point_3r& p) override;
 
     void SigPushVisualPoint_3r(const Point_3r& p, const Visual::Point& vp,
-                            const uint32_t msec_delay = 0) const override;
+                               const uint32_t msec_delay = 0) const override;
 
     void SigPushVisualSegment_3r(const Segment_3r& s, const Visual::Segment& vs,
-                              const uint32_t msec_delay = 0) const override;
+                                 const uint32_t msec_delay = 0) const override;
 
-    void SigPushVisualTriangle_3r(const Triangle_3r& t, const Visual::Triangle& vt,
-                               const uint32_t msec_delay = 0) const override;
+    void SigPushVisualTriangle_3r(const Triangle_3r& t,
+                                  const Visual::Triangle& vt,
+                                  const uint32_t msec_delay = 0) const override;
 
     void SigPopVisualPoint_3r(const Point_3r& p,
                            const uint32_t msec_delay = 0) const override;
 
     void SigPopVisualSegment_3r(const Segment_3r& s,
-                             const uint32_t msec_delay = 0) const override;
+                                const uint32_t msec_delay = 0) const override;
 
     void SigPopVisualTriangle_3r(const Triangle_3r& t,
-                             const uint32_t msec_delay = 0) const override;
+                                 const uint32_t msec_delay = 0) const override;
 
     void SigUpdate() const override;
 

@@ -73,9 +73,8 @@ MainWindow::MainWindow(QWidget *parent) :
     // create polyline button
     QAction* create_polyline = new QAction("Create Polyline",
                                            input_state_buttons);
-    //create_polyline->setIcon(QIcon("://icons/create_polytope.png"));
+    create_polyline->setIcon(QIcon("://icons/create_polyline.png"));
     create_polyline->setCheckable(true);
-    //create_polyline->setChecked(true);
 
     connect(create_polyline,
             SIGNAL(triggered()),

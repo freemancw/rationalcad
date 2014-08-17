@@ -118,12 +118,12 @@ void OrthographicWidget::initializeGL() {
         ":shaders/mat_unlit_opaque.fsh",
         attributes
     );
-    i_grid_rg_.InitContext(GL::Context::eORTHOGRAPHIC);
+    i_grid_rg_.InitContext(GL::Context::E_ORTHOGRAPHIC);
     QVector<GL::Vertex> grid_verts;
     i_grid_.InitializeGrid(8, 8, 16, 16, grid_verts);
-    i_grid_rg_.UploadVertices(GL::Primitive::eLINES, grid_verts);
+    i_grid_rg_.UploadVertices(GL::Primitive::E_LINES, grid_verts);
 
-    renderer_->InitContext(GL::Context::eORTHOGRAPHIC);
+    renderer_->InitContext(GL::Context::E_ORTHOGRAPHIC);
 
     timer_.setTimerType(Qt::PreciseTimer);
     connect(&timer_, SIGNAL(timeout()), this, SLOT(update()));
@@ -157,12 +157,12 @@ void OrthographicWidget::drawGrid() {
     mv.scale(i_grid_.local_scale());
     mv.translate(-i_grid_.local_pos().x(), -i_grid_.local_pos().y());
 
-    i_grid_rg_.BindContextPrimitive(GL::Context::eORTHOGRAPHIC,
-                                    GL::Primitive::eLINES);
-    i_grid_rg_.program_[GL::Context::eORTHOGRAPHIC].setUniformValue("m_modelview", mv);
-    glDrawArrays(GL_LINES, 0, i_grid_rg_.NumVertices(GL::Primitive::eLINES));
-    i_grid_rg_.ReleaseContextPrimitive(GL::Context::eORTHOGRAPHIC,
-                                       GL::Primitive::eLINES);
+    i_grid_rg_.BindContextPrimitive(GL::Context::E_ORTHOGRAPHIC,
+                                    GL::Primitive::E_LINES);
+    i_grid_rg_.program_[GL::Context::E_ORTHOGRAPHIC].setUniformValue("m_modelview", mv);
+    glDrawArrays(GL_LINES, 0, i_grid_rg_.NumVertices(GL::Primitive::E_LINES));
+    i_grid_rg_.ReleaseContextPrimitive(GL::Context::E_ORTHOGRAPHIC,
+                                       GL::Primitive::E_LINES);
 }
 
 void OrthographicWidget::drawScene() {
@@ -190,14 +190,14 @@ void OrthographicWidget::drawScene() {
     modelview_.scale(i_grid_.global_scale());
     modelview_.translate(position);
 
-    auto& rg = renderer_->render_groups_[Coverage::eOPAQUE][Lighting::eUNLIT];
-    rg.BindContextPrimitive(GL::Context::eORTHOGRAPHIC, GL::Primitive::ePOINTS);
-    rg.program_[GL::Context::eORTHOGRAPHIC].setUniformValue("m_modelview", modelview_);
-    glDrawArrays(GL_POINTS, 0, rg.NumVertices(GL::Primitive::ePOINTS));
-    rg.ReleaseContextPrimitive(GL::Context::eORTHOGRAPHIC, GL::Primitive::ePOINTS);
-    rg.BindContextPrimitive(GL::Context::eORTHOGRAPHIC, GL::Primitive::eLINES);
-    glDrawArrays(GL_LINES, 0, rg.NumVertices(GL::Primitive::eLINES));
-    rg.ReleaseContextPrimitive(GL::Context::eORTHOGRAPHIC, GL::Primitive::eLINES);
+    auto& rg = renderer_->render_groups_[Coverage::E_OPAQUE][Lighting::E_UNLIT];
+    rg.BindContextPrimitive(GL::Context::E_ORTHOGRAPHIC, GL::Primitive::E_POINTS);
+    rg.program_[GL::Context::E_ORTHOGRAPHIC].setUniformValue("m_modelview", modelview_);
+    glDrawArrays(GL_POINTS, 0, rg.NumVertices(GL::Primitive::E_POINTS));
+    rg.ReleaseContextPrimitive(GL::Context::E_ORTHOGRAPHIC, GL::Primitive::E_POINTS);
+    rg.BindContextPrimitive(GL::Context::E_ORTHOGRAPHIC, GL::Primitive::E_LINES);
+    glDrawArrays(GL_LINES, 0, rg.NumVertices(GL::Primitive::E_LINES));
+    rg.ReleaseContextPrimitive(GL::Context::E_ORTHOGRAPHIC, GL::Primitive::E_LINES);
 }
 
 void OrthographicWidget::draw2DOverlay() {
@@ -235,13 +235,13 @@ void OrthographicWidget::resizeGL(int width, int height) {
     projection_.ortho(-halfWidth, halfWidth, -halfHeight, halfHeight,
                       -8192.0f*8, 8192.0f*8);
 
-    i_grid_rg_.program_[GL::Context::eORTHOGRAPHIC].bind();
-    i_grid_rg_.program_[GL::Context::eORTHOGRAPHIC].setUniformValue("m_projection", projection_);
-    i_grid_rg_.program_[GL::Context::eORTHOGRAPHIC].release();
-    auto rg = &renderer_->render_groups_[Coverage::eOPAQUE][Lighting::eUNLIT];
-    rg->program_[GL::Context::eORTHOGRAPHIC].bind();
-    rg->program_[GL::Context::eORTHOGRAPHIC].setUniformValue("m_projection", projection_);
-    rg->program_[GL::Context::eORTHOGRAPHIC].release();
+    i_grid_rg_.program_[GL::Context::E_ORTHOGRAPHIC].bind();
+    i_grid_rg_.program_[GL::Context::E_ORTHOGRAPHIC].setUniformValue("m_projection", projection_);
+    i_grid_rg_.program_[GL::Context::E_ORTHOGRAPHIC].release();
+    auto rg = &renderer_->render_groups_[Coverage::E_OPAQUE][Lighting::E_UNLIT];
+    rg->program_[GL::Context::E_ORTHOGRAPHIC].bind();
+    rg->program_[GL::Context::E_ORTHOGRAPHIC].setUniformValue("m_projection", projection_);
+    rg->program_[GL::Context::E_ORTHOGRAPHIC].release();
 }
 
 //=============================================================================

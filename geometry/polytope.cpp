@@ -376,7 +376,7 @@ Polytope_3r ConvexHull(const std::vector<SharedPoint_3r>& P) {
     //
 
 
-    return Polytope_3r();
+    return hull;
 }
 
 }

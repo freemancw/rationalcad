@@ -279,16 +279,16 @@ void Color::set_rgba(const std::array<unsigned char, 4>& rgba) {
 //=============================================================================
 
 Material::Material() :
-    coverage_(Coverage::eOPAQUE),
-    lighting_(Lighting::eUNLIT) {}
+    coverage_(Coverage::E_OPAQUE),
+    lighting_(Lighting::E_UNLIT) {}
 
 Material::Material(const Color& ambient, const Color& diffuse,
                    const Color& specular) :
     ambient_(ambient),
     diffuse_(diffuse),
     specular_(specular),
-    coverage_(Coverage::eOPAQUE),
-    lighting_(Lighting::eUNLIT) {}
+    coverage_(Coverage::E_OPAQUE),
+    lighting_(Lighting::E_UNLIT) {}
 
 Material::Material(const Color& ambient, const Color& diffuse,
                    const Color& specular, Coverage::Type coverage,
