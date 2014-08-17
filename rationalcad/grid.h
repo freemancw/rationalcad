@@ -14,8 +14,6 @@
  */
 
 /*!
- * @author Clinton Freeman <freeman@cs.unc.edu>
- * @date 2013-01-13
  * @brief Customizable grid type to support precise placement of objects.
  */
 

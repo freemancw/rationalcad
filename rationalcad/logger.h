@@ -13,11 +13,6 @@
  * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*!
- * @author Clinton Freeman <freeman@cs.unc.edu>
- * @date 2013-08-16
- */
-
 #ifndef RC_LOGGER_H
 #define RC_LOGGER_H
 

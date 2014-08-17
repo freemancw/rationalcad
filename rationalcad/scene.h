@@ -14,8 +14,6 @@
  */
 
 /*!
- * @author Clinton Freeman <freeman@cs.unc.edu>
- * @date 2013-01-13
  * @brief Manager type responsible for storing and manipulating scene objects.
  */
 

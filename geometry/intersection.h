@@ -14,8 +14,6 @@
  */
 
 /*!
- * @author Clinton Freeman <freeman@cs.unc.edu>
- * @date 2013-07-11
  * @note Code modeled after Eberly's intersection classes (geometrictools.com)
  */
 

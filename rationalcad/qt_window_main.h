@@ -14,8 +14,6 @@
  */
 
 /*!
- * @author Clinton Freeman <freeman@cs.unc.edu>
- * @date 2013-05-23
  * @brief Main window responsible for forwarding widget input.
  */
 

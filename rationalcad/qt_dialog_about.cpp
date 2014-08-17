@@ -13,11 +13,6 @@
  * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*!
- * @author Clinton Freeman <freeman@cs.unc.edu>
- * @date 2012-05-23
- */
-
 // RationalCAD
 #include "qt_dialog_about.h"
 #include "ui_dialog_about.h"

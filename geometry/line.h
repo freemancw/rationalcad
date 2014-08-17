@@ -13,12 +13,6 @@
  * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*!
- * @author {David L. Millman <dave@cs.unc.edu>,
- *          Clinton Freeman <freeman@cs.unc.edu>
- * @date 2013-06-19
- */
-
 #ifndef GE_LINE_H
 #define GE_LINE_H
 

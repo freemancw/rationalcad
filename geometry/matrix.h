@@ -13,11 +13,6 @@
  * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*!
- * @author Clinton Freeman <freeman@cs.unc.edu>
- * @date 2012-12-26
- */
-
 #ifndef GE_MATRIX_H
 #define GE_MATRIX_H
 

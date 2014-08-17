@@ -15,8 +15,6 @@
 
 /*!
  * @brief 2-dimensional polyline and polygon types.
- * @author Clinton Freeman <freeman@cs.unc.edu>
- * @date 2013-02-12
  */
 
 #ifndef GE_POLYGON_H

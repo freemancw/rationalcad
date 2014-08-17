@@ -13,11 +13,6 @@
  * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*!
- * @author Clinton Freeman <freeman@cs.unc.edu>
- * @date 08/16/2013
- */
-
 // RationalCAD
 #include "common.h"
 #include "logger.h"

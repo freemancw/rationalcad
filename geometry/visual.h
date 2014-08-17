@@ -13,12 +13,6 @@
  * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*!
- * @brief Visual interface.
- * @author Clinton Freeman <freeman@cs.unc.edu>
- * @date 2014-04-10
- */
-
 #ifndef GE_VISUAL_H
 #define GE_VISUAL_H
 

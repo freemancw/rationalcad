@@ -15,8 +15,6 @@
 
 /*!
  * @brief 3-dimensional polytope types.
- * @author Clinton Freeman <freeman@cs.unc.edu>
- * @date 2013-10-23
  */
 
 #ifndef GE_POLYTOPE_H

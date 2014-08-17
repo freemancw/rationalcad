@@ -15,8 +15,6 @@
 
 /*!
  * @brief Integer, floating-point, and rational vector types for 2D and 3D.
- * @author Clinton Freeman <freeman@cs.unc.edu>
- * @date 2012-12-26
  */
 
 #ifndef GE_VECTOR_H

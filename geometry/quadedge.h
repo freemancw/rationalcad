@@ -13,11 +13,6 @@
  * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*!
- * @author Clinton Freeman <freeman@cs.unc.edu>
- * @date 2014-03-10
- */
-
 #ifndef GE_QUADEDGE_H
 #define GE_QUADEDGE_H
 

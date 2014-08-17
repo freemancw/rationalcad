@@ -13,12 +13,6 @@
  * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*!
- * @author Clinton Freeman <freeman@cs.unc.edu>
- * @date 2013-06-03
- * @brief Manager type responsible for altering OpenGL states and data.
- */
-
 #ifndef RC_OPENGL_H
 #define RC_OPENGL_H
 

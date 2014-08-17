@@ -13,12 +13,6 @@
  * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*!
- * @author Clinton Freeman <freeman@cs.unc.edu>
- * @date 2012-05-23
- * @brief Modal dialog that displays program information (e.g. build date).
- */
-
 #ifndef RC_QT_DIALOG_ABOUT_H
 #define RC_QT_DIALOG_ABOUT_H
 

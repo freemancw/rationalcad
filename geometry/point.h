@@ -15,8 +15,6 @@
 
 /*!
  * @brief Integer, floating-point, and rational point types for 2D and 3D.
- * @author Clinton Freeman <freeman@cs.unc.edu>
- * @date 2012-12-27
  */
 
 #ifndef GE_POINT_H
