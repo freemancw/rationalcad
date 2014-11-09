@@ -23,6 +23,114 @@
 
 namespace RCAD {
 
+class DelaunayTriangulation_2r : public Visual::Geometry {
+public:
+    DelaunayTriangulation_2r();
+    ~DelaunayTriangulation_2r();
+
+    void Initialize();
+    void AddPoint();
+
+private:
+    QuadEdge::Cell* triangulation_;
+};
+
+class Terrain_3r : public Visual::Geometry {
+public:
+    Terrain_3r();
+    ~Terrain_3r();
+
+    void Initialize();
+    void AddSample();
+
+private:
+    DelaunayTriangulation_2r terrain_;
+};
+
+Terrain_3r DelaunayTerrain(const std::vector<Point_3f>& samples);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 namespace Predicate {
 
 inline rational InCircle(const Point_3r& a, const Point_3r& b,

@@ -210,6 +210,7 @@ public slots:
     void onBeginCreatePolyline(const QVector2D& cur);
     void onUpdateNewPolyline(const QVector2D& cur);
     void onEndCreatePolyline();
+    void onExecuteMelkman();
 
     void onBeginCreatePolytope(const QVector2D& start, const QVector2D& cur);
     void onUpdateNewPolytope(const QVector2D& cur);

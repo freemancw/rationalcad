@@ -78,6 +78,10 @@ void OrthographicWidget::initialize(Renderer* renderer,
             SIGNAL(EndCreatePolyline()),
             &scene_manager_->scene_observer_,
             SLOT(onEndCreatePolyline()));
+    connect(this,
+            SIGNAL(ExecuteMelkman()),
+            &scene_manager_->scene_observer_,
+            SLOT(onExecuteMelkman()));
 
     // polytope
     connect(this,
@@ -262,6 +266,11 @@ QVector2D OrthographicWidget::mousePressToWorld(const QPoint& pos) const {
 void OrthographicWidget::mousePressEvent(QMouseEvent *event) {
     int convertedY = height()-event->y();
     QVector2D world_coords = mousePressToWorld(event->pos());
+    QVector2D world_snapped(i_grid_.RoundToNearestMinor(world_coords.x()),
+                            i_grid_.RoundToNearestMinor(world_coords.y()));
+
+    QVector2D input_world_coords = ConfigManager::get().snap_to_grid() ?
+        world_snapped : world_coords;
 
     if (event->buttons() & Qt::LeftButton) {
         switch (ConfigManager::get().input_state()) {
@@ -286,10 +295,10 @@ void OrthographicWidget::mousePressEvent(QMouseEvent *event) {
 
             break;
         case CREATE_POLYLINE:
-            emit BeginCreatePolyline(world_coords);
+            emit BeginCreatePolyline(input_world_coords);
             break;
         case UPDATE_POLYLINE:
-            emit UpdateNewPolyline(world_coords);
+            emit UpdateNewPolyline(input_world_coords);
             break;
         default:
             break;
@@ -302,12 +311,29 @@ void OrthographicWidget::mousePressEvent(QMouseEvent *event) {
         last_click_pos.setY(convertedY);
     }
 
+    // for most widgets
+    QPoint globalPos = this->mapToGlobal(event->pos());
+
+    QMenu myMenu;
+    myMenu.addAction("Melkman");
+    // ...
+
+    QAction* selectedItem = nullptr;
+
     if (event->buttons() & Qt::RightButton) {
         switch (ConfigManager::get().input_state()) {
         case UPDATE_POLYLINE:
             emit EndCreatePolyline();
             break;
         default:
+            /*
+            selectedItem = myMenu.exec(globalPos);
+            if (selectedItem->text() == "Melkman") {
+                emit ExecuteMelkman();
+            } else {
+                qDebug() << "click off";
+            }
+            */
             break;
         }
     }
@@ -388,18 +414,23 @@ void OrthographicWidget::wheelEvent(QWheelEvent *event) {
 }
 
 void OrthographicWidget::ShowContextMenu(const QPoint &p) {
-    /*
-    if(g_config.input_state_ != SELECT)  {
+
+    switch (ConfigManager::get().input_state()) {
+    case UPDATE_POLYLINE:
+    case UPDATE_POLYTOPE:
         return;
+    default:
+        break;
     }
 
     QPoint gp = mapToGlobal(p);
 
     QMenu ctxt_menu;
-    ctxt_menu.addAction("Import mesh here...");
+    ctxt_menu.addAction("Melkman");
 
     QAction* selected_item = ctxt_menu.exec(gp);
-    if(selected_item) {
+    if (selected_item) {
+        /*
         QString selected_file = QFileDialog::getOpenFileName(
                     this, "Import Mesh", "./",
                     "3ds Max 3DS (*.3ds);;"
@@ -416,10 +447,15 @@ void OrthographicWidget::ShowContextMenu(const QPoint &p) {
         if(!scene) {
             rDebug("error");
         }
+        */
+
+        if (selected_item->text() == "Melkman") {
+            emit ExecuteMelkman();
+            return;
+        }
     } else {
 
     }
-    */
 }
 
 void OrthographicWidget::keyPressEvent(QKeyEvent *event) {

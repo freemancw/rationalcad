@@ -187,6 +187,7 @@ void PerspectiveWidget::drawScene() {
                    GL::Primitive::E_LINES, GL_LINES);
     drawPrimitives(Coverage::E_OPAQUE, Lighting::E_FLAT,
                    GL::Primitive::E_TRIANGLES, GL_TRIANGLES);
+
 }
 
 void PerspectiveWidget::draw2DOverlay() {

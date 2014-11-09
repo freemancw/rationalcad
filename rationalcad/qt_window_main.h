@@ -17,8 +17,8 @@
  * @brief Main window responsible for forwarding widget input.
  */
 
-#ifndef RCAD_RC_QT_WINDOW_MAIN_H
-#define RCAD_RC_QT_WINDOW_MAIN_H
+#ifndef RC_QT_WINDOW_MAIN_H
+#define RC_QT_WINDOW_MAIN_H
 
 // Qt
 #include <QMainWindow>
@@ -86,4 +86,4 @@ private:
     QColor create_object_color_;
 };
 
-#endif // RCAD_RC_QT_WINDOW_MAIN_H
+#endif // RC_QT_WINDOW_MAIN_H

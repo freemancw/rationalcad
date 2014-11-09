@@ -308,6 +308,11 @@ void SceneObserver::onUpdateNewPolyline(const QVector2D& v) {
 }
 
 void SceneObserver::onEndCreatePolyline() {
+    ConfigManager::get().set_input_state(CREATE_POLYLINE);
+    //RCAD::Melkman(SelectedPolyline_2()->model_polyline(), this);
+}
+
+void SceneObserver::onExecuteMelkman() {
     RCAD::Melkman(SelectedPolyline_2()->model_polyline(), this);
 }
 
