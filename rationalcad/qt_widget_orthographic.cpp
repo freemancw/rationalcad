@@ -48,6 +48,14 @@ OrthographicWidget::OrthographicWidget(OrthoOrientation orientation,
 // Initialization
 //=============================================================================
 
+int myFunction(const std::vector<int>& vec) {
+    int sum = 0;
+    for (int v : vec) {
+        sum += v;
+    }
+    return sum;
+}
+
 void OrthographicWidget::initialize(Renderer* renderer,
                                     SceneManager* scene_manager) {
     renderer_ = renderer;
@@ -164,6 +172,8 @@ void OrthographicWidget::drawGrid() {
                                        GL::Primitive::E_LINES);
 }
 
+
+
 void OrthographicWidget::drawScene() {
     // restore gl state
     glEnable(GL_BLEND);
@@ -190,10 +200,27 @@ void OrthographicWidget::drawScene() {
     modelview_.translate(position);
 
     auto& rg = renderer_->render_groups_[Coverage::E_OPAQUE][Lighting::E_UNLIT];
-    rg.BindContextPrimitive(GL::Context::E_ORTHOGRAPHIC, GL::Primitive::E_POINTS);
     rg.program_[GL::Context::E_ORTHOGRAPHIC].setUniformValue("m_modelview", modelview_);
+
+/*
+    renderer_->Uniform();
+
+    renderer_->GetRenderGroup(Coverage::E_OPAQUE, Lighting::E_UNLIT)
+        .DrawPrimitive(GL::Primitive::E_POINTS)
+        .DrawPrimitive(GL::Primitive::E_LINES);
+*/
+
+
+    renderer_->DrawRenderGroup(Coverage::E_OPAQUE, Lighting::E_UNLIT, {
+        GL::Primitive::E_POINTS,
+        GL::Primitive::E_LINES
+    });
+
+
+    rg.BindContextPrimitive(GL::Context::E_ORTHOGRAPHIC, GL::Primitive::E_POINTS);
     glDrawArrays(GL_POINTS, 0, rg.NumVertices(GL::Primitive::E_POINTS));
     rg.ReleaseContextPrimitive(GL::Context::E_ORTHOGRAPHIC, GL::Primitive::E_POINTS);
+
     rg.BindContextPrimitive(GL::Context::E_ORTHOGRAPHIC, GL::Primitive::E_LINES);
     glDrawArrays(GL_LINES, 0, rg.NumVertices(GL::Primitive::E_LINES));
     rg.ReleaseContextPrimitive(GL::Context::E_ORTHOGRAPHIC, GL::Primitive::E_LINES);
