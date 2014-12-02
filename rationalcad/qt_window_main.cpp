@@ -41,12 +41,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ConfigManager::get().Initialize();
 
-    // create toolbar buttons
-    QActionGroup *input_state_buttons = new QActionGroup(ui->toolBar->layout());
+    // toolbar buttons
+    QActionGroup *toolbar_buttons = new QActionGroup(ui->toolBar->layout());
 
     // select objects button
     QAction* select_objects = new QAction("Select Objects",
-                                          input_state_buttons);
+                                          toolbar_buttons);
     select_objects->setIcon(QIcon("://icons/select_object.png"));
     select_objects->setCheckable(true);
 
@@ -56,45 +56,15 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // translate button
     QAction* translate = new QAction("Translate",
-                                     input_state_buttons);
+                                     toolbar_buttons);
     translate->setIcon(QIcon("://icons/translate.png"));
     translate->setCheckable(true);
 
     // rotate button
     QAction* rotate = new QAction("Rotate",
-                                  input_state_buttons);
+                                  toolbar_buttons);
     rotate->setIcon(QIcon("://icons/rotate.png"));
     rotate->setCheckable(true);
-
-    // create polytope button
-    QAction* create_polytope = new QAction("Create Polytope",
-                                           input_state_buttons);
-    create_polytope->setIcon(QIcon("://icons/create_polytope.png"));
-    create_polytope->setCheckable(true);
-    create_polytope->setChecked(true);
-
-    connect(create_polytope,
-            SIGNAL(triggered()),
-            SLOT(onCreatePolytopeTriggered()));
-
-    // create polyline button
-    QAction* create_polyline = new QAction("Create Polyline",
-                                           input_state_buttons);
-    create_polyline->setIcon(QIcon("://icons/create_polyline.png"));
-    create_polyline->setCheckable(true);
-
-    connect(create_polyline,
-            SIGNAL(triggered()),
-            SLOT(onCreatePolylineTriggered()));
-
-    // create terrain button
-    QAction* create_terrain = new QAction("Create Terrain", input_state_buttons);
-    create_terrain->setIcon(QIcon("://icons/create_terrain.png"));
-    create_terrain->setCheckable(true);
-
-    connect(create_terrain,
-            SIGNAL(triggered()),
-            SLOT(onCreateTerrainTriggered()));
 
     // snap to grid button
     QAction* snap_to_grid = new QAction("Snap to Grid", ui->toolBar->layout());
@@ -106,15 +76,54 @@ MainWindow::MainWindow(QWidget *parent) :
             SIGNAL(toggled(bool)),
             SLOT(onSnapToGridToggled(bool)));
 
+    // create buttons
+    QActionGroup *object_type_buttons = new QActionGroup(ui->object_type->layout());
+
+    // create polytope button
+    QAction* create_polytope = new QAction("Create Polytope",
+                                           object_type_buttons);
+    create_polytope->setIcon(QIcon("://icons/create_polytope.png"));
+    create_polytope->setCheckable(true);
+    create_polytope->setChecked(true);
+
+    connect(create_polytope,
+            SIGNAL(triggered()),
+            SLOT(onCreatePolytopeTriggered()));
+
+    // create polyline button
+    QAction* create_polyline = new QAction("Create Polyline",
+                                           object_type_buttons);
+    create_polyline->setIcon(QIcon("://icons/create_polyline.png"));
+    create_polyline->setCheckable(true);
+
+    connect(create_polyline,
+            SIGNAL(triggered()),
+            SLOT(onCreatePolylineTriggered()));
+
+    // create terrain button
+    QAction* create_terrain = new QAction("Create Terrain", object_type_buttons);
+    create_terrain->setIcon(QIcon("://icons/create_terrain.png"));
+    create_terrain->setCheckable(true);
+
+    connect(create_terrain,
+            SIGNAL(triggered()),
+            SLOT(onCreateTerrainTriggered()));
+
     // add buttons to toolbar
     ui->toolBar->addAction(select_objects);
     ui->toolBar->addAction(translate);
     ui->toolBar->addAction(rotate);
-    ui->toolBar->addAction(create_polyline);
-    ui->toolBar->addAction(create_polytope);
-    ui->toolBar->addAction(create_terrain);
+    //ui->toolBar->addAction(create_polyline);
+    //ui->toolBar->addAction(create_polytope);
+    //ui->toolBar->addAction(create_terrain);
     ui->toolBar->addSeparator();
     ui->toolBar->addAction(snap_to_grid);
+
+    /*
+    ui->object_type->addAction(create_polyline);
+    ui->object_type->addAction(create_polytope);
+    ui->object_type->addAction(create_terrain);
+    */
 
     // create perspective widget
     //rInfo("Creating perspective view.");

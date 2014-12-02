@@ -155,7 +155,7 @@
                <number>2</number>
               </property>
               <item row="0" column="0">
-               <widget class="QGroupBox" name="groupBox_2">
+               <widget class="QGroupBox" name="object_type">
                 <property name="title">
                  <string>Object Type</string>
                 </property>
@@ -205,6 +205,9 @@
                    <property name="flat">
                     <bool>false</bool>
                    </property>
+                   <attribute name="buttonGroup">
+                    <string notr="true">buttonGroup</string>
+                   </attribute>
                   </widget>
                  </item>
                  <item row="0" column="3">
@@ -229,6 +232,12 @@
                     <iconset resource="../resources/resources.qrc">
                      <normaloff>:/icons/create_polytope.png</normaloff>:/icons/create_polytope.png</iconset>
                    </property>
+                   <property name="checkable">
+                    <bool>true</bool>
+                   </property>
+                   <attribute name="buttonGroup">
+                    <string notr="true">buttonGroup</string>
+                   </attribute>
                   </widget>
                  </item>
                  <item row="0" column="2">
@@ -243,6 +252,12 @@
                     <iconset resource="../resources/resources.qrc">
                      <normaloff>:/icons/create_terrain.png</normaloff>:/icons/create_terrain.png</iconset>
                    </property>
+                   <property name="checkable">
+                    <bool>true</bool>
+                   </property>
+                   <attribute name="buttonGroup">
+                    <string notr="true">buttonGroup</string>
+                   </attribute>
                   </widget>
                  </item>
                 </layout>
@@ -435,4 +450,7 @@
   <include location="../resources/resources.qrc"/>
  </resources>
  <connections/>
+ <buttongroups>
+  <buttongroup name="buttonGroup"/>
+ </buttongroups>
 </ui>
