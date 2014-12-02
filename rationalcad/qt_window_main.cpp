@@ -54,6 +54,18 @@ MainWindow::MainWindow(QWidget *parent) :
             SIGNAL(triggered()),
             SLOT(onSelectObjectsTriggered()));
 
+    // translate button
+    QAction* translate = new QAction("Translate",
+                                     input_state_buttons);
+    translate->setIcon(QIcon("://icons/translate.png"));
+    translate->setCheckable(true);
+
+    // rotate button
+    QAction* rotate = new QAction("Rotate",
+                                  input_state_buttons);
+    rotate->setIcon(QIcon("://icons/rotate.png"));
+    rotate->setCheckable(true);
+
     // create polytope button
     QAction* create_polytope = new QAction("Create Polytope",
                                            input_state_buttons);
@@ -96,6 +108,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // add buttons to toolbar
     ui->toolBar->addAction(select_objects);
+    ui->toolBar->addAction(translate);
+    ui->toolBar->addAction(rotate);
     ui->toolBar->addAction(create_polyline);
     ui->toolBar->addAction(create_polytope);
     ui->toolBar->addAction(create_terrain);
