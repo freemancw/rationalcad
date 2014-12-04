@@ -300,7 +300,7 @@ void SceneObserver::onBeginCreatePolyline(const QVector2D& v) {
                           QSharedPointer<ISceneObject>(new ScenePolyline_2()));
     SelectedPolyline_2()->AddObserver(this);
     SelectedPolyline_2()->Initialize(v);
-    ConfigManager::get().set_input_state(UPDATE_POLYLINE);
+    ConfigManager::get().set_input_state(InputState::UPDATE_POLYLINE);
 }
 
 void SceneObserver::onUpdateNewPolyline(const QVector2D& v) {
@@ -308,7 +308,7 @@ void SceneObserver::onUpdateNewPolyline(const QVector2D& v) {
 }
 
 void SceneObserver::onEndCreatePolyline() {
-    ConfigManager::get().set_input_state(CREATE_POLYLINE);
+    ConfigManager::get().set_input_state(InputState::CREATE_POLYLINE);
     //RCAD::Melkman(SelectedPolyline_2()->model_polyline(), this);
 }
 

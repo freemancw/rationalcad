@@ -49,6 +49,7 @@ MainWindow::MainWindow(QWidget *parent) :
                                           toolbar_buttons);
     select_objects->setIcon(QIcon("://icons/select_object.png"));
     select_objects->setCheckable(true);
+    select_objects->setChecked(true);
 
     connect(select_objects,
             SIGNAL(triggered()),
@@ -84,7 +85,6 @@ MainWindow::MainWindow(QWidget *parent) :
                                            object_type_buttons);
     create_polytope->setIcon(QIcon("://icons/create_polytope.png"));
     create_polytope->setCheckable(true);
-    create_polytope->setChecked(true);
 
     connect(create_polytope,
             SIGNAL(triggered()),
@@ -211,15 +211,15 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::onSelectObjectsTriggered() {
-    ConfigManager::get().set_input_state(SELECT);
+    ConfigManager::get().set_input_state(InputState::SELECT);
 }
 
 void MainWindow::onCreatePolytopeTriggered() {
-    ConfigManager::get().set_input_state(CREATE_POLYTOPE);
+    ConfigManager::get().set_input_state(InputState::CREATE_POLYTOPE);
 }
 
 void MainWindow::onCreatePolylineTriggered() {
-    ConfigManager::get().set_input_state(CREATE_POLYLINE);
+    ConfigManager::get().set_input_state(InputState::CREATE_POLYLINE);
 }
 
 void MainWindow::onCreateTerrainTriggered() {
