@@ -52,8 +52,8 @@ MainWindow::MainWindow(QWidget *parent) :
     select_objects->setChecked(true);
 
     connect(select_objects,
-            SIGNAL(triggered()),
-            SLOT(onSelectObjectsTriggered()));
+            SIGNAL(toggled(bool)),
+            SLOT(on_select_objects_toggled(bool)));
 
     // translate button
     QAction* translate = new QAction("Translate",
@@ -61,11 +61,19 @@ MainWindow::MainWindow(QWidget *parent) :
     translate->setIcon(QIcon("://icons/translate.png"));
     translate->setCheckable(true);
 
+    connect(translate,
+            SIGNAL(toggled(bool)),
+            SLOT(on_translate_toggled(bool)));
+
     // rotate button
     QAction* rotate = new QAction("Rotate",
                                   toolbar_buttons);
     rotate->setIcon(QIcon("://icons/rotate.png"));
     rotate->setCheckable(true);
+
+    connect(rotate,
+            SIGNAL(toggled(bool)),
+            SLOT(on_rotate_toggled(bool)));
 
     // snap to grid button
     QAction* snap_to_grid = new QAction("Snap to Grid", ui->toolBar->layout());
@@ -75,87 +83,34 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(snap_to_grid,
             SIGNAL(toggled(bool)),
-            SLOT(onSnapToGridToggled(bool)));
-
-    // create buttons
-    QActionGroup *object_type_buttons = new QActionGroup(ui->object_type->layout());
-
-    // create polytope button
-    QAction* create_polytope = new QAction("Create Polytope",
-                                           object_type_buttons);
-    create_polytope->setIcon(QIcon("://icons/create_polytope.png"));
-    create_polytope->setCheckable(true);
-
-    connect(create_polytope,
-            SIGNAL(triggered()),
-            SLOT(onCreatePolytopeTriggered()));
-
-    // create polyline button
-    QAction* create_polyline = new QAction("Create Polyline",
-                                           object_type_buttons);
-    create_polyline->setIcon(QIcon("://icons/create_polyline.png"));
-    create_polyline->setCheckable(true);
-
-    connect(create_polyline,
-            SIGNAL(triggered()),
-            SLOT(onCreatePolylineTriggered()));
-
-    // create terrain button
-    QAction* create_terrain = new QAction("Create Terrain", object_type_buttons);
-    create_terrain->setIcon(QIcon("://icons/create_terrain.png"));
-    create_terrain->setCheckable(true);
-
-    connect(create_terrain,
-            SIGNAL(triggered()),
-            SLOT(onCreateTerrainTriggered()));
+            SLOT(on_snap_to_grid_toggled(bool)));
 
     // add buttons to toolbar
     ui->toolBar->addAction(select_objects);
     ui->toolBar->addAction(translate);
     ui->toolBar->addAction(rotate);
-    //ui->toolBar->addAction(create_polyline);
-    //ui->toolBar->addAction(create_polytope);
-    //ui->toolBar->addAction(create_terrain);
     ui->toolBar->addSeparator();
     ui->toolBar->addAction(snap_to_grid);
 
-    /*
-    ui->object_type->addAction(create_polyline);
-    ui->object_type->addAction(create_polytope);
-    ui->object_type->addAction(create_terrain);
-    */
-
     // create perspective widget
-    //rInfo("Creating perspective view.");
     qDebug() << "Creating perspective view";
     auto perspective = new PerspectiveWidget(ui->group_perspective);
     ui->group_perspective->layout()->addWidget(perspective);
     perspective->installEventFilter(this);
-    qDebug() << "persp is sharing? " << perspective->context()->isSharing();
-    qDebug() << "persp is valid? " << perspective->context()->isValid();
-    //perspective->context()->makeCurrent();
-    //qDebug() << perspective->format();
-
 
     // create orthographic widget
-    //rInfo("Creating orthographic view.");
     qDebug() << "Creating orthographic view";
     auto ortho_top = new OrthographicWidget(TOP, ui->group_top, perspective);
     ui->group_top->layout()->addWidget(ortho_top);
     ortho_top->installEventFilter(this);
-    qDebug() << "persp is sharing? " << perspective->context()->isSharing();
-    qDebug() << "ortho is sharing?" << ortho_top->context()->isSharing();
-    //qDebug() << ortho_top->format();
 
     perspective->context()->makeCurrent();
 
     // create renderer
-    //rInfo("Creating renderer.");
     qDebug() << "Creating renderer.";
     renderer_ = new Renderer();
 
     // create scene manager
-    //rInfo("Creating scene manager.");
     qDebug() << "Creating scene manager.";
     scene_manager_ = new SceneManager(renderer_);
 
@@ -170,21 +125,9 @@ MainWindow::MainWindow(QWidget *parent) :
     qDebug() << "Initializing perspective.";
     perspective->initialize(renderer_, scene_manager_);
 
-    //perspective->context()->makeCurrent();
-
-    /*
-    QOpenGLDebugLogger *logger = new QOpenGLDebugLogger(this);
-    logger->initialize();
-    connect(logger,
-            &QOpenGLDebugLogger::messageLogged,
-            this,
-            &MainWindow::onLogMessage);
-    logger->startLogging();
-    */
-
     connect(ortho_top,
             SIGNAL(ChangeMessage(const QString&)),
-            SLOT(UpdateStatusBarMsg(const QString&)));
+            SLOT(onUpdateStatusBarMsg(const QString&)));
     connect(this,
             SIGNAL(Deselect()),
             &scene_manager_->scene_observer_,
@@ -210,61 +153,97 @@ MainWindow::~MainWindow() {
     delete ui;
 }
 
-void MainWindow::onSelectObjectsTriggered() {
-    ConfigManager::get().set_input_state(InputState::SELECT);
-}
-
-void MainWindow::onCreatePolytopeTriggered() {
-    ConfigManager::get().set_input_state(InputState::CREATE_POLYTOPE);
-}
-
-void MainWindow::onCreatePolylineTriggered() {
-    ConfigManager::get().set_input_state(InputState::CREATE_POLYLINE);
-}
-
-void MainWindow::onCreateTerrainTriggered() {
-    QString fileName = QFileDialog::getOpenFileName(
-        this,
-        tr("Open terrain data"),
-        "./",
-        tr("Text files (*.txt)")
-    );
-
-    QFile file(fileName);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        //rInfo("Could not open file %s.", fileName.toUtf8().data());
-        return;
-    } else {
-        //rInfo("Successfully opened file %s.", fileName.toUtf8().data());
+void MainWindow::on_select_objects_toggled(bool checked) {
+    qDebug() << "on_select_objects_toggled: " << checked;
+    if (checked) {
+        ConfigManager::get().set_input_state(InputState::SELECT);
+        ui->buttonGroup->setExclusive(false);
+        ui->create_point_set->setChecked(false);
+        ui->create_polyline->setChecked(false);
+        ui->create_polytope->setChecked(false);
+        ui->buttonGroup->setExclusive(true);
     }
-
-    QVector<QVector3D> points;
-
-    QTextStream in(&file);
-    while (!in.atEnd()) {
-        QString line = in.readLine();
-        auto tokens = line.split(QRegularExpression("\\s+"), QString::SkipEmptyParts);
-        //qDebug() << tokens << " size: " << tokens.size();
-        points.push_back(QVector3D(tokens.at(1).toFloat(),
-                                   tokens.at(2).toFloat(),
-                                   tokens.at(3).toFloat()));
-        //qDebug() << points.back();
-    }
-
-    emit CreateTerrainMesh(points);
 }
 
-void MainWindow::onSnapToGridToggled(bool state) {
+void MainWindow::on_translate_toggled(bool checked) {
+    qDebug() << "on_translate_toggled: " << checked;
+    if (checked) {
+        ConfigManager::get().set_input_state(InputState::TRANSLATE);
+        ui->buttonGroup->setExclusive(false);
+        ui->create_point_set->setChecked(false);
+        ui->create_polyline->setChecked(false);
+        ui->create_polytope->setChecked(false);
+        ui->buttonGroup->setExclusive(true);
+    }
+}
+
+void MainWindow::on_rotate_toggled(bool checked) {
+    qDebug() << "on_rotate_toggled: " << checked;
+    if (checked) {
+        ConfigManager::get().set_input_state(InputState::ROTATE);
+        ui->buttonGroup->setExclusive(false);
+        ui->create_point_set->setChecked(false);
+        ui->create_polyline->setChecked(false);
+        ui->create_polytope->setChecked(false);
+        ui->buttonGroup->setExclusive(true);
+    }
+}
+
+void MainWindow::on_create_polytope_toggled(bool checked) {
+    qDebug() << "on_create_polytope_toggled: " << checked;
+    if (checked) {
+        ConfigManager::get().set_input_state(InputState::CREATE_POLYTOPE);
+    }
+}
+
+void MainWindow::on_create_polyline_toggled(bool checked) {
+    qDebug() << "on_create_polyline_toggled: " << checked;
+    if (checked) {
+        ConfigManager::get().set_input_state(InputState::CREATE_POLYLINE);
+    }
+}
+
+void MainWindow::on_create_point_set_toggled(bool checked) {
+    qDebug() << "on_create_point_set_toggled: " << checked;
+    if (checked) {
+        QString fileName = QFileDialog::getOpenFileName(
+            this,
+            tr("Open terrain data"),
+            "./",
+            tr("Text files (*.txt)")
+        );
+
+        QFile file(fileName);
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            //rInfo("Could not open file %s.", fileName.toUtf8().data());
+            return;
+        } else {
+            //rInfo("Successfully opened file %s.", fileName.toUtf8().data());
+        }
+
+        QVector<QVector3D> points;
+
+        QTextStream in(&file);
+        while (!in.atEnd()) {
+            QString line = in.readLine();
+            auto tokens = line.split(QRegularExpression("\\s+"), QString::SkipEmptyParts);
+            //qDebug() << tokens << " size: " << tokens.size();
+            points.push_back(QVector3D(tokens.at(1).toFloat(),
+                                       tokens.at(2).toFloat(),
+                                       tokens.at(3).toFloat()));
+            //qDebug() << points.back();
+        }
+
+        emit CreateTerrainMesh(points);
+    }
+}
+
+void MainWindow::on_snap_to_grid_toggled(bool state) {
     ConfigManager::get().set_snap_to_grid(state);
 }
 
 void MainWindow::initializeLogging() {
-    /*
-    logger_.set_console(ui->console);
-    logger_.subscribeTo(rlog::GetGlobalChannel("info"));
-    logger_.subscribeTo(rlog::GetGlobalChannel("debug"));
-    logger_.subscribeTo(rlog::GetGlobalChannel("error"));
-    */
+
 }
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
@@ -303,6 +282,10 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
 // Top Menubar Items
 //=============================================================================
 
+void MainWindow::onUpdateStatusBarMsg(const QString &status) {
+    ui->statusbar_main->showMessage(status);
+}
+
 void MainWindow::on_action_about_triggered() {
     AboutDialog *a = new AboutDialog(this);
     a->addBuildDate();
@@ -314,10 +297,6 @@ void MainWindow::on_action_preferences_triggered() {
     p->show();
 }
 
-void MainWindow::UpdateStatusBarMsg(const QString &status) {
-    ui->statusbar_main->showMessage(status);
-}
-
-void MainWindow::on_actionUser_Manual_triggered() {
+void MainWindow::on_action_user_manual_triggered() {
     QDesktopServices::openUrl(QUrl("file:///C:/RationalCADUserManual.pdf"));
 }

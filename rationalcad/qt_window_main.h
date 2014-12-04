@@ -61,20 +61,25 @@ signals:
     void QuitManager();
 
 private slots:
-    void on_action_about_triggered();
-    void on_action_preferences_triggered();
-    void UpdateStatusBarMsg(const QString& status);
-
-    void onSelectObjectsTriggered();
-    void onCreatePolytopeTriggered();
-    void onCreatePolylineTriggered();
-    void onCreateTerrainTriggered();
-    void onSnapToGridToggled(bool state);
-
-    void on_actionUser_Manual_triggered();
+    void onUpdateStatusBarMsg(const QString& status);
     void onLogMessage(const QOpenGLDebugMessage& message);
 
-private:
+    // toolbar actions
+    void on_select_objects_toggled(bool checked);
+    void on_translate_toggled(bool checked);
+    void on_rotate_toggled(bool checked);
+    void on_snap_to_grid_toggled(bool checked);
+
+    // create buttons
+    void on_create_polytope_toggled(bool checked);
+    void on_create_polyline_toggled(bool checked);
+    void on_create_point_set_toggled(bool checked);
+
+    void on_action_about_triggered();
+    void on_action_preferences_triggered();
+    void on_action_user_manual_triggered();
+
+    private:
     void initializeLogging();
     void initializeConnections();
 
