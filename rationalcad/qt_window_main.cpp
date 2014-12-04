@@ -21,6 +21,7 @@
 #include "ui_window_main.h"
 #include "qt_widget_orthographic.h"
 #include "qt_widget_perspective.h"
+#include "qt_point_set_creation_method.h"
 #include "scene.h"
 
 #include "../geometry/point.h"
@@ -194,35 +195,25 @@ void MainWindow::on_create_point_set_toggled(bool checked) {
     qDebug() << "on_create_point_set_toggled: " << checked;
     if (checked) {
         uncheckInputModeButtons();
-        QString fileName = QFileDialog::getOpenFileName(
-            this,
-            tr("Open terrain data"),
-            "./",
-            tr("Text files (*.txt)")
-        );
 
-        QFile file(fileName);
-        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            //rInfo("Could not open file %s.", fileName.toUtf8().data());
-            return;
-        } else {
-            //rInfo("Successfully opened file %s.", fileName.toUtf8().data());
-        }
+        /*
+        QGroupBox *creation_method = new QGroupBox("Creation Method");
+        QPushButton *open_file = new QPushButton("Open File...");
+        creation_method->setLayout(new QGridLayout());
+        creation_method->layout()->addWidget(open_file);
+        */
 
-        QVector<QVector3D> points;
+        PointSetCreationMethod *creation_method = new PointSetCreationMethod();
 
-        QTextStream in(&file);
-        while (!in.atEnd()) {
-            QString line = in.readLine();
-            auto tokens = line.split(QRegularExpression("\\s+"), QString::SkipEmptyParts);
-            //qDebug() << tokens << " size: " << tokens.size();
-            points.push_back(QVector3D(tokens.at(1).toFloat(),
-                                       tokens.at(2).toFloat(),
-                                       tokens.at(3).toFloat()));
-            //qDebug() << points.back();
-        }
+        QLayoutItem *spacer = ui->create_tab_spacer;
+        ui->create->layout()->removeItem(spacer);
+        ui->create->layout()->addWidget(creation_method);
+        ui->create->layout()->addItem(spacer);
+        /*
+
 
         emit CreateTerrainMesh(points);
+        */
     }
 }
 
