@@ -42,55 +42,52 @@ MainWindow::MainWindow(QWidget *parent) :
     ConfigManager::get().Initialize();
 
     // toolbar buttons
-    QActionGroup *toolbar_buttons = new QActionGroup(ui->toolBar->layout());
+    toolbar_buttons_ = new QActionGroup(ui->toolBar->layout());
 
     // select objects button
-    QAction* select_objects = new QAction("Select Objects",
-                                          toolbar_buttons);
-    select_objects->setIcon(QIcon("://icons/select_object.png"));
-    select_objects->setCheckable(true);
-    select_objects->setChecked(true);
+    select_button_ = new QAction("Select Objects", toolbar_buttons_);
+    select_button_->setIcon(QIcon("://icons/select_object.png"));
+    select_button_->setCheckable(true);
+    select_button_->setChecked(true);
 
-    connect(select_objects,
+    connect(select_button_,
             SIGNAL(toggled(bool)),
             SLOT(on_select_objects_toggled(bool)));
 
     // translate button
-    QAction* translate = new QAction("Translate",
-                                     toolbar_buttons);
-    translate->setIcon(QIcon("://icons/translate.png"));
-    translate->setCheckable(true);
+    translate_button_ = new QAction("Translate", toolbar_buttons_);
+    translate_button_->setIcon(QIcon("://icons/translate.png"));
+    translate_button_->setCheckable(true);
 
-    connect(translate,
+    connect(translate_button_,
             SIGNAL(toggled(bool)),
             SLOT(on_translate_toggled(bool)));
 
     // rotate button
-    QAction* rotate = new QAction("Rotate",
-                                  toolbar_buttons);
-    rotate->setIcon(QIcon("://icons/rotate.png"));
-    rotate->setCheckable(true);
+    rotate_button_ = new QAction("Rotate", toolbar_buttons_);
+    rotate_button_->setIcon(QIcon("://icons/rotate.png"));
+    rotate_button_->setCheckable(true);
 
-    connect(rotate,
+    connect(rotate_button_,
             SIGNAL(toggled(bool)),
             SLOT(on_rotate_toggled(bool)));
 
     // snap to grid button
-    QAction* snap_to_grid = new QAction("Snap to Grid", ui->toolBar->layout());
-    snap_to_grid->setIcon(QIcon("://icons/snap_to_grid.png"));
-    snap_to_grid->setCheckable(true);
-    snap_to_grid->setChecked(true);
+    snap_to_grid_button_ = new QAction("Snap to Grid", ui->toolBar->layout());
+    snap_to_grid_button_->setIcon(QIcon("://icons/snap_to_grid.png"));
+    snap_to_grid_button_->setCheckable(true);
+    snap_to_grid_button_->setChecked(true);
 
-    connect(snap_to_grid,
+    connect(snap_to_grid_button_,
             SIGNAL(toggled(bool)),
             SLOT(on_snap_to_grid_toggled(bool)));
 
     // add buttons to toolbar
-    ui->toolBar->addAction(select_objects);
-    ui->toolBar->addAction(translate);
-    ui->toolBar->addAction(rotate);
+    ui->toolBar->addAction(select_button_);
+    ui->toolBar->addAction(translate_button_);
+    ui->toolBar->addAction(rotate_button_);
     ui->toolBar->addSeparator();
-    ui->toolBar->addAction(snap_to_grid);
+    ui->toolBar->addAction(snap_to_grid_button_);
 
     // create perspective widget
     qDebug() << "Creating perspective view";
@@ -153,15 +150,27 @@ MainWindow::~MainWindow() {
     delete ui;
 }
 
+void MainWindow::uncheckCreateButtons() {
+    ui->buttonGroup->setExclusive(false);
+    ui->create_point_set->setChecked(false);
+    ui->create_polyline->setChecked(false);
+    ui->create_polytope->setChecked(false);
+    ui->buttonGroup->setExclusive(true);
+}
+
+void MainWindow::uncheckInputModeButtons() {
+    toolbar_buttons_->setExclusive(false);
+    select_button_->setChecked(false);
+    translate_button_->setChecked(false);
+    rotate_button_->setChecked(false);
+    toolbar_buttons_->setExclusive(true);
+}
+
 void MainWindow::on_select_objects_toggled(bool checked) {
     qDebug() << "on_select_objects_toggled: " << checked;
     if (checked) {
         ConfigManager::get().set_input_state(InputState::SELECT);
-        ui->buttonGroup->setExclusive(false);
-        ui->create_point_set->setChecked(false);
-        ui->create_polyline->setChecked(false);
-        ui->create_polytope->setChecked(false);
-        ui->buttonGroup->setExclusive(true);
+        uncheckCreateButtons();
     }
 }
 
@@ -169,11 +178,7 @@ void MainWindow::on_translate_toggled(bool checked) {
     qDebug() << "on_translate_toggled: " << checked;
     if (checked) {
         ConfigManager::get().set_input_state(InputState::TRANSLATE);
-        ui->buttonGroup->setExclusive(false);
-        ui->create_point_set->setChecked(false);
-        ui->create_polyline->setChecked(false);
-        ui->create_polytope->setChecked(false);
-        ui->buttonGroup->setExclusive(true);
+        uncheckCreateButtons();
     }
 }
 
@@ -181,31 +186,14 @@ void MainWindow::on_rotate_toggled(bool checked) {
     qDebug() << "on_rotate_toggled: " << checked;
     if (checked) {
         ConfigManager::get().set_input_state(InputState::ROTATE);
-        ui->buttonGroup->setExclusive(false);
-        ui->create_point_set->setChecked(false);
-        ui->create_polyline->setChecked(false);
-        ui->create_polytope->setChecked(false);
-        ui->buttonGroup->setExclusive(true);
-    }
-}
-
-void MainWindow::on_create_polytope_toggled(bool checked) {
-    qDebug() << "on_create_polytope_toggled: " << checked;
-    if (checked) {
-        ConfigManager::get().set_input_state(InputState::CREATE_POLYTOPE);
-    }
-}
-
-void MainWindow::on_create_polyline_toggled(bool checked) {
-    qDebug() << "on_create_polyline_toggled: " << checked;
-    if (checked) {
-        ConfigManager::get().set_input_state(InputState::CREATE_POLYLINE);
+        uncheckCreateButtons();
     }
 }
 
 void MainWindow::on_create_point_set_toggled(bool checked) {
     qDebug() << "on_create_point_set_toggled: " << checked;
     if (checked) {
+        uncheckInputModeButtons();
         QString fileName = QFileDialog::getOpenFileName(
             this,
             tr("Open terrain data"),
@@ -235,6 +223,22 @@ void MainWindow::on_create_point_set_toggled(bool checked) {
         }
 
         emit CreateTerrainMesh(points);
+    }
+}
+
+void MainWindow::on_create_polyline_toggled(bool checked) {
+    qDebug() << "on_create_polyline_toggled: " << checked;
+    if (checked) {
+        ConfigManager::get().set_input_state(InputState::CREATE_POLYLINE);
+        uncheckInputModeButtons();
+    }
+}
+
+void MainWindow::on_create_polytope_toggled(bool checked) {
+    qDebug() << "on_create_polytope_toggled: " << checked;
+    if (checked) {
+        ConfigManager::get().set_input_state(InputState::CREATE_POLYTOPE);
+        uncheckInputModeButtons();
     }
 }
 

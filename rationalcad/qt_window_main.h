@@ -79,9 +79,18 @@ private slots:
     void on_action_preferences_triggered();
     void on_action_user_manual_triggered();
 
-    private:
+private:
     void initializeLogging();
     void initializeConnections();
+
+    void uncheckCreateButtons();
+    void uncheckInputModeButtons();
+
+    QActionGroup *toolbar_buttons_;
+    QAction* select_button_;
+    QAction* translate_button_;
+    QAction* rotate_button_;
+    QAction* snap_to_grid_button_;
 
     Ui::MainWindow *ui;
 
