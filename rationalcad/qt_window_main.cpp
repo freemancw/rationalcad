@@ -209,6 +209,12 @@ void MainWindow::on_create_point_set_toggled(bool checked) {
         ui->create->layout()->removeItem(spacer);
         ui->create->layout()->addWidget(creation_method);
         ui->create->layout()->addItem(spacer);
+
+        connect(creation_method,
+                SIGNAL(CreatePointSet(const QVector<QVector3D>&)),
+                &scene_manager_->scene_observer_,
+                SLOT(onCreatePointSet(const QVector<QVector3D>&)));
+
         /*
 
 

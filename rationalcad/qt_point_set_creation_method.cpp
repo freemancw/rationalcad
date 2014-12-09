@@ -1,3 +1,18 @@
+/*
+ * This file is part of RationalCAD.
+ *
+ * RationalCAD is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
+ *
+ * RationalCAD is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details. You should have received a copy of the GNU General Public
+ * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "qt_point_set_creation_method.h"
 #include "ui_point_set_creation_method.h"
 
@@ -5,13 +20,11 @@
 
 PointSetCreationMethod::PointSetCreationMethod(QWidget *parent) :
     QGroupBox(parent),
-    ui(new Ui::PointSetCreationMethod)
-{
+    ui(new Ui::PointSetCreationMethod) {
     ui->setupUi(this);
 }
 
-PointSetCreationMethod::~PointSetCreationMethod()
-{
+PointSetCreationMethod::~PointSetCreationMethod() {
     delete ui;
 }
 
@@ -27,26 +40,30 @@ void PointSetCreationMethod::on_file_button_clicked() {
 }
 
 void PointSetCreationMethod::on_generate_clicked() {
+
+    LOG(INFO) << "on_generate_clicked with file "
+              << ui->file_name->text().toStdString();
+
     QFile file(ui->file_name->text());
+
+    // error check
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        //rInfo("Could not open file %s.", fileName.toUtf8().data());
+        LOG(ERROR) << "Unable to open point set file.";
         return;
-    } else {
-        //rInfo("Successfully opened file %s.", fileName.toUtf8().data());
     }
 
-    /*
-    QVector<QVector3D> points;
+    LOG(INFO) << "Successfully opened point set file. Continuing.";
 
+    QVector<QVector3D> points;
     QTextStream in(&file);
+
     while (!in.atEnd()) {
         QString line = in.readLine();
         auto tokens = line.split(QRegularExpression("\\s+"), QString::SkipEmptyParts);
-        //qDebug() << tokens << " size: " << tokens.size();
         points.push_back(QVector3D(tokens.at(1).toFloat(),
                                    tokens.at(2).toFloat(),
                                    tokens.at(3).toFloat()));
-        //qDebug() << points.back();
     }
-    */
+
+    emit CreatePointSet(points);
 }

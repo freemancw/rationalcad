@@ -128,6 +128,28 @@ private:
 };
 
 //=============================================================================
+// Interface: ScenePointSet_3
+//=============================================================================
+
+class ScenePointSet_3 : public ISceneObject, public Visual::Geometry {
+public:
+    ScenePointSet_3() {
+        //model_terrain_mesh_.AddObserver(this);
+    }
+
+    void Initialize(const std::vector<Point_3f>& data) {
+        //model_terrain_mesh_.Initialize(data);
+    }
+
+    void Select() override {}
+    void Deselect() override {}
+    void UpdateColor(const QColor &color) override {}
+
+private:
+    //TerrainMesh_3r model_terrain_mesh_;
+};
+
+//=============================================================================
 // Interface: SceneTerrainMesh_3
 //=============================================================================
 
@@ -217,6 +239,7 @@ public slots:
     void onEndCreatePolytope();
 
     void onCreateTerrainMesh(const QVector<QVector3D>& data);
+    void onCreatePointSet(const QVector<QVector3D>& data);
 
     void onUpdateSelectedObjectName(const QString& name);
     void onUpdateSelectedObjectColor(const QColor& color);
@@ -237,6 +260,7 @@ private:
 
     bool ObjectIsSelected() const;
     ISceneObject* SelectedObject();
+    ScenePointSet_3* SelectedPointSet_3();
     ScenePolyline_2* SelectedPolyline_2();
     ScenePolytope_3* SelectedPolytope_3();
     SceneTerrainMesh_3* SelectedTerrainMesh_3();
