@@ -60,9 +60,9 @@ void PointSetCreationMethod::on_generate_clicked() {
     while (!in.atEnd()) {
         QString line = in.readLine();
         auto tokens = line.split(QRegularExpression("\\s+"), QString::SkipEmptyParts);
-        points.push_back(QVector3D(tokens.at(1).toFloat(),
-                                   tokens.at(2).toFloat(),
-                                   tokens.at(3).toFloat()));
+        points.push_back(QVector3D(tokens.at(0).toFloat(),
+                                   tokens.at(1).toFloat(),
+                                   tokens.at(2).toFloat()));
     }
 
     emit CreatePointSet(points);

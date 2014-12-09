@@ -5,6 +5,7 @@ add_library(geometry
     line.cpp
     matrix.cpp
     point.cpp
+    pointset.cpp
     polygon.cpp
     polytope.cpp
     quadedge.cpp

@@ -26,6 +26,7 @@
 #include "opengl.h"
 
 // geometry kernel
+#include "../geometry/pointset.h"
 #include "../geometry/polygon.h"
 #include "../geometry/polytope.h"
 #include "../geometry/triangulation.h"
@@ -134,11 +135,13 @@ private:
 class ScenePointSet_3 : public ISceneObject, public Visual::Geometry {
 public:
     ScenePointSet_3() {
-        //model_terrain_mesh_.AddObserver(this);
+        model_point_set_.AddObserver(this);
     }
 
-    void Initialize(const std::vector<Point_3f>& data) {
-        //model_terrain_mesh_.Initialize(data);
+    void Initialize(const QVector<QVector3D>& data) {
+        for (auto point : data) {
+            model_point_set_.add(Point_3r(point.x(), point.y(), point.z()));
+        }
     }
 
     void Select() override {}
@@ -146,7 +149,7 @@ public:
     void UpdateColor(const QColor &color) override {}
 
 private:
-    //TerrainMesh_3r model_terrain_mesh_;
+    PointSet_3r model_point_set_;
 };
 
 //=============================================================================

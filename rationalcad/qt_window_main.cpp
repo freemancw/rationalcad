@@ -196,13 +196,6 @@ void MainWindow::on_create_point_set_toggled(bool checked) {
     if (checked) {
         uncheckInputModeButtons();
 
-        /*
-        QGroupBox *creation_method = new QGroupBox("Creation Method");
-        QPushButton *open_file = new QPushButton("Open File...");
-        creation_method->setLayout(new QGridLayout());
-        creation_method->layout()->addWidget(open_file);
-        */
-
         PointSetCreationMethod *creation_method = new PointSetCreationMethod();
 
         QLayoutItem *spacer = ui->create_tab_spacer;
@@ -214,12 +207,6 @@ void MainWindow::on_create_point_set_toggled(bool checked) {
                 SIGNAL(CreatePointSet(const QVector<QVector3D>&)),
                 &scene_manager_->scene_observer_,
                 SLOT(onCreatePointSet(const QVector<QVector3D>&)));
-
-        /*
-
-
-        emit CreateTerrainMesh(points);
-        */
     }
 }
 

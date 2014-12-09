@@ -354,22 +354,12 @@ void SceneObserver::onCreatePointSet(const QVector<QVector3D>& data) {
 
     onDeselect();
 
-    /*
-    std::vector<Point_3f> points;
-    foreach(QVector3D p, data) {
-        points.push_back(Point_3f(p.x(), p.y(), p.z()));
-    }
-
-    std::srand ( unsigned ( std::time(0) ) );
-    std::random_shuffle ( points.begin(), points.end() );
-
-    static int numTerrain = 0;
-    selected_name_ = QString("terrain3_%1").arg(numTerrain++);
+    static int numPointSets = 0;
+    selected_name_ = QString("pointset3_%1").arg(numPointSets++);
     scene_objects_.insert(selected_name_,
-                          QSharedPointer<ISceneObject>(new SceneTerrainMesh_3()));
-    SelectedTerrainMesh_3()->AddObserver(this);
-    SelectedTerrainMesh_3()->Initialize(points);
-    */
+                          QSharedPointer<ISceneObject>(new ScenePointSet_3()));
+    SelectedPointSet_3()->AddObserver(this);
+    SelectedPointSet_3()->Initialize(data);
 }
 
 //=============================================================================
@@ -460,6 +450,10 @@ int SceneObserver::NumObjects() const {
 
 ISceneObject* SceneObserver::SelectedObject() {
     return scene_objects_.value(selected_name_).data();
+}
+
+ScenePointSet_3 *SceneObserver::SelectedPointSet_3() {
+    return dynamic_cast<ScenePointSet_3*>(SelectedObject());
 }
 
 ScenePolyline_2* SceneObserver::SelectedPolyline_2() {
