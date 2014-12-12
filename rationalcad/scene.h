@@ -63,10 +63,18 @@ private:
 // Interface: ISceneObject
 //=============================================================================
 
+enum class SceneObjectType {
+    POLYLINE_2
+};
+
 struct ISceneObject {
     virtual void Select() = 0;
     virtual void Deselect() = 0;
     virtual void UpdateColor(const QColor& color) = 0;
+    virtual const QString& name() const = 0;
+    virtual void set_name(const QString& name) = 0;
+    // TODO
+    //virtual SceneObjectType scene_object_type() = 0;
 };
 
 //=============================================================================
@@ -80,18 +88,26 @@ public:
     }
 
     void Initialize(const QVector2D& start) {
-        LOG(INFO) << "initializing polyline.";
+        LOG(DEBUG) << "initializing polyline.";
+
         model_polyline_.push_back(Point_2r(start.x(), start.y()));
     }
 
     void Update(const QVector2D& cur) {
-        LOG(INFO) << "updating polyline.";
+        LOG(DEBUG) << "updating polyline.";
+
         model_polyline_.push_back(Point_2r(cur.x(), cur.y()));
     }
 
     void Select() override {}
     void Deselect() override {}
     void UpdateColor(const QColor &color) override {}
+    const QString& name() const override {
+        return name_;
+    }
+    void set_name(const QString &name) override {
+        name_ = name;
+    }
 
     const Polyline_2r& model_polyline() const {
         return model_polyline_;
@@ -99,6 +115,7 @@ public:
 
 private:
     Polyline_2r model_polyline_;
+    QString name_;
 };
 
 //=============================================================================
@@ -123,9 +140,16 @@ public:
     void Select() override {}
     void Deselect() override {}
     void UpdateColor(const QColor &color) override {}
+    const QString& name() const override {
+        return name_;
+    }
+    void set_name(const QString &name) override {
+        name_ = name;
+    }
 
 private:
     Polytope_3r model_polytope_;
+    QString name_;
 };
 
 //=============================================================================
@@ -147,9 +171,16 @@ public:
     void Select() override {}
     void Deselect() override {}
     void UpdateColor(const QColor &color) override {}
+    const QString& name() const override {
+        return name_;
+    }
+    void set_name(const QString &name) override {
+        name_ = name;
+    }
 
 private:
     PointSet_3r model_point_set_;
+    QString name_;
 };
 
 //=============================================================================
@@ -169,9 +200,16 @@ public:
     void Select() override {}
     void Deselect() override {}
     void UpdateColor(const QColor &color) override {}
+    const QString& name() const override {
+        return name_;
+    }
+    void set_name(const QString &name) override {
+        name_ = name;
+    }
 
 private:
     TerrainMesh_3r model_terrain_mesh_;
+    QString name_;
 };
 
 //=============================================================================
@@ -268,8 +306,12 @@ private:
     ScenePolytope_3* SelectedPolytope_3();
     SceneTerrainMesh_3* SelectedTerrainMesh_3();
 
+
     QHash<QString, QSharedPointer<ISceneObject>> scene_objects_;
+    QVector<QSharedPointer<ISceneObject>> selected_objects_;
+
     QString selected_name_;
+
     quint32 cur_point_uid_;
     QHash<uint32_t, QSharedPointer<ApproxPoint_3f>> approx_points_;
     QHash<uint32_t, QStack<Visual::Point>> viz_points_;
