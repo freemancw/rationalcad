@@ -449,6 +449,24 @@ void SceneObserver::onDeleteSelectedObject() {
     selected_objects_.clear();
 }
 
+/*
+ * Selection has a variety of issues to address:
+ * - when we are clicking in the ortho view, conceptually we are shooting a
+ *   ray from infinity down to the XY plane (or other axis-aligned planes if
+ *   we generalize it in the future.) This is tricky to represent using only
+ *   the Ray_3r class.
+ * - when we are clicking in the perspective view, conceptually we are shooting
+ *   a ray from the camera toward the view direction. This is straightforward
+ *   to represent as a simple Ray_3r.
+ * - while it would be nice to use the same function with a single input type,
+ *   it makes more sense to just separate the two and handle the orthographic
+ *   selection ray in a "reasonable" fashion. for example, we could take as
+ *   input the xy world coords of the ortho click. we can compute a ray as follows.
+ *   we know the direction is (0, 0, -1). we can set the ray origin as the (x, y)
+ *   coords with z equal to the "top" of the AABB of the scene. then we can
+ *   forward this newly constructed ray to the same function we use for the
+ *   perspective view.
+ */
 void SceneObserver::onSelectObject(const QVector2D& coords) {
     LOG(DEBUG) << "onSelectObject";
 
