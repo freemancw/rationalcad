@@ -39,6 +39,7 @@ public:
     static const Color CYAN;
     static const Color YELLOW;
     static const Color MAGENTA;
+    static const Color SKYBLUE;
 
     Color();
     Color(const unsigned char r, const unsigned char g,

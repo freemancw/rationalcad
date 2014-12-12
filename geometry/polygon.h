@@ -55,6 +55,7 @@ public:
     const size_t size() const;
 
     const std::deque<SharedPoint_2r>& vertices() const;
+    const int32_t z_order() const { return z_order_; }
     void set_vertices(const std::deque<SharedPoint_2r>& vertices);
     const bool closed() const;
     void set_mat_vertex(const Visual::Material mat_vertex) { mat_vertex_ = mat_vertex; }

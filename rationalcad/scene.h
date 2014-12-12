@@ -99,8 +99,21 @@ public:
         model_polyline_.push_back(Point_2r(cur.x(), cur.y()));
     }
 
-    void Select() override {}
-    void Deselect() override {}
+    void Select() override {
+        Visual::Material selected_mat;
+        selected_mat.set_ambient(Visual::Color::SKYBLUE);
+
+        for (auto point : model_polyline_.vertices()) {
+            SigPushVisualPoint_2r(*point, Visual::Point(selected_mat,
+                model_polyline_.z_order()));
+        }
+    }
+
+    void Deselect() override {
+        for (auto point : model_polyline_.vertices()) {
+            SigPopVisualPoint_2r(*point);
+        }
+    }
     void UpdateColor(const QColor &color) override {}
     const QString& name() const override {
         return name_;

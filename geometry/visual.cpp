@@ -224,6 +224,7 @@ const Color Color::WHITE = Color(255, 255, 255, 255);
 const Color Color::CYAN = Color(0, 255, 255, 255);
 const Color Color::YELLOW = Color(255, 255, 0, 255);
 const Color Color::MAGENTA = Color(255, 0, 255, 255);
+const Color Color::SKYBLUE = Color(0, 151, 255, 255);
 
 Color::Color() {
     rgba_.assign(0);
