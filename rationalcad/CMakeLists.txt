@@ -17,6 +17,7 @@ qt5_wrap_ui(
     forms/dialog_about.ui
     forms/dialog_preferences.ui
     forms/window_main.ui
+    forms/point_set_creation_method.ui
 )
 
 qt5_add_resources(
@@ -36,6 +37,7 @@ add_executable(
     qt_widget_orthographic.cpp
     qt_widget_perspective.cpp
     qt_window_main.cpp
+    qt_point_set_creation_method.cpp
     scene.cpp
     common.h
     ${UI_HEADERS}

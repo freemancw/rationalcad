@@ -300,7 +300,7 @@ void SceneObserver::onBeginCreatePolyline(const QVector2D& v) {
                           QSharedPointer<ISceneObject>(new ScenePolyline_2()));
     SelectedPolyline_2()->AddObserver(this);
     SelectedPolyline_2()->Initialize(v);
-    ConfigManager::get().set_input_state(UPDATE_POLYLINE);
+    ConfigManager::get().set_input_state(InputState::UPDATE_POLYLINE);
 }
 
 void SceneObserver::onUpdateNewPolyline(const QVector2D& v) {
@@ -308,7 +308,7 @@ void SceneObserver::onUpdateNewPolyline(const QVector2D& v) {
 }
 
 void SceneObserver::onEndCreatePolyline() {
-    ConfigManager::get().set_input_state(CREATE_POLYLINE);
+    ConfigManager::get().set_input_state(InputState::CREATE_POLYLINE);
     //RCAD::Melkman(SelectedPolyline_2()->model_polyline(), this);
 }
 
@@ -346,9 +346,26 @@ void SceneObserver::onEndCreatePolytope() {
 }
 
 //=============================================================================
+// PointSet_3 management
+//=============================================================================
+
+void SceneObserver::onCreatePointSet(const QVector<QVector3D>& data) {
+    LOG(INFO) << "onCreatePointSet";
+
+    onDeselect();
+
+    static int numPointSets = 0;
+    selected_name_ = QString("pointset3_%1").arg(numPointSets++);
+    scene_objects_.insert(selected_name_,
+                          QSharedPointer<ISceneObject>(new ScenePointSet_3()));
+    SelectedPointSet_3()->AddObserver(this);
+    SelectedPointSet_3()->Initialize(data);
+}
+
+//=============================================================================
 // TerrainMesh_3 management
 //=============================================================================
-//#include <ctime>
+
 void SceneObserver::onCreateTerrainMesh(const QVector<QVector3D>& data) {
 
     onDeselect();
@@ -435,6 +452,10 @@ ISceneObject* SceneObserver::SelectedObject() {
     return scene_objects_.value(selected_name_).data();
 }
 
+ScenePointSet_3 *SceneObserver::SelectedPointSet_3() {
+    return dynamic_cast<ScenePointSet_3*>(SelectedObject());
+}
+
 ScenePolyline_2* SceneObserver::SelectedPolyline_2() {
     return dynamic_cast<ScenePolyline_2*>(SelectedObject());
 }
@@ -475,21 +496,6 @@ SceneManager::SceneManager(Renderer* renderer) :
                                       const quint32,
                                       const quint32,
                                       QVector<GL::Vertex>)));
-
-
-    /*
-    Point_2r testP0(4, 4);
-    Point_2r testQ0(5, 9);
-    Point_2r testR0(3, 10); // should be left of
-    Point_2r testR1(5, 5);  // should be right of
-    Point_2r testR2(3, -1);  // should be on but outside
-    Point_2r testR3(4.5, 6.5);  // should be on and inside
-
-    LOG(INFO) << testP0 << testQ0 << testR0 << Predicate::RIsLeftOrInsidePQ(testP0, testQ0, testR0);
-    LOG(INFO) << testP0 << testQ0 << testR1 << Predicate::RIsLeftOrInsidePQ(testP0, testQ0, testR1);
-    LOG(INFO) << testP0 << testQ0 << testR2 << Predicate::RIsLeftOrInsidePQ(testP0, testQ0, testR2);
-    LOG(INFO) << testP0 << testQ0 << testR3 << Predicate::RIsLeftOrInsidePQ(testP0, testQ0, testR3);
-    */
 }
 
 SceneManager::~SceneManager() {

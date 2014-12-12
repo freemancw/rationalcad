@@ -26,6 +26,7 @@
 #include "opengl.h"
 
 // geometry kernel
+#include "../geometry/pointset.h"
 #include "../geometry/polygon.h"
 #include "../geometry/polytope.h"
 #include "../geometry/triangulation.h"
@@ -128,6 +129,30 @@ private:
 };
 
 //=============================================================================
+// Interface: ScenePointSet_3
+//=============================================================================
+
+class ScenePointSet_3 : public ISceneObject, public Visual::Geometry {
+public:
+    ScenePointSet_3() {
+        model_point_set_.AddObserver(this);
+    }
+
+    void Initialize(const QVector<QVector3D>& data) {
+        for (auto point : data) {
+            model_point_set_.add(Point_3r(point.x(), point.y(), point.z()));
+        }
+    }
+
+    void Select() override {}
+    void Deselect() override {}
+    void UpdateColor(const QColor &color) override {}
+
+private:
+    PointSet_3r model_point_set_;
+};
+
+//=============================================================================
 // Interface: SceneTerrainMesh_3
 //=============================================================================
 
@@ -217,6 +242,7 @@ public slots:
     void onEndCreatePolytope();
 
     void onCreateTerrainMesh(const QVector<QVector3D>& data);
+    void onCreatePointSet(const QVector<QVector3D>& data);
 
     void onUpdateSelectedObjectName(const QString& name);
     void onUpdateSelectedObjectColor(const QColor& color);
@@ -237,6 +263,7 @@ private:
 
     bool ObjectIsSelected() const;
     ISceneObject* SelectedObject();
+    ScenePointSet_3* SelectedPointSet_3();
     ScenePolyline_2* SelectedPolyline_2();
     ScenePolytope_3* SelectedPolytope_3();
     SceneTerrainMesh_3* SelectedTerrainMesh_3();

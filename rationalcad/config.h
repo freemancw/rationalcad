@@ -21,8 +21,10 @@
 
 namespace RCAD {
 
-enum InputState {
+enum class InputState {
     SELECT,
+    TRANSLATE,
+    ROTATE,
     CREATE_POLYTOPE,
     UPDATE_POLYTOPE,
     CREATE_POLYLINE,

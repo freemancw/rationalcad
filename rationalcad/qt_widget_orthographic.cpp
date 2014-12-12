@@ -274,7 +274,7 @@ void OrthographicWidget::mousePressEvent(QMouseEvent *event) {
 
     if (event->buttons() & Qt::LeftButton) {
         switch (ConfigManager::get().input_state()) {
-        case CREATE_POLYTOPE:
+        case InputState::CREATE_POLYTOPE:
             /* need to save initial click position to determine where to begin
              * creating the polytope. there are two cases:
              *
@@ -294,10 +294,10 @@ void OrthographicWidget::mousePressEvent(QMouseEvent *event) {
             create_polytope_pos = event->pos();
 
             break;
-        case CREATE_POLYLINE:
+        case InputState::CREATE_POLYLINE:
             emit BeginCreatePolyline(input_world_coords);
             break;
-        case UPDATE_POLYLINE:
+        case InputState::UPDATE_POLYLINE:
             emit UpdateNewPolyline(input_world_coords);
             break;
         default:
@@ -322,7 +322,7 @@ void OrthographicWidget::mousePressEvent(QMouseEvent *event) {
 
     if (event->buttons() & Qt::RightButton) {
         switch (ConfigManager::get().input_state()) {
-        case UPDATE_POLYLINE:
+        case InputState::UPDATE_POLYLINE:
             emit EndCreatePolyline();
             break;
         default:
@@ -346,9 +346,9 @@ void OrthographicWidget::mouseReleaseEvent(QMouseEvent *event) {
 
     if (!(event->buttons() & Qt::LeftButton)) {
         switch (ConfigManager::get().input_state()) {
-        case UPDATE_POLYTOPE:
+        case InputState::UPDATE_POLYTOPE:
             emit EndCreatePolytope();
-            ConfigManager::get().set_input_state(CREATE_POLYTOPE);
+            ConfigManager::get().set_input_state(InputState::CREATE_POLYTOPE);
             break;
         default:
             break;
@@ -372,19 +372,19 @@ void OrthographicWidget::mouseMoveEvent(QMouseEvent *event) {
 
     if (event->buttons() & Qt::LeftButton) {
         switch (ConfigManager::get().input_state()) {
-        case CREATE_POLYTOPE:
+        case InputState::CREATE_POLYTOPE:
             if (ConfigManager::get().snap_to_grid()) {
                 if (cur_world_snapped.x() != cpoly_world_snapped.x() &&
                     cur_world_snapped.y() != cpoly_world_snapped.y()) {
                     emit BeginCreatePolytope(cpoly_world_snapped,
                                              cur_world_snapped);
-                    ConfigManager::get().set_input_state(UPDATE_POLYTOPE);
+                    ConfigManager::get().set_input_state(InputState::UPDATE_POLYTOPE);
                 }
             } else {
 
             }
             break;
-        case UPDATE_POLYTOPE:
+        case InputState::UPDATE_POLYTOPE:
             if (ConfigManager::get().snap_to_grid()) {
                 emit UpdateNewPolytope(cur_world_snapped);
             } else {
@@ -416,8 +416,8 @@ void OrthographicWidget::wheelEvent(QWheelEvent *event) {
 void OrthographicWidget::ShowContextMenu(const QPoint &p) {
 
     switch (ConfigManager::get().input_state()) {
-    case UPDATE_POLYLINE:
-    case UPDATE_POLYTOPE:
+    case InputState::UPDATE_POLYLINE:
+    case InputState::UPDATE_POLYTOPE:
         return;
     default:
         break;
