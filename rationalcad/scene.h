@@ -100,6 +100,8 @@ public:
     }
 
     void Select() override {
+        LOG(DEBUG) << "selecting polyline.";
+
         Visual::Material selected_mat;
         selected_mat.set_ambient(Visual::Color::SKYBLUE);
 
@@ -118,6 +120,8 @@ public:
     }
 
     void Deselect() override {
+        LOG(DEBUG) << "deselecting polyline.";
+
         SharedPoint_2r last_vertex;
         for (auto vertex : model_polyline_.vertices()) {
             SigPopVisualPoint_2r(*vertex);
@@ -129,10 +133,13 @@ public:
             last_vertex = vertex;
         }
     }
+
     void UpdateColor(const QColor &color) override {}
+
     const QString& name() const override {
         return name_;
     }
+
     void set_name(const QString &name) override {
         name_ = name;
     }
@@ -165,9 +172,54 @@ public:
         model_polytope_.Update(Point_3f(cur.x(), cur.y(), 8));
     }
 
-    void Select() override {}
-    void Deselect() override {}
+    void Select() override {
+        Visual::Material selected_mat;
+        selected_mat.set_ambient(Visual::Color::SKYBLUE);
+
+        QuadEdge::CellVertexIterator cellVerts(model_polytope_.cell());
+        QuadEdge::Vertex *v;
+        while ((v = cellVerts.next()) != 0) {
+            SigPushVisualPoint_3r(*v->pos, Visual::Point(selected_mat));
+        }
+
+        QuadEdge::CellFaceIterator cellFaces(model_polytope_.cell());
+        QuadEdge::Face *f;
+        while ((f = cellFaces.next()) != 0) {
+            QuadEdge::FaceEdgeIterator faceEdges(f);
+            QuadEdge::Edge *e;
+
+            while ((e = faceEdges.next()) != 0) {
+                if (e->Org() < e->Dest()) {
+                    SigPushVisualSegment_3r(Segment_3r(e->Org()->pos, e->Dest()->pos),
+                                            Visual::Segment(selected_mat));
+                }
+            }
+        }
+    }
+
+    void Deselect() override {
+        QuadEdge::CellVertexIterator cellVerts(model_polytope_.cell());
+        QuadEdge::Vertex *v;
+        while ((v = cellVerts.next()) != 0) {
+            SigPopVisualPoint_3r(*v->pos);
+        }
+
+        QuadEdge::CellFaceIterator cellFaces(model_polytope_.cell());
+        QuadEdge::Face *f;
+        while ((f = cellFaces.next()) != 0) {
+            QuadEdge::FaceEdgeIterator faceEdges(f);
+            QuadEdge::Edge *e;
+
+            while ((e = faceEdges.next()) != 0) {
+                if (e->Org() < e->Dest()) {
+                    SigPopVisualSegment_3r(Segment_3r(e->Org()->pos, e->Dest()->pos));
+                }
+            }
+        }
+    }
+
     void UpdateColor(const QColor &color) override {}
+
     const QString& name() const override {
         return name_;
     }
@@ -196,9 +248,23 @@ public:
         }
     }
 
-    void Select() override {}
-    void Deselect() override {}
+    void Select() override {
+        Visual::Material selected_mat;
+        selected_mat.set_ambient(Visual::Color::SKYBLUE);
+
+        for (auto point : model_point_set_.points()) {
+            SigPushVisualPoint_3r(*point, Visual::Point(selected_mat));
+        }
+    }
+
+    void Deselect() override {
+        for (auto point : model_point_set_.points()) {
+            SigPopVisualPoint_3r(*point);
+        }
+    }
+
     void UpdateColor(const QColor &color) override {}
+
     const QString& name() const override {
         return name_;
     }

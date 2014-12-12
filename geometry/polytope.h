@@ -42,6 +42,10 @@ public:
 
     void Initialize(const Point_3f& start, const Point_3f& cur);
     void Update(const Point_3f& cur);
+
+    QuadEdge::Cell* cell() {
+        return cell_;
+    }
     
 private:
     QuadEdge::Cell* cell_;
