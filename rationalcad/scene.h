@@ -103,15 +103,30 @@ public:
         Visual::Material selected_mat;
         selected_mat.set_ambient(Visual::Color::SKYBLUE);
 
-        for (auto point : model_polyline_.vertices()) {
-            SigPushVisualPoint_2r(*point, Visual::Point(selected_mat,
+        SharedPoint_2r last_vertex;
+        for (auto vertex : model_polyline_.vertices()) {
+            SigPushVisualPoint_2r(*vertex, Visual::Point(selected_mat,
                 model_polyline_.z_order()));
+
+            if (last_vertex) {
+                SigPushVisualSegment_2r(Segment_2r(last_vertex, vertex),
+                                        Visual::Segment(selected_mat));
+            }
+
+            last_vertex = vertex;
         }
     }
 
     void Deselect() override {
-        for (auto point : model_polyline_.vertices()) {
-            SigPopVisualPoint_2r(*point);
+        SharedPoint_2r last_vertex;
+        for (auto vertex : model_polyline_.vertices()) {
+            SigPopVisualPoint_2r(*vertex);
+
+            if (last_vertex) {
+                SigPopVisualSegment_2r(Segment_2r(last_vertex, vertex));
+            }
+
+            last_vertex = vertex;
         }
     }
     void UpdateColor(const QColor &color) override {}
