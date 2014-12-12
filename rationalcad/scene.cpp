@@ -496,21 +496,6 @@ SceneManager::SceneManager(Renderer* renderer) :
                                       const quint32,
                                       const quint32,
                                       QVector<GL::Vertex>)));
-
-
-    /*
-    Point_2r testP0(4, 4);
-    Point_2r testQ0(5, 9);
-    Point_2r testR0(3, 10); // should be left of
-    Point_2r testR1(5, 5);  // should be right of
-    Point_2r testR2(3, -1);  // should be on but outside
-    Point_2r testR3(4.5, 6.5);  // should be on and inside
-
-    LOG(INFO) << testP0 << testQ0 << testR0 << Predicate::RIsLeftOrInsidePQ(testP0, testQ0, testR0);
-    LOG(INFO) << testP0 << testQ0 << testR1 << Predicate::RIsLeftOrInsidePQ(testP0, testQ0, testR1);
-    LOG(INFO) << testP0 << testQ0 << testR2 << Predicate::RIsLeftOrInsidePQ(testP0, testQ0, testR2);
-    LOG(INFO) << testP0 << testQ0 << testR3 << Predicate::RIsLeftOrInsidePQ(testP0, testQ0, testR3);
-    */
 }
 
 SceneManager::~SceneManager() {
