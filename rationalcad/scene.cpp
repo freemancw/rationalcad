@@ -450,7 +450,14 @@ void SceneObserver::onDeleteSelectedObject() {
 }
 
 void SceneObserver::onSelectObject(const QVector2D& coords) {
-    //onDeselect();
+    LOG(DEBUG) << "onSelectObject";
+
+    onDeselect();
+
+    for (auto object : scene_objects_) {
+
+    }
+
 }
 
 void SceneObserver::onDeselect() {
@@ -486,11 +493,7 @@ SceneTerrainMesh_3* SceneObserver::SelectedTerrainMesh_3() {
 }
 
 bool SceneObserver::ObjectIsSelected() const {
-    return selected_name_ != "";
-}
-
-const QString& SceneObserver::selected_name() const {
-    return selected_name_;
+    return true;
 }
 
 //=============================================================================

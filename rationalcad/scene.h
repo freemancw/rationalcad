@@ -400,11 +400,8 @@ private:
     ScenePolytope_3* SelectedPolytope_3();
     SceneTerrainMesh_3* SelectedTerrainMesh_3();
 
-
     QHash<QString, QSharedPointer<ISceneObject>> scene_objects_;
     QVector<QSharedPointer<ISceneObject>> selected_objects_;
-
-    QString selected_name_;
 
     quint32 cur_point_uid_;
     QHash<uint32_t, QSharedPointer<ApproxPoint_3f>> approx_points_;

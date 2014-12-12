@@ -274,6 +274,9 @@ void OrthographicWidget::mousePressEvent(QMouseEvent *event) {
 
     if (event->buttons() & Qt::LeftButton) {
         switch (ConfigManager::get().input_state()) {
+        case InputState::SELECT:
+            emit SelectObject(world_coords);
+            break;
         case InputState::CREATE_POLYTOPE:
             /* need to save initial click position to determine where to begin
              * creating the polytope. there are two cases:
