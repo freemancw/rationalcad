@@ -466,16 +466,42 @@ void SceneObserver::onDeleteSelectedObject() {
  *   coords with z equal to the "top" of the AABB of the scene. then we can
  *   forward this newly constructed ray to the same function we use for the
  *   perspective view.
+ *
+ * TODO: rationals are overkill for selection
  */
-void SceneObserver::onSelectObject(const QVector2D& coords) {
+void SceneObserver::onSelectObject(const Ray_3r& selection_ray) {
     LOG(DEBUG) << "onSelectObject";
 
     onDeselect();
 
+    QSharedPointer<ISceneObject> selected_object;
+    // TODO: currently using large constant, in future intersect with AABB
+    rational closest_isect_time = 999999999;
     for (auto object : scene_objects_) {
-
+        Intersection::Ray_3rSceneObject isect(selection_ray, object->data);
+        if (isect.type() != Intersection::Ray_3rSceneObject::Type::INTERSECTION_EMPTY) {
+            if (isect.time() < closest_isect_time) {
+                selection_object = object;
+                closest_isect_time = isect.time();
+            }
+        }
     }
+}
 
+void SceneObserver::onSelectObjectFromOrtho(const QVector2D& coords) {
+    LOG(DEBUG) << "onSelectObjectFromOrtho";
+
+    // TODO: currently using large constant, in future compute AABB of scene
+    auto origin = std::make_shared<Point_3r>(coords.x(), coords.y(), 4096);
+    onSelectObject(Ray_3r(origin, Vector_3r(0, 0, -1)));
+}
+
+void SceneObserver::onSelectObjectFromPerspective(const QVector3D& origin,
+                                                  const QVector3D& dir) {
+    LOG(DEBUG) << "onSelectObjectFromPerspective";
+
+    auto origin = std::make_shared<Point_3r>(origin.x(), origin.y(), origin.z());
+    onSelectObject(Ray_3r(origin, Vector_3r(dir.x(), dir.y(), dir.z())));
 }
 
 void SceneObserver::onDeselect() {

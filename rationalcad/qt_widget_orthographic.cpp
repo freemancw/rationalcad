@@ -63,7 +63,7 @@ void OrthographicWidget::initialize(Renderer* renderer,
     connect(this,
             SIGNAL(SelectObject(QVector2D)),
             &scene_manager_->scene_observer_,
-            SLOT(onSelectObject(QVector2D)));
+            SLOT(onSelectObjectFromOrtho(QVector2D)));
 
     // polyline
     connect(this,

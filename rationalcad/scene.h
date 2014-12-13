@@ -77,6 +77,88 @@ struct ISceneObject {
     //virtual SceneObjectType scene_object_type() = 0;
 };
 
+namespace Intersection {
+
+class Ray_3rSceneObject {
+public:
+    enum class Type {
+        INTERSECTION_EMPTY,
+        INTERSECTION_POINT,
+        INTERSECTION_COINCIDENT
+    };
+
+    Ray_3rSceneObject() :
+        type_(INTERSECTION_EMPTY),
+        ray_(nullptr),
+        scene_object_(nullptr) {}
+
+    Ray_3rSceneObject(const Ray_3r* ray, const ISceneObject* scene_object) :
+        ray_(ray),
+        scene_object_(scene_object) {
+
+    }
+
+    const Point_3r& intersection() const {
+        return *intersection_;
+    }
+    const Type type() const {
+        return type_;
+    }
+    const rational& time() const {
+        return time_;
+    }
+    SharedPoint_3r intersection_sptr() {
+        return intersection_;
+    }
+
+protected:
+    const Ray_3r* ray_;
+    const ISceneObject* scene_object_;
+
+    SharedPoint_3r intersection_;
+    Type type_;
+    rational time_;
+};
+
+}
+/*
+Ray_2rSegment_2r::Ray_2rSegment_2r() :
+    type_(INTERSECTION_EMPTY),
+    ray_(nullptr),
+    segment_(nullptr) {}
+
+Ray_2rSegment_2r::Ray_2rSegment_2r(const Ray_2r *ray,
+                                   const Segment_2r *segment) :
+    ray_(ray),
+    segment_(segment) {
+    Line_2rLine_2r isect_support(&segment->support(), &ray->support());
+    switch(isect_support.type()) {
+    case INTERSECTION_EMPTY:
+        type_ = INTERSECTION_EMPTY;
+        break;
+    case INTERSECTION_COINCIDENT:
+        type_ = INTERSECTION_COINCIDENT;
+        time_ = 0;
+        break;
+    case INTERSECTION_POINT:
+        if(isect_support.time() < 0) {
+            type_ = INTERSECTION_EMPTY;
+        } else {
+            auto pt = Dot(segment->support().V(), segment->p());
+            auto qt = Dot(segment->support().V(), segment->q());
+            auto it = Dot(segment->support().V(), isect_support.intersection());
+            if(it <= qt && it >= pt) {
+                type_ = INTERSECTION_POINT;
+                intersection_ = isect_support.intersection_sptr();
+                time_ = isect_support.time();
+            } else {
+                type_ = INTERSECTION_EMPTY;
+            }
+        }
+        break;
+    }
+    */
+
 //=============================================================================
 // Interface: ScenePolyline_2
 //=============================================================================
@@ -379,7 +461,9 @@ public slots:
     void onUpdateSelectedObjectName(const QString& name);
     void onUpdateSelectedObjectColor(const QColor& color);
     void onDeleteSelectedObject();
-    void onSelectObject(const QVector2D& coords);
+    void onSelectObjectFromOrtho(const QVector2D& coords);
+    void onSelectObjectFromPerspective(const QVector3D& origin,
+                                       const QVector3D& dir);
     void onDeselect();
 
 signals:
@@ -392,6 +476,8 @@ private:
     void GenerateVboPoints();
     void GenerateVboLines();
     void GenerateVboTriangles();
+
+    void onSelectObject(const Ray_3r& selection_ray);
 
     bool ObjectIsSelected() const;
     ISceneObject* SelectedObject();
