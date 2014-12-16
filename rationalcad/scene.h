@@ -34,6 +34,7 @@
 #include "../geometry/line.h"
 #include "../geometry/visual.h"
 #include "../geometry/triangle.h"
+#include "../geometry/intersection.h"
 
 bool operator<(const QVector<uint32_t>& a, const QVector<uint32_t>& b);
 
@@ -67,97 +68,42 @@ enum class SceneObjectType {
     POLYLINE_2
 };
 
+namespace Intersection {
+
+class Ray_3rSceneObject {
+public:
+    Ray_3rSceneObject() :
+        empty_(true),
+        time_(0) {}
+
+    Ray_3rSceneObject(bool empty, const rational& time) :
+        empty_(empty),
+        time_(time) {}
+
+
+    bool empty() const {
+        return empty_;
+    }
+    const rational& time() const {
+        return time_;
+    }
+
+private:
+    bool empty_;
+    rational time_;
+};
+
+}
+
 struct ISceneObject {
     virtual void Select() = 0;
     virtual void Deselect() = 0;
     virtual void UpdateColor(const QColor& color) = 0;
     virtual const QString& name() const = 0;
     virtual void set_name(const QString& name) = 0;
-    // TODO
     //virtual SceneObjectType scene_object_type() = 0;
+    virtual Intersection::Ray_3rSceneObject intersect(const Ray_3r& ray) = 0;
 };
-
-namespace Intersection {
-
-class Ray_3rSceneObject {
-public:
-    enum class Type {
-        INTERSECTION_EMPTY,
-        INTERSECTION_POINT,
-        INTERSECTION_COINCIDENT
-    };
-
-    Ray_3rSceneObject() :
-        type_(INTERSECTION_EMPTY),
-        ray_(nullptr),
-        scene_object_(nullptr) {}
-
-    Ray_3rSceneObject(const Ray_3r* ray, const ISceneObject* scene_object) :
-        ray_(ray),
-        scene_object_(scene_object) {
-
-    }
-
-    const Point_3r& intersection() const {
-        return *intersection_;
-    }
-    const Type type() const {
-        return type_;
-    }
-    const rational& time() const {
-        return time_;
-    }
-    SharedPoint_3r intersection_sptr() {
-        return intersection_;
-    }
-
-protected:
-    const Ray_3r* ray_;
-    const ISceneObject* scene_object_;
-
-    SharedPoint_3r intersection_;
-    Type type_;
-    rational time_;
-};
-
-}
-/*
-Ray_2rSegment_2r::Ray_2rSegment_2r() :
-    type_(INTERSECTION_EMPTY),
-    ray_(nullptr),
-    segment_(nullptr) {}
-
-Ray_2rSegment_2r::Ray_2rSegment_2r(const Ray_2r *ray,
-                                   const Segment_2r *segment) :
-    ray_(ray),
-    segment_(segment) {
-    Line_2rLine_2r isect_support(&segment->support(), &ray->support());
-    switch(isect_support.type()) {
-    case INTERSECTION_EMPTY:
-        type_ = INTERSECTION_EMPTY;
-        break;
-    case INTERSECTION_COINCIDENT:
-        type_ = INTERSECTION_COINCIDENT;
-        time_ = 0;
-        break;
-    case INTERSECTION_POINT:
-        if(isect_support.time() < 0) {
-            type_ = INTERSECTION_EMPTY;
-        } else {
-            auto pt = Dot(segment->support().V(), segment->p());
-            auto qt = Dot(segment->support().V(), segment->q());
-            auto it = Dot(segment->support().V(), isect_support.intersection());
-            if(it <= qt && it >= pt) {
-                type_ = INTERSECTION_POINT;
-                intersection_ = isect_support.intersection_sptr();
-                time_ = isect_support.time();
-            } else {
-                type_ = INTERSECTION_EMPTY;
-            }
-        }
-        break;
-    }
-    */
 
 //=============================================================================
 // Interface: ScenePolyline_2
@@ -214,6 +160,11 @@ public:
 
             last_vertex = vertex;
         }
+    }
+
+    Intersection::Ray_3rSceneObject intersect(const Ray_3r &ray) {
+        Intersection::Toleranced::Ray_3rPolyline_2r isect(&ray, &model_polyline_);
+        return Intersection::Ray_3rSceneObject(isect.type() == Intersection::Toleranced::Ray_3rPolyline_2r::INTERSECTION_EMPTY, isect.time());
     }
 
     void UpdateColor(const QColor &color) override {}
@@ -300,6 +251,10 @@ public:
         }
     }
 
+    Intersection::Ray_3rSceneObject intersect(const Ray_3r &ray) {
+        return Intersection::Ray_3rSceneObject();
+    }
+
     void UpdateColor(const QColor &color) override {}
 
     const QString& name() const override {
@@ -345,6 +300,10 @@ public:
         }
     }
 
+    Intersection::Ray_3rSceneObject intersect(const Ray_3r &ray) {
+        return Intersection::Ray_3rSceneObject();
+    }
+
     void UpdateColor(const QColor &color) override {}
 
     const QString& name() const override {
@@ -375,6 +334,11 @@ public:
 
     void Select() override {}
     void Deselect() override {}
+
+    Intersection::Ray_3rSceneObject intersect(const Ray_3r &ray) {
+        return Intersection::Ray_3rSceneObject();
+    }
+
     void UpdateColor(const QColor &color) override {}
     const QString& name() const override {
         return name_;

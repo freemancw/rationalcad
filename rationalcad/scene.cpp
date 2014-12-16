@@ -478,13 +478,22 @@ void SceneObserver::onSelectObject(const Ray_3r& selection_ray) {
     // TODO: currently using large constant, in future intersect with AABB
     rational closest_isect_time = 999999999;
     for (auto object : scene_objects_) {
-        Intersection::Ray_3rSceneObject isect(selection_ray, object->data);
-        if (isect.type() != Intersection::Ray_3rSceneObject::Type::INTERSECTION_EMPTY) {
+        auto isect = object->intersect(selection_ray);
+        if (!isect.empty()) {
             if (isect.time() < closest_isect_time) {
-                selection_object = object;
                 closest_isect_time = isect.time();
+                selected_object = object;
             }
         }
+    }
+
+    if (selected_object) {
+        LOG(DEBUG) << "selected object: " << selected_object->name().toStdString();
+
+        selected_object->Select();
+        selected_objects_.push_back(selected_object);
+    } else {
+        LOG(DEBUG) << "no object selected.";
     }
 }
 
@@ -500,8 +509,8 @@ void SceneObserver::onSelectObjectFromPerspective(const QVector3D& origin,
                                                   const QVector3D& dir) {
     LOG(DEBUG) << "onSelectObjectFromPerspective";
 
-    auto origin = std::make_shared<Point_3r>(origin.x(), origin.y(), origin.z());
-    onSelectObject(Ray_3r(origin, Vector_3r(dir.x(), dir.y(), dir.z())));
+    auto shared_origin = std::make_shared<Point_3r>(origin.x(), origin.y(), origin.z());
+    onSelectObject(Ray_3r(shared_origin, Vector_3r(dir.x(), dir.y(), dir.z())));
 }
 
 void SceneObserver::onDeselect() {
