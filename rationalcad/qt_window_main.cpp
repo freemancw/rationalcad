@@ -112,10 +112,10 @@ MainWindow::MainWindow(QWidget *parent) :
     qDebug() << "Creating scene manager.";
     scene_manager_ = new SceneManager(renderer_);
 
-    connect(this,
-            SIGNAL(CreateTerrainMesh(const QVector<QVector3D>&)),
-            &scene_manager_->scene_observer_,
-            SLOT(onCreateTerrainMesh(const QVector<QVector3D>&)));
+    connect(&scene_manager_->scene_observer_,
+            SIGNAL(UpdateContextSensitiveMenus(QString)),
+            this,
+            SLOT(onUpdateContextSensitiveMenus(QString)));
 
     // initialize widgets
     qDebug() << "Initializing ortho.";
@@ -287,4 +287,8 @@ void MainWindow::on_action_preferences_triggered() {
 
 void MainWindow::on_action_user_manual_triggered() {
     QDesktopServices::openUrl(QUrl("file:///C:/RationalCADUserManual.pdf"));
+}
+
+void MainWindow::onUpdateContextSensitiveMenus(const QString &selected_object_type) {
+    LOG(DEBUG) << selected_object_type.toStdString();
 }

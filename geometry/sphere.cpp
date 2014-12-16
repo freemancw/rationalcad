@@ -32,4 +32,4 @@ const rational& Sphere_3r::radius() const {
     return radius_;
 }
 
-}
+} // namespace RCAD

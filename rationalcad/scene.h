@@ -65,7 +65,10 @@ private:
 //=============================================================================
 
 enum class SceneObjectType {
-    POLYLINE_2
+    POLYLINE_2,
+    POINTSET_3,
+    POLYTOPE_3,
+    TERRAINMESH_3
 };
 
 namespace Intersection {
@@ -102,7 +105,7 @@ struct ISceneObject {
     virtual void UpdateColor(const QColor& color) = 0;
     virtual const QString& name() const = 0;
     virtual void set_name(const QString& name) = 0;
-    //virtual SceneObjectType scene_object_type() = 0;
+    virtual SceneObjectType scene_object_type() const = 0;
     virtual Intersection::Ray_3rSceneObject intersect(const Ray_3r& ray) = 0;
 };
 
@@ -173,6 +176,10 @@ public:
     }
 
     void UpdateColor(const QColor &color) override {}
+
+    SceneObjectType scene_object_type() const override {
+        return SceneObjectType::POLYLINE_2;
+    }
 
     const QString& name() const override {
         return name_;
@@ -262,6 +269,10 @@ public:
 
     void UpdateColor(const QColor &color) override {}
 
+    SceneObjectType scene_object_type() const override {
+        return SceneObjectType::POLYTOPE_3;
+    }
+
     const QString& name() const override {
         return name_;
     }
@@ -312,6 +323,10 @@ public:
 
     void UpdateColor(const QColor &color) override {}
 
+    SceneObjectType scene_object_type() const override {
+        return SceneObjectType::POINTSET_3;
+    }
+
     const QString& name() const override {
         return name_;
     }
@@ -346,6 +361,11 @@ public:
     }
 
     void UpdateColor(const QColor &color) override {}
+
+    SceneObjectType scene_object_type() const override {
+        return SceneObjectType::TERRAINMESH_3;
+    }
+
     const QString& name() const override {
         return name_;
     }
@@ -441,6 +461,8 @@ signals:
                             const quint32 lighting_idx,
                             const quint32 primtype_idx,
                             QVector<GL::Vertex> verts);
+
+    void UpdateContextSensitiveMenus(const QString& selected_obj_type);
 
 private:
     void GenerateVboPoints();

@@ -493,14 +493,31 @@ void SceneObserver::onSelectObject(const Ray_3r& selection_ray) {
         }
     }
 
+    QString selected_object_type = "";
+
     if (selected_object) {
         LOG(DEBUG) << "selected object: " << selected_object->name().toStdString();
 
         selected_object->Select();
         selected_objects_.push_back(selected_object);
+        switch (selected_object->scene_object_type()) {
+        case SceneObjectType::POLYLINE_2:
+            selected_object_type = "polyline_2";
+            break;
+        case SceneObjectType::POINTSET_3:
+            selected_object_type = "pointset_3";
+            break;
+        case SceneObjectType::POLYTOPE_3:
+            selected_object_type = "polytope_3";
+            break;
+        default:
+            break;
+        }
     } else {
         LOG(DEBUG) << "no object selected.";
     }
+
+    emit UpdateContextSensitiveMenus(selected_object_type);
 }
 
 void SceneObserver::onSelectObjectFromOrtho(const QVector2D& coords) {
