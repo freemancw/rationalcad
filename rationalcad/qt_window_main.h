@@ -79,6 +79,8 @@ private slots:
     void on_action_preferences_triggered();
     void on_action_user_manual_triggered();
 
+    void onUpdateContextSensitiveMenus(const QString& selected_object_type);
+
 private:
     void initializeLogging();
     void initializeConnections();

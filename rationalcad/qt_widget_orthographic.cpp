@@ -63,7 +63,7 @@ void OrthographicWidget::initialize(Renderer* renderer,
     connect(this,
             SIGNAL(SelectObject(QVector2D)),
             &scene_manager_->scene_observer_,
-            SLOT(onSelectObject(QVector2D)));
+            SLOT(onSelectObjectFromOrtho(QVector2D)));
 
     // polyline
     connect(this,
@@ -274,6 +274,9 @@ void OrthographicWidget::mousePressEvent(QMouseEvent *event) {
 
     if (event->buttons() & Qt::LeftButton) {
         switch (ConfigManager::get().input_state()) {
+        case InputState::SELECT:
+            emit SelectObject(world_coords);
+            break;
         case InputState::CREATE_POLYTOPE:
             /* need to save initial click position to determine where to begin
              * creating the polytope. there are two cases:

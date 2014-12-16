@@ -34,6 +34,7 @@
 #include "../geometry/line.h"
 #include "../geometry/visual.h"
 #include "../geometry/triangle.h"
+#include "../geometry/intersection.h"
 
 bool operator<(const QVector<uint32_t>& a, const QVector<uint32_t>& b);
 
@@ -63,10 +64,49 @@ private:
 // Interface: ISceneObject
 //=============================================================================
 
+enum class SceneObjectType {
+    POLYLINE_2,
+    POINTSET_3,
+    POLYTOPE_3,
+    TERRAINMESH_3
+};
+
+namespace Intersection {
+
+class Ray_3rSceneObject {
+public:
+    Ray_3rSceneObject() :
+        empty_(true),
+        time_(0) {}
+
+    Ray_3rSceneObject(bool empty, const rational& time) :
+        empty_(empty),
+        time_(time) {}
+
+
+    bool empty() const {
+        return empty_;
+    }
+    const rational& time() const {
+        return time_;
+    }
+
+private:
+    bool empty_;
+    rational time_;
+};
+
+}
+
 struct ISceneObject {
+    virtual ~ISceneObject() {}
     virtual void Select() = 0;
     virtual void Deselect() = 0;
     virtual void UpdateColor(const QColor& color) = 0;
+    virtual const QString& name() const = 0;
+    virtual void set_name(const QString& name) = 0;
+    virtual SceneObjectType scene_object_type() const = 0;
+    virtual Intersection::Ray_3rSceneObject intersect(const Ray_3r& ray) = 0;
 };
 
 //=============================================================================
@@ -79,19 +119,75 @@ public:
         model_polyline_.AddObserver(this);
     }
 
+    ~ScenePolyline_2() {
+        LOG(DEBUG) << "destroying scene polyline...";
+    }
+
     void Initialize(const QVector2D& start) {
-        LOG(INFO) << "initializing polyline.";
+        LOG(DEBUG) << "initializing polyline.";
+
         model_polyline_.push_back(Point_2r(start.x(), start.y()));
     }
 
     void Update(const QVector2D& cur) {
-        LOG(INFO) << "updating polyline.";
+        LOG(DEBUG) << "updating polyline.";
+
         model_polyline_.push_back(Point_2r(cur.x(), cur.y()));
     }
 
-    void Select() override {}
-    void Deselect() override {}
+    void Select() override {
+        LOG(DEBUG) << "selecting polyline.";
+
+        Visual::Material selected_mat;
+        selected_mat.set_ambient(Visual::Color::SKYBLUE);
+
+        SharedPoint_2r last_vertex;
+        for (auto vertex : model_polyline_.vertices()) {
+            SigPushVisualPoint_2r(*vertex, Visual::Point(selected_mat,
+                model_polyline_.z_order()));
+
+            if (last_vertex) {
+                SigPushVisualSegment_2r(Segment_2r(last_vertex, vertex),
+                                        Visual::Segment(selected_mat));
+            }
+
+            last_vertex = vertex;
+        }
+    }
+
+    void Deselect() override {
+        LOG(DEBUG) << "deselecting polyline.";
+
+        SharedPoint_2r last_vertex;
+        for (auto vertex : model_polyline_.vertices()) {
+            SigPopVisualPoint_2r(*vertex);
+
+            if (last_vertex) {
+                SigPopVisualSegment_2r(Segment_2r(last_vertex, vertex));
+            }
+
+            last_vertex = vertex;
+        }
+    }
+
+    Intersection::Ray_3rSceneObject intersect(const Ray_3r &ray) {
+        Intersection::Toleranced::Ray_3rPolyline_2r isect(&ray, &model_polyline_);
+        return Intersection::Ray_3rSceneObject(isect.type() == Intersection::Toleranced::Ray_3rPolyline_2r::INTERSECTION_EMPTY, isect.time());
+    }
+
     void UpdateColor(const QColor &color) override {}
+
+    SceneObjectType scene_object_type() const override {
+        return SceneObjectType::POLYLINE_2;
+    }
+
+    const QString& name() const override {
+        return name_;
+    }
+
+    void set_name(const QString &name) override {
+        name_ = name;
+    }
 
     const Polyline_2r& model_polyline() const {
         return model_polyline_;
@@ -99,6 +195,7 @@ public:
 
 private:
     Polyline_2r model_polyline_;
+    QString name_;
 };
 
 //=============================================================================
@@ -120,12 +217,72 @@ public:
         model_polytope_.Update(Point_3f(cur.x(), cur.y(), 8));
     }
 
-    void Select() override {}
-    void Deselect() override {}
+    void Select() override {
+        Visual::Material selected_mat;
+        selected_mat.set_ambient(Visual::Color::SKYBLUE);
+
+        QuadEdge::CellVertexIterator cellVerts(model_polytope_.cell());
+        QuadEdge::Vertex *v;
+        while ((v = cellVerts.next()) != 0) {
+            SigPushVisualPoint_3r(*v->pos, Visual::Point(selected_mat));
+        }
+
+        QuadEdge::CellFaceIterator cellFaces(model_polytope_.cell());
+        QuadEdge::Face *f;
+        while ((f = cellFaces.next()) != 0) {
+            QuadEdge::FaceEdgeIterator faceEdges(f);
+            QuadEdge::Edge *e;
+
+            while ((e = faceEdges.next()) != 0) {
+                if (e->Org() < e->Dest()) {
+                    SigPushVisualSegment_3r(Segment_3r(e->Org()->pos, e->Dest()->pos),
+                                            Visual::Segment(selected_mat));
+                }
+            }
+        }
+    }
+
+    void Deselect() override {
+        QuadEdge::CellVertexIterator cellVerts(model_polytope_.cell());
+        QuadEdge::Vertex *v;
+        while ((v = cellVerts.next()) != 0) {
+            SigPopVisualPoint_3r(*v->pos);
+        }
+
+        QuadEdge::CellFaceIterator cellFaces(model_polytope_.cell());
+        QuadEdge::Face *f;
+        while ((f = cellFaces.next()) != 0) {
+            QuadEdge::FaceEdgeIterator faceEdges(f);
+            QuadEdge::Edge *e;
+
+            while ((e = faceEdges.next()) != 0) {
+                if (e->Org() < e->Dest()) {
+                    SigPopVisualSegment_3r(Segment_3r(e->Org()->pos, e->Dest()->pos));
+                }
+            }
+        }
+    }
+
+    Intersection::Ray_3rSceneObject intersect(const Ray_3r &ray) {
+        return Intersection::Ray_3rSceneObject();
+    }
+
     void UpdateColor(const QColor &color) override {}
+
+    SceneObjectType scene_object_type() const override {
+        return SceneObjectType::POLYTOPE_3;
+    }
+
+    const QString& name() const override {
+        return name_;
+    }
+    void set_name(const QString &name) override {
+        name_ = name;
+    }
 
 private:
     Polytope_3r model_polytope_;
+    QString name_;
 };
 
 //=============================================================================
@@ -144,12 +301,42 @@ public:
         }
     }
 
-    void Select() override {}
-    void Deselect() override {}
+    void Select() override {
+        Visual::Material selected_mat;
+        selected_mat.set_ambient(Visual::Color::SKYBLUE);
+
+        for (auto point : model_point_set_.points()) {
+            SigPushVisualPoint_3r(*point, Visual::Point(selected_mat));
+        }
+    }
+
+    void Deselect() override {
+        for (auto point : model_point_set_.points()) {
+            SigPopVisualPoint_3r(*point);
+        }
+    }
+
+    Intersection::Ray_3rSceneObject intersect(const Ray_3r &ray) {
+        Intersection::Toleranced::Ray_3rPointSet_3r isect(&ray, &model_point_set_);
+        return Intersection::Ray_3rSceneObject(isect.type() == Intersection::Toleranced::Ray_3rPointSet_3r::INTERSECTION_EMPTY, isect.time());
+    }
+
     void UpdateColor(const QColor &color) override {}
+
+    SceneObjectType scene_object_type() const override {
+        return SceneObjectType::POINTSET_3;
+    }
+
+    const QString& name() const override {
+        return name_;
+    }
+    void set_name(const QString &name) override {
+        name_ = name;
+    }
 
 private:
     PointSet_3r model_point_set_;
+    QString name_;
 };
 
 //=============================================================================
@@ -168,10 +355,27 @@ public:
 
     void Select() override {}
     void Deselect() override {}
+
+    Intersection::Ray_3rSceneObject intersect(const Ray_3r &ray) {
+        return Intersection::Ray_3rSceneObject();
+    }
+
     void UpdateColor(const QColor &color) override {}
+
+    SceneObjectType scene_object_type() const override {
+        return SceneObjectType::TERRAINMESH_3;
+    }
+
+    const QString& name() const override {
+        return name_;
+    }
+    void set_name(const QString &name) override {
+        name_ = name;
+    }
 
 private:
     TerrainMesh_3r model_terrain_mesh_;
+    QString name_;
 };
 
 //=============================================================================
@@ -247,7 +451,9 @@ public slots:
     void onUpdateSelectedObjectName(const QString& name);
     void onUpdateSelectedObjectColor(const QColor& color);
     void onDeleteSelectedObject();
-    void onSelectObject(const QVector2D& coords);
+    void onSelectObjectFromOrtho(const QVector2D& coords);
+    void onSelectObjectFromPerspective(const QVector3D& origin,
+                                       const QVector3D& dir);
     void onDeselect();
 
 signals:
@@ -256,10 +462,14 @@ signals:
                             const quint32 primtype_idx,
                             QVector<GL::Vertex> verts);
 
+    void UpdateContextSensitiveMenus(const QString& selected_obj_type);
+
 private:
     void GenerateVboPoints();
     void GenerateVboLines();
     void GenerateVboTriangles();
+
+    void onSelectObject(const Ray_3r& selection_ray);
 
     bool ObjectIsSelected() const;
     ISceneObject* SelectedObject();
@@ -269,7 +479,8 @@ private:
     SceneTerrainMesh_3* SelectedTerrainMesh_3();
 
     QHash<QString, QSharedPointer<ISceneObject>> scene_objects_;
-    QString selected_name_;
+    QVector<QSharedPointer<ISceneObject>> selected_objects_;
+
     quint32 cur_point_uid_;
     QHash<uint32_t, QSharedPointer<ApproxPoint_3f>> approx_points_;
     QHash<uint32_t, QStack<Visual::Point>> viz_points_;

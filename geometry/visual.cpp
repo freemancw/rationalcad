@@ -104,6 +104,11 @@ void Geometry::AddObserver(IGeometryObserver* geom_observer) {
     observers_.push_back(geom_observer);
 }
 
+void Geometry::RemoveObserver(IGeometryObserver* geom_observer) {
+    observers_.erase(std::remove(begin(observers_), end(observers_),
+        geom_observer), end(observers_));
+}
+
 void Geometry::SigRegisterPoint_2r(Point_2r &p) {
     for(auto i = begin(observers_); i != end(observers_); ++i) {
         (*i)->SlotRegisterPoint_2r(p);
@@ -224,6 +229,7 @@ const Color Color::WHITE = Color(255, 255, 255, 255);
 const Color Color::CYAN = Color(0, 255, 255, 255);
 const Color Color::YELLOW = Color(255, 255, 0, 255);
 const Color Color::MAGENTA = Color(255, 0, 255, 255);
+const Color Color::SKYBLUE = Color(0, 151, 255, 255);
 
 Color::Color() {
     rgba_.assign(0);

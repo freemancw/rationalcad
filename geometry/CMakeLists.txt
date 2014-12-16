@@ -9,6 +9,7 @@ add_library(geometry
     polygon.cpp
     polytope.cpp
     quadedge.cpp
+    sphere.cpp
     triangle.cpp
     triangulation.cpp
     vector.h

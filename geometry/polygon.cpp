@@ -146,7 +146,13 @@ Polygon_2r::Polygon_2r() :
 }
 
 Polygon_2r::~Polygon_2r() {
-
+    LOG(DEBUG) << "destroying polygon_2r...";
+    // this may not be necessary. basically if you make a copy of the polygon,
+    // this will get called twice and blow up
+    boundary_.RemoveObserver(this);
+    for (auto observer : observers_) {
+        boundary_.AddObserver(observer);
+    }
 }
 
 void Polygon_2r::push_back(const Point_2r& v) {
@@ -236,7 +242,18 @@ Polyline_2r::Polyline_2r() :
     z_order_(0) {}
 
 Polyline_2r::~Polyline_2r() {
+    LOG(DEBUG) << "destroying polyline...";
 
+    SharedPoint_2r last_vertex;
+    for (auto vertex : vertices_) {
+        SigPopVisualPoint_2r(*vertex);
+
+        if (last_vertex) {
+            SigPopVisualSegment_2r(Segment_2r(last_vertex, vertex));
+        }
+
+        last_vertex = vertex;
+    }
 }
 
 void Polyline_2r::Close() {
@@ -269,7 +286,7 @@ void Polyline_2r::push_back(SharedPoint_2r v) {
 
     if (vertices_.size() > 1) {
         SigPushVisualSegment_2r(Segment_2r(back(1), back(0)),
-                                Visual::Segment(mat_edge_), 1000);
+                                Visual::Segment(mat_edge_));
     }
 }
 

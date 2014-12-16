@@ -47,6 +47,11 @@ void PerspectiveWidget::initialize(Renderer* renderer,
     renderer_ = renderer;
     scene_manager_ = scene_manager;
     setAutoFillBackground(false);
+
+    connect(this,
+            SIGNAL(SelectObject(QVector3D, QVector3D)),
+            &scene_manager_->scene_observer_,
+            SLOT(onSelectObjectFromPerspective(QVector3D, QVector3D)));
 }
 
 void PerspectiveWidget::initializeGL() {
@@ -225,6 +230,23 @@ void PerspectiveWidget::timerEvent(QTimerEvent *event) {
 void PerspectiveWidget::mousePressEvent(QMouseEvent *event) {
     if (event->button() & Qt::RightButton) {
         camera_active_ = !camera_active_;
+    }
+
+    float sinx = sin(camera_rot_.x()*pi180);
+    float cosx = cos(camera_rot_.x()*pi180);
+    float sinz = sin(-camera_rot_.z()*pi180);
+    float cosz = cos(-camera_rot_.z()*pi180);
+    QVector3D forward(sinz*cosx, -cosz*cosx, sinx);
+    forward.normalize();
+
+    if (event->button() & Qt::LeftButton) {
+        switch (ConfigManager::get().input_state()) {
+        case InputState::SELECT:
+            emit SelectObject(camera_pos_, forward);
+            break;
+        default:
+            break;
+        }
     }
 
     if (camera_active_) {

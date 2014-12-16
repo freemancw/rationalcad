@@ -40,7 +40,13 @@ Point_2f ToPoint_2f(const QVector2D& v, bool snap = false);
 SceneObserver::SceneObserver() :
     cur_point_uid_(1) {}
 
-SceneObserver::~SceneObserver() {}
+SceneObserver::~SceneObserver() {
+    for (auto object : selected_objects_) {
+        object->Deselect();
+    }
+    selected_objects_.clear();
+    scene_objects_.clear();
+}
 
 void SceneObserver::GenerateVboPoints() {
     QVector<GL::Vertex> points;
@@ -291,13 +297,17 @@ void SceneObserver::SlotUpdate() {
 //=============================================================================
 
 void SceneObserver::onBeginCreatePolyline(const QVector2D& v) {
+    LOG(DEBUG) << "onBeginCreatePolyline";
 
     onDeselect();
 
     static int numPolylines = 0;
-    selected_name_ = QString("polyline2_%1").arg(numPolylines++);
-    scene_objects_.insert(selected_name_,
-                          QSharedPointer<ISceneObject>(new ScenePolyline_2()));
+
+    auto name = QString("polyline2_%1").arg(numPolylines++);
+    auto polyline = QSharedPointer<ISceneObject>(new ScenePolyline_2());
+    polyline->set_name(name);
+    scene_objects_.insert(name, polyline);
+    selected_objects_.push_back(polyline);
     SelectedPolyline_2()->AddObserver(this);
     SelectedPolyline_2()->Initialize(v);
     ConfigManager::get().set_input_state(InputState::UPDATE_POLYLINE);
@@ -308,11 +318,12 @@ void SceneObserver::onUpdateNewPolyline(const QVector2D& v) {
 }
 
 void SceneObserver::onEndCreatePolyline() {
+    SelectedPolyline_2()->Select();
     ConfigManager::get().set_input_state(InputState::CREATE_POLYLINE);
-    //RCAD::Melkman(SelectedPolyline_2()->model_polyline(), this);
 }
 
 void SceneObserver::onExecuteMelkman() {
+    // TODO: capture resulting polygon to create scene object
     RCAD::Melkman(SelectedPolyline_2()->model_polyline(), this);
 }
 
@@ -322,27 +333,26 @@ void SceneObserver::onExecuteMelkman() {
 
 void SceneObserver::onBeginCreatePolytope(const QVector2D& start,
                                           const QVector2D& cur) {
-    //qDebug() << "SceneObserver BeginCreatePolytope " << start << ", " << cur;
+    LOG(DEBUG) << "onBeginCreatePolytope";
 
     onDeselect();
 
     static int numPolytopes = 0;
-    selected_name_ = QString("polytope3_%1").arg(numPolytopes++);
-    scene_objects_.insert(selected_name_,
-                          QSharedPointer<ISceneObject>(new ScenePolytope_3()));
+    auto name = QString("polytope3_%1").arg(numPolytopes++);
+    auto polytope = QSharedPointer<ISceneObject>(new ScenePolytope_3());
+    polytope->set_name(name);
+    scene_objects_.insert(name, polytope);
+    selected_objects_.push_back(polytope);
     SelectedPolytope_3()->AddObserver(this);
     SelectedPolytope_3()->Initialize(start, cur);
 }
 
 void SceneObserver::onUpdateNewPolytope(const QVector2D& cur) {
-    //qDebug() << "SceneObserver UpdateNewPolytope " << cur;
     SelectedPolytope_3()->Update(cur);
 }
 
 void SceneObserver::onEndCreatePolytope() {
-    //qDebug() << "SceneObserver EndCreatePolytope";
-    //ConfigManager::get().set_input_state(CREATE_POLYTOPE);
-    //SelectedPolytope_3()->Update();
+    SelectedPolytope_3()->Select();
 }
 
 //=============================================================================
@@ -350,16 +360,22 @@ void SceneObserver::onEndCreatePolytope() {
 //=============================================================================
 
 void SceneObserver::onCreatePointSet(const QVector<QVector3D>& data) {
-    LOG(INFO) << "onCreatePointSet";
+    LOG(DEBUG) << "onCreatePointSet";
 
     onDeselect();
 
     static int numPointSets = 0;
-    selected_name_ = QString("pointset3_%1").arg(numPointSets++);
-    scene_objects_.insert(selected_name_,
-                          QSharedPointer<ISceneObject>(new ScenePointSet_3()));
+    auto name = QString("pointset3_%1").arg(numPointSets++);
+    auto pointset = QSharedPointer<ISceneObject>(new ScenePointSet_3());
+    pointset->set_name(name);
+    scene_objects_.insert(name, pointset);
+    selected_objects_.push_back(pointset);
     SelectedPointSet_3()->AddObserver(this);
     SelectedPointSet_3()->Initialize(data);
+
+    // TODO: should probably have "onEndCreatePointSet" to match others
+    // for now just doing select call here
+    SelectedPointSet_3()->Select();
 }
 
 //=============================================================================
@@ -368,6 +384,7 @@ void SceneObserver::onCreatePointSet(const QVector<QVector3D>& data) {
 
 void SceneObserver::onCreateTerrainMesh(const QVector<QVector3D>& data) {
 
+    /*
     onDeselect();
 
     std::vector<Point_3f> points;
@@ -384,6 +401,7 @@ void SceneObserver::onCreateTerrainMesh(const QVector<QVector3D>& data) {
                           QSharedPointer<ISceneObject>(new SceneTerrainMesh_3()));
     SelectedTerrainMesh_3()->AddObserver(this);
     SelectedTerrainMesh_3()->Initialize(points);
+    */
 }
 
 /*
@@ -404,44 +422,125 @@ void SceneObserver::onEndCreatePolytope() {
 //=============================================================================
 
 void SceneObserver::onUpdateSelectedObjectName(const QString &name) {
+    /*
     if (!ObjectIsSelected()) {
         return;
     }
 
     QSharedPointer<ISceneObject> obj_ptr(SelectedObject());
     //scene_objects_.remove(selected_name_);
-    selected_name_ = name;
+    //selected_name_ = name;
     //scene_objects_.insert(selected_name_, obj_ptr);
+    */
 }
 
 void SceneObserver::onUpdateSelectedObjectColor(const QColor &color) {
+    /*
     if (!ObjectIsSelected()) {
         return;
     }
 
     SelectedObject()->UpdateColor(color);
+    */
 }
 
+// TODO: rename to deleteSelectedObjects
 void SceneObserver::onDeleteSelectedObject() {
-    if (!ObjectIsSelected()) {
-        return;
+    LOG(DEBUG) << "onDeleteSelectedObject";
+
+    for (auto object : selected_objects_) {
+        object->Deselect();
+        LOG(DEBUG) << "removed " << scene_objects_.remove(object->name()) << " objects...";
+    }
+    selected_objects_.clear();
+}
+
+/*
+ * Selection has a variety of issues to address:
+ * - when we are clicking in the ortho view, conceptually we are shooting a
+ *   ray from infinity down to the XY plane (or other axis-aligned planes if
+ *   we generalize it in the future.) This is tricky to represent using only
+ *   the Ray_3r class.
+ * - when we are clicking in the perspective view, conceptually we are shooting
+ *   a ray from the camera toward the view direction. This is straightforward
+ *   to represent as a simple Ray_3r.
+ * - while it would be nice to use the same function with a single input type,
+ *   it makes more sense to just separate the two and handle the orthographic
+ *   selection ray in a "reasonable" fashion. for example, we could take as
+ *   input the xy world coords of the ortho click. we can compute a ray as follows.
+ *   we know the direction is (0, 0, -1). we can set the ray origin as the (x, y)
+ *   coords with z equal to the "top" of the AABB of the scene. then we can
+ *   forward this newly constructed ray to the same function we use for the
+ *   perspective view.
+ *
+ * TODO: rationals are overkill for selection
+ */
+void SceneObserver::onSelectObject(const Ray_3r& selection_ray) {
+    LOG(DEBUG) << "onSelectObject";
+
+    onDeselect();
+
+    QSharedPointer<ISceneObject> selected_object;
+    // TODO: currently using large constant, in future intersect with AABB
+    rational closest_isect_time = 999999999;
+    for (auto object : scene_objects_) {
+        auto isect = object->intersect(selection_ray);
+        if (!isect.empty()) {
+            if (isect.time() < closest_isect_time) {
+                closest_isect_time = isect.time();
+                selected_object = object;
+            }
+        }
     }
 
-    //scene_objects_.remove(selected_name_);
-    //selected_name_ = "";
+    QString selected_object_type = "";
+
+    if (selected_object) {
+        LOG(DEBUG) << "selected object: " << selected_object->name().toStdString();
+
+        selected_object->Select();
+        selected_objects_.push_back(selected_object);
+        switch (selected_object->scene_object_type()) {
+        case SceneObjectType::POLYLINE_2:
+            selected_object_type = "polyline_2";
+            break;
+        case SceneObjectType::POINTSET_3:
+            selected_object_type = "pointset_3";
+            break;
+        case SceneObjectType::POLYTOPE_3:
+            selected_object_type = "polytope_3";
+            break;
+        default:
+            break;
+        }
+    } else {
+        LOG(DEBUG) << "no object selected.";
+    }
+
+    emit UpdateContextSensitiveMenus(selected_object_type);
 }
 
-void SceneObserver::onSelectObject(const QVector2D& coords) {
-    onDeselect();
+void SceneObserver::onSelectObjectFromOrtho(const QVector2D& coords) {
+    LOG(DEBUG) << "onSelectObjectFromOrtho";
+
+    // TODO: currently using large constant, in future compute AABB of scene
+    auto origin = std::make_shared<Point_3r>(coords.x(), coords.y(), 4096);
+    onSelectObject(Ray_3r(origin, Vector_3r(0, 0, -1)));
+}
+
+void SceneObserver::onSelectObjectFromPerspective(const QVector3D& origin,
+                                                  const QVector3D& dir) {
+    LOG(DEBUG) << "onSelectObjectFromPerspective";
+
+    auto shared_origin = std::make_shared<Point_3r>(origin.x(), origin.y(), origin.z());
+    onSelectObject(Ray_3r(shared_origin, Vector_3r(dir.x(), dir.y(), dir.z())));
 }
 
 void SceneObserver::onDeselect() {
-    if (!ObjectIsSelected()) {
-        return;
+    for (auto object : selected_objects_) {
+        object->Deselect();
     }
-
-    SelectedObject()->Deselect();
-    selected_name_ = "";
+    selected_objects_.clear();
 }
 
 int SceneObserver::NumObjects() const {
@@ -449,7 +548,8 @@ int SceneObserver::NumObjects() const {
 }
 
 ISceneObject* SceneObserver::SelectedObject() {
-    return scene_objects_.value(selected_name_).data();
+    assert(selected_objects_.size() == 1);
+    return selected_objects_.at(0).data();
 }
 
 ScenePointSet_3 *SceneObserver::SelectedPointSet_3() {
@@ -469,11 +569,7 @@ SceneTerrainMesh_3* SceneObserver::SelectedTerrainMesh_3() {
 }
 
 bool SceneObserver::ObjectIsSelected() const {
-    return selected_name_ != "";
-}
-
-const QString& SceneObserver::selected_name() const {
-    return selected_name_;
+    return true;
 }
 
 //=============================================================================

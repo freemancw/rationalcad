@@ -49,6 +49,9 @@ public:
     void initialize(RCAD::Renderer* renderer,
                     RCAD::SceneManager* scene_manager);
 
+signals:
+    void SelectObject(const QVector3D& origin, const QVector3D& dir);
+
 protected:
     void initializeGL();
     void resizeGL(int width, int height);

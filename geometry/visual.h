@@ -39,6 +39,7 @@ public:
     static const Color CYAN;
     static const Color YELLOW;
     static const Color MAGENTA;
+    static const Color SKYBLUE;
 
     Color();
     Color(const unsigned char r, const unsigned char g,
@@ -219,6 +220,7 @@ struct IGeometryObserver {
 
 struct IObservableGeometry {
     virtual void AddObserver(IGeometryObserver* geom_observer) = 0;
+    virtual void RemoveObserver(IGeometryObserver* geom_observer) = 0;
 
     virtual void SigRegisterPoint_2r(Point_2r& p) = 0;
 
@@ -328,6 +330,7 @@ public:
     /* Observable */
 
     void AddObserver(IGeometryObserver* geom_observer) override;
+    void RemoveObserver(IGeometryObserver* geom_observer) override;
 
     void SigRegisterPoint_2r(Point_2r& p) override;
 
@@ -372,7 +375,7 @@ public:
 
     void SigUpdate() const override;
 
-private:
+protected:
     std::vector<IGeometryObserver*> observers_;
 };
 

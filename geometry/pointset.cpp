@@ -27,7 +27,9 @@ PointSet_3r::PointSet_3r() {
 }
 
 PointSet_3r::~PointSet_3r() {
-
+    for (auto point : points_) {
+        SigPopVisualPoint_3r(*point);
+    }
 }
 
 void PointSet_3r::add(const Point_3r &p) {

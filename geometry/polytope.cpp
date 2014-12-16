@@ -77,7 +77,7 @@ void Polytope_3r::Initialize(const Point_3f& start, const Point_3f& cur) {
 
     // register vertices
     Visual::Material vMat;
-    vMat.set_ambient(Visual::Color(0, 151, 255, 255));
+    vMat.set_ambient(Visual::Color::BLACK);
     Visual::Point vPoint(vMat);
 
     QuadEdge::CellVertexIterator cellVerts(cell_);
@@ -116,11 +116,11 @@ void Polytope_3r::Initialize(const Point_3f& start, const Point_3f& cur) {
 
     // register faces
     Visual::Material eMat;
-    eMat.set_ambient(Visual::Color(0, 151, 255, 255));
+    eMat.set_ambient(Visual::Color::BLACK);
     Visual::Segment vSegment(eMat);
 
     Visual::Material fMat;
-    fMat.set_ambient(Visual::Color(0, 151, 255, 255));
+    fMat.set_ambient(Visual::Color(175, 175, 175, 255));
     Visual::Triangle vTriangle(fMat);
 
     QuadEdge::CellFaceIterator cellFaces(cell_);
