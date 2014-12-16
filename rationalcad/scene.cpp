@@ -40,7 +40,13 @@ Point_2f ToPoint_2f(const QVector2D& v, bool snap = false);
 SceneObserver::SceneObserver() :
     cur_point_uid_(1) {}
 
-SceneObserver::~SceneObserver() {}
+SceneObserver::~SceneObserver() {
+    for (auto object : selected_objects_) {
+        object->Deselect();
+    }
+    selected_objects_.clear();
+    scene_objects_.clear();
+}
 
 void SceneObserver::GenerateVboPoints() {
     QVector<GL::Vertex> points;
