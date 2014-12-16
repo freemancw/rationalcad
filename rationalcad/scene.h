@@ -96,6 +96,7 @@ private:
 }
 
 struct ISceneObject {
+    virtual ~ISceneObject() {}
     virtual void Select() = 0;
     virtual void Deselect() = 0;
     virtual void UpdateColor(const QColor& color) = 0;
@@ -113,6 +114,10 @@ class ScenePolyline_2 : public ISceneObject, public Visual::Geometry {
 public:
     ScenePolyline_2() {
         model_polyline_.AddObserver(this);
+    }
+
+    ~ScenePolyline_2() {
+        LOG(DEBUG) << "destroying scene polyline...";
     }
 
     void Initialize(const QVector2D& start) {

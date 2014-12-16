@@ -444,7 +444,7 @@ void SceneObserver::onDeleteSelectedObject() {
 
     for (auto object : selected_objects_) {
         object->Deselect();
-        scene_objects_.remove(object->name());
+        LOG(DEBUG) << "removed " << scene_objects_.remove(object->name()) << " objects...";
     }
     selected_objects_.clear();
 }

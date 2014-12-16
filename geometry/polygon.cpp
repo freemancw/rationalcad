@@ -236,7 +236,18 @@ Polyline_2r::Polyline_2r() :
     z_order_(0) {}
 
 Polyline_2r::~Polyline_2r() {
+    LOG(DEBUG) << "destroying polyline...";
 
+    SharedPoint_2r last_vertex;
+    for (auto vertex : vertices_) {
+        SigPopVisualPoint_2r(*vertex);
+
+        if (last_vertex) {
+            SigPopVisualSegment_2r(Segment_2r(last_vertex, vertex));
+        }
+
+        last_vertex = vertex;
+    }
 }
 
 void Polyline_2r::Close() {
