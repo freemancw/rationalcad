@@ -306,7 +306,8 @@ public:
     }
 
     Intersection::Ray_3rSceneObject intersect(const Ray_3r &ray) {
-        return Intersection::Ray_3rSceneObject();
+        Intersection::Toleranced::Ray_3rPointSet_3r isect(&ray, &model_point_set_);
+        return Intersection::Ray_3rSceneObject(isect.type() == Intersection::Toleranced::Ray_3rPointSet_3r::INTERSECTION_EMPTY, isect.time());
     }
 
     void UpdateColor(const QColor &color) override {}

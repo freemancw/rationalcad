@@ -104,6 +104,11 @@ void Geometry::AddObserver(IGeometryObserver* geom_observer) {
     observers_.push_back(geom_observer);
 }
 
+void Geometry::RemoveObserver(IGeometryObserver* geom_observer) {
+    observers_.erase(std::remove(begin(observers_), end(observers_),
+        geom_observer), end(observers_));
+}
+
 void Geometry::SigRegisterPoint_2r(Point_2r &p) {
     for(auto i = begin(observers_); i != end(observers_); ++i) {
         (*i)->SlotRegisterPoint_2r(p);
