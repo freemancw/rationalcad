@@ -1,34 +1,36 @@
 /*
- * This file is part of RationalCAD.
+ * This file is part of DDAD.
  *
- * RationalCAD is free software: you can redistribute it and/or modify it under
+ * DDAD is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
  * any later version.
  *
- * RationalCAD is distributed in the hope that it will be useful, but WITHOUT
+ * DDAD is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
  * more details. You should have received a copy of the GNU General Public
- * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
+ * License along with DDAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef RC_CONFIG_H
-#define RC_CONFIG_H
+#ifndef WB_CONFIG_H
+#define WB_CONFIG_H
 
-// RationalCAD
+// DDAD
 #include "common.h"
 
-namespace RCAD {
+namespace DDAD {
 
 enum class InputState {
     SELECT,
     TRANSLATE,
     ROTATE,
-    CREATE_POLYTOPE,
-    UPDATE_POLYTOPE,
+    CREATE_POINTSET,
+    UPDATE_POINTSET,
     CREATE_POLYLINE,
-    UPDATE_POLYLINE
+    UPDATE_POLYLINE,
+    CREATE_POLYTOPE,
+    UPDATE_POLYTOPE
 };
 
 class ConfigManager {
@@ -61,6 +63,6 @@ private:
     QColor grid_major_color_;
 };
 
-} // namespace RCAD
+} // namespace DDAD
 
-#endif // RC_CONFIG_H
+#endif // WB_CONFIG_H

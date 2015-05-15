@@ -1,29 +1,29 @@
 /*
- * This file is part of RationalCAD.
+ * This file is part of DDAD.
  *
- * RationalCAD is free software: you can redistribute it and/or modify it under
+ * DDAD is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
  * any later version.
  *
- * RationalCAD is distributed in the hope that it will be useful, but WITHOUT
+ * DDAD is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
  * more details. You should have received a copy of the GNU General Public
- * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
+ * License along with DDAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /*!
  * @brief Main window responsible for forwarding widget input.
  */
 
-#ifndef RC_QT_WINDOW_MAIN_H
-#define RC_QT_WINDOW_MAIN_H
+#ifndef WB_QT_WINDOW_MAIN_H
+#define WB_QT_WINDOW_MAIN_H
 
 // Qt
 #include <QMainWindow>
 
-// RationalCAD
+// DDAD
 #include "common.h"
 #include "scene.h"
 #include "logger.h"
@@ -79,7 +79,8 @@ private slots:
     void on_action_preferences_triggered();
     void on_action_user_manual_triggered();
 
-    void onUpdateContextSensitiveMenus(const QString& selected_object_type);
+    void onUpdateContextSensitiveMenus(const QString& selected_object_type,
+                                       const QString& selected_object_name);
 
 private:
     void initializeLogging();
@@ -87,6 +88,10 @@ private:
 
     void uncheckCreateButtons();
     void uncheckInputModeButtons();
+
+    //void resetToDefaultCreationMode();
+    //void addDefaultPointSetCreationMode();
+
 
     QActionGroup *toolbar_buttons_;
     QAction* select_button_;
@@ -96,10 +101,10 @@ private:
 
     Ui::MainWindow *ui;
 
-    RCAD::Renderer* renderer_;
-    RCAD::SceneManager* scene_manager_;
+    DDAD::Renderer* renderer_;
+    DDAD::SceneManager* scene_manager_;
 
     QColor create_object_color_;
 };
 
-#endif // RC_QT_WINDOW_MAIN_H
+#endif // WB_QT_WINDOW_MAIN_H

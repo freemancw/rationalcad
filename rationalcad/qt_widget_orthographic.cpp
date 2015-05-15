@@ -1,19 +1,19 @@
 /*
- * This file is part of RationalCAD.
+ * This file is part of DDAD.
  *
- * RationalCAD is free software: you can redistribute it and/or modify it under
+ * DDAD is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
  * any later version.
  *
- * RationalCAD is distributed in the hope that it will be useful, but WITHOUT
+ * DDAD is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
  * more details. You should have received a copy of the GNU General Public
- * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
+ * License along with DDAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// RationalCAD
+// DDAD
 #include "common.h"
 #include "qt_window_main.h"
 #include "qt_widget_orthographic.h"
@@ -24,8 +24,8 @@
 #include "../geometry/point.h"
 #include "../geometry/vector.h"
 
-using namespace RCAD;
-using namespace RCAD::Visual;
+using namespace DDAD;
+using namespace DDAD::Visual;
 
 const int OrthographicWidget::kRedrawMsec = 16;
 const int OrthographicWidget::kMinHintWidth = 64;
@@ -56,14 +56,31 @@ void OrthographicWidget::initialize(Renderer* renderer,
     setAutoFillBackground(false);
     setContextMenuPolicy(Qt::CustomContextMenu);
 
+    /*
     connect(this,
             SIGNAL(customContextMenuRequested(const QPoint&)),
             this,
             SLOT(ShowContextMenu(const QPoint&)));
+            */
+
     connect(this,
             SIGNAL(SelectObject(QVector2D)),
             &scene_manager_->scene_observer_,
             SLOT(onSelectObjectFromOrtho(QVector2D)));
+
+    // pointset
+    connect(this,
+            SIGNAL(BeginCreatePointSet(QVector2D)),
+            &scene_manager_->scene_observer_,
+            SLOT(onBeginCreatePointSet(QVector2D)));
+    connect(this,
+            SIGNAL(UpdateNewPointSet(QVector2D)),
+            &scene_manager_->scene_observer_,
+            SLOT(onUpdateNewPointSet(QVector2D)));
+    connect(this,
+            SIGNAL(EndCreatePointSet()),
+            &scene_manager_->scene_observer_,
+            SLOT(onEndCreatePointSet()));
 
     // polyline
     connect(this,
@@ -297,6 +314,12 @@ void OrthographicWidget::mousePressEvent(QMouseEvent *event) {
             create_polytope_pos = event->pos();
 
             break;
+        case InputState::CREATE_POINTSET:
+            emit BeginCreatePointSet(input_world_coords);
+            break;
+        case InputState::UPDATE_POINTSET:
+            emit UpdateNewPointSet(input_world_coords);
+            break;
         case InputState::CREATE_POLYLINE:
             emit BeginCreatePolyline(input_world_coords);
             break;
@@ -327,6 +350,9 @@ void OrthographicWidget::mousePressEvent(QMouseEvent *event) {
         switch (ConfigManager::get().input_state()) {
         case InputState::UPDATE_POLYLINE:
             emit EndCreatePolyline();
+            break;
+        case InputState::UPDATE_POINTSET:
+            emit EndCreatePointSet();
             break;
         default:
             /*

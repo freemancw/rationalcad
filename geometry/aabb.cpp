@@ -13,23 +13,37 @@
  * License along with DDAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "sphere.h"
+#include "common.h"
+#include "aabb.h"
 
 namespace DDAD {
 
-Sphere_3r::Sphere_3r() :
-    center_(0, 0, 0),
-    radius_(0) {}
+AABB_2r::AABB_2r() {}
 
-Sphere_3r::Sphere_3r(const Point_3r &center, const rational &radius) :
-    center_(center),
-    radius_(radius) {}
+AABB_2r::AABB_2r(const PointSet_3r &pointset) {
+    rational minx, miny, maxx, maxy;
+    minx = maxx = pointset.points()[0]->x();
+    miny = maxy = pointset.points()[0]->y();
 
-const Point_3r& Sphere_3r::center() const {
-    return center_;
+    for (auto point : pointset.points()) {
+        minx = std::min(point->x(), minx);
+        miny = std::min(point->y(), miny);
+        maxx = std::max(point->x(), maxx);
+        maxy = std::max(point->y(), maxy);
+    }
+
+    min_.set_x(minx);
+    min_.set_y(miny);
+    max_.set_x(maxx);
+    max_.set_y(maxy);
 }
-const rational& Sphere_3r::radius() const {
-    return radius_;
+
+const Point_2r& AABB_2r::min() const {
+    return min_;
+}
+
+const Point_2r& AABB_2r::max() const {
+    return max_;
 }
 
 } // namespace DDAD

@@ -1,16 +1,16 @@
 /*
- * This file is part of RationalCAD.
+ * This file is part of DDAD.
  *
- * RationalCAD is free software: you can redistribute it and/or modify it under
+ * DDAD is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
  * any later version.
  *
- * RationalCAD is distributed in the hope that it will be useful, but WITHOUT
+ * DDAD is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
  * more details. You should have received a copy of the GNU General Public
- * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
+ * License along with DDAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /*!
@@ -26,7 +26,7 @@
 #include "line.h"
 #include "triangle.h"
 
-namespace RCAD {
+namespace DDAD {
 
 //=============================================================================
 // Interface: Polyline_2r
@@ -35,6 +35,7 @@ namespace RCAD {
 class Polyline_2r : public Visual::Geometry {
 public:
     Polyline_2r();
+    Polyline_2r(const Polyline_2r& copy);
     ~Polyline_2r();
 
     void Close();
@@ -56,10 +57,12 @@ public:
 
     const std::deque<SharedPoint_2r>& vertices() const;
     const int32_t z_order() const { return z_order_; }
+    const Visual::Material& mat_vertex() const { return mat_vertex_; }
+    const Visual::Material& mat_edge() const { return mat_vertex_; }
     void set_vertices(const std::deque<SharedPoint_2r>& vertices);
     const bool closed() const;
-    void set_mat_vertex(const Visual::Material mat_vertex) { mat_vertex_ = mat_vertex; }
-    void set_mat_edge(const Visual::Material mat_edge) { mat_edge_ = mat_edge; }
+    void set_mat_vertex(const Visual::Material& mat_vertex) { mat_vertex_ = mat_vertex; }
+    void set_mat_edge(const Visual::Material& mat_edge) { mat_edge_ = mat_edge; }
     void set_z_order(const int32_t z_order) { z_order_ = z_order; }
 
 private:
@@ -110,6 +113,6 @@ private:
 Polygon_2r Melkman(const Polyline_2r& P, Visual::IGeometryObserver* observer = nullptr);
 Polygon_2r IntegerHull(const Polygon_2r& P, Visual::IGeometryObserver* observer = nullptr);
 
-} // namespace RCAD
+} // namespace DDAD
 
 #endif // GE_POLYGON_H

@@ -1,16 +1,16 @@
 /*
- * This file is part of RationalCAD.
+ * This file is part of DDAD.
  *
- * RationalCAD is free software: you can redistribute it and/or modify it under
+ * DDAD is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
  * any later version.
  *
- * RationalCAD is distributed in the hope that it will be useful, but WITHOUT
+ * DDAD is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
  * more details. You should have received a copy of the GNU General Public
- * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
+ * License along with DDAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /*!
@@ -26,7 +26,7 @@
 #include "line.h"
 #include "triangle.h"
 
-namespace RCAD {
+namespace DDAD {
 
 namespace QuadEdge {
 class Cell;
@@ -39,11 +39,12 @@ class Cell;
 class Polytope_3r : public Visual::Geometry {
 public:
     Polytope_3r();
+    ~Polytope_3r();
 
     void Initialize(const Point_3f& start, const Point_3f& cur);
     void Update(const Point_3f& cur);
 
-    QuadEdge::Cell* cell() {
+    QuadEdge::Cell* cell() const {
         return cell_;
     }
     
@@ -76,6 +77,6 @@ private:
 };
 */
 
-} // namespace RCAD
+} // namespace DDAD
 
 #endif // GE_POLYTOPE_H

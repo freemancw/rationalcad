@@ -1,22 +1,22 @@
 /*
- * This file is part of RationalCAD.
+ * This file is part of DDAD.
  *
- * RationalCAD is free software: you can redistribute it and/or modify it under
+ * DDAD is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
  * any later version.
  *
- * RationalCAD is distributed in the hope that it will be useful, but WITHOUT
+ * DDAD is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
  * more details. You should have received a copy of the GNU General Public
- * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
+ * License along with DDAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "common.h"
 #include "visual.h"
 
-namespace RCAD {
+namespace DDAD {
 
 namespace Visual {
 
@@ -225,6 +225,7 @@ const Color Color::RED = Color(255, 0, 0, 255);
 const Color Color::GREEN = Color(0, 255, 0, 255);
 const Color Color::BLUE = Color(0, 0, 255, 255);
 const Color Color::BLACK = Color(0, 0, 0, 255);
+const Color Color::GRAY = Color(175, 175, 175, 255);
 const Color Color::WHITE = Color(255, 255, 255, 255);
 const Color Color::CYAN = Color(0, 255, 255, 255);
 const Color Color::YELLOW = Color(255, 255, 0, 255);
@@ -383,4 +384,4 @@ void Triangle::set_material(const Material& material) {
 
 } // namespace Visual
 
-} // namespace RCAD
+} // namespace DDAD

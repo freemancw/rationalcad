@@ -1,20 +1,20 @@
 /*
- * This file is part of RationalCAD.
+ * This file is part of DDAD.
  *
- * RationalCAD is free software: you can redistribute it and/or modify it under
+ * DDAD is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
  * any later version.
  *
- * RationalCAD is distributed in the hope that it will be useful, but WITHOUT
+ * DDAD is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
  * more details. You should have received a copy of the GNU General Public
- * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
+ * License along with DDAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef RC_COMMON_H
-#define RC_COMMON_H
+#ifndef WB_COMMON_H
+#define WB_COMMON_H
 
 #define BEGIN_NAMESPACE(x) namespace x {
 #define END_NAMESPACE(x) }
@@ -52,4 +52,4 @@
 #define NOMINMAX
 #include "../utility/easylogging++.h"
 
-#endif // RC_COMMON_H
+#endif // WB_COMMON_H

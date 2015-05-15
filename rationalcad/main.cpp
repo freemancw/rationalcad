@@ -1,16 +1,16 @@
 /*
- * This file is part of RationalCAD.
+ * This file is part of DDAD.
  *
- * RationalCAD is free software: you can redistribute it and/or modify it under
+ * DDAD is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
  * any later version.
  *
- * RationalCAD is distributed in the hope that it will be useful, but WITHOUT
+ * DDAD is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
  * more details. You should have received a copy of the GNU General Public
- * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
+ * License along with DDAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
 // Qt
@@ -18,7 +18,7 @@
 #include <QSplashScreen>
 #include <QtDebug>
 
-// RationalCAD
+// DDAD
 #include "common.h"
 #include "qt_window_main.h"
 
@@ -26,6 +26,11 @@
 _INITIALIZE_EASYLOGGINGPP
 
 int main(int argc, char *argv[]) {
+
+    el::Configurations defaultConf;
+    defaultConf.setToDefault();
+    defaultConf.setGlobally(el::ConfigurationType::Format, "%datetime %msg");
+    el::Loggers::reconfigureLogger("default", defaultConf);
 
     LOG(INFO) << "===========================================================";
 
@@ -36,11 +41,11 @@ int main(int argc, char *argv[]) {
 
     // register any types that will pass through Qt's signal/slot mechanism
     LOG(INFO) << "registering qt meta types";
-    qRegisterMetaType<QVector<RCAD::GL::Vertex>>("QVector<RCAD::GL::Vertex>");
+    qRegisterMetaType<QVector<DDAD::GL::Vertex>>("QVector<DDAD::GL::Vertex>");
     qRegisterMetaType<QVector<QVector3D>>("QVector<QVector3D>");
 
     LOG(INFO) << "displaying splash screen";
-    QPixmap splash_image(":/splash3.png");
+    QPixmap splash_image(":/splash.png");
     QSplashScreen splash(splash_image);
     splash.show();
     //splash.showMessage("Initializing...");

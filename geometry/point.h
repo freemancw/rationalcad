@@ -1,16 +1,16 @@
 /*
- * This file is part of RationalCAD.
+ * This file is part of DDAD.
  *
- * RationalCAD is free software: you can redistribute it and/or modify it under
+ * DDAD is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
  * any later version.
  *
- * RationalCAD is distributed in the hope that it will be useful, but WITHOUT
+ * DDAD is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
  * more details. You should have received a copy of the GNU General Public
- * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
+ * License along with DDAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /*!
@@ -23,7 +23,7 @@
 #include "common.h"
 #include "arithmetic.h"
 
-namespace RCAD {
+namespace DDAD {
 
 class Point_2i;
 class Point_2f;
@@ -76,13 +76,6 @@ bool operator!=(const Point_2i& lhs, const Point_2i& rhs);
 std::ostream& operator<<(std::ostream& o, const Point_2i& p);
 std::string to_string(const Point_2i& p);
 
-namespace Predicate {
-bool AIsLeftOfB(const Point_2i& a, const Point_2i& b);
-bool AIsBelowB(const Point_2i& a, const Point_2i& b);
-Orientation OrientationPQR(const Point_2i& p, const Point_2i& q,
-                           const Point_2i& r);
-}
-
 //=============================================================================
 // Interface: Point_2f
 //=============================================================================
@@ -114,13 +107,6 @@ bool operator==(const Point_2f& lhs, const Point_2f& rhs);
 bool operator!=(const Point_2f& lhs, const Point_2f& rhs);
 std::ostream& operator<<(std::ostream& o, const Point_2f& p);
 std::string to_string(const Point_2f& v);
-
-namespace Predicate {
-bool AIsLeftOfB(const Point_2f& a, const Point_2f& b);
-bool AIsBelowB(const Point_2f& a, const Point_2f& b);
-Orientation OrientationPQR(const Point_2f& p, const Point_2f& q,
-                           const Point_2f& r);
-}
 
 //=============================================================================
 // Interface: Point_2r
@@ -163,16 +149,6 @@ std::string to_string(const Point_2r& p);
 
 namespace Construction {
 Point_2r Z2Neighbor(const Point_2r& p, Quadrant quad);
-}
-
-namespace Predicate {
-bool AIsLeftOfB(const Point_2r& a, const Point_2r& b);
-bool AIsBelowB(const Point_2r& a, const Point_2r& b);
-Orientation OrientationPQR(const Point_2r& p, const Point_2r& q,
-                           const Point_2r& r);
-
-bool RIsLeftOrInsidePQ(const Point_2r& p, const Point_2r& q, const Point_2r& r);
-
 }
 
 //=============================================================================
@@ -227,16 +203,6 @@ inline std::string to_string(const Point_2i& p) {
     std::stringstream ss;
     ss << "(" << p.x() << ", " << p.y() << ")";
     return ss.str();
-}
-
-// Predicates =================================================================
-
-inline bool Predicate::AIsLeftOfB(const Point_2i& a, const Point_2i& b) {
-    return a.x() < b.x() || (a.x() == b.x() && a.y() < b.y());
-}
-
-inline bool Predicate::AIsBelowB(const Point_2i& a, const Point_2i& b) {
-    return a.y() < b.y() || (a.y() == b.y() && a.x() < b.x());
 }
 
 // Accessors/Mutators =========================================================
@@ -318,16 +284,6 @@ inline std::string to_string(const Point_2f& p) {
     std::stringstream ss;
     ss << "(" << p.x() << ", " << p.y() << ")";
     return ss.str();
-}
-
-// Predicates =================================================================
-
-inline bool Predicate::AIsLeftOfB(const Point_2f& a, const Point_2f& b) {
-    return a.x() < b.x() || (a.x() == b.x() && a.y() < b.y());
-}
-
-inline bool Predicate::AIsBelowB(const Point_2f& a, const Point_2f& b) {
-    return a.y() < b.y() || (a.y() == b.y() && a.x() < b.x());
 }
 
 // Accessors/Mutators =========================================================
@@ -449,16 +405,6 @@ inline Point_2r Construction::Z2Neighbor(const Point_2r& p, Quadrant quad) {
     case QUADRANT_SOUTHWEST: return Point_2r(Floor(p.x()), Floor(p.y()));
     default: return p;
     }
-}
-
-// Predicates =================================================================
-
-inline bool Predicate::AIsLeftOfB(const Point_2r& a, const Point_2r& b) {
-    return a.x() < b.x() || (a.x() == b.x() && a.y() < b.y());
-}
-
-inline bool Predicate::AIsBelowB(const Point_2r& a, const Point_2r& b) {
-    return a.y() < b.y() || (a.y() == b.y() && a.x() < b.x());
 }
 
 // Accessors/Mutators =========================================================
@@ -599,15 +545,6 @@ bool operator==(const Point_3r& lhs, const Point_3r& rhs);
 bool operator!=(const Point_3r& lhs, const Point_3r& rhs);
 std::ostream& operator<<(std::ostream& o, const Point_3r& p);
 std::string to_string(const Point_3r& p);
-
-namespace Predicate {
-/*
-rational InCircle(const Point_3r& a, const Point_3r& b, const Point_3r& c,
-                  const Point_3r& d);
-rational Orient2D(const Point_3r& a, const Point_3r& b, const Point_3r& c);
-*/
-
-}
 
 //=============================================================================
 // Implementation: Point_3i
@@ -934,6 +871,6 @@ inline void Point_3r::set_unique_id(const uint32_t unique_id) {
     unique_id_ = unique_id;
 }
 
-} // namespace RCAD
+} // namespace DDAD
 
 #endif // GE_POINT_H

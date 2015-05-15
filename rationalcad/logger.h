@@ -1,24 +1,24 @@
 /*
- * This file is part of RationalCAD.
+ * This file is part of DDAD.
  *
- * RationalCAD is free software: you can redistribute it and/or modify it under
+ * DDAD is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
  * any later version.
  *
- * RationalCAD is distributed in the hope that it will be useful, but WITHOUT
+ * DDAD is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
  * more details. You should have received a copy of the GNU General Public
- * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
+ * License along with DDAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef RC_LOGGER_H
-#define RC_LOGGER_H
+#ifndef WB_LOGGER_H
+#define WB_LOGGER_H
 
 #include "common.h"
 
-BEGIN_NAMESPACE(RCAD)
+BEGIN_NAMESPACE(DDAD)
 
 /*
 class RLOG_DECL RCLogger : public rlog::RLogNode {
@@ -40,6 +40,6 @@ private:
     QTextEdit* console_;
 };
 */
-END_NAMESPACE(RCAD)
+END_NAMESPACE(DDAD)
 
-#endif // RC_LOGGER_H
+#endif // WB_LOGGER_H

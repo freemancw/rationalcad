@@ -1,19 +1,19 @@
 /*
- * This file is part of RationalCAD.
+ * This file is part of DDAD.
  *
- * RationalCAD is free software: you can redistribute it and/or modify it under
+ * DDAD is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
  * any later version.
  *
- * RationalCAD is distributed in the hope that it will be useful, but WITHOUT
+ * DDAD is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
  * more details. You should have received a copy of the GNU General Public
- * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
+ * License along with DDAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// RationalCAD
+// DDAD
 #include "common.h"
 #include "qt_dialog_about.h"
 #include "qt_dialog_preferences.h"
@@ -21,12 +21,17 @@
 #include "ui_window_main.h"
 #include "qt_widget_orthographic.h"
 #include "qt_widget_perspective.h"
-#include "qt_point_set_creation_method.h"
 #include "scene.h"
+#include "qt_point_set_creation_method.h"
+#include "qt_polyline_creation_method.h"
+#include "qt_polytope_creation_method.h"
+#include "qt_point_set_algorithms.h"
+#include "qt_polyline_algorithms.h"
+#include "qt_polytope_algorithms.h"
 
 #include "../geometry/point.h"
 
-using namespace RCAD;
+using namespace DDAD;
 
 //=============================================================================
 // Constructors/Destructors
@@ -46,8 +51,8 @@ MainWindow::MainWindow(QWidget *parent) :
     toolbar_buttons_ = new QActionGroup(ui->toolBar->layout());
 
     // select objects button
-    select_button_ = new QAction("Select Objects", toolbar_buttons_);
-    select_button_->setIcon(QIcon("://icons/select_object.png"));
+    select_button_ = new QAction("Select", toolbar_buttons_);
+    select_button_->setIcon(QIcon("://icons/select.png"));
     select_button_->setCheckable(true);
     select_button_->setChecked(true);
 
@@ -113,9 +118,9 @@ MainWindow::MainWindow(QWidget *parent) :
     scene_manager_ = new SceneManager(renderer_);
 
     connect(&scene_manager_->scene_observer_,
-            SIGNAL(UpdateContextSensitiveMenus(QString)),
+            SIGNAL(UpdateContextSensitiveMenus(QString, QString)),
             this,
-            SLOT(onUpdateContextSensitiveMenus(QString)));
+            SLOT(onUpdateContextSensitiveMenus(QString, QString)));
 
     // initialize widgets
     qDebug() << "Initializing ortho.";
@@ -193,10 +198,14 @@ void MainWindow::on_rotate_toggled(bool checked) {
 
 void MainWindow::on_create_point_set_toggled(bool checked) {
     qDebug() << "on_create_point_set_toggled: " << checked;
+
+    static PointSetCreationMethod *creation_method = nullptr;
+
     if (checked) {
+        ConfigManager::get().set_input_state(InputState::CREATE_POINTSET);
         uncheckInputModeButtons();
 
-        PointSetCreationMethod *creation_method = new PointSetCreationMethod();
+        creation_method = new PointSetCreationMethod();
 
         QLayoutItem *spacer = ui->create_tab_spacer;
         ui->create->layout()->removeItem(spacer);
@@ -207,22 +216,57 @@ void MainWindow::on_create_point_set_toggled(bool checked) {
                 SIGNAL(CreatePointSet(const QVector<QVector3D>&)),
                 &scene_manager_->scene_observer_,
                 SLOT(onCreatePointSet(const QVector<QVector3D>&)));
+
+    } else if (creation_method) {
+        ui->create->layout()->removeWidget(creation_method);
+        delete creation_method;
+        creation_method = nullptr;
     }
 }
 
 void MainWindow::on_create_polyline_toggled(bool checked) {
     qDebug() << "on_create_polyline_toggled: " << checked;
+
+    static PolylineCreationMethod *creation_method = nullptr;
+
     if (checked) {
         ConfigManager::get().set_input_state(InputState::CREATE_POLYLINE);
         uncheckInputModeButtons();
+
+        creation_method = new PolylineCreationMethod();
+
+        QLayoutItem *spacer = ui->create_tab_spacer;
+        ui->create->layout()->removeItem(spacer);
+        ui->create->layout()->addWidget(creation_method);
+        ui->create->layout()->addItem(spacer);
+
+    } else if (creation_method) {
+        ui->create->layout()->removeWidget(creation_method);
+        delete creation_method;
+        creation_method = nullptr;
     }
 }
 
 void MainWindow::on_create_polytope_toggled(bool checked) {
     qDebug() << "on_create_polytope_toggled: " << checked;
+
+    static PolytopeCreationMethod *creation_method = nullptr;
+
     if (checked) {
         ConfigManager::get().set_input_state(InputState::CREATE_POLYTOPE);
         uncheckInputModeButtons();
+
+        creation_method = new PolytopeCreationMethod();
+
+        QLayoutItem *spacer = ui->create_tab_spacer;
+        ui->create->layout()->removeItem(spacer);
+        ui->create->layout()->addWidget(creation_method);
+        ui->create->layout()->addItem(spacer);
+
+    } else if (creation_method) {
+        ui->create->layout()->removeWidget(creation_method);
+        delete creation_method;
+        creation_method = nullptr;
     }
 }
 
@@ -286,9 +330,47 @@ void MainWindow::on_action_preferences_triggered() {
 }
 
 void MainWindow::on_action_user_manual_triggered() {
-    QDesktopServices::openUrl(QUrl("file:///C:/RationalCADUserManual.pdf"));
+    QDesktopServices::openUrl(QUrl("file:///C:/DDADUserManual.pdf"));
 }
 
-void MainWindow::onUpdateContextSensitiveMenus(const QString &selected_object_type) {
-    LOG(DEBUG) << selected_object_type.toStdString();
+void MainWindow::onUpdateContextSensitiveMenus(const QString &selected_object_type,
+                                               const QString &selected_object_name) {
+    LOG(DEBUG) << "updating context sensitive menus for object type " << selected_object_type.toStdString();
+
+    static QWidget* algorithms = nullptr;
+    QLayoutItem *spacer = ui->compute_tab_spacer;
+
+    if (algorithms) {
+        LOG(DEBUG) << "deleting algorithms menu";
+        ui->compute->layout()->removeWidget(algorithms);
+        delete algorithms;
+        algorithms = nullptr;
+    }
+
+    if (selected_object_type == "") {
+        ui->object_name->setText("No object selected");
+        return;
+    }
+
+    ui->object_name->setText(selected_object_name);
+
+    if (selected_object_type == "PointSet") {
+        algorithms = new PointSetAlgorithms();
+        connect(algorithms,
+                SIGNAL(ComputeTerrainMeshForSelectedPointSet()),
+                &scene_manager_->scene_observer_,
+                SLOT(onComputeTerrainMeshForSelectedPointSet()));
+    } else if (selected_object_type == "Polyline") {
+        algorithms = new PolylineAlgorithms();
+        connect(algorithms,
+                SIGNAL(ComputeMelkmanForSelectedPolyline()),
+                &scene_manager_->scene_observer_,
+                SLOT(onComputeMelkmanForSelectedPolyline()));
+    } else if (selected_object_type == "Polytope") {
+        algorithms = new PolytopeAlgorithms();
+    }
+
+    ui->compute->layout()->removeItem(spacer);
+    ui->compute->layout()->addWidget(algorithms);
+    ui->compute->layout()->addItem(spacer);
 }

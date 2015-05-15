@@ -1,30 +1,30 @@
 /*
- * This file is part of RationalCAD.
+ * This file is part of DDAD.
  *
- * RationalCAD is free software: you can redistribute it and/or modify it under
+ * DDAD is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
  * any later version.
  *
- * RationalCAD is distributed in the hope that it will be useful, but WITHOUT
+ * DDAD is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
  * more details. You should have received a copy of the GNU General Public
- * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
+ * License along with DDAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /*!
  * @brief OpenGL widget that displays an orthogonal view of the current scene.
  */
 
-#ifndef RC_QT_WIDGET_ORTHOGRAPHIC_H
-#define RC_QT_WIDGET_ORTHOGRAPHIC_H
+#ifndef WB_QT_WIDGET_ORTHOGRAPHIC_H
+#define WB_QT_WIDGET_ORTHOGRAPHIC_H
 
 // Qt
 #include <QtOpenGL/QGLWidget>
 #include <QOpenGLFunctions_3_3_Core>
 
-// RationalCAD
+// DDAD
 #include "common.h"
 #include "grid.h"
 #include "scene.h"
@@ -57,8 +57,8 @@ public:
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
 
-    void initialize(RCAD::Renderer* renderer,
-                    RCAD::SceneManager* scene_manager);
+    void initialize(DDAD::Renderer* renderer,
+                    DDAD::SceneManager* scene_manager);
 
 public slots:
     void ShowContextMenu(const QPoint& p);
@@ -66,6 +66,11 @@ public slots:
 signals:
     void ChangeMessage(const QString& msg);
     void SelectObject(const QVector2D& coords);
+
+    // pointset
+    void BeginCreatePointSet(const QVector2D& start);
+    void UpdateNewPointSet(const QVector2D& cur);
+    void EndCreatePointSet();
 
     // polyline
     void BeginCreatePolyline(const QVector2D& start);
@@ -101,11 +106,11 @@ protected:
     static const int kPrefHintWidth;
     static const int kPrefHintHeight;
 
-    RCAD::Renderer* renderer_;
-    RCAD::SceneManager* scene_manager_;
+    DDAD::Renderer* renderer_;
+    DDAD::SceneManager* scene_manager_;
 
-    RCAD::IntegerGrid i_grid_;
-    RCAD::GL::RenderGroup i_grid_rg_;
+    DDAD::IntegerGrid i_grid_;
+    DDAD::GL::RenderGroup i_grid_rg_;
 
     quint32 num_frames_;
     QTimer timer_;
@@ -115,4 +120,4 @@ protected:
     OrthoOrientation orientation_;
 };
 
-#endif // RC_QT_WIDGET_ORTHOGRAPHIC_H
+#endif // WB_QT_WIDGET_ORTHOGRAPHIC_H
