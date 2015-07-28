@@ -56,14 +56,14 @@ public:
     const size_t size() const;
 
     const std::deque<SharedPoint_2r>& vertices() const;
-    const int32_t z_order() const { return z_order_; }
-    const Visual::Material& mat_vertex() const { return mat_vertex_; }
-    const Visual::Material& mat_edge() const { return mat_vertex_; }
+    const int32_t z_order() const;
+    const Visual::Material& mat_vertex() const;
+    const Visual::Material& mat_edge() const;
     void set_vertices(const std::deque<SharedPoint_2r>& vertices);
     const bool closed() const;
-    void set_mat_vertex(const Visual::Material& mat_vertex) { mat_vertex_ = mat_vertex; }
-    void set_mat_edge(const Visual::Material& mat_edge) { mat_edge_ = mat_edge; }
-    void set_z_order(const int32_t z_order) { z_order_ = z_order; }
+    void set_mat_vertex(const Visual::Material& mat_vertex);
+    void set_mat_edge(const Visual::Material& mat_edge);
+    void set_z_order(const int32_t z_order);
 
 private:
     std::deque<SharedPoint_2r> vertices_;
@@ -99,10 +99,10 @@ public:
 
     const Polyline_2r& boundary() const;
 
-    void set_mat_vertex(const Visual::Material mat_vertex) { boundary_.set_mat_vertex(mat_vertex); }
-    void set_mat_edge(const Visual::Material mat_edge) { boundary_.set_mat_edge(mat_edge); }
-    void set_mat_face(const Visual::Material mat_face) { mat_face_ = mat_face; }
-    void set_z_order(const uint32_t z_order) { z_order_ = z_order; boundary_.set_z_order(z_order); }
+    void set_mat_vertex(const Visual::Material& mat_vertex);
+    void set_mat_edge(const Visual::Material& mat_edge);
+    void set_mat_face(const Visual::Material& mat_face);
+    void set_z_order(const uint32_t z_order);
 
 private:
     Polyline_2r boundary_;
@@ -110,8 +110,15 @@ private:
     uint32_t z_order_;
 };
 
-Polygon_2r Melkman(const Polyline_2r& P, Visual::IGeometryObserver* observer = nullptr);
-Polygon_2r IntegerHull(const Polygon_2r& P, Visual::IGeometryObserver* observer = nullptr);
+//=============================================================================
+// Algorithms
+//=============================================================================
+
+Polygon_2r Melkman(const Polyline_2r& P,
+                   Visual::IGeometryObserver* observer = nullptr);
+
+Polygon_2r IntegerHull(const Polygon_2r& P,
+                       Visual::IGeometryObserver* observer = nullptr);
 
 } // namespace RCAD
 
