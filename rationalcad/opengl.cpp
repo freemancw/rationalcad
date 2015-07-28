@@ -13,7 +13,7 @@
  * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// RationalCAD
+// RCAD
 #include "common.h"
 #include "opengl.h"
 
@@ -228,7 +228,7 @@ VertexBuffer::VertexBuffer() :
     num_vertices(0) {}
 
 void VertexBuffer::UploadVertices(const QVector<Vertex> &vertices) {
-    if(!buffer.isCreated()) {
+    if (!buffer.isCreated()) {
         buffer.create();
         buffer.bind();
         buffer.setUsagePattern(QOpenGLBuffer::DynamicDraw);

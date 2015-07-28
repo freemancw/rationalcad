@@ -13,13 +13,13 @@
  * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef RC_QT_DIALOG_PREFERENCES_H
-#define RC_QT_DIALOG_PREFERENCES_H
+#ifndef WB_QT_DIALOG_PREFERENCES_H
+#define WB_QT_DIALOG_PREFERENCES_H
 
 // Qt
 #include <QDialog>
 
-// RationalCAD
+// RCAD
 #include "common.h"
 #include "config.h"
 
@@ -49,4 +49,4 @@ private:
     Ui::PreferencesDialog *ui;
 };
 
-#endif // RC_QT_DIALOG_PREFERENCES_H
+#endif // WB_QT_DIALOG_PREFERENCES_H

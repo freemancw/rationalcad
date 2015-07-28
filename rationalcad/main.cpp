@@ -18,7 +18,7 @@
 #include <QSplashScreen>
 #include <QtDebug>
 
-// RationalCAD
+// RCAD
 #include "common.h"
 #include "qt_window_main.h"
 
@@ -26,6 +26,11 @@
 _INITIALIZE_EASYLOGGINGPP
 
 int main(int argc, char *argv[]) {
+
+    el::Configurations defaultConf;
+    defaultConf.setToDefault();
+    defaultConf.setGlobally(el::ConfigurationType::Format, "%datetime %msg");
+    el::Loggers::reconfigureLogger("default", defaultConf);
 
     LOG(INFO) << "===========================================================";
 

@@ -22,13 +22,38 @@ PointSetCreationMethod::PointSetCreationMethod(QWidget *parent) :
     QGroupBox(parent),
     ui(new Ui::PointSetCreationMethod) {
     ui->setupUi(this);
+
+    ui->file_button_choose->hide();
+    ui->file_button_generate->hide();
+    ui->file_name->hide();
 }
 
 PointSetCreationMethod::~PointSetCreationMethod() {
     delete ui;
 }
 
-void PointSetCreationMethod::on_file_button_clicked() {
+void PointSetCreationMethod::on_method_dropdown_currentTextChanged(const QString &arg1) {
+    if (arg1 == "Click") {
+        ui->file_button_choose->hide();
+        ui->file_button_generate->hide();
+        ui->file_name->hide();
+
+        ui->click_text->show();
+    } else if (arg1 == "File") {
+        ui->click_text->hide();
+
+        ui->file_button_choose->show();
+        ui->file_button_generate->show();
+        ui->file_name->show();
+    } else if (arg1 == "Random") {
+        ui->file_button_choose->hide();
+        ui->file_button_generate->hide();
+        ui->file_name->hide();
+        ui->click_text->hide();
+    }
+}
+
+void PointSetCreationMethod::on_file_button_choose_clicked() {
     QString fileName = QFileDialog::getOpenFileName(
         this,
         tr("Open point set data"),
@@ -39,8 +64,7 @@ void PointSetCreationMethod::on_file_button_clicked() {
     ui->file_name->setText(fileName);
 }
 
-void PointSetCreationMethod::on_generate_clicked() {
-
+void PointSetCreationMethod::on_file_button_generate_clicked() {
     LOG(INFO) << "on_generate_clicked with file "
               << ui->file_name->text().toStdString();
 

@@ -13,7 +13,7 @@
  * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// RationalCAD
+// RCAD
 #include "common.h"
 #include "logger.h"
 

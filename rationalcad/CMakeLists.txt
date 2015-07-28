@@ -10,7 +10,7 @@ find_package(Qt5Widgets)
 find_package(Qt5Gui)
 find_package(Qt5OpenGL)
 
-link_directories(${RATIONALCAD_BINARY_DIR}/geometry)
+link_directories(${DDAD_BINARY_DIR}/geometry)
 
 qt5_wrap_ui(
     UI_HEADERS
@@ -18,6 +18,11 @@ qt5_wrap_ui(
     forms/dialog_preferences.ui
     forms/window_main.ui
     forms/point_set_creation_method.ui
+    forms/point_set_algorithms.ui
+    forms/polyline_creation_method.ui
+    forms/polyline_algorithms.ui
+    forms/polytope_creation_method.ui
+    forms/polytope_algorithms.ui
 )
 
 qt5_add_resources(
@@ -26,7 +31,7 @@ qt5_add_resources(
 )
 
 add_executable(
-    rationalcad
+    workbench
     config.cpp
     grid.cpp
     logger.cpp
@@ -38,14 +43,20 @@ add_executable(
     qt_widget_perspective.cpp
     qt_window_main.cpp
     qt_point_set_creation_method.cpp
+    qt_point_set_algorithms.cpp
+    qt_polyline_creation_method.cpp
+    qt_polyline_algorithms.cpp
+    qt_polytope_creation_method.cpp
+    qt_polytope_algorithms.cpp
     scene.cpp
     common.h
+    resources/icon.rc
     ${UI_HEADERS}
     ${UI_RESOURCES}
 )
 
 qt5_use_modules(
-    rationalcad
+    workbench
     Core
     Gui
     Widgets
@@ -53,7 +64,7 @@ qt5_use_modules(
 )
 
 target_link_libraries(
-    rationalcad
+    workbench
     geometry
     mpir
     mpirxx

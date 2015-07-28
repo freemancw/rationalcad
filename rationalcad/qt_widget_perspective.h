@@ -17,14 +17,14 @@
  * @brief OpenGL widget that allows for navigation with 3D perspective camera.
  */
 
-#ifndef RC_QT_WIDGET_PERSPECTIVE_H
-#define RC_QT_WIDGET_PERSPECTIVE_H
+#ifndef WB_QT_WIDGET_PERSPECTIVE_H
+#define WB_QT_WIDGET_PERSPECTIVE_H
 
 // Qt
 #include <QtOpenGL/QGLWidget>
 #include <QOpenGLFunctions_3_3_Core>
 
-// RationalCAD
+// RCAD
 #include "common.h"
 #include "opengl.h"
 #include "scene.h"
@@ -89,4 +89,4 @@ protected:
     RCAD::SceneManager* scene_manager_;
 };
 
-#endif // RCAD_RC_QT_WIDGET_PERSPECTIVE_H
+#endif // RCAD_WB_QT_WIDGET_PERSPECTIVE_H

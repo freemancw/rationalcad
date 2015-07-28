@@ -13,7 +13,7 @@
  * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// RationalCAD
+// RCAD
 #include "common.h"
 #include "grid.h"
 #include "scene.h"
@@ -37,8 +37,6 @@ void IntegerGrid::InitializeGrid(const int min_pixel_spacing,
                                  const int bit_complexity,
                                  QVector<GL::Vertex>& grid_verts) {
     Q_UNUSED(bit_complexity);
-
-    //rInfo("Initializing coordinate grid.");
 
     min_pixel_spacing_ = min_pixel_spacing;
     major_line_spacing_ = major_line_spacing;

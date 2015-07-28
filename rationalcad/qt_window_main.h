@@ -17,13 +17,13 @@
  * @brief Main window responsible for forwarding widget input.
  */
 
-#ifndef RC_QT_WINDOW_MAIN_H
-#define RC_QT_WINDOW_MAIN_H
+#ifndef WB_QT_WINDOW_MAIN_H
+#define WB_QT_WINDOW_MAIN_H
 
 // Qt
 #include <QMainWindow>
 
-// RationalCAD
+// RCAD
 #include "common.h"
 #include "scene.h"
 #include "logger.h"
@@ -79,7 +79,8 @@ private slots:
     void on_action_preferences_triggered();
     void on_action_user_manual_triggered();
 
-    void onUpdateContextSensitiveMenus(const QString& selected_object_type);
+    void onUpdateContextSensitiveMenus(const QString& selected_object_type,
+                                       const QString& selected_object_name);
 
 private:
     void initializeLogging();
@@ -87,6 +88,10 @@ private:
 
     void uncheckCreateButtons();
     void uncheckInputModeButtons();
+
+    //void resetToDefaultCreationMode();
+    //void addDefaultPointSetCreationMode();
+
 
     QActionGroup *toolbar_buttons_;
     QAction* select_button_;
@@ -102,4 +107,4 @@ private:
     QColor create_object_color_;
 };
 
-#endif // RC_QT_WINDOW_MAIN_H
+#endif // WB_QT_WINDOW_MAIN_H

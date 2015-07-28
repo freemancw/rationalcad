@@ -16,7 +16,7 @@
 // Qt
 #include <QSysInfo>
 
-// RationalCAD
+// RCAD
 #include "common.h"
 #include "config.h"
 

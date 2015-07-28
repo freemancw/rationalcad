@@ -20,7 +20,7 @@
 #ifndef RC_GRID_H
 #define RC_GRID_H
 
-// RationalCAD
+// RCAD
 #include "common.h"
 
 namespace RCAD {

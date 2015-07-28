@@ -16,7 +16,7 @@
 #ifndef RC_CONFIG_H
 #define RC_CONFIG_H
 
-// RationalCAD
+// RCAD
 #include "common.h"
 
 namespace RCAD {
@@ -25,10 +25,12 @@ enum class InputState {
     SELECT,
     TRANSLATE,
     ROTATE,
-    CREATE_POLYTOPE,
-    UPDATE_POLYTOPE,
+    CREATE_POINTSET,
+    UPDATE_POINTSET,
     CREATE_POLYLINE,
-    UPDATE_POLYLINE
+    UPDATE_POLYLINE,
+    CREATE_POLYTOPE,
+    UPDATE_POLYTOPE
 };
 
 class ConfigManager {

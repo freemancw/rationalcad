@@ -20,5 +20,7 @@
         <file>icons/create_polyline.png</file>
         <file>icons/translate.png</file>
         <file>icons/rotate.png</file>
+        <file>icons/create_pointset.png</file>
+        <file>icons/select.png</file>
     </qresource>
 </RCC>

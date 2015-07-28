@@ -13,28 +13,37 @@
  * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GE_TRIANGULATION_H
-#define GE_TRIANGULATION_H
-
 #include "common.h"
-#include "visual.h"
-#include "quadedge.h"
-#include "matrix.h"
+#include "aabb.h"
 
 namespace RCAD {
 
-class DelaunayTriangulation_2r : public Visual::Geometry {
-public:
-    DelaunayTriangulation_2r();
-    ~DelaunayTriangulation_2r();
+AABB_2r::AABB_2r() {}
 
-    void Initialize();
-    void AddPoint();
+AABB_2r::AABB_2r(const PointSet_3r &pointset) {
+    rational minx, miny, maxx, maxy;
+    minx = maxx = pointset.points()[0]->x();
+    miny = maxy = pointset.points()[0]->y();
 
-private:
-    QuadEdge::Cell* triangulation_;
-};
+    for (auto point : pointset.points()) {
+        minx = std::min(point->x(), minx);
+        miny = std::min(point->y(), miny);
+        maxx = std::max(point->x(), maxx);
+        maxy = std::max(point->y(), maxy);
+    }
+
+    min_.set_x(minx);
+    min_.set_y(miny);
+    max_.set_x(maxx);
+    max_.set_y(maxy);
+}
+
+const Point_2r& AABB_2r::min() const {
+    return min_;
+}
+
+const Point_2r& AABB_2r::max() const {
+    return max_;
+}
 
 } // namespace RCAD
-
-#endif // GE_TRIANGULATION_H

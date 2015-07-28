@@ -13,7 +13,7 @@
  * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// RationalCAD
+// RCAD
 #include "qt_dialog_about.h"
 #include "ui_dialog_about.h"
 

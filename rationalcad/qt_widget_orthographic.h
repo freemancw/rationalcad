@@ -17,14 +17,14 @@
  * @brief OpenGL widget that displays an orthogonal view of the current scene.
  */
 
-#ifndef RC_QT_WIDGET_ORTHOGRAPHIC_H
-#define RC_QT_WIDGET_ORTHOGRAPHIC_H
+#ifndef WB_QT_WIDGET_ORTHOGRAPHIC_H
+#define WB_QT_WIDGET_ORTHOGRAPHIC_H
 
 // Qt
 #include <QtOpenGL/QGLWidget>
 #include <QOpenGLFunctions_3_3_Core>
 
-// RationalCAD
+// RCAD
 #include "common.h"
 #include "grid.h"
 #include "scene.h"
@@ -66,6 +66,11 @@ public slots:
 signals:
     void ChangeMessage(const QString& msg);
     void SelectObject(const QVector2D& coords);
+
+    // pointset
+    void BeginCreatePointSet(const QVector2D& start);
+    void UpdateNewPointSet(const QVector2D& cur);
+    void EndCreatePointSet();
 
     // polyline
     void BeginCreatePolyline(const QVector2D& start);
@@ -115,4 +120,4 @@ protected:
     OrthoOrientation orientation_;
 };
 
-#endif // RC_QT_WIDGET_ORTHOGRAPHIC_H
+#endif // WB_QT_WIDGET_ORTHOGRAPHIC_H

@@ -13,15 +13,15 @@
  * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef RC_OPENGL_H
-#define RC_OPENGL_H
+#ifndef WB_OPENGL_H
+#define WB_OPENGL_H
 
 // Qt
 #include <QOpenGLFunctions_3_3_Core>
 #include <QOpenGLDebugLogger>
 #include <QOpenGLDebugMessage>
 
-// RationalCAD
+// RCAD
 #include "common.h"
 
 // kernel
@@ -369,4 +369,4 @@ public:
 
 } // namespace RCAD
 
-#endif // RC_OPENGL_H
+#endif // WB_OPENGL_H

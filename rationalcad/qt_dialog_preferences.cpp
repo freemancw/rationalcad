@@ -16,7 +16,7 @@
 // Qt
 #include <QColorDialog>
 
-// RationalCAD
+// RCAD
 #include "common.h"
 #include "qt_dialog_preferences.h"
 #include "ui_dialog_preferences.h"
