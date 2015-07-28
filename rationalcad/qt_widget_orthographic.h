@@ -17,8 +17,8 @@
  * @brief OpenGL widget that displays an orthogonal view of the current scene.
  */
 
-#ifndef WB_QT_WIDGET_ORTHOGRAPHIC_H
-#define WB_QT_WIDGET_ORTHOGRAPHIC_H
+#ifndef RC_QT_WIDGET_ORTHOGRAPHIC_H
+#define RC_QT_WIDGET_ORTHOGRAPHIC_H
 
 // Qt
 #include <QtOpenGL/QGLWidget>
@@ -120,4 +120,4 @@ protected:
     OrthoOrientation orientation_;
 };
 
-#endif // WB_QT_WIDGET_ORTHOGRAPHIC_H
+#endif // RC_QT_WIDGET_ORTHOGRAPHIC_H

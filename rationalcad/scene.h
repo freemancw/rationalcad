@@ -17,8 +17,8 @@
  * @brief Manager type responsible for storing and manipulating scene objects.
  */
 
-#ifndef WB_SCENE_H
-#define WB_SCENE_H
+#ifndef RC_SCENE_H
+#define RC_SCENE_H
 
 // RCAD
 #include "common.h"
@@ -533,4 +533,4 @@ private:
 
 } // namespace RCAD
 
-#endif // WB_SCENE_H
+#endif // RC_SCENE_H

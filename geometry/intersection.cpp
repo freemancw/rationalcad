@@ -116,7 +116,7 @@ Line_2rRay_2r::Line_2rRay_2r(const Line_2r* line, const Ray_2r* ray) :
         type_ = INTERSECTION_COINCIDENT;
         break;
     case INTERSECTION_POINT:
-        if(isect_support.time() < 0) {
+        if (isect_support.time() < 0) {
             type_ = INTERSECTION_EMPTY;
         } else {
             type_ = INTERSECTION_POINT;
@@ -199,13 +199,13 @@ Ray_2rSegment_2r::Ray_2rSegment_2r(const Ray_2r *ray,
         time_ = 0;
         break;
     case INTERSECTION_POINT:
-        if(isect_support.time() < 0) {
+        if (isect_support.time() < 0) {
             type_ = INTERSECTION_EMPTY;
         } else {
             auto pt = Dot(segment->support().V(), segment->p());
             auto qt = Dot(segment->support().V(), segment->q());
             auto it = Dot(segment->support().V(), isect_support.intersection());
-            if(it <= qt && it >= pt) {
+            if (it <= qt && it >= pt) {
                 type_ = INTERSECTION_POINT;
                 intersection_ = isect_support.intersection_sptr();
                 time_ = isect_support.time();

@@ -13,8 +13,8 @@
  * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef WB_QT_DIALOG_ABOUT_H
-#define WB_QT_DIALOG_ABOUT_H
+#ifndef RC_QT_DIALOG_ABOUT_H
+#define RC_QT_DIALOG_ABOUT_H
 
 // Qt
 #include <QtGui>
@@ -37,4 +37,4 @@ private:
     Ui::AboutDialog *ui;
 };
 
-#endif // WB_QT_DIALOG_ABOUT_H
+#endif // RC_QT_DIALOG_ABOUT_H

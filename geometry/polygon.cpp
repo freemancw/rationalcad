@@ -223,6 +223,23 @@ const Polyline_2r& Polygon_2r::boundary() const {
     return boundary_;
 }
 
+void Polygon_2r::set_mat_vertex(const Visual::Material& mat_vertex) {
+    boundary_.set_mat_vertex(mat_vertex);
+}
+
+void Polygon_2r::set_mat_edge(const Visual::Material& mat_edge) {
+    boundary_.set_mat_edge(mat_edge);
+}
+
+void Polygon_2r::set_mat_face(const Visual::Material& mat_face) {
+    mat_face_ = mat_face;
+}
+
+void Polygon_2r::set_z_order(const uint32_t z_order) {
+    z_order_ = z_order;
+    boundary_.set_z_order(z_order);
+}
+
 //=============================================================================
 // Polyline_2r
 //=============================================================================
@@ -352,6 +369,30 @@ void Polyline_2r::set_vertices(const std::deque<SharedPoint_2r>& vertices) {
 
 const bool Polyline_2r::closed() const {
     return closed_;
+}
+
+const int32_t Polyline_2r::z_order() const {
+    return z_order_;
+}
+
+const Visual::Material& Polyline_2r::mat_vertex() const {
+    return mat_vertex_;
+}
+
+const Visual::Material& Polyline_2r::mat_edge() const {
+    return mat_vertex_;
+}
+
+void Polyline_2r::set_mat_vertex(const Visual::Material& mat_vertex) {
+    mat_vertex_ = mat_vertex;
+}
+
+void Polyline_2r::set_mat_edge(const Visual::Material& mat_edge) {
+    mat_edge_ = mat_edge;
+}
+
+void Polyline_2r::set_z_order(const int32_t z_order) {
+    z_order_ = z_order;
 }
 
 } // namespace RCAD
