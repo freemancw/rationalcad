@@ -1,29 +1,29 @@
 /*
- * This file is part of DDAD.
+ * This file is part of RationalCAD.
  *
- * DDAD is free software: you can redistribute it and/or modify it under
+ * RationalCAD is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
  * any later version.
  *
- * DDAD is distributed in the hope that it will be useful, but WITHOUT
+ * RationalCAD is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
  * more details. You should have received a copy of the GNU General Public
- * License along with DDAD. If not, see <http://www.gnu.org/licenses/>.
+ * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /*!
  * @brief Customizable grid type to support precise placement of objects.
  */
 
-#ifndef WB_GRID_H
-#define WB_GRID_H
+#ifndef RC_GRID_H
+#define RC_GRID_H
 
-// DDAD
+// RCAD
 #include "common.h"
 
-namespace DDAD {
+namespace RCAD {
 
 namespace GL {
 
@@ -93,6 +93,6 @@ private:
     //Q_DISABLE_COPY(IntegerGrid)
 };
 
-} // namespace DDAD
+} // namespace RCAD
 
-#endif // WB_GRID_H
+#endif // RC_GRID_H

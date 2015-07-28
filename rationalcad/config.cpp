@@ -1,26 +1,26 @@
 /*
- * This file is part of DDAD.
+ * This file is part of RationalCAD.
  *
- * DDAD is free software: you can redistribute it and/or modify it under
+ * RationalCAD is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
  * any later version.
  *
- * DDAD is distributed in the hope that it will be useful, but WITHOUT
+ * RationalCAD is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
  * more details. You should have received a copy of the GNU General Public
- * License along with DDAD. If not, see <http://www.gnu.org/licenses/>.
+ * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
 // Qt
 #include <QSysInfo>
 
-// DDAD
+// RCAD
 #include "common.h"
 #include "config.h"
 
-namespace DDAD {
+namespace RCAD {
 
 ConfigManager::ConfigManager() {}
 ConfigManager::ConfigManager(const ConfigManager&) {}
@@ -72,5 +72,5 @@ void ConfigManager::set_grid_major_color(const QColor& grid_major_color) {
     grid_major_color_ = grid_major_color;
 }
 
-} // namespace DDAD
+} // namespace RCAD
 

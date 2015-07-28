@@ -1,25 +1,25 @@
 /*
- * This file is part of DDAD.
+ * This file is part of RationalCAD.
  *
- * DDAD is free software: you can redistribute it and/or modify it under
+ * RationalCAD is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
  * any later version.
  *
- * DDAD is distributed in the hope that it will be useful, but WITHOUT
+ * RationalCAD is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
  * more details. You should have received a copy of the GNU General Public
  * License along with DDAD. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// DDAD
+// RCAD
 #include "common.h"
 #include "grid.h"
 #include "scene.h"
 #include "config.h"
 
-namespace DDAD {
+namespace RCAD {
 
 //=============================================================================
 // Constructors / Destructors
@@ -37,8 +37,6 @@ void IntegerGrid::InitializeGrid(const int min_pixel_spacing,
                                  const int bit_complexity,
                                  QVector<GL::Vertex>& grid_verts) {
     Q_UNUSED(bit_complexity);
-
-    //rInfo("Initializing coordinate grid.");
 
     min_pixel_spacing_ = min_pixel_spacing;
     major_line_spacing_ = major_line_spacing;
@@ -328,4 +326,4 @@ const qreal& IntegerGrid::global_scale() const {
     return global_scale_;
 }
 
-} // namespace DDAD
+} // namespace RCAD
