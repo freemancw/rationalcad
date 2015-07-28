@@ -4,7 +4,7 @@
 
 #include "quadedge.h"
 
-namespace DDAD {
+namespace RCAD {
 
 namespace QuadEdge {
 
@@ -639,4 +639,4 @@ void Cell::setOrbitLeft(Edge *edge, Face *left) {
 
 } // namespace QuadEdge
 
-} // namespace DDAD
+} // namespace RCAD

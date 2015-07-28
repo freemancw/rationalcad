@@ -11,10 +11,10 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>DDAD Workbench</string>
+   <string>RationalCAD</string>
   </property>
   <property name="windowIcon">
-   <iconset>
+   <iconset resource="../resources/resources.qrc">
     <normaloff>:/icons/appicon.png</normaloff>:/icons/appicon.png</iconset>
   </property>
   <widget class="QWidget" name="widget_main">
@@ -181,7 +181,7 @@
                     <string>Polytope</string>
                    </property>
                    <property name="icon">
-                    <iconset>
+                    <iconset resource="../resources/resources.qrc">
                      <normaloff>:/icons/create_polytope.png</normaloff>:/icons/create_polytope.png</iconset>
                    </property>
                    <property name="checkable">
@@ -220,7 +220,7 @@
                     <string>Polyline</string>
                    </property>
                    <property name="icon">
-                    <iconset>
+                    <iconset resource="../resources/resources.qrc">
                      <normaloff>:/icons/create_polyline.png</normaloff>:/icons/create_polyline.png</iconset>
                    </property>
                    <property name="iconSize">
@@ -249,7 +249,7 @@
                     <string>Point Set</string>
                    </property>
                    <property name="icon">
-                    <iconset>
+                    <iconset resource="../resources/resources.qrc">
                      <normaloff>:/icons/create_pointset.png</normaloff>:/icons/create_pointset.png</iconset>
                    </property>
                    <property name="checkable">
@@ -426,7 +426,7 @@
   </widget>
   <action name="action_about">
    <property name="text">
-    <string>About DDAD Workbench</string>
+    <string>About RationalCAD</string>
    </property>
   </action>
   <action name="action_preferences">
@@ -441,7 +441,9 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="../resources/resources.qrc"/>
+ </resources>
  <connections/>
  <buttongroups>
   <buttongroup name="buttonGroup"/>

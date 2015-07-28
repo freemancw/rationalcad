@@ -11,7 +11,7 @@
 #include "line.h"
 #include "triangle.h"
 
-namespace DDAD {
+namespace RCAD {
 
 namespace QuadEdge {
 
@@ -404,6 +404,6 @@ private:
 } // namespace QuadEdge
 
 
-} // namespace DDAD
+} // namespace RCAD
 
 #endif // GE_QUADEDGE_H

@@ -45,7 +45,7 @@ int main(int argc, char *argv[]) {
     qRegisterMetaType<QVector<QVector3D>>("QVector<QVector3D>");
 
     LOG(INFO) << "displaying splash screen";
-    QPixmap splash_image(":/splash.png");
+    QPixmap splash_image(":/splash3.png");
     QSplashScreen splash(splash_image);
     splash.show();
     //splash.showMessage("Initializing...");
