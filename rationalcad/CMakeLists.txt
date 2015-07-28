@@ -10,7 +10,7 @@ find_package(Qt5Widgets)
 find_package(Qt5Gui)
 find_package(Qt5OpenGL)
 
-link_directories(${DDAD_BINARY_DIR}/geometry)
+link_directories(${RATIONALCAD_BINARY_DIR}/geometry)
 
 qt5_wrap_ui(
     UI_HEADERS
@@ -31,7 +31,7 @@ qt5_add_resources(
 )
 
 add_executable(
-    workbench
+    RationalCAD
     config.cpp
     grid.cpp
     logger.cpp
@@ -56,7 +56,7 @@ add_executable(
 )
 
 qt5_use_modules(
-    workbench
+    RationalCAD
     Core
     Gui
     Widgets
@@ -64,8 +64,17 @@ qt5_use_modules(
 )
 
 target_link_libraries(
-    workbench
+    RationalCAD
     geometry
     mpir
     mpirxx
+)
+
+# Copy MPIR dll into RationalCAD binary dir
+ADD_CUSTOM_COMMAND(
+    TARGET RationalCAD
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy
+    ${RATIONALCAD_SOURCE_DIR}/dependencies/mpir/build.vc12/${RCAD_WIN_ARCH}/${CMAKE_BUILD_TYPE}/mpir.dll
+    ${RATIONALCAD_BINARY_DIR}/rationalcad
 )
