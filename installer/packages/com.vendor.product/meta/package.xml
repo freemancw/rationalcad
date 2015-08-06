@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+    <DisplayName>RationalCAD</DisplayName>
+    <Description>Install RationalCAD.</Description>
+    <Version>0.1-1</Version>
+    <ReleaseDate>2015-08-05</ReleaseDate>
+    <Licenses>
+        <License name="GPL" file="license.txt" />
+    </Licenses>
+    <Default>script</Default>
+    <Script>installscript.qs</Script>
+</Package>
