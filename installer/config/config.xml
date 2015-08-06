@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+    <Name>RationalCAD</Name>
+    <Version>0.1</Version>
+    <Title>RationalCAD</Title>
+    <Publisher>Clinton Freeman</Publisher>
+    <StartMenuDir>RationalCAD</StartMenuDir>
+    <TargetDir>@ApplicationsDir@/RationalCAD</TargetDir>
+    <WizardStyle>Modern</WizardStyle>
+    <InstallerApplicationIcon>../../rationalcad/resources/icons/appicon</InstallerApplicationIcon>
+    <InstallerWindowIcon>../../rationalcad/resources/icons/appicon.png</InstallerWindowIcon>
+</Installer>
