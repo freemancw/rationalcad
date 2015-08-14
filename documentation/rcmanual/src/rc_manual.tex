@@ -19,27 +19,26 @@
 %\color{white}
 
 \pagenumbering{gobble}
-\thispagestyle{empty}
+\thispagestyle{empty}     
 
 %\begin{mdframed}[style=answer]  
-\noindent\textbf{{\fontsize{20pt}{48pt}\selectfont ROBUST GEOMETRIC COMPUTING}}  
+\noindent{\fontsize{48pt}{64pt}\myfont\selectfont Rational\textbf{CAD} 0.1}
     
-\vspace{1.5em}
+\vspace{1.5em}   
 
-\noindent\textit{\fontsize{16pt}{24pt}\selectfont A handy guide to writing
-reliable geometric software}
+\noindent{\fontsize{24pt}{48pt}\myfont\selectfont User Manual}
 %\end{mdframed}   
-%\vspace{10em} 
+%\vspace{10em}  
 \par\vspace*{\fill}
 
-\noindent\hfill{\fontsize{16pt}{24pt}\selectfont by CLINTON FREEMAN}  
+%\noindent\hfill{\fontsize{16pt}{24pt}\selectfont by CLINTON FREEMAN}  
 
 \clearpage
-
-%\pagecolor{white}
+ 
+%\pagecolor{white}   
 %\color{black}
 
-%\newpage\null\thispagestyle{empty}\newpage
+%\newpage\null\thispagestyle{empty}\newpage  
 
 %==============================================================================
 % Table of Contents 
@@ -47,569 +46,187 @@ reliable geometric software}
 
 \pagenumbering{roman}
 
-\tableofcontents*   
-
+\begingroup
+\hypersetup{linkcolor=black}
+\tableofcontents*
+\endgroup   
+ 
 \clearpage
 
 %==============================================================================
 % Preface
 %==============================================================================
 
-\chapter{Preface}  
-
-I am writing this book because I have yet to find a single source that clearly
-outlines what is to be done about geometric nonrobustness from both a
-theoretical and practical point of view.
-
-\vspace{2em}
-\hfill\textbf{Clinton Freeman}
-
-\hfill\textit{Chapel Hill, North Carolina}
-
-\hfill January 2014
+% \chapter{Preface}  
+% 
+% I am writing this book because I have yet to find a single source that clearly
+% outlines what is to be done about geometric nonrobustness from both a
+% theoretical and practical point of view.
+% 
+% \vspace{2em}
+% \hfill\textbf{Clinton Freeman}
+% 
+% \hfill\textit{Chapel Hill, North Carolina}
+% 
+% \hfill January 2014
 
 %==============================================================================
 % Introduction
 %==============================================================================
 
-\mainmatter  
+\mainmatter   
 \pagenumbering{arabic}
      
 \chapterstyle{freeman}
 
-\chapter{Uncategorized}         
+\chapter{Introduction}         
  
-% \chapterprecishere{``Begin at the beginning,¨ the King said gravely, ``and go on
-% till you come to the end: then stop."\par\raggedleft--- \textup{Lewis Carroll}, Alice in Wonderland}
+\chapterprecishere{``Begin at the beginning,¨ the King said gravely, ``and go on
+ till you come to the end: then stop."\par\raggedleft--- \textup{Lewis Carroll}, Alice in Wonderland}
 
 %\epigraph{``Begin at the beginning," the King said gravely, ``and go on till
 % you come to the end: then stop."}{--- \textup{Lewis Carroll}, Alice in Wonderland}
  
 
-%\section{Audience}   
+%\section{Audience}    
  
-\section{General considerations} 
+Thanks for trying out RationalCAD, the simplest, easiest way to create robust
+geometric models with convex polyhedra. This document describes what RationalCAD
+is, how it differs from other editors, and how to use its powerful features to
+create works of art.
  
-\subsection{Mathematical notation}
-   
-\begin{tabularx}{\textwidth}{llX}
-\toprule 
-Entity & Notation & Description \\  
-\midrule
-%Set & derp & derp \\
-Set                         & $\{\square,\square,\square\}$                   & 
-Curly braces surrounding a list denote a set of objects. \\
-
-Tuple                       & $(\square,\square,\square)$                     & 
-Parentheses surrounding a list denote a sequence of objects. \\
-
-Elementary set              & $\mathbb{N, Z, Q, R}$                           & 
-Naturals, integers, rationals, and reals. \\               
-
-Elementary value            & $\alpha, \beta, a, b$                           &  
-A value in some set. \\   
-    
-Point                       & $\mPt{p}, \mPt{q}, \mPt{r}, \mPt{s}$            & 
-An element of some space such as $\mR{3}$. \\
-    
-Vector                      & $\mVc{t}, \mVc{u}, \mVc{v}, \mVc{w}$            &
-A vector in some space such as $\mR{3}$. \\
+\section{Interface Overview}
  
-Matrix                      & $\mMt{A}, \mMt{B}, \mMt{C}, \mMt{D}$            & 
-description \\
- 
-Line (oriented)             & $\mOLine{ab}, \mOLine{cd}, \mOLine{A}, \mOLine{B}$        
-& description \\  
-%                
-% %Line (unoriented)           & $\mULine{ab}, \mULine{pq}$                      &
-% %description \\ 
- 
-Line segment                & $\mSeg{ab}, \mSeg{cd}, \mSeg{A}, \mSeg{B}$                         
-& description \\  
-   
-Ray                         & $\mRay{ab}, \mRay{cd}, \mRay{A}, \mRay{B}$                               
-& description \\           
-    
-Compound object             & $\mPlane{P}, \mPolygon{Q}, \mPolytope{R},
-\mPolytope{S}$ & description \\                  
+\begin{figure}[h!]
+  \centering
+    \includegraphics[width=0.9\textwidth]{images/interface-overview}
+\end{figure}
 
-%Matrix transpose            & $a$ & description \\
-%Matrix inverse              & $a$ & description \\
-%Tuple                       & $a$ & description \\
-%Determinant                 & $a$ & description \\
-%Space (linear etc)          & $a$ & description \\ 
-%Space (reals)               & $a$ & description \\      
-%Dot (inner) product         & $a$ & description \\  
-%Cross product               & $a$ & description \\ 
-%Tensor (outer) product      & $a$ & description \\
- 
-%Vector length               & $a$ & description \\     
-%Scalar                      & $a$ & description \\
-%Angle                       & $a$ & description \\
-%Unit vector                 & $a$ & description \\
-%Perpendicular vector        & $a$ & description \\
-%Parallel vector             & $a$ & description \\
+The Graphical User Interface (GUI) comprises 7 components: the menubar, the
+toolbar, the orthographic widget, the perspective widget, the interactive panel,
+the statusbar, and the console.
 
-\bottomrule          
-\end{tabularx}   
+% ![GUI Overview](http://cs.unc.edu/~freeman/DDAD/media/gui-overview.png)
+\paragraph{Menubar.} The menubar comprises 3 high-level menus: File, Edit, and
+Help. It exists primarily as a scaffold for future functionality.
 
-\subsection{Pseudocode}
+\begin{itemize}
+	\item File. The File menu is currently empty but
+	\href{https://github.com/unc-compgeom/DDAD/issues/6}{issue $\triangle$ 6}
+	specifies saving and loading of files. To do this, we need a mechanism for
+	serializing and deserializing the scene, which is a major undertaking.
+    \item Edit. The Edit menu contains one element, Preferences (there are
+    issues to add duplicating and copy/paste.) Clicking Preferences will open a
+    dialog which is split into 3 major panels. On the left is a list of
+    subsections. The list currently contains only Grid Settings. On the right is
+    a detailed view of the selected subsection. This detail view is
+    parameterized by the list on the left. Finally, the bottom contains 4
+    buttons: Default, Cancel, Apply, and Ok. The most interesting of these is
+    Default, which requires the application to somehow define defaults. Settings
+    \& Defaults bring up the notion of a configuration file (e.g. .ini). While
+    currently there are not many settings, the dialog sets forth a framework
+    into which developers can add new configurations settings.
+    \item Help. The Help menu contains two simple elements. The first is a link
+    to the user manual (the wiki). The second is an About dialog that provides
+    information about the program version and a link to the project webpage.
+\end{itemize}
 
-\section{Geometric and solid modeling}
+\paragraph{Toolbar.} The toolbar comprises 4 elements: 3 buttons to control
+input mode (Select, Translate, and Rotate), and 1 button to toggle snapping to
+grid. The three input mode buttons are mutually exclusive with one another and
+with the creation buttons in the interactive panel. The select mode is initially
+activated and allows the user to pick one object at a time via left-clicking in
+the orthographic and perspective views.
+\href{https://github.com/unc-compgeom/DDAD/issues/8}{Issue $\triangle$ 8}
+specifies multiple-object selection,
+\href{https://github.com/unc-compgeom/DDAD/issues/9}{issue $\triangle$ 9}
+specifies the rotation mode, and
+\href{https://github.com/unc-compgeom/DDAD/issues/10}{issue $\triangle$ 10}
+specifies the translation mode.
 
-Geometric and solid modeling are processes by which a user may employ a computer
-to design virtual geometric shapes. Another term for these processes is
-computer-aided geometric design. The purpose may vary greatly, but we can
-classify broadly as: creating a virtual object to live in a virtual world,
-creating a virtual object to be manufactured to live in the real world, modeling
-a real object, and \ldots The difference between geometric and solid modeling is
-\ldots
+\paragraph{Orthographic widget.} The orthographic widget allows users to
+precisely create and manipulate objects against the backdrop of an integer grid.
+The integer grid has minor and major grid lines. Minor lines are drawn in a
+lighter color. Major lines occur after a certain number of minor lines - the
+default is 8.
 
-%purpose of geometric modeling
-%purpose of solid modeling
-%difference between geometric and solid modeling
-computer aided design
+Users are able to zoom in and out and pan around the grid. As the user zooms
+out, the grid adapts so that the lines are not drawn too close together. At the
+highest zoom level, minor lines are drawn 1 unit apart. After the user zooms out
+a ways, the grid adapts to draw minor lines 8 units apart. After more zooming,
+the grid adapts to draw minor lines 64 units apart, and so on.
 
-\section{Software reliability}
+\paragraph{Perspective widget.} The perspective widget allows the user to
+control a 3D perspective camera that renders the current scene. Users may change
+the camera's orientation and move forward (W), backward (S), left (A), right (D)
+up (E), and down (C).
 
-robust
-reliable
-software reliability
-probability
+\paragraph{Interactive panel.} The interactive panel comprises three tabs:
+Create, Modify, and Compute.
 
+The create tab is open by default. It initially has only a gallery of geometric
+objects. The buttons in the gallery are mutually exclusive with one another and
+with the input mode buttons in the toolbar. Once the user selects one of the
+geometric objects, an additional ``Creation Method'' panel will appear with
+additional options. The options are parameterized by the selected object type;
+often these methods will overlap (e.g. clicking inside the orthographic view to
+create a point set or polyline), but may be unique (e.g. a polytope may have a
+user-defined length, width, and height). Each method will be listed in a
+dropdown menu at the top of the panel. As the user changes between methods,
+method-specific controls will appear below the dropdown. For example, when
+``Click'' is selected, explanatory text appears; if you change the selection to
+``File,'' then the explanatory text will be replaced with a file chooser and
+``Generate'' button.
 
-\section{Polyhedra}
+The modify tab is meant to let the user choose the \emph{selection granularity},
+or the level at which operations are applied. For example, a polytope is
+composed of vertices, edges, and faces. Each of these, along with the whole
+polytope, are selectable levels of granularity. When ``edges'' is selected,
+picking operations will choose from only the object's edges, when ``vertices''
+is selected, picking operations will choose from only the object's vertices, and
+so on. Most of this functionality is not yet implemented, but is specified in
+\href{https://github.com/unc-compgeom/DDAD/issues/7}{issue $\triangle$ 7}.
 
-Our primary objects of study are convex polytopes and their corresponding
-integer hulls. Below, we define both terms and bound the complexity of integer
-hulls in 3-space by specializing a general bound for fixed dimensions.
+The compute tab is composed of the name of the selected object and a drop down
+menu of applicable algorithms. The dropdown of algorithms follows the same logic
+as the creation method dropdown, meaning that as you change your selection
+relevant parameters will appear below. Once the user is with the algorithm
+selection and any parameters, they would like to execute the algorithm. For
+this, we provide a set of media controls. In particular, they may click the
+``Run'' button which will begin algorithm execution. Once the algorithm is
+running, editing controls will be disabled.
 
-In $\mR{d}$, let $S^d$ and $B^d$ denote the unit sphere and unit ball,
-respectively, and for a set $X \subseteq \mR{d}$, let $\text{cl}X$ denote
-the closure of $X$. A $k$\emph{-face} (or $k$\emph{-cell}) is subset of
-$\mR{d}$ that is homeomorphic to $B^k$. A $d$-dimensional \emph{cell
-complex} is a disjoint union of $k$-faces for $k=0,1,2,\ldots,d$ in which, for
-any faces $a$ and $b$, the intersection of $\text{cl}a$ and $\text{cl}b$ is
-either a union of faces or the empty set.
+\paragraph{Statusbar.} The statusbar provides a way of sending messages to the
+user, depending on application context. For example, when the user is creating a
+polyline, the application cycles through 2 different states. First, the user
+needs to click in the orthographic view to position the initial vertex, so we
+might simply display: ``Left-click in the orthographic view to place first
+vertex.'' Second, the user can either place additional vertices in the same
+fashion, or terminate the polyline by right-clicking; the status bar should be
+updated to reflect the user's options: ``Left-click again to add more vertices,
+or right-click to terminate polyline.'' Finally, after the user right-clicks to
+terminate, we transition back to creating a new polyline, so the message should
+update as well.
 
-A \emph{convex polyhedron} $P$ is a nonempty intersection of a finite number of
-closed half-spaces in $\mR{d}$. A \emph{convex polytope} is a convex
-polyhedron whose volume is bounded. The reader should assume the words
-polyhedron or polytope by themselves refer to a convex object unless otherwise
-stated. The boundary of a polytope $P$, denoted $\partial P$, is a 2-dimensional
-cell complex, and we call 0-faces \emph{vertices}, 1-faces \emph{edges}, and
-2-faces \emph{facets}. We use the quad-edge data
-structure~\cite{guibas1985primitives} to store and manipulate polytope
-boundaries.
+The main window defines a slot for updating the statusbar message (\texttt{void
+onUpdateStatusBarMsg(const QString\& status)}). To trigger the handler from
+another QObject, you must ensure that the instance is connected to the main
+window, then emit an appropriate signal. For more information, see Qt's
+documentation on
+\href{http://qt-project.org/doc/qt-4.8/signalsandslots.html}{signals and slots} and
+\href{http://qt-project.org/doc/qt-4.8/qstatusbar.html}{QStatusBar}.
 
-\subsection{Integer hulls and their complexity in 3-space}
+\paragraph{Console.}
 
-As mentioned in the introduction, the \emph{integer hull} $\mIntHull{P}$ of a
-polyhedron $P$ is the convex hull of all integer points contained by $P$. The
-combinatorial complexity of $\mIntHull{P}$ is the sum of its vertices, edges,
-and facets. In order to state an upper bound for the complexity of
-$\mIntHull{P}$, we first define the \emph{size of an inequality}. For a rational
-number $r = p/q$ with $p$ and $q$ relatively prime integers, let
-$\text{size}(r) = 1+\ceiling{\log_2(|p|+1)}+\ceiling{\log_2(|q|+1)}$, and for a
-rational vector $a$, $\text{size}(a) = n+\sum_{j=1}^n \text{size}(a_j)$. The
-\emph{size of an inequality} $a^Tx \leq \beta$ is thus given by
-$1+\text{size}(a)+\text{size}(\beta)$ and is an indication of the number of bits
-necessary to encode it as a binary string.
-
-\begin{theorem}
-For a convex polyhedron $P \subset \mR{3}$ defined by $m$ inequalities
-of size at most $\varphi$, the complexity of the integer hull $\mIntHull{P}$ is
-$O(m^3\varphi^2)$.
-\end{theorem}
-\begin{proof}
-Cook et.al. give an upper bound on the number of vertices of integer hulls in
-$\mR{d}$~\cite{cook1992integer}. For fixed $d$, the bound is
-$O(m^d\varphi^{d-1})$, so when $d=3$ we have $O(m^3\varphi^2)$. By Euler's
-formula for planar graphs, we know that the complexity of a convex polyhedron in
-three space is linear in the number of vertices~\cite{dutchBook}. Thus, we can
-conclude that the overall complexity of $\mIntHull{P}$ shares the
-$O(m^3\varphi^2)$ bound. 
-\end{proof}
-
-\subsection{Flattening planes}
-
-In $\mR{3}$, we have the standard basis vectors $\{\mVector{i}, \mVector{j},
-\mVector{k}\}$. These 3 standard vectors define what we may call the 3 standard
-planes, $\{\hat{IJ}, \hat{IK}, \hat{JK}\}$. Intuitively, these planes -- taken
-together -- divide 3-space into 8 octants. Given a plane $\Gamma \subset
-\mR{3}$, how can we compute a transformation matrix that makes $\Gamma$
-parallel to one of the three standard planes?
-
-The basic idea is to find two linearly independent vectors that span $\Gamma$,
-and make these two of our new basis vectors, combined with a third vector formed
-from their cross product.
-
-\subsection{Constructing unimodular bases}
-
-\begin{algorithm}
-\caption{Constructing a unimodular basis that contains a specified vector}
-\label{alg:UnimodularBasisWithVec}
-\begin{algorithmic}[1]
-    \vspace{0.75em}
-    \Require{Integer vector $\mVector{v} \in \mR{3}$} 
-    \Ensure{Unimodular basis $\mMatrix{B}$}
-    \vspace{0.75em}
-    \Procedure{UnimodularBasisWithVec3}{$\mVector{v}$}
-    \State $\mMatrix{B} := \textsc{identity}$
-    \State $\mMatrix{B}_{i,i} := \mTernary{v_i < 0}{-1}{+1}$ 
-    \While{$\mVector{v}$ is not a row of $\mMatrix{B}$}
-        \State $\mVector{v}^\prime := \mVector{v} \cdot \mMatrix{B}^{-1}$
-        \State $\mVector{v}^\prime_{\text{min}} :=
-        \min(\mVector{v}^\prime)$, $\mVector{v}^\prime_{\text{mid}} :=
-        \text{mid}(\mVector{v}^\prime)$, $\mVector{v}^\prime_{\text{max}} :=
-        \max(\mVector{v}^\prime)$
-        \State $\mMatrix{B}_{\text{min}, i} := \mMatrix{B}_{\text{min}, i} +
-        \mMatrix{B}_{\text{mid}, i}$
-        \State $\mMatrix{B}_{\text{min}, i} := \mMatrix{B}_{\text{min}, i} +
-        \mMatrix{B}_{\text{max}, i}$
-        \State $\mMatrix{B}_{\text{mid}, i} := \mMatrix{B}_{\text{mid}, i} +
-        \mMatrix{B}_{\text{max}, i}$
-    \EndWhile
-    \State \Return $\mMatrix{B}$
-    \EndProcedure 
-\end{algorithmic} 
-\end{algorithm}
-
-\begin{lemma}
-Given an integer vector $\mVector{v}$ with $\gcd(\mVector{v}) = 1$, Algorithm
-\ref{alg:UnimodularBasisWithVec} computes a unimodular basis matrix with one row
-equal to $\mVector{v}$ in $O(\log_\phi \varphi)$ time.
-\end{lemma}
-\begin{proof}
-We have several proof obligations. First, we show that each iteration
-computes a new basis that is closer to containing $\mVector{v}$. Next, we
-show that output matrix $\mMatrix{B}$ is unimodular. Lines 2 and 3
-establish the invariant that $|\mMatrix{B}| = \pm 1$. The loop beginning on line
-4 maintains this invariant since $\mMatrix{B}$ is only modified with row
-operations on lines 7-9, and row operations do not alter the determinant.
-\end{proof}
-
-polyhedron
-polytope
-polygon
-polygonal chain
-triangle
-tetrahedron
-simplex
-cone
-simplicial cone
-mesh
-simplicial mesh
-subdivision
-complex
-simplicial complex
-cross product
-dot product
-inner product
-inner product space
-projection
-point
-vertex
-edge
-face
-line segment
-line
-ray
-plane
-hyperplane
-open set
-closed set
-topology
-homeomorphic
-homology
-cohomology
-isomorphic
-hausdorff distance
-norm
-euclidean distance
-euclidean norm
-manhattan distance
-metric
-taxicab metric
-taxicab geometry
-space
-genus
-Euler's formula
-convex set
-convex hull
-integer hull
-linear programming
-simplex algorithm
-integer programming
-quadratic programming
-linear inequality
-halfspace
-naturals
-reals
-integers
-rationals
-algebraic numbers
-square root
-kth root
-floating point numbers
-arithmetic operations
-relative error
-absolute error
-tolerance
-interval arithmetic
-sin/cos/pi/e
-transcendental numbers
-numerical analysis
-floor
-ceiling
-mod
-logarithm
-exponentiation
-factorial
-greatest common denominator
-euclid's algorithm
-extended euclid
-diophantus
-linear diophantine equations 
-clipping a polytope with a plane
-checking a polytope for convexity
-boolean operations
-rotations
-rotating a collection of polytopes
-CSG
-Brep
-high level geometric rounding
-snap rounding
-surface
-boundary
-manifold
-winding order
-predicate
-construction
-orientation predicate
-matrix
-matrix multiplication
-matrix addition
-matrix subtraction
-matrix inverse
-unimodular matrix
-unimodular transformation
-lattice
-staircase
-
-
-minkowski sum
-hermann minkowski
-convex decomposition
-binary space partition
-k-d tree
-big-o notation
-computational complexity
-NP-hard
-NP-complete
-collision detection
-axis
-axis-aligned bounding box
-oriented bounding box
-separating axis theorem
-circle
-sphere
-ball
-quadric
-cylinder
-capsule
-
-
-\section{Models of computation}
-
-concrete machines
-BSS
-RAM
-Real RAM
-turing machine
-straight-line program
-decision-tree model
-pseudocode
-
-
-% \epigraph{``Begin at the beginning," the King said gravely, ``and go on till you 
-% come to the end: then stop."}{--- \textup{Lewis Carroll}, Alice in Wonderland}
-
-The following uses the \textbf{bitwise computation} model. Let $O_b$ denote
-big-oh notation in this model.
-
-\section{Complexity of arithmetic operations on integers}
-
-\subsection{Addition}
-
-Integer addition $+ : \mathbb{Z} \times \mathbb{Z} \mapsto \mathbb{Z}$ takes as
-input two 
-
-
-\begin{table}[hr]
-\begin{tabularx}{\textwidth}{lX}
-\toprule
-Operation & Time complexity \\
-\midrule
-Addition & $O_b(\beta)$ \\
-Subtraction & $O_b(\beta)$ \\
-Multiplication & $O_b(\beta \log \beta \log \log \beta)$ \\
-Division & $O_b(\beta \log \beta \log \log \beta)$ \\ 
-\bottomrule
-\end{tabularx}
-\end{table}
-
-
-rational multiplication
-rational division
-rational addition
-rational subtraction
-
-\section{Complexity of matrix operations}
-
-\begin{table}[hr]
-\caption{Time complexity of basic arithmetic operations on two $n \times n$
-matrices.}
-\begin{tabular}{ll}
-\toprule 
-Operation & Time complexity \\
-\midrule
-Multiplication & $O(n^{2.376})$ \\
-Inverse & $O(n)$ \\
-Determinant & $O_b(n \log n \log \log n)$ \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\chapter{Surface-surface intersection}
-
-\section{Degree and genus of algebraic curves}
-
-Katz and Sederberg presents formula for computing the degree and genus of the
-intersection curve between two surfaces \cite{katz1988genus}. They show that for
-two generic tensor product surface patches of parametric degree $m_1 \times m_2$
-and $n_1 \times n_2$ respectively, the intersection curve is of degree
-$4m_1m_2n_1n_2$ and generally of genus $8m_1m_2n_1n_2 -
-2m_1m_2(n_1+n_2)-2n_1n_2(m_1+m_2)+1$. Bicubic patches (i.e. $m_1 = m_2 = 3$),
-are often used in geometric modeling systems. Two such patches would intersect
-in a curve of degree 324 and of genus 433. They explain that only curves whose
-genus is zero can be expressed parametrically, curves whose genus is one or two
-can be expressed using formula involving square roots, and curves whose genus is
-greater than two possess no such parameterizations.
-
-\section{B-splines}
-
-B-splines are piecewise polynomial functions formed from linear combinations of
-B-spline basis functions. These basis functions are in turn specified by a knot
-vector, which is a monotonically increasing sequence of real numbers. The knot
-vector defines the basis functions' support interval in parameter space. The
-formula commonly used to compute the basis functions from the knot vector is
-known as the Cox-de Boor recursion formula.
-
-Although a more intuitive geometric way of deriving B-splines involves repeated
-convex combinations of control points, the vector space point of view is more
-important for considering tensor product surfaces and T-splines. For T-splines,
-being able to derive the basis functions independently of the control points is
-necessary since they are constructed with unique knot vectors for each control
-point. Since there is only one control point per set of basis functions, we are
-unable to use the repeated convex combination construction, and must rely on the
-Cox-de Boor recurrence.
-
-\section{Tensors, the tensor product, and tensor product surfaces}
-
-Tensors (from the Latin word \emph{tendere}, ``to stretch'') came into use
-around the turn of the 19\textsuperscript{th} century by mathematicians working
-in differential geometry, perhaps most notably by Ricci and Levi-Civita. One
-most often finds tensors in physics literature, where they can be used to
-succinctly describe physical concepts such as stress and strain on geometric
-objects. Einstein used tensors extensively in his theory of general relativity,
-which helped give tensors more widespread acceptance. He also introduced an
-eponymous index notation to simplify the sometimes unwieldy expressions. This
-notation is now standard practice when working with tensors.
-
-A natural way for computer scientists to think about tensors is to view them as
-multidimensional arrays paired with a transformation law which describes how the
-entries respond to a change of basis. Each element in the array is called a
-component, and represents a value of the tensor with respect to a particular
-basis. If we perform a change of basis with a transformation matrix $R$, the
-transformation law just describes how each component is mapped to the new basis.
-That is to say, whether the component will be multiplied by $R$ or by $R^{-1}$.
-Components which are multiplied by $R$ are said to be covariant and their index
-appears as a subscript, and components which are multiplied by $R^{-1}$ are said
-to be contravariant and their index appears as a superscript. We can also talk
-about the order of a tensor, which is the number of indices you need to specify
-a particular element in the array. The familiar concepts of scalars, vectors,
-and matrices are subsumed under the definition of a tensor; they are order 0, 1,
-and 2 tensors, respectively.
-
-There are a number of ways to view tensor products. When talking about ``tensor
-product surfaces,'' we are referring to taking a product of vector spaces. The
-first vector space is specified by the $U$ knot vector, which generates a
-corresponding set of basis functions. The set of all linear combinations of
-these basis functions is the vector space. Likewise, another vector space is
-generated from the second knot vector $V$. The tensor product is formed from the
-Cartesian product that is modified with equivalence relations.
-
-\section{Sphere-sphere} 
-
-
-Since the direction of each segment is allowed to vary, the start position and
-length define the center and radius of respective spheres. The solution set may
-be represented as the intersection of these spheres, which is one of the
-following:
-\begin{enumerate}
-  \item The empty set $\emptyset$, which occurs in three cases. In the first
-  case, the spheres are too far apart to touch, given by the conditions
-  \begin{align} 
-  \|\mPt{p_0}-\mPt{p_1}\| &> l_0,\text{ or} \\
-  \|\mPt{p_0}-\mPt{p_1}\| &> l_1. 
-  \end{align}
-  In the second and third cases, one sphere is fully enclosed by the other,
-  given by the conditions 
-  \begin{align}
-  \|\mPt{p_0}-\mPt{p_1}\| + l_0 &< l_1,\text{ or} \\
-  \|\mPt{p_0}-\mPt{p_1}\| + l_1 &< l_0.
-  \end{align}
-  \item A single point $\mPt{q}$, which occurs when the distance between the two
-  centers exactly equals the sum of the radii
-  \begin{equation}
-  \|\mPt{p_0}-\mPt{p_1}\|=l_0+l_1. 
-  \end{equation}
-  First observe that $\mPt{q}$ is located along the vector connecting the
-  centers. We may use this fact to construct $\mPt{q}$ with a number of
-  different algebraic expressions -- we should choose the expression of
-  lowest degree in order to minimize its precision requirement. For example, a
-  straightforward way is to form the vector $\mVc{v} = \mPt{p_0}-\mPt{p_1}$,
-  normalize $\mVc{v}$, and construct $\mPt{q} = \mPt{p_1}+l_1\mVc{v}$. However,
-  we can do better by simply computing $\mPt{q}$ as
-  \begin{equation}
-  \mPt{q} = \left(\frac{l_0+l_1}{l_1}\right)\mVc{v}.
-  \end{equation}
-  \item A circle $\mSet{C}$, which occurs when
-  \begin{equation}
-  \|\mPt{p_0}-\mPt{p_1}\|<l_0+l_1. 
-  \end{equation}
-  To begin, we may write $\mSet{C}$ precisely as the set of points 
-  \begin{equation}\label{eq:circle_set}
-  \mSet{C} = \left\{\mPt{q} \in \mR{3} : (\mPt{q} - \mPt{p_0})\cdot(\mPt{q} -
-  \mPt{p_0})= l_0^2\text{ and } (\mPt{q} - \mPt{p_1})\cdot(\mPt{q} -
-  \mPt{p_1})= l_1^2\right\}.
-  \end{equation}
-  For programming purposes, we would prefer a different representation. For
-  simplicity, we can let $\mCompound{C}$ be the tuple $\mCompound{C} = (\mPt{c},
-  r, \mVc{n})$, where $\mPt{c}$ is its center in $\mR{3}$, $\mVc{n}$ is normal
-  to its supporting plane, and $r$ is its radius. We may compute this tuple from
-  equation~\eqref{eq:circle_set} as follows. Intuitively, the normal $\mVc{n}$
-  should be the normalized vector from one center to the other, $\mVc{n} =
-  \mPt{p_0}-\mPt{p_1}$. 
-  
-  \item A sphere $\mCompound{S}$, when (L0 == L1) and (P0 == P1).
-\end{enumerate}
-
-
-\backmatter
+The console is designed to provide non-developers with useful information in
+case they experience unexpected (but non-terminal) behavior. By logging to the
+console, developers can ask these users to inspect the console to understand the
+application behavior. The console is not meant as a replacement of the IDE
+console. By default, the console is hidden from view, but may be expanded at any
+time.
 
 \appendix
+
 \chapter{Linear algebra}
 
 vector
@@ -684,6 +301,7 @@ Multiplicative identity for scalar multiplication & $1\mVector a = \mVector a$ \
 % \end{tabular}
 % \end{center}
 
+\backmatter 
 
 \bibliographystyle{plain}  
 \bibliography{rc_references} 
