@@ -274,6 +274,17 @@
                    </property>
                   </widget>
                  </item>
+                 <item row="0" column="4">
+                  <widget class="QPushButton" name="bsplinesurface">
+                   <property name="text">
+                    <string>BSplineSurface</string>
+                   </property>
+                   <property name="icon">
+                    <iconset resource="../resources/resources.qrc">
+                     <normaloff>:/icons/create_polytope.png</normaloff>:/icons/create_polytope.png</iconset>
+                   </property>
+                  </widget>
+                 </item>
                 </layout>
                </widget>
               </item>

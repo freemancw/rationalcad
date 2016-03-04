@@ -21,7 +21,7 @@
 
 namespace RCAD {
 
-class Sphere_3r  {
+class Sphere_3r {
 public:
     Sphere_3r();
     Sphere_3r(const Point_3r& center, const rational& radius);
