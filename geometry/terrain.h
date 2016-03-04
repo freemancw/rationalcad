@@ -89,4 +89,4 @@ RegionalTerrain_3r DelaunayTerrain(const PointSet_3r&, IGeometryObserver* obs);
 
 } // namespace RCAD
 
-#endif // GE_TERRAI_H
+#endif // GE_TERRAIN_H

@@ -12,6 +12,7 @@ add_library(geometry
     predicate.cpp
     quadedge.cpp
     sphere.cpp
+    spline.cpp
     terrain.cpp
     triangle.cpp
     triangulation.cpp
