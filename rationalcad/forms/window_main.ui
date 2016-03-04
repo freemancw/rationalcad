@@ -175,14 +175,17 @@
                  <property name="spacing">
                   <number>4</number>
                  </property>
-                 <item row="0" column="2">
-                  <widget class="QPushButton" name="create_polytope">
+                 <item row="0" column="0">
+                  <widget class="QPushButton" name="create_point_set">
+                   <property name="toolTip">
+                    <string/>
+                   </property>
                    <property name="text">
-                    <string>Polytope</string>
+                    <string>Point Set</string>
                    </property>
                    <property name="icon">
                     <iconset resource="../resources/resources.qrc">
-                     <normaloff>:/icons/create_polytope.png</normaloff>:/icons/create_polytope.png</iconset>
+                     <normaloff>:/icons/create_pointset.png</normaloff>:/icons/create_pointset.png</iconset>
                    </property>
                    <property name="checkable">
                     <bool>true</bool>
@@ -191,19 +194,6 @@
                     <string notr="true">buttonGroup</string>
                    </attribute>
                   </widget>
-                 </item>
-                 <item row="0" column="4">
-                  <spacer name="horizontalSpacer">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>40</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
                  </item>
                  <item row="0" column="1">
                   <widget class="QPushButton" name="create_polyline">
@@ -240,17 +230,27 @@
                    </attribute>
                   </widget>
                  </item>
-                 <item row="0" column="0">
-                  <widget class="QPushButton" name="create_point_set">
-                   <property name="toolTip">
-                    <string/>
+                 <item row="0" column="5">
+                  <spacer name="horizontalSpacer">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
                    </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item row="0" column="3">
+                  <widget class="QPushButton" name="create_polytope">
                    <property name="text">
-                    <string>Point Set</string>
+                    <string>Polytope</string>
                    </property>
                    <property name="icon">
                     <iconset resource="../resources/resources.qrc">
-                     <normaloff>:/icons/create_pointset.png</normaloff>:/icons/create_pointset.png</iconset>
+                     <normaloff>:/icons/create_polytope.png</normaloff>:/icons/create_polytope.png</iconset>
                    </property>
                    <property name="checkable">
                     <bool>true</bool>
@@ -258,6 +258,20 @@
                    <attribute name="buttonGroup">
                     <string notr="true">buttonGroup</string>
                    </attribute>
+                  </widget>
+                 </item>
+                 <item row="0" column="2">
+                  <widget class="QPushButton" name="pushButton">
+                   <property name="text">
+                    <string>Polygon</string>
+                   </property>
+                   <property name="icon">
+                    <iconset resource="../resources/resources.qrc">
+                     <normaloff>:/icons/create_polyline.png</normaloff>:/icons/create_polyline.png</iconset>
+                   </property>
+                   <property name="checkable">
+                    <bool>true</bool>
+                   </property>
                   </widget>
                  </item>
                 </layout>

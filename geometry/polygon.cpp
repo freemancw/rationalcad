@@ -223,6 +223,14 @@ const Polyline_2r& Polygon_2r::boundary() const {
     return boundary_;
 }
 
+const int32_t Polygon_2r::z_order() const {
+    return z_order_;
+}
+
+const Visual::Material& Polygon_2r::mat_face() const {
+    return mat_face_;
+}
+
 void Polygon_2r::set_mat_vertex(const Visual::Material& mat_vertex) {
     boundary_.set_mat_vertex(mat_vertex);
 }

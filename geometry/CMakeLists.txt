@@ -3,6 +3,7 @@ add_library(geometry
     arithmetic.cpp
     common.cpp
     intersection.cpp
+    kdtree.cpp
     line.cpp
     matrix.cpp
     point.cpp

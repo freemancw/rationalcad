@@ -348,6 +348,60 @@ protected:
     rational time_;
 };
 
+/*!
+ * @brief Represents the intersection of a 3D ray and a 2D polygon.
+ */
+class Ray_3rPolygon_2r {
+public:
+    enum Type {
+        INTERSECTION_EMPTY,
+        INTERSECTION_POINT,
+        INTERSECTION_COINCIDENT
+    };
+
+    Ray_3rPolygon_2r() :
+        ray_(nullptr),
+        polygon_(nullptr),
+        type_(Type::INTERSECTION_EMPTY) {}
+
+    Ray_3rPolygon_2r(const Ray_3r* ray, const Polygon_2r* polygon) :
+        ray_(ray),
+        polygon_(polygon) {
+
+        type_ = Type::INTERSECTION_EMPTY;
+
+        rational earliest_time = 99999999; // FIXME
+        for (auto vertex : polygon_->boundary().vertices()) {
+            Sphere_3r tol_vertex(*vertex, 8.0);
+            Ray_3rSphere_3r isect(ray, &tol_vertex);
+            if (isect.type() != Ray_3rSphere_3r::IntersectionType::EMPTY) {
+                type_ = Type::INTERSECTION_POINT; // FIXME
+                if (isect.time_enter() < earliest_time) {
+                    earliest_time = isect.time_enter();
+                }
+            }
+        }
+
+        if (type_ != Type::INTERSECTION_EMPTY) {
+            time_ = earliest_time;
+        }
+
+    }
+
+    const Type type() const {
+        return type_;
+    }
+    const rational& time() const {
+        return time_;
+    }
+
+protected:
+    const Ray_3r* ray_;
+    const Polygon_2r* polygon_;
+    Type type_;
+    rational time_;
+};
+
 class Ray_3rPointSet_3r {
 public:
     enum Type {

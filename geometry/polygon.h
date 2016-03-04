@@ -98,6 +98,8 @@ public:
     void CloseBoundary();
 
     const Polyline_2r& boundary() const;
+    const int32_t z_order() const;
+    const Visual::Material& mat_face() const;
 
     void set_mat_vertex(const Visual::Material& mat_vertex);
     void set_mat_edge(const Visual::Material& mat_edge);

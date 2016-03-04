@@ -34,7 +34,7 @@ Line_2r::Line_2r(SharedPoint_2r p, SharedPoint_2r q) :
 
 Line_2r::Line_2r(SlopeType slope_type, const rational& c) :
     slope_type_(slope_type) {
-    switch(slope_type_) {
+    switch (slope_type_) {
     case SLOPE_PINFINITY:
         p_ = std::make_shared<Point_2r>(c, 0);
         q_ = std::make_shared<Point_2r>(c, 1);
@@ -56,29 +56,35 @@ Line_2r::Line_2r(SlopeType slope_type, const rational& c) :
         break;
     }
 
-    if(slope_type_ != SLOPE_DEGENERATE)
+    if (slope_type_ != SLOPE_DEGENERATE) {
         Update();
+    }
 }
 
 void Line_2r::Update() {
     V_ = (*q_)-(*p_);
-    if(*p_ == *q_) {
+
+    if (*p_ == *q_) {
         slope_type_ = SLOPE_DEGENERATE;
-    } else if(p_->x() == q_->x()) {
-        if(p_->y() < q_->y()) {
+    } else if (p_->x() == q_->x()) {
+
+        if (p_->y() < q_->y()) {
             slope_type_ = SLOPE_PINFINITY;
         } else {
             slope_type_ = SLOPE_NINFINITY;
         }
+
         N_.set_x(1);
         N_.set_y(0);
         d_ = p_->x();
-    } else if(p_->y() == q_->y()) {
-        if(p_->x() < q_->x()) {
+    } else if (p_->y() == q_->y()) {
+
+        if (p_->x() < q_->x()) {
             slope_type_ = SLOPE_PZERO;
         } else {
             slope_type_ = SLOPE_NZERO;
         }
+
         N_.set_x(0);
         N_.set_y(1);
         d_ = p_->y();
