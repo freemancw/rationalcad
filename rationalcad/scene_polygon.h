@@ -26,83 +26,28 @@ namespace RCAD {
 
 class ScenePolygon_2 : public ISceneObject, public Visual::Geometry {
 public:
-    ScenePolygon_2() {
-        model_polygon_.AddObserver(this);
-    }
+    ScenePolygon_2();
+    ~ScenePolygon_2();
 
-    ~ScenePolygon_2() {
-        LOG(DEBUG) << "destroying scene polygon...";
-    }
+    void Initialize(const QVector2D& start);
 
-    void Initialize(const QVector2D& start) {
-        LOG(DEBUG) << "initializing polygon.";
+    void Update(const QVector2D& cur);
 
-        model_polygon_.push_back(Point_2r(start.x(), start.y()));
-    }
+    void Select() override;
 
-    void Update(const QVector2D& cur) {
-        LOG(DEBUG) << "updating polygon.";
+    void Deselect() override;
 
-        model_polygon_.push_back(Point_2r(cur.x(), cur.y()));
-    }
+    Intersection::Ray_3rSceneObject intersect(const Ray_3r &ray) override;
 
-    void Select() override {
-        LOG(DEBUG) << "selecting polygon.";
+    void UpdateColor(const QColor &color) override;
 
-        Visual::Material selected_mat;
-        selected_mat.set_ambient(Visual::Color::SKYBLUE);
+    QString scene_object_type() const override;
 
-        SharedPoint_2r last_vertex;
-        for (auto vertex : model_polygon_.boundary().vertices()) {
-            SigPushVisualPoint_2r(*vertex, Visual::Point(selected_mat,
-                model_polygon_.z_order()));
+    const QString& name() const override;
 
-            if (last_vertex) {
-                SigPushVisualSegment_2r(Segment_2r(last_vertex, vertex),
-                                        Visual::Segment(selected_mat));
-            }
+    void set_name(const QString &name) override;
 
-            last_vertex = vertex;
-        }
-    }
-
-    void Deselect() override {
-        LOG(DEBUG) << "deselecting polygon.";
-
-        SharedPoint_2r last_vertex;
-        for (auto vertex : model_polygon_.boundary().vertices()) {
-            SigPopVisualPoint_2r(*vertex);
-
-            if (last_vertex) {
-                SigPopVisualSegment_2r(Segment_2r(last_vertex, vertex));
-            }
-
-            last_vertex = vertex;
-        }
-    }
-
-    Intersection::Ray_3rSceneObject intersect(const Ray_3r &ray) {
-        Intersection::Toleranced::Ray_3rPolygon_2r isect(&ray, &model_polygon_);
-        return Intersection::Ray_3rSceneObject(isect.type() == Intersection::Toleranced::Ray_3rPolygon_2r::INTERSECTION_EMPTY, isect.time());
-    }
-
-    void UpdateColor(const QColor &color) override {}
-
-    QString scene_object_type() const override {
-        return "Polygon";
-    }
-
-    const QString& name() const override {
-        return name_;
-    }
-
-    void set_name(const QString &name) override {
-        name_ = name;
-    }
-
-    const Polygon_2r& model_polygon() const {
-        return model_polygon_;
-    }
+    const Polygon_2r& model_polygon() const;
 
 private:
     Polygon_2r model_polygon_;

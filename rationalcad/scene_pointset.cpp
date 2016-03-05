@@ -17,6 +17,10 @@
 
 namespace RCAD {
 
+//=============================================================================
+// Implementation: ScenePointSet_3
+//=============================================================================
+
 ScenePointSet_3::ScenePointSet_3() {
     model_point_set_.AddObserver(this);
 }
