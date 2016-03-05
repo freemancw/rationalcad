@@ -66,8 +66,9 @@ public:
      * \param U
      * \return
      */
-    std::vector<rational> BasisFuns(const uint32_t i, rational u, uint32_t p,
-                                    const std::vector<rational>& U) {
+    std::vector<rational> BasisFuns(const uint32_t i, const rational& u,
+                                    const uint32_t p,
+                                    const std::vector<rational>& U) const noexcept {
         std::vector<rational> N, left, right;
         N.push_back(1.0);
 

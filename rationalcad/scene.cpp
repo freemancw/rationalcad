@@ -16,6 +16,11 @@
 // RCAD
 #include "common.h"
 #include "scene.h"
+#include "scene_pointset.h"
+#include "scene_polyline.h"
+#include "scene_polygon.h"
+#include "scene_polytope.h"
+#include "scene_terrainmesh.h"
 #include "config.h"
 
 // geometry kernel
@@ -26,6 +31,7 @@
 #include "../geometry/matrix.h"
 #include "../geometry/line.h"
 #include "../geometry/intersection.h"
+#include "../geometry/terrain.h"
 
 #include <ctime>
 

@@ -49,6 +49,11 @@ add_executable(
     qt_polytope_creation_method.cpp
     qt_polytope_algorithms.cpp
     scene.cpp
+    scene_pointset.cpp
+    scene_polyline.cpp
+    scene_polygon.cpp
+    scene_polytope.cpp
+    scene_terrainmesh.cpp
     common.h
     resources/icon.rc
     ${UI_HEADERS}
