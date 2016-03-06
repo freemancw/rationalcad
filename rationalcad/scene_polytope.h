@@ -26,82 +26,25 @@ namespace RCAD {
 
 class ScenePolytope_3 : public ISceneObject, public Visual::Geometry {
 public:
-    ScenePolytope_3() {
-        model_polytope_.AddObserver(this);
-    }
+    ScenePolytope_3();
 
-    void Initialize(const QVector2D& start, const QVector2D& cur) {
-        model_polytope_.Initialize(Point_3f(start.x(), start.y(), 0),
-                                   Point_3f(cur.x(), cur.y(), 8));
-    }
+    void Initialize(const QVector2D& start, const QVector2D& cur);
 
-    void Update(const QVector2D& cur) {
-        model_polytope_.Update(Point_3f(cur.x(), cur.y(), 8));
-    }
+    void Update(const QVector2D& cur);
 
-    void Select() override {
-        Visual::Material selected_mat;
-        selected_mat.set_ambient(Visual::Color::SKYBLUE);
+    void Select() override;
 
-        QuadEdge::CellVertexIterator cellVerts(model_polytope_.cell());
-        QuadEdge::Vertex *v;
-        while ((v = cellVerts.next()) != 0) {
-            SigPushVisualPoint_3r(*v->pos, Visual::Point(selected_mat));
-        }
+    void Deselect() override;
 
-        QuadEdge::CellFaceIterator cellFaces(model_polytope_.cell());
-        QuadEdge::Face *f;
-        while ((f = cellFaces.next()) != 0) {
-            QuadEdge::FaceEdgeIterator faceEdges(f);
-            QuadEdge::Edge *e;
+    Intersection::Ray_3rSceneObject intersect(const Ray_3r &ray) override;
 
-            while ((e = faceEdges.next()) != 0) {
-                if (e->Org() < e->Dest()) {
-                    SigPushVisualSegment_3r(Segment_3r(e->Org()->pos, e->Dest()->pos),
-                                            Visual::Segment(selected_mat));
-                }
-            }
-        }
-    }
+    void UpdateColor(const QColor &color) override;
 
-    void Deselect() override {
-        QuadEdge::CellVertexIterator cellVerts(model_polytope_.cell());
-        QuadEdge::Vertex *v;
-        while ((v = cellVerts.next()) != 0) {
-            SigPopVisualPoint_3r(*v->pos);
-        }
+    QString scene_object_type() const override;
 
-        QuadEdge::CellFaceIterator cellFaces(model_polytope_.cell());
-        QuadEdge::Face *f;
-        while ((f = cellFaces.next()) != 0) {
-            QuadEdge::FaceEdgeIterator faceEdges(f);
-            QuadEdge::Edge *e;
+    const QString& name() const override;
 
-            while ((e = faceEdges.next()) != 0) {
-                if (e->Org() < e->Dest()) {
-                    SigPopVisualSegment_3r(Segment_3r(e->Org()->pos, e->Dest()->pos));
-                }
-            }
-        }
-    }
-
-    Intersection::Ray_3rSceneObject intersect(const Ray_3r &ray) {
-        Intersection::Toleranced::Ray_3rPolytope_3r isect(&ray, &model_polytope_);
-        return Intersection::Ray_3rSceneObject(isect.type() == Intersection::Toleranced::Ray_3rPolytope_3r::INTERSECTION_EMPTY, isect.time());
-    }
-
-    void UpdateColor(const QColor &color) override {}
-
-    QString scene_object_type() const override {
-        return "Polytope";
-    }
-
-    const QString& name() const override {
-        return name_;
-    }
-    void set_name(const QString &name) override {
-        name_ = name;
-    }
+    void set_name(const QString &name) override;
 
 private:
     Polytope_3r model_polytope_;
