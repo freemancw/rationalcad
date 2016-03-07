@@ -105,4 +105,11 @@ const Polygon_2r& ScenePolygon_2::model_polygon() const {
     return model_polygon_;
 }
 
+void ScenePolygon_2::set_model_polygon(const Polygon_2r& model_polygon) {
+    model_polygon_.set_z_order(model_polygon.z_order());
+    for (auto v : model_polygon.boundary().vertices()) {
+        model_polygon_.push_back(v);
+    }
+}
+
 }

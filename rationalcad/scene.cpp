@@ -330,14 +330,20 @@ void SceneObserver::onEndCreatePolyline() {
                                      SelectedObject()->name());
 }
 
-void SceneObserver::onExecuteMelkman() {
-    // TODO: capture resulting polygon to create scene object
-    RCAD::Melkman(SelectedPolyline_2()->model_polyline(), this);
-}
-
 void SceneObserver::onComputeMelkmanForSelectedPolyline() {
-    // TODO: capture resulting polygon to create scene object
-    RCAD::Melkman(SelectedPolyline_2()->model_polyline(), this);
+    auto model_polygon = RCAD::Melkman(SelectedPolyline_2()->model_polyline(), this);
+
+    auto name = QString("polygon2_%1").arg(20);
+    auto polygon = QSharedPointer<ISceneObject>(new ScenePolygon_2());
+    polygon->set_name(name);
+    scene_objects_.insert(name, polygon);
+
+    onDeselect();
+
+    selected_objects_.push_back(polygon);
+    SelectedPolygon_2()->AddObserver(this);
+    SelectedPolygon_2()->set_model_polygon(model_polygon);
+    SelectedPolygon_2()->Select();
 }
 
 //=============================================================================

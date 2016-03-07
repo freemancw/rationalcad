@@ -162,7 +162,6 @@ public slots:
     void onBeginCreatePolyline(const QVector2D& cur);
     void onUpdateNewPolyline(const QVector2D& cur);
     void onEndCreatePolyline();
-    void onExecuteMelkman();
     void onComputeMelkmanForSelectedPolyline();
 
     // polygon

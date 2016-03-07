@@ -15,6 +15,12 @@ public:
     explicit PolygonAlgorithms(QWidget *parent = 0);
     ~PolygonAlgorithms();
 
+signals:
+    void ComputeIntegerHullForSelectedPolygon();
+
+private slots:
+    void on_compute_clicked();
+
 private:
     Ui::PolygonAlgorithms *ui;
 };

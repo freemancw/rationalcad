@@ -168,7 +168,15 @@ Polygon_2r IntegerHull(const Polygon_2r& P, IGeometryObserver *obs) {
 
 Polygon_2r::Polygon_2r() :
     z_order_(0) {
+    LOG(DEBUG) << "default constructing polygon_2r...";
     boundary_.AddObserver(this);
+}
+
+Polygon_2r::Polygon_2r(const Polygon_2r &other) :
+    z_order_(other.z_order()),
+    mat_face_(other.mat_face()),
+    boundary_(other.boundary()) {
+    LOG(DEBUG) << "copy constructing polygon_2r...";
 }
 
 Polygon_2r::~Polygon_2r() {
@@ -254,13 +262,16 @@ void Polygon_2r::set_z_order(const uint32_t z_order) {
 
 Polyline_2r::Polyline_2r() :
     closed_(false),
-    z_order_(0) {}
+    z_order_(0) {
+    LOG(DEBUG) << "default constructing polyline...";
+}
 
 Polyline_2r::Polyline_2r(const Polyline_2r &copy) :
     closed_(copy.closed()),
     z_order_(copy.z_order()),
     mat_vertex_(copy.mat_vertex()),
     mat_edge_(copy.mat_edge()) {
+    LOG(DEBUG) << "copy constructing polyline...";
     for (auto vertex : copy.vertices()) {
         push_back(vertex);
     }

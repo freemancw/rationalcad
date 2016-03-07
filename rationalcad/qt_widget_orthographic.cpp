@@ -95,10 +95,6 @@ void OrthographicWidget::initialize(Renderer* renderer,
             SIGNAL(EndCreatePolyline()),
             &scene_manager_->scene_observer_,
             SLOT(onEndCreatePolyline()));
-    connect(this,
-            SIGNAL(ExecuteMelkman()),
-            &scene_manager_->scene_observer_,
-            SLOT(onExecuteMelkman()));
 
     // polygon
     connect(this,

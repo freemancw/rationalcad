@@ -80,6 +80,7 @@ private:
 class Polygon_2r : public Visual::Geometry {
 public:
     Polygon_2r();
+    Polygon_2r(const Polygon_2r& other);
     ~Polygon_2r();
 
     void push_back(const Point_2r& v);

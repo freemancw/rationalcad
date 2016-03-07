@@ -51,6 +51,8 @@ public:
 
     const Polygon_2r& model_polygon() const;
 
+    void set_model_polygon(const Polygon_2r& model_polygon);
+
 private:
     Polygon_2r model_polygon_;
     QString name_;
