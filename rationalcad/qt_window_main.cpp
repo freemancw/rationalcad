@@ -28,6 +28,7 @@
 #include "qt_polytope_creation_method.h"
 #include "qt_point_set_algorithms.h"
 #include "qt_polyline_algorithms.h"
+#include "qt_polygon_algorithms.h"
 #include "qt_polytope_algorithms.h"
 
 #include "../geometry/point.h"
@@ -391,6 +392,8 @@ void MainWindow::onUpdateContextSensitiveMenus(const QString &selected_object_ty
                 SIGNAL(ComputeMelkmanForSelectedPolyline()),
                 &scene_manager_->scene_observer_,
                 SLOT(onComputeMelkmanForSelectedPolyline()));
+    } else if (selected_object_type == "Polygon") {
+        algorithms = new PolygonAlgorithms();
     } else if (selected_object_type == "Polytope") {
         algorithms = new PolytopeAlgorithms();
     }
