@@ -4,4 +4,4 @@ Integers and rational numbers offer an attractive alternative to floating-point 
 
 #### Get Started ####
 
-See [compiling]().
+See [compiling](https://github.com/freemancw/rationalcad/wiki/Compiling).
