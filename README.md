@@ -4,7 +4,7 @@ Integers and rational numbers offer an attractive alternative to floating-point 
 
 #### Get Started ####
 
-RationalCAD is composed of a [[geometry library]] and the actual GUI program. While the geometry library has minimal dependencies, the GUI is built using the Qt framework. Thus, most developers will prefer to work within Qt Creator. This guide to compiling is built with these users in mind. RationalCAD uses CMake to structure the compilation process. 
+RationalCAD is composed of a geometry library and the actual GUI program. While the geometry library has minimal dependencies, the GUI is built using the Qt framework. Thus, most developers will prefer to work within Qt Creator. This guide to compiling is built with these users in mind. RationalCAD uses CMake to structure the compilation process. 
 
 ##### Windows x64
 
