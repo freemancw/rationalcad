@@ -341,6 +341,38 @@ void SceneObserver::onComputeMelkmanForSelectedPolyline() {
 }
 
 //=============================================================================
+// Polygon_2 management
+//=============================================================================
+
+void SceneObserver::onBeginCreatePolygon(const QVector2D& v) {
+    LOG(DEBUG) << "onBeginCreatePolygon";
+
+    onDeselect();
+
+    static int numPolygons = 0;
+
+    auto name = QString("polygon2_%1").arg(numPolygons++);
+    auto polygon = QSharedPointer<ISceneObject>(new ScenePolygon_2());
+    polygon->set_name(name);
+    scene_objects_.insert(name, polygon);
+    selected_objects_.push_back(polygon);
+    SelectedPolygon_2()->AddObserver(this);
+    SelectedPolygon_2()->Initialize(v);
+    ConfigManager::get().set_input_state(InputState::UPDATE_POLYGON);
+}
+
+void SceneObserver::onUpdateNewPolygon(const QVector2D& v) {
+    SelectedPolygon_2()->Update(v);
+}
+
+void SceneObserver::onEndCreatePolygon() {
+    SelectedPolygon_2()->Select();
+    ConfigManager::get().set_input_state(InputState::CREATE_POLYGON);
+    emit UpdateContextSensitiveMenus(SelectedObject()->scene_object_type(),
+                                     SelectedObject()->name());
+}
+
+//=============================================================================
 // Polytope_3 management
 //=============================================================================
 
@@ -600,6 +632,10 @@ ScenePointSet_3 *SceneObserver::SelectedPointSet_3() {
 
 ScenePolyline_2* SceneObserver::SelectedPolyline_2() {
     return dynamic_cast<ScenePolyline_2*>(SelectedObject());
+}
+
+ScenePolygon_2* SceneObserver::SelectedPolygon_2() {
+    return dynamic_cast<ScenePolygon_2*>(SelectedObject());
 }
 
 ScenePolytope_3* SceneObserver::SelectedPolytope_3() {

@@ -55,8 +55,10 @@ void ScenePointSet_3::Deselect() {
 }
 
 Intersection::Ray_3rSceneObject ScenePointSet_3::intersect(const Ray_3r &ray) {
-    Intersection::Toleranced::Ray_3rPointSet_3r isect(&ray, &model_point_set_);
-    return Intersection::Ray_3rSceneObject(isect.type() == Intersection::Toleranced::Ray_3rPointSet_3r::INTERSECTION_EMPTY, isect.time());
+    using IntersectionType = Intersection::Toleranced::Ray_3rPointSet_3r;
+    IntersectionType isect(&ray, &model_point_set_);
+    bool isect_empty = isect.type() == IntersectionType::INTERSECTION_EMPTY;
+    return Intersection::Ray_3rSceneObject(isect_empty, isect.time());
 }
 
 void ScenePointSet_3::UpdateColor(const QColor &color) {}

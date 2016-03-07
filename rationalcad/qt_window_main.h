@@ -82,7 +82,9 @@ private slots:
     void onUpdateContextSensitiveMenus(const QString& selected_object_type,
                                        const QString& selected_object_name);
 
-private:
+    void on_create_polygon_toggled(bool checked);
+
+    private:
     void initializeLogging();
     void initializeConnections();
 

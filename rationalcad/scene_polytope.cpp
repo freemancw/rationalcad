@@ -85,17 +85,17 @@ Intersection::Ray_3rSceneObject ScenePolytope_3::intersect(const Ray_3r &ray) {
     return Intersection::Ray_3rSceneObject(isect.type() == Intersection::Toleranced::Ray_3rPolytope_3r::INTERSECTION_EMPTY, isect.time());
 }
 
-void ScenePolytope_3::UpdateColor(const QColor &color) override {}
+void ScenePolytope_3::UpdateColor(const QColor &color) {}
 
-QString ScenePolytope_3::scene_object_type() const override {
+QString ScenePolytope_3::scene_object_type() const {
     return "Polytope";
 }
 
-const QString& ScenePolytope_3::name() const override {
+const QString& ScenePolytope_3::name() const {
     return name_;
 }
 
-void ScenePolytope_3::set_name(const QString &name) override {
+void ScenePolytope_3::set_name(const QString &name) {
     name_ = name;
 }
 

@@ -100,6 +100,20 @@ void OrthographicWidget::initialize(Renderer* renderer,
             &scene_manager_->scene_observer_,
             SLOT(onExecuteMelkman()));
 
+    // polygon
+    connect(this,
+            SIGNAL(BeginCreatePolygon(QVector2D)),
+            &scene_manager_->scene_observer_,
+            SLOT(onBeginCreatePolygon(QVector2D)));
+    connect(this,
+            SIGNAL(UpdateNewPolygon(QVector2D)),
+            &scene_manager_->scene_observer_,
+            SLOT(onUpdateNewPolygon(QVector2D)));
+    connect(this,
+            SIGNAL(EndCreatePolygon()),
+            &scene_manager_->scene_observer_,
+            SLOT(onEndCreatePolygon()));
+
     // polytope
     connect(this,
             SIGNAL(BeginCreatePolytope(QVector2D, QVector2D)),
@@ -326,6 +340,12 @@ void OrthographicWidget::mousePressEvent(QMouseEvent *event) {
         case InputState::UPDATE_POLYLINE:
             emit UpdateNewPolyline(input_world_coords);
             break;
+        case InputState::CREATE_POLYGON:
+            emit BeginCreatePolygon(input_world_coords);
+            break;
+        case InputState::UPDATE_POLYGON:
+            emit UpdateNewPolygon(input_world_coords);
+            break;
         default:
             break;
         }
@@ -348,11 +368,14 @@ void OrthographicWidget::mousePressEvent(QMouseEvent *event) {
 
     if (event->buttons() & Qt::RightButton) {
         switch (ConfigManager::get().input_state()) {
+        case InputState::UPDATE_POINTSET:
+            emit EndCreatePointSet();
+            break;
         case InputState::UPDATE_POLYLINE:
             emit EndCreatePolyline();
             break;
-        case InputState::UPDATE_POINTSET:
-            emit EndCreatePointSet();
+        case InputState::UPDATE_POLYGON:
+            emit EndCreatePolygon();
             break;
         default:
             /*

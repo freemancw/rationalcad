@@ -261,7 +261,7 @@
                   </widget>
                  </item>
                  <item row="0" column="2">
-                  <widget class="QPushButton" name="pushButton">
+                  <widget class="QPushButton" name="create_polygon">
                    <property name="text">
                     <string>Polygon</string>
                    </property>
@@ -272,10 +272,13 @@
                    <property name="checkable">
                     <bool>true</bool>
                    </property>
+                   <attribute name="buttonGroup">
+                    <string notr="true">buttonGroup</string>
+                   </attribute>
                   </widget>
                  </item>
                  <item row="0" column="4">
-                  <widget class="QPushButton" name="bsplinesurface">
+                  <widget class="QPushButton" name="create_bsplinesurface">
                    <property name="text">
                     <string>BSplineSurface</string>
                    </property>
@@ -283,6 +286,12 @@
                     <iconset resource="../resources/resources.qrc">
                      <normaloff>:/icons/create_polytope.png</normaloff>:/icons/create_polytope.png</iconset>
                    </property>
+                   <property name="checkable">
+                    <bool>true</bool>
+                   </property>
+                   <attribute name="buttonGroup">
+                    <string notr="true">buttonGroup</string>
+                   </attribute>
                   </widget>
                  </item>
                 </layout>

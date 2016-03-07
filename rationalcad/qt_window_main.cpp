@@ -24,6 +24,7 @@
 #include "scene.h"
 #include "qt_point_set_creation_method.h"
 #include "qt_polyline_creation_method.h"
+#include "qt_polygon_creation_method.h"
 #include "qt_polytope_creation_method.h"
 #include "qt_point_set_algorithms.h"
 #include "qt_polyline_algorithms.h"
@@ -160,7 +161,9 @@ void MainWindow::uncheckCreateButtons() {
     ui->buttonGroup->setExclusive(false);
     ui->create_point_set->setChecked(false);
     ui->create_polyline->setChecked(false);
+    ui->create_polygon->setChecked(false);
     ui->create_polytope->setChecked(false);
+    ui->create_bsplinesurface->setChecked(false);
     ui->buttonGroup->setExclusive(true);
 }
 
@@ -240,6 +243,28 @@ void MainWindow::on_create_polyline_toggled(bool checked) {
         ui->create->layout()->addWidget(creation_method);
         ui->create->layout()->addItem(spacer);
 
+    } else if (creation_method) {
+        ui->create->layout()->removeWidget(creation_method);
+        delete creation_method;
+        creation_method = nullptr;
+    }
+}
+
+void MainWindow::on_create_polygon_toggled(bool checked) {
+    qDebug() << "on_create_polygon_toggled: " << checked;
+
+    static PolygonCreationMethod *creation_method = nullptr;
+
+    if (checked) {
+        ConfigManager::get().set_input_state(InputState::CREATE_POLYGON);
+        uncheckInputModeButtons();
+
+        creation_method = new PolygonCreationMethod();
+
+        QLayoutItem *spacer = ui->create_tab_spacer;
+        ui->create->layout()->removeItem(spacer);
+        ui->create->layout()->addWidget(creation_method);
+        ui->create->layout()->addItem(spacer);
     } else if (creation_method) {
         ui->create->layout()->removeWidget(creation_method);
         delete creation_method;

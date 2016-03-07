@@ -165,6 +165,11 @@ public slots:
     void onExecuteMelkman();
     void onComputeMelkmanForSelectedPolyline();
 
+    // polygon
+    void onBeginCreatePolygon(const QVector2D& cur);
+    void onUpdateNewPolygon(const QVector2D& cur);
+    void onEndCreatePolygon();
+
     // polytope
     void onBeginCreatePolytope(const QVector2D& start, const QVector2D& cur);
     void onUpdateNewPolytope(const QVector2D& cur);
@@ -201,6 +206,7 @@ private:
     ISceneObject* SelectedObject();
     class ScenePointSet_3* SelectedPointSet_3();
     class ScenePolyline_2* SelectedPolyline_2();
+    class ScenePolygon_2* SelectedPolygon_2();
     class ScenePolytope_3* SelectedPolytope_3();
     class SceneTerrainMesh_3* SelectedTerrainMesh_3();
 

@@ -78,6 +78,11 @@ signals:
     void EndCreatePolyline();
     void ExecuteMelkman();
 
+    // polygon
+    void BeginCreatePolygon(const QVector2D& start);
+    void UpdateNewPolygon(const QVector2D& cur);
+    void EndCreatePolygon();
+
     // polytope
     void BeginCreatePolytope(const QVector2D& start, const QVector2D& cur);
     void UpdateNewPolytope(const QVector2D& cur);
