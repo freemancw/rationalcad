@@ -41,6 +41,12 @@ void ScenePolygon_2::Update(const QVector2D& cur) {
     model_polygon_.push_back(Point_2r(cur.x(), cur.y()));
 }
 
+void ScenePolygon_2::Finalize() {
+    LOG(DEBUG) << "finalizing polygon.";
+
+    model_polygon_.CloseBoundary();
+}
+
 void ScenePolygon_2::Select() {
     LOG(DEBUG) << "selecting polygon.";
 

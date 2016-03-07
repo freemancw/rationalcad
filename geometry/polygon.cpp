@@ -282,7 +282,7 @@ Polyline_2r::~Polyline_2r() {
 }
 
 void Polyline_2r::Close() {
-
+    push_back(front());
 }
 
 void Polyline_2r::Open() {

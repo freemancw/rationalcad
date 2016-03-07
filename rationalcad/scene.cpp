@@ -366,6 +366,7 @@ void SceneObserver::onUpdateNewPolygon(const QVector2D& v) {
 }
 
 void SceneObserver::onEndCreatePolygon() {
+    SelectedPolygon_2()->Finalize();
     SelectedPolygon_2()->Select();
     ConfigManager::get().set_input_state(InputState::CREATE_POLYGON);
     emit UpdateContextSensitiveMenus(SelectedObject()->scene_object_type(),

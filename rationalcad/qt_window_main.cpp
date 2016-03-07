@@ -395,7 +395,9 @@ void MainWindow::onUpdateContextSensitiveMenus(const QString &selected_object_ty
         algorithms = new PolytopeAlgorithms();
     }
 
-    ui->compute->layout()->removeItem(spacer);
-    ui->compute->layout()->addWidget(algorithms);
-    ui->compute->layout()->addItem(spacer);
+    if (algorithms) {
+        ui->compute->layout()->removeItem(spacer);
+        ui->compute->layout()->addWidget(algorithms);
+        ui->compute->layout()->addItem(spacer);
+    }
 }

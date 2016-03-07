@@ -33,6 +33,8 @@ public:
 
     void Update(const QVector2D& cur);
 
+    void Finalize();
+
     void Select() override;
 
     void Deselect() override;
