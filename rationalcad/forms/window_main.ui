@@ -267,7 +267,7 @@
                    </property>
                    <property name="icon">
                     <iconset resource="../resources/resources.qrc">
-                     <normaloff>:/icons/create_polyline.png</normaloff>:/icons/create_polyline.png</iconset>
+                     <normaloff>:/icons/create_polygon.png</normaloff>:/icons/create_polygon.png</iconset>
                    </property>
                    <property name="checkable">
                     <bool>true</bool>
@@ -284,7 +284,7 @@
                    </property>
                    <property name="icon">
                     <iconset resource="../resources/resources.qrc">
-                     <normaloff>:/icons/create_polytope.png</normaloff>:/icons/create_polytope.png</iconset>
+                     <normaloff>:/icons/create_bsplinesurface.png</normaloff>:/icons/create_bsplinesurface.png</iconset>
                    </property>
                    <property name="checkable">
                     <bool>true</bool>

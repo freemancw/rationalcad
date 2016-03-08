@@ -22,5 +22,7 @@
         <file>icons/rotate.png</file>
         <file>icons/create_pointset.png</file>
         <file>icons/select.png</file>
+        <file>icons/create_polygon.png</file>
+        <file>icons/create_bsplinesurface.png</file>
     </qresource>
 </RCC>

@@ -1,0 +1,1 @@
+C:\Qt\QtIFW2.0.1\bin\binarycreator.exe -c installer\config\config.xml -p installer\packages rationalcad-0.1-setup
