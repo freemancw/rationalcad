@@ -71,9 +71,11 @@ private slots:
     void on_snap_to_grid_toggled(bool checked);
 
     // create buttons
-    void on_create_polytope_toggled(bool checked);
-    void on_create_polyline_toggled(bool checked);
     void on_create_point_set_toggled(bool checked);
+    void on_create_polyline_toggled(bool checked);
+    void on_create_polygon_toggled(bool checked);
+    void on_create_polytope_toggled(bool checked);
+    void on_create_triangle_soup_toggled(bool checked);
 
     void on_action_about_triggered();
     void on_action_preferences_triggered();
@@ -81,8 +83,6 @@ private slots:
 
     void onUpdateContextSensitiveMenus(const QString& selected_object_type,
                                        const QString& selected_object_name);
-
-    void on_create_polygon_toggled(bool checked);
 
     private:
     void initializeLogging();

@@ -13,9 +13,11 @@ add_library(geometry
     predicate.cpp
     quadedge.cpp
     sphere.cpp
+    spherical_harmonics.cpp
     spline.cpp
     terrain.cpp
     triangle.cpp
+    triangle_soup.cpp
     triangulation.cpp
     vector.h
     visual.cpp

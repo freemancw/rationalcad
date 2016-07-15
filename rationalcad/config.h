@@ -32,7 +32,8 @@ enum class InputState {
     CREATE_POLYGON,
     UPDATE_POLYGON,
     CREATE_POLYTOPE,
-    UPDATE_POLYTOPE
+    UPDATE_POLYTOPE,
+    CREATE_TRIANGLE_SOUP
 };
 
 class ConfigManager {

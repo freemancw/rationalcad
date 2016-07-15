@@ -1,0 +1,58 @@
+/*
+ * This file is part of RationalCAD.
+ *
+ * RationalCAD is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
+ *
+ * RationalCAD is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details. You should have received a copy of the GNU General Public
+ * License along with RationalCAD. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include "scene_triangle_soup.h"
+
+namespace RCAD {
+
+//=============================================================================
+// Implementation: SceneTriangleSoup_3
+//=============================================================================
+
+SceneTriangleSoup_3::SceneTriangleSoup_3() {
+    model_triangle_soup_.AddObserver(this);
+}
+
+void SceneTriangleSoup_3::Initialize() {
+
+}
+
+void SceneTriangleSoup_3::Select() {
+
+}
+
+void SceneTriangleSoup_3::Deselect() {
+
+}
+
+Intersection::Ray_3rSceneObject SceneTriangleSoup_3::intersect(const Ray_3r &ray) {
+    return Intersection::Ray_3rSceneObject(false, 0);
+}
+
+void SceneTriangleSoup_3::UpdateColor(const QColor &color) {}
+
+QString SceneTriangleSoup_3::scene_object_type() const {
+    return "TriangleSoup";
+}
+
+const QString& SceneTriangleSoup_3::name() const {
+    return name_;
+}
+
+void SceneTriangleSoup_3::set_name(const QString &name) {
+    name_ = name;
+}
+
+}

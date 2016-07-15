@@ -26,6 +26,7 @@
 #include "qt_polyline_creation_method.h"
 #include "qt_polygon_creation_method.h"
 #include "qt_polytope_creation_method.h"
+#include "qt_triangle_soup_creation_method.h"
 #include "qt_point_set_algorithms.h"
 #include "qt_polyline_algorithms.h"
 #include "qt_polygon_algorithms.h"
@@ -293,6 +294,32 @@ void MainWindow::on_create_polytope_toggled(bool checked) {
         ui->create->layout()->removeWidget(creation_method);
         delete creation_method;
         creation_method = nullptr;
+    }
+}
+
+void MainWindow::on_create_triangle_soup_toggled(bool checked) {
+    qDebug() << "on_create_triangle_soup_toggled: " << checked;
+
+    static TriangleSoupCreationMethod *creation_method = nullptr;
+
+    if (checked) {
+
+        ConfigManager::get().set_input_state(InputState::CREATE_TRIANGLE_SOUP);
+        uncheckInputModeButtons();
+
+        creation_method = new TriangleSoupCreationMethod();
+
+        QLayoutItem *spacer = ui->create_tab_spacer;
+        ui->create->layout()->removeItem(spacer);
+        ui->create->layout()->addWidget(creation_method);
+        ui->create->layout()->addItem(spacer);
+
+    } else if (creation_method) {
+
+        ui->create->layout()->removeWidget(creation_method);
+        delete creation_method;
+        creation_method = nullptr;
+
     }
 }
 

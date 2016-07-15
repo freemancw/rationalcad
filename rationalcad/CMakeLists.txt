@@ -25,6 +25,7 @@ qt5_wrap_ui(
     forms/polygon_algorithms.ui
     forms/polytope_creation_method.ui
     forms/polytope_algorithms.ui
+    forms/triangle_soup_creation_method.ui
 )
 
 qt5_add_resources(
@@ -52,12 +53,14 @@ add_executable(
     qt_polygon_algorithms.cpp
     qt_polytope_creation_method.cpp
     qt_polytope_algorithms.cpp
+    qt_triangle_soup_creation_method.cpp
     scene.cpp
     scene_pointset.cpp
     scene_polyline.cpp
     scene_polygon.cpp
     scene_polytope.cpp
     scene_terrainmesh.cpp
+    scene_triangle_soup.cpp
     common.h
     resources/icon.rc
     ${UI_HEADERS}
