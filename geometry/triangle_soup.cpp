@@ -29,11 +29,24 @@ TriangleSoup_3r::TriangleSoup_3r() {
 }
 
 TriangleSoup_3r::~TriangleSoup_3r() {
-
+    for (auto triangle : triangle_soup_) {
+        SigPopVisualPoint_3r(triangle.a());
+        SigPopVisualPoint_3r(triangle.b());
+        SigPopVisualPoint_3r(triangle.c());
+    }
 }
 
 void TriangleSoup_3r::AddTriangle(const Triangle_3r &triangle) {
     triangle_soup_.push_back(triangle);
+
+    SigRegisterPoint_3r(triangle.a());
+    SigPushVisualPoint_3r(triangle.a(), mat_vertex_);
+
+    SigRegisterPoint_3r(triangle.b());
+    SigPushVisualPoint_3r(triangle.b(), mat_vertex_);
+
+    SigRegisterPoint_3r(triangle.c());
+    SigPushVisualPoint_3r(triangle.c(), mat_vertex_);
 }
 
 }

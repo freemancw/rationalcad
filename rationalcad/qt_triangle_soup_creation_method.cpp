@@ -68,6 +68,14 @@ void TriangleSoupCreationMethod::on_file_button_generate_clicked() {
     QVector<QVector3D> vertices;
     QVector<qint32> indices;
 
+    vertices.push_back(QVector3D(0, 0, 0));
+    vertices.push_back(QVector3D(8, 0, 0));
+    vertices.push_back(QVector3D(0, 8, 0));
+
+    indices.push_back(0);
+    indices.push_back(1);
+    indices.push_back(2);
+
     emit CreateTriangleSoup(vertices, indices);
 }
 

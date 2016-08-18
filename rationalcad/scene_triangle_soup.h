@@ -29,7 +29,8 @@ class SceneTriangleSoup_3 : public ISceneObject, public Visual::Geometry {
 public:
     SceneTriangleSoup_3();
 
-    void Initialize();
+    void Initialize(const QVector<QVector3D>& vertices,
+                    const QVector<qint32>& indices);
 
     void Select() override;
 

@@ -61,9 +61,9 @@ public:
     Triangle_3r(SharedPoint_3r a, SharedPoint_3r b,
                 SharedPoint_3r c);
 
-    const Point_3r& a() const;
-    const Point_3r& b() const;
-    const Point_3r& c() const;
+    Point_3r& a() const;
+    Point_3r& b() const;
+    Point_3r& c() const;
     void set_a(SharedPoint_3r a);
     void set_b(SharedPoint_3r b);
     void set_c(SharedPoint_3r c);

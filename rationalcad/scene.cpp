@@ -21,6 +21,7 @@
 #include "scene_polygon.h"
 #include "scene_polytope.h"
 #include "scene_terrainmesh.h"
+#include "scene_triangle_soup.h"
 #include "config.h"
 
 // geometry kernel
@@ -513,7 +514,22 @@ void SceneObserver::onEndCreatePolytope() {
 
 void SceneObserver::onCreateTriangleSoup(const QVector<QVector3D>& vertices,
                                          const QVector<qint32>& indices) {
-    LOG(INFO) << "creating triangle soup";
+    LOG(DEBUG) << "onCreateTriangleSoup";
+
+    onDeselect();
+
+    static int numTriangleSoups = 0;
+    auto name = QString("trianglesoup3_%1").arg(numTriangleSoups++);
+    auto triangle_soup = QSharedPointer<ISceneObject>(new SceneTriangleSoup_3());
+    triangle_soup->set_name(name);
+    scene_objects_.insert(name, triangle_soup);
+    selected_objects_.push_back(triangle_soup);
+    SelectedTriangleSoup_3()->AddObserver(this);
+    SelectedTriangleSoup_3()->Initialize(vertices, indices);
+    SelectedTriangleSoup_3()->Select();
+
+    emit UpdateContextSensitiveMenus(SelectedObject()->scene_object_type(),
+                                     SelectedObject()->name());
 }
 
 //=============================================================================
@@ -660,6 +676,10 @@ ScenePolytope_3* SceneObserver::SelectedPolytope_3() {
 
 SceneTerrainMesh_3* SceneObserver::SelectedTerrainMesh_3() {
     return dynamic_cast<SceneTerrainMesh_3*>(SelectedObject());
+}
+
+SceneTriangleSoup_3* SceneObserver::SelectedTriangleSoup_3() {
+    return dynamic_cast<SceneTriangleSoup_3*>(SelectedObject());
 }
 
 bool SceneObserver::ObjectIsSelected() const {

@@ -79,13 +79,13 @@ std::ostream& operator<<(std::ostream& o, const Triangle_3r& tri) {
     return o << "a: " << tri.a() << "\nb: " << tri.b() << "\nc: " << tri.c();
 }
 
-const Point_3r& Triangle_3r::a() const {
+Point_3r& Triangle_3r::a() const {
     return *a_;
 }
-const Point_3r& Triangle_3r::b() const {
+Point_3r& Triangle_3r::b() const {
     return *b_;
 }
-const Point_3r& Triangle_3r::c() const {
+Point_3r& Triangle_3r::c() const {
     return *c_;
 }
 void Triangle_3r::set_a(SharedPoint_3r a) {

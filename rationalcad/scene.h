@@ -213,6 +213,7 @@ private:
     class ScenePolygon_2* SelectedPolygon_2();
     class ScenePolytope_3* SelectedPolytope_3();
     class SceneTerrainMesh_3* SelectedTerrainMesh_3();
+    class SceneTriangleSoup_3* SelectedTriangleSoup_3();
 
     QHash<QString, QSharedPointer<ISceneObject>> scene_objects_;
     QVector<QSharedPointer<ISceneObject>> selected_objects_;
