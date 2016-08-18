@@ -26,7 +26,7 @@ namespace RCAD {
 namespace Visual {
 
 //=============================================================================
-// Interface: Color
+// Color
 //=============================================================================
 
 /**
@@ -65,7 +65,7 @@ private:
 };
 
 //=============================================================================
-// Interface: Material
+// Material
 //=============================================================================
 
 namespace Coverage {
@@ -113,7 +113,7 @@ private:
 };
 
 //=============================================================================
-// Interface: Point
+// Point
 //=============================================================================
 
 class Point {
@@ -133,7 +133,7 @@ private:
 };
 
 //=============================================================================
-// Interface: Segment
+// Segment
 //=============================================================================
 
 class Segment {
@@ -149,7 +149,7 @@ private:
 };
 
 //=============================================================================
-// Interface: Triangle
+// Triangle
 //=============================================================================
 
 class Triangle {
@@ -193,7 +193,7 @@ struct IGeometryObserver {
                                        const uint32_t msec_delay) = 0;
 
     virtual void SlotPopVisualSegment_2r(const Segment_2r& s,
-                                      const uint32_t msec_delay) = 0;
+                                         const uint32_t msec_delay) = 0;
 
     virtual void SlotPopVisualTriangle_2r(const Triangle_2r& t,
                                           const uint32_t msec_delay) = 0;
@@ -216,7 +216,7 @@ struct IGeometryObserver {
                                        const uint32_t msec_delay) = 0;
 
     virtual void SlotPopVisualSegment_3r(const Segment_3r& s,
-                                      const uint32_t msec_delay) = 0;
+                                         const uint32_t msec_delay) = 0;
 
     virtual void SlotPopVisualTriangle_3r(const Triangle_3r& t,
                                           const uint32_t msec_delay) = 0;
@@ -296,7 +296,7 @@ struct IObservableGeometry {
 };
 
 //=============================================================================
-// Interface: Geometry
+// Geometry
 //=============================================================================
 
 /**
@@ -311,7 +311,7 @@ class Geometry : public IGeometryObserver, public IObservableGeometry {
 public:
     virtual ~Geometry();
 
-    /* Observer */
+    // IGeometryObserver overrides
 
     void SlotRegisterPoint_2r(Point_2r& p) override;
 
@@ -335,7 +335,6 @@ public:
 
     void SlotPopVisualTriangle_2r(const Triangle_2r& t,
                                   const uint32_t msec_delay = 0) override;
-
 
     void SlotRegisterPoint_3r(Point_3r& p) override;
 
@@ -366,7 +365,7 @@ public:
 
     void SlotUpdate() override;
 
-    /* Observable */
+    // IObservableGeometry overrides
 
     void AddObserver(IGeometryObserver* geom_observer) override;
     void RemoveObserver(IGeometryObserver* geom_observer) override;

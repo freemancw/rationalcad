@@ -18,6 +18,43 @@
 
 namespace RCAD {
 
+//=============================================================================
+// Implementation: ApproximatePoint_3f
+//=============================================================================
+
+ApproxPoint_3f::ApproxPoint_3f() {}
+
+ApproxPoint_3f::ApproxPoint_3f(const Point_2r &p) {
+    approx_.set_x(p.x().get_d());
+    approx_.set_y(p.y().get_d());
+    approx_.set_z(0);
+}
+
+ApproxPoint_3f::ApproxPoint_3f(const Point_3r &p) {
+    approx_.set_x(p.x().get_d());
+    approx_.set_y(p.y().get_d());
+    approx_.set_z(p.z().get_d());
+}
+
+void ApproxPoint_3f::set_z_order(const int32_t z_order) {
+    approx_.set_z(z_order);
+}
+
+void ApproxPoint_3f::SlotPositionChanged_2r(const Point_2r &p) {
+    approx_.set_x(p.x().get_d());
+    approx_.set_y(p.y().get_d());
+}
+
+void ApproxPoint_3f::SlotPositionChanged_3r(const Point_3r& p) {
+    approx_.set_x(p.x().get_d());
+    approx_.set_y(p.y().get_d());
+    approx_.set_z(p.z().get_d());
+}
+
+const Point_3f& ApproxPoint_3f::approx() const {
+    return approx_;
+}
+
 } // namespace RCAD
 
 

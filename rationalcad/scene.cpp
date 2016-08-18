@@ -768,37 +768,27 @@ static Point_2f ToPoint_2f(const QVector2D &v, bool snap) {
 }
 
 //=============================================================================
-// ApproximatePoint_3f
+// Implementation: Intersection::Ray_3rSceneObject
 //=============================================================================
 
-ApproxPoint_3f::ApproxPoint_3f() {}
+namespace Intersection {
 
-ApproxPoint_3f::ApproxPoint_3f(const Point_2r &p) {
-    approx_.set_x(p.x().get_d());
-    approx_.set_y(p.y().get_d());
-    approx_.set_z(0);
+Ray_3rSceneObject::Ray_3rSceneObject() :
+    empty_(true),
+    time_(0) {}
+
+Ray_3rSceneObject::Ray_3rSceneObject(const bool empty, const rational& time) :
+    empty_(empty),
+    time_(time) {}
+
+bool Ray_3rSceneObject::empty() const {
+    return empty_;
+}
+const rational& Ray_3rSceneObject::time() const {
+    return time_;
 }
 
-ApproxPoint_3f::ApproxPoint_3f(const Point_3r &p) {
-    approx_.set_x(p.x().get_d());
-    approx_.set_y(p.y().get_d());
-    approx_.set_z(p.z().get_d());
-}
-
-void ApproxPoint_3f::SlotPositionChanged_2r(const Point_2r &p) {
-    approx_.set_x(p.x().get_d());
-    approx_.set_y(p.y().get_d());
-}
-
-void ApproxPoint_3f::SlotPositionChanged_3r(const Point_3r& p) {
-    approx_.set_x(p.x().get_d());
-    approx_.set_y(p.y().get_d());
-    approx_.set_z(p.z().get_d());
-}
-
-const Point_3f& ApproxPoint_3f::approx() const {
-    return approx_;
-}
+} // namespace Intersection
 
 } // namespace RCAD
 

@@ -28,52 +28,29 @@
 #include "../geometry/triangle.h"
 #include "../geometry/intersection.h"
 
+// This function must be defined to maintain a QMap with key type
+// QVector<uint32_t>.
 bool operator<(const QVector<uint32_t>& a, const QVector<uint32_t>& b);
 
 namespace RCAD {
 
 //=============================================================================
-// Interface: ApproximatePoint_3f
-//=============================================================================
-
-class ApproxPoint_3f : public IPointObserver {
-public:
-    ApproxPoint_3f();
-    ApproxPoint_3f(const Point_2r& p);
-    ApproxPoint_3f(const Point_3r& p);
-
-    void SlotPositionChanged_2r(const Point_2r& p) override;
-    void SlotPositionChanged_3r(const Point_3r& p) override;
-    void set_z_order(const int32_t z_order) { approx_.set_z(z_order); }
-
-    const Point_3f& approx() const;
-
-private:
-    Point_3f approx_;
-};
-
-//=============================================================================
-// Interface: ISceneObject
+// Intersection::Ray_3rSceneObject
 //=============================================================================
 
 namespace Intersection {
 
+/**
+ * The Ray_3rSceneObject class represents the intersection of a 3D rational
+ * ray with an ISceneObject type. Used for picking.
+ */
 class Ray_3rSceneObject {
 public:
-    Ray_3rSceneObject() :
-        empty_(true),
-        time_(0) {}
+    Ray_3rSceneObject();
+    Ray_3rSceneObject(const bool empty, const rational& time);
 
-    Ray_3rSceneObject(bool empty, const rational& time) :
-        empty_(empty),
-        time_(time) {}
-
-    bool empty() const {
-        return empty_;
-    }
-    const rational& time() const {
-        return time_;
-    }
+    bool empty() const;
+    const rational& time() const;
 
 private:
     bool empty_;
@@ -81,6 +58,10 @@ private:
 };
 
 }
+
+//=============================================================================
+// Interface: ISceneObject
+//=============================================================================
 
 struct ISceneObject {
     virtual ~ISceneObject() {}
@@ -94,7 +75,7 @@ struct ISceneObject {
 };
 
 //=============================================================================
-// Interface: SceneObserver
+// SceneObserver
 //=============================================================================
 
 class SceneObserver : public QObject, public Visual::IGeometryObserver {
@@ -105,50 +86,134 @@ public:
     SceneObserver();
     ~SceneObserver();
 
+    /**
+     * Provides @p with a unique identifier and creates an approximate observer
+     * point for rendering @p.
+     */
     void SlotRegisterPoint_2r(Point_2r& p) override;
 
+    /**
+     * Pushes a new visual representation for @p. Generates a new point VBO and
+     * pauses the animation thread by @msec_delay unless this response is
+     * batched with other signals.
+     */
     void SlotPushVisualPoint_2r(const Point_2r& p, const Visual::Point& vp,
         const uint32_t msec_delay = 0) override;
 
+    /**
+     * Pushes a new visual representation for @s. Generates a new line VBO and
+     * pauses the animation thread by @msec_delay unless this response is
+     * batched with other signals.
+     */
     void SlotPushVisualSegment_2r(const Segment_2r& s,
         const Visual::Segment& vs, const uint32_t msec_delay = 0) override;
 
+    /**
+     * Pushes a new visual representation for @t. Generates a new triangle VBO
+     * and pauses the animation thread by @msec_delay unless this response is
+     * batched with other signals.
+     */
     void SlotPushVisualTriangle_2r(const Triangle_2r& t,
         const Visual::Triangle& vt, const uint32_t msec_delay = 0) override;
 
+    /**
+     * Pops the top visual representation for @p. Generates a new point VBO and
+     * pauses the animation thread by @msec_delay unless this response is
+     * batched with other signals.
+     */
     void SlotPopVisualPoint_2r(const Point_2r& p,
         const uint32_t msec_delay = 0) override;
 
+    /**
+     * Pops the top visual representation for @s. Generates a new line VBO and
+     * pauses the animation thread by @msec_delay unless this response is
+     * batched with other signals.
+     */
     void SlotPopVisualSegment_2r(const Segment_2r& s,
         const uint32_t msec_delay = 0) override;
 
+    /**
+     * Pops the top visual representation for @t. Generates a new triangle VBO
+     * and pauses the animation thread by @msec_delay unless this response is
+     * batched with other signals.
+     */
     void SlotPopVisualTriangle_2r(const Triangle_2r& t,
         const uint32_t msec_delay = 0) override;
 
+    /**
+     * Provides @p with a unique identifier and creates an approximate observer
+     * point for rendering @p.
+     */
     void SlotRegisterPoint_3r(Point_3r& p) override;
 
+    /**
+     * Pushes a new visual representation for @p. Generates a new point VBO and
+     * pauses the animation thread by @msec_delay unless this response is
+     * batched with other signals.
+     */
     void SlotPushVisualPoint_3r(const Point_3r& p, const Visual::Point& vp,
         const uint32_t msec_delay = 0) override;
 
+    /**
+     * Pushes a new visual representation for @s. Generates a new line VBO and
+     * pauses the animation thread by @msec_delay unless this response is
+     * batched with other signals.
+     */
     void SlotPushVisualSegment_3r(const Segment_3r& s,
         const Visual::Segment& vs, const uint32_t msec_delay = 0) override;
 
+    /**
+     * Pushes a new visual representation for @t. Generates a new triangle VBO
+     * and pauses the animation thread by @msec_delay unless this response is
+     * batched with other signals.
+     */
     void SlotPushVisualTriangle_3r(const Triangle_3r& t,
         const Visual::Triangle& vt, const uint32_t msec_delay = 0) override;
 
+    /**
+     * Pops the top visual representation for @p. Generates a new point VBO and
+     * pauses the animation thread by @msec_delay unless this response is
+     * batched with other signals.
+     */
     void SlotPopVisualPoint_3r(const Point_3r& p,
         const uint32_t msec_delay = 0) override;
 
+    /**
+     * Pops the top visual representation for @s. Generates a new line VBO and
+     * pauses the animation thread by @msec_delay unless this response is
+     * batched with other signals.
+     */
     void SlotPopVisualSegment_3r(const Segment_3r& s,
         const uint32_t msec_delay = 0) override;
 
+    /**
+     * Pops the top visual representation for @t. Generates a new triangle VBO
+     * and pauses the animation thread by @msec_delay unless this response is
+     * batched with other signals.
+     */
     void SlotPopVisualTriangle_3r(const Triangle_3r& t,
         const uint32_t msec_delay = 0) override;
 
+    /**
+     * Updates internal state so that future responses to visual signals will
+     * not update vertex buffers or pause the animation thread until we
+     * receive a signal to end the batch. This is used to avoid stuttery
+     * rendering when updating a large amount of visual information at once.
+     * Users of this function are responsible for signalling SlotUpdate after
+     * ending the batch in order to update all vertex buffers.
+     */
     void SlotBeginBatch() override;
 
+    /**
+     * Updates internal state to reenable vertex buffer updates and pausing
+     * the animation thread. Users of this function are responsible for
+     * signalling SlotUpdate in order to update all vertex buffers.
+     */
     void SlotEndBatch() override;
 
+    /**
+     * Updates all vertex buffers.
+     */
     void SlotUpdate() override;
 
     int NumObjects() const;
@@ -232,7 +297,7 @@ private:
 };
 
 //=============================================================================
-// Interface: SceneManager
+// SceneManager
 //=============================================================================
 
 class SceneManager : public QObject {

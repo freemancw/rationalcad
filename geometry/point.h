@@ -871,6 +871,30 @@ inline void Point_3r::set_unique_id(const uint32_t unique_id) {
     unique_id_ = unique_id;
 }
 
+//=============================================================================
+// ApproximatePoint_3f
+//=============================================================================
+
+/**
+ * The ApproxPoint_3f class provides a single-precision floating-point
+ * approximation of rational points, usually for rendering purposes.
+ */
+class ApproxPoint_3f : public IPointObserver {
+public:
+    ApproxPoint_3f();
+    ApproxPoint_3f(const Point_2r& p);
+    ApproxPoint_3f(const Point_3r& p);
+
+    void SlotPositionChanged_2r(const Point_2r& p) override;
+    void SlotPositionChanged_3r(const Point_3r& p) override;
+    void set_z_order(const int32_t z_order);
+
+    const Point_3f& approx() const;
+
+private:
+    Point_3f approx_;
+};
+
 } // namespace RCAD
 
 #endif // GE_POINT_H
