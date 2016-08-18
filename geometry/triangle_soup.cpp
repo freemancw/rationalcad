@@ -106,4 +106,8 @@ void TriangleSoup_3r::AddTriangles(const std::vector<Triangle_3r>& triangles) {
     SigUpdate();
 }
 
+const std::vector<Triangle_3r>& TriangleSoup_3r::triangle_soup() const {
+    return triangle_soup_;
+}
+
 }

@@ -27,25 +27,15 @@ SceneTriangleSoup_3::SceneTriangleSoup_3() {
 
 void SceneTriangleSoup_3::Initialize(const QVector<QVector3D>& vertices,
                                      const QVector<qint32>& indices) {
-    //assert(indices.size() % 3 == 0);
-
     QVector<SharedPoint_3r> sharedVertices;
 
     for (auto vertex : vertices) {
-        sharedVertices.push_back(std::make_shared<Point_3r>(vertex.x(), vertex.y(), vertex.z()));
+        sharedVertices.push_back(std::make_shared<Point_3r>(vertex.x(),
+                                                            vertex.y(),
+                                                            vertex.z()));
     }
 
     std::vector<Triangle_3r> triangles;
-
-    /*
-    for (auto i = 0; i < vertices.size(); i += 3) {
-        Triangle_3r triangle(sharedVertices[i],
-                             sharedVertices[i+1],
-                             sharedVertices[i+2]);
-        triangles.push_back(triangle);
-    }
-    */
-
     for (auto i = 0; i < indices.size(); i += 3) {
         Triangle_3r tri(sharedVertices[indices[i]],
                         sharedVertices[indices[i+1]],
@@ -57,11 +47,43 @@ void SceneTriangleSoup_3::Initialize(const QVector<QVector3D>& vertices,
 }
 
 void SceneTriangleSoup_3::Select() {
+    Visual::Material selected_mat;
+    selected_mat.set_ambient(Visual::Color::SKYBLUE);
 
+    SigBeginBatch();
+
+    auto triangle_soup = model_triangle_soup_.triangle_soup();
+    for (auto triangle : triangle_soup) {
+        SigPushVisualPoint_3r(triangle.a(), Visual::Point(selected_mat));
+        SigPushVisualPoint_3r(triangle.b(), Visual::Point(selected_mat));
+        SigPushVisualPoint_3r(triangle.c(), Visual::Point(selected_mat));
+        SigPushVisualSegment_3r(Segment_3r(triangle.a_sptr(), triangle.b_sptr()),
+                                Visual::Segment(selected_mat));
+        SigPushVisualSegment_3r(Segment_3r(triangle.b_sptr(), triangle.c_sptr()),
+                                Visual::Segment(selected_mat));
+        SigPushVisualSegment_3r(Segment_3r(triangle.c_sptr(), triangle.a_sptr()),
+                                Visual::Segment(selected_mat));
+    }
+
+    SigEndBatch();
+    SigUpdate();
 }
 
 void SceneTriangleSoup_3::Deselect() {
+    SigBeginBatch();
 
+    auto triangle_soup = model_triangle_soup_.triangle_soup();
+    for (auto triangle : triangle_soup) {
+        SigPopVisualPoint_3r(triangle.a());
+        SigPopVisualPoint_3r(triangle.b());
+        SigPopVisualPoint_3r(triangle.c());
+        SigPopVisualSegment_3r(Segment_3r(triangle.a_sptr(), triangle.b_sptr()));
+        SigPopVisualSegment_3r(Segment_3r(triangle.b_sptr(), triangle.c_sptr()));
+        SigPopVisualSegment_3r(Segment_3r(triangle.c_sptr(), triangle.a_sptr()));
+    }
+
+    SigEndBatch();
+    SigUpdate();
 }
 
 Intersection::Ray_3rSceneObject SceneTriangleSoup_3::intersect(const Ray_3r &ray) {
