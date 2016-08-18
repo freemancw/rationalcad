@@ -299,6 +299,10 @@
                    <property name="text">
                     <string>Triangle Soup</string>
                    </property>
+                   <property name="icon">
+                    <iconset resource="../resources/resources.qrc">
+                     <normaloff>:/icons/create_triangle_soup.png</normaloff>:/icons/create_triangle_soup.png</iconset>
+                   </property>
                    <property name="checkable">
                     <bool>true</bool>
                    </property>

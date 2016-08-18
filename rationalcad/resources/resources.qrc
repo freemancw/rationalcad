@@ -24,5 +24,6 @@
         <file>icons/select.png</file>
         <file>icons/create_polygon.png</file>
         <file>icons/create_bsplinesurface.png</file>
+        <file>icons/create_triangle_soup.png</file>
     </qresource>
 </RCC>
