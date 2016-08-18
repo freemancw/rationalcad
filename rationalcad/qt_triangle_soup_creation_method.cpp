@@ -17,6 +17,9 @@
 #include "ui_triangle_soup_creation_method.h"
 
 #include "common.h"
+#include "assimp/Importer.hpp"
+#include "assimp/scene.h"
+#include "assimp/postprocess.h"
 
 TriangleSoupCreationMethod::TriangleSoupCreationMethod(QWidget *parent) :
     QGroupBox(parent),
@@ -37,39 +40,34 @@ void TriangleSoupCreationMethod::on_file_button_choose_clicked() {
         this,
         tr("Open triangle soup data"),
         "./",
-        tr("OBJ files (*.obj)")
+        tr("FBX files (*.fbx)")
     );
 
     ui->file_name->setText(fileName);
 }
 
 void TriangleSoupCreationMethod::on_file_button_generate_clicked() {
-    LOG(INFO) << "on_generate_clicked with file "
-              << ui->file_name->text().toStdString();
+    Assimp::Importer importer;
 
-    QFile file(ui->file_name->text());
+    // And have it read the given file with some example postprocessing
+    // Usually - if speed is not the most important aspect for you - you'll
+    // propably to request more postprocessing than we do in this example.
+    const aiScene* scene = importer.ReadFile(ui->file_name->text().toStdString(),
+            aiProcess_CalcTangentSpace       |
+            aiProcess_Triangulate            |
+            aiProcess_JoinIdenticalVertices  |
+            aiProcess_SortByPType);
 
-    // error check
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        LOG(ERROR) << "Unable to open OBJ file.";
+    if (!scene) {
+        LOG(ERROR) << "Unable to open file.";
         return;
     }
 
     LOG(INFO) << "Successfully opened OBJ file. Continuing.";
 
-    QVector<QVector3D> points;
-    QTextStream in(&file);
+    QVector<QVector3D> vertices;
+    QVector<qint32> indices;
 
-    while (!in.atEnd()) {
-        QString line = in.readLine();
-/*
-        auto tokens = line.split(QRegularExpression("\\s+"), QString::SkipEmptyParts);
-        points.push_back(QVector3D(tokens.at(0).toFloat(),
-                                   tokens.at(1).toFloat(),
-                                   tokens.at(2).toFloat()));
-                                   */
-    }
-
-    emit CreateTriangleSoup();
+    emit CreateTriangleSoup(vertices, indices);
 }
 

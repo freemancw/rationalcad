@@ -174,7 +174,12 @@ public slots:
     void onUpdateNewPolytope(const QVector2D& cur);
     void onEndCreatePolytope();
 
+    // terrain mesh
     void onCreateTerrainMesh(const QVector<QVector3D>& data);
+
+    // triangle soup
+    void onCreateTriangleSoup(const QVector<QVector3D>& vertices,
+                              const QVector<qint32>& indices);
 
     // picking and selection
     void onUpdateSelectedObjectName(const QString& name);

@@ -13,6 +13,9 @@ endif(CMAKE_SIZEOF_VOID_P EQUAL 8)
 include_directories(${RATIONALCAD_SOURCE_DIR}/dependencies/mpir/)
 link_directories(${RATIONALCAD_SOURCE_DIR}/dependencies/mpir/build.vc12/${RCAD_WIN_ARCH}/${CMAKE_BUILD_TYPE})
 
+include_directories(${RATIONALCAD_SOURCE_DIR}/dependencies/assimp-3.3.1/include/)
+link_directories(${RATIONALCAD_SOURCE_DIR}/dependencies/assimp-3.3.1/lib/Release)
+
 add_subdirectory(geometry)
 add_subdirectory(utility)
 add_subdirectory(rationalcad)

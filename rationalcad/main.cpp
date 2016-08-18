@@ -43,6 +43,7 @@ int main(int argc, char *argv[]) {
     LOG(INFO) << "registering qt meta types";
     qRegisterMetaType<QVector<RCAD::GL::Vertex>>("QVector<RCAD::GL::Vertex>");
     qRegisterMetaType<QVector<QVector3D>>("QVector<QVector3D>");
+    qRegisterMetaType<QVector<qint32>>("QVector<qint32>");
 
     LOG(INFO) << "displaying splash screen";
     QPixmap splash_image(":/splash3.png");

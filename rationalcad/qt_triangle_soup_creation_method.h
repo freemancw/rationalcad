@@ -16,7 +16,8 @@ public:
     ~TriangleSoupCreationMethod();
 
 signals:
-    void CreateTriangleSoup();
+    void CreateTriangleSoup(const QVector<QVector3D>& vertices,
+                            const QVector<qint32>& indices);
 
 private slots:
     void on_method_dropdown_currentTextChanged(const QString &arg1);

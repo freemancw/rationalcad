@@ -314,6 +314,11 @@ void MainWindow::on_create_triangle_soup_toggled(bool checked) {
         ui->create->layout()->addWidget(creation_method);
         ui->create->layout()->addItem(spacer);
 
+        connect(creation_method,
+                SIGNAL(CreateTriangleSoup(const QVector<QVector3D>&, const QVector<qint32>&)),
+                &scene_manager_->scene_observer_,
+                SLOT(onCreateTriangleSoup(const QVector<QVector3D>&, const QVector<qint32>&)));
+
     } else if (creation_method) {
 
         ui->create->layout()->removeWidget(creation_method);

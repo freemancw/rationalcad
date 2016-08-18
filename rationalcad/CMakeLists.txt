@@ -80,6 +80,7 @@ target_link_libraries(
     geometry
     mpir
     mpirxx
+    assimp-vc140-mt
 )
 
 # Copy MPIR dll into RationalCAD binary dir
@@ -88,5 +89,14 @@ ADD_CUSTOM_COMMAND(
     POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy
     ${RATIONALCAD_SOURCE_DIR}/dependencies/mpir/build.vc12/${RCAD_WIN_ARCH}/${CMAKE_BUILD_TYPE}/mpir.dll
+    ${RATIONALCAD_BINARY_DIR}/rationalcad
+)
+
+# Copy Assimp dll into RationalCAD binary dir
+ADD_CUSTOM_COMMAND(
+    TARGET RationalCAD
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy
+    ${RATIONALCAD_SOURCE_DIR}/dependencies/assimp-3.3.1/bin/Release/assimp-vc140-mt.dll
     ${RATIONALCAD_BINARY_DIR}/rationalcad
 )

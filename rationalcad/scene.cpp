@@ -508,6 +508,15 @@ void SceneObserver::onEndCreatePolytope() {
 */
 
 //=============================================================================
+// TriangleSoup_3 management
+//=============================================================================
+
+void SceneObserver::onCreateTriangleSoup(const QVector<QVector3D>& vertices,
+                                         const QVector<qint32>& indices) {
+    LOG(INFO) << "creating triangle soup";
+}
+
+//=============================================================================
 // Object management
 //=============================================================================
 
