@@ -40,7 +40,7 @@ void TriangleSoupCreationMethod::on_file_button_choose_clicked() {
         this,
         tr("Open triangle soup data"),
         "./",
-        tr("FBX files (*.fbx)")
+        tr("OBJ files (*.obj)")
     );
 
     ui->file_name->setText(fileName);
@@ -68,6 +68,22 @@ void TriangleSoupCreationMethod::on_file_button_generate_clicked() {
     QVector<QVector3D> vertices;
     QVector<qint32> indices;
 
+    for (auto i = 0; i < scene->mNumMeshes; ++i) {
+        auto mesh = scene->mMeshes[i];
+        for (auto j = 0; j < mesh->mNumVertices; ++j) {
+            vertices.push_back(QVector3D(mesh->mVertices[j].x,
+                                         mesh->mVertices[j].y,
+                                         mesh->mVertices[j].z));
+        }
+        for (auto j = 0; j < mesh->mNumFaces; ++j) {
+            assert(mesh->mFaces[j].mNumIndices == 3);
+            indices.push_back(mesh->mFaces[j].mIndices[0]);
+            indices.push_back(mesh->mFaces[j].mIndices[1]);
+            indices.push_back(mesh->mFaces[j].mIndices[2]);
+        }
+    }
+
+    /*
     vertices.push_back(QVector3D(0, 0, 0));
     vertices.push_back(QVector3D(8, 0, 0));
     vertices.push_back(QVector3D(0, 8, 0));
@@ -75,6 +91,7 @@ void TriangleSoupCreationMethod::on_file_button_generate_clicked() {
     indices.push_back(0);
     indices.push_back(1);
     indices.push_back(2);
+    */
 
     emit CreateTriangleSoup(vertices, indices);
 }
