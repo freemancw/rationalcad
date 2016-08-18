@@ -212,6 +212,10 @@ struct IGeometryObserver {
     virtual void SlotPopVisualTriangle_3r(const Triangle_3r& t,
                                           const uint32_t msec_delay) = 0;
 
+    virtual void SlotBeginBatch() = 0;
+
+    virtual void SlotEndBatch() = 0;
+
     virtual void SlotUpdate() = 0;
 };
 
@@ -269,6 +273,10 @@ struct IObservableGeometry {
     virtual void SigPopVisualTriangle_3r(const Triangle_3r& t,
                                          const uint32_t msec_delay) const = 0;
 
+    virtual void SigBeginBatch() const = 0;
+
+    virtual void SigEndBatch() const = 0;
+
     virtual void SigUpdate() const = 0;
 };
 
@@ -325,6 +333,9 @@ public:
     void SlotPopVisualTriangle_3r(const Triangle_3r& t,
                                   const uint32_t msec_delay = 0) override;
 
+    void SlotBeginBatch() override;
+
+    void SlotEndBatch() override;
 
     void SlotUpdate() override;
 
@@ -373,6 +384,10 @@ public:
 
     void SigPopVisualTriangle_3r(const Triangle_3r& t,
                                  const uint32_t msec_delay = 0) const override;
+
+    void SigBeginBatch() const override;
+
+    void SigEndBatch() const override;
 
     void SigUpdate() const override;
 

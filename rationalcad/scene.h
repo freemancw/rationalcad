@@ -145,6 +145,10 @@ public:
     void SlotPopVisualTriangle_3r(const Triangle_3r& t,
         const uint32_t msec_delay = 0) override;
 
+    void SlotBeginBatch() override;
+
+    void SlotEndBatch() override;
+
     void SlotUpdate() override;
 
     int NumObjects() const;
@@ -223,6 +227,8 @@ private:
     QHash<uint32_t, QStack<Visual::Point>> viz_points_;
     QMap<QPair<uint32_t, uint32_t>, QStack<Visual::Segment>> viz_segments_;
     QMap<QVector<uint32_t>, QStack<Visual::Triangle>> viz_triangles_;
+
+    bool viz_batched_;
 };
 
 //=============================================================================

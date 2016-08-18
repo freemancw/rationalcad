@@ -28,6 +28,7 @@ public:
     ~TriangleSoup_3r();
 
     void AddTriangle(Triangle_3r& triangle);
+    void AddTriangles(const std::vector<Triangle_3r>& triangles);
 
 private:
     std::vector<Triangle_3r> triangle_soup_;

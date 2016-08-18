@@ -96,6 +96,14 @@ void Geometry::SlotPopVisualTriangle_3r(const Triangle_3r &t,
     SigPopVisualTriangle_3r(t, msec_delay);
 }
 
+void Geometry::SlotBeginBatch() {
+    SigBeginBatch();
+}
+
+void Geometry::SlotEndBatch() {
+    SigEndBatch();
+}
+
 void Geometry::SlotUpdate() {
     SigUpdate();
 }
@@ -208,6 +216,18 @@ void Geometry::SigPopVisualTriangle_3r(const Triangle_3r &t,
                                        const uint32_t msec_delay) const {
     for(auto i = begin(observers_); i != end(observers_); ++i) {
         (*i)->SlotPopVisualTriangle_3r(t, msec_delay);
+    }
+}
+
+void Geometry::SigBeginBatch() const {
+    for(auto i = begin(observers_); i != end(observers_); ++i) {
+        (*i)->SlotBeginBatch();
+    }
+}
+
+void Geometry::SigEndBatch() const {
+    for(auto i = begin(observers_); i != end(observers_); ++i) {
+        (*i)->SlotEndBatch();
     }
 }
 

@@ -35,12 +35,25 @@ void SceneTriangleSoup_3::Initialize(const QVector<QVector3D>& vertices,
         sharedVertices.push_back(std::make_shared<Point_3r>(vertex.x(), vertex.y(), vertex.z()));
     }
 
+    std::vector<Triangle_3r> triangles;
+
+    /*
+    for (auto i = 0; i < vertices.size(); i += 3) {
+        Triangle_3r triangle(sharedVertices[i],
+                             sharedVertices[i+1],
+                             sharedVertices[i+2]);
+        triangles.push_back(triangle);
+    }
+    */
+
     for (auto i = 0; i < indices.size(); i += 3) {
         Triangle_3r tri(sharedVertices[indices[i]],
                         sharedVertices[indices[i+1]],
                         sharedVertices[indices[i+2]]);
-        model_triangle_soup_.AddTriangle(tri);
+        triangles.push_back(tri);
     }
+
+    model_triangle_soup_.AddTriangles(triangles);
 }
 
 void SceneTriangleSoup_3::Select() {

@@ -45,7 +45,8 @@ Point_2f ToPoint_2f(const QVector2D& v, bool snap = false);
 //=============================================================================
 
 SceneObserver::SceneObserver() :
-    cur_point_uid_(1) {}
+    cur_point_uid_(1),
+    viz_batched_(false) {}
 
 SceneObserver::~SceneObserver() {
     for (auto object : selected_objects_) {
@@ -126,9 +127,12 @@ void SceneObserver::SlotPushVisualPoint_2r(const Point_2r& p,
                                            const uint32_t msec_delay) {
     viz_points_[p.unique_id()].push_back(vp);
     approx_points_[p.unique_id()]->set_z_order(vp.z_order());
-    GenerateVboPoints();
-    thread()->msleep(msec_delay);
-    QApplication::processEvents();
+
+    if (!viz_batched_) {
+        GenerateVboPoints();
+        thread()->msleep(msec_delay);
+        QApplication::processEvents();
+    }
 }
 
 void SceneObserver::SlotPopVisualPoint_2r(const Point_2r& p,
@@ -141,9 +145,11 @@ void SceneObserver::SlotPopVisualPoint_2r(const Point_2r& p,
         approx_points_[p.unique_id()]->set_z_order(viz_points_[p.unique_id()].back().z_order());
     }
 
-    GenerateVboPoints();
-    thread()->msleep(msec_delay);
-    QApplication::processEvents();
+    if (!viz_batched_) {
+        GenerateVboPoints();
+        thread()->msleep(msec_delay);
+        QApplication::processEvents();
+    }
 }
 
 void SceneObserver::SlotPushVisualSegment_2r(const Segment_2r& s,
@@ -151,9 +157,12 @@ void SceneObserver::SlotPushVisualSegment_2r(const Segment_2r& s,
                                              const uint32_t msec_delay) {
     QPair<uint32_t, uint32_t> key(s.p().unique_id(), s.q().unique_id());
     viz_segments_[key].push_back(vs);
-    GenerateVboLines();
-    thread()->msleep(msec_delay);
-    QApplication::processEvents();
+
+    if (!viz_batched_) {
+        GenerateVboLines();
+        thread()->msleep(msec_delay);
+        QApplication::processEvents();
+    }
 }
 
 void SceneObserver::SlotPopVisualSegment_2r(const Segment_2r& s,
@@ -165,9 +174,11 @@ void SceneObserver::SlotPopVisualSegment_2r(const Segment_2r& s,
         viz_segments_.remove(key);
     }
 
-    GenerateVboLines();
-    thread()->msleep(msec_delay);
-    QApplication::processEvents();
+    if (!viz_batched_) {
+        GenerateVboLines();
+        thread()->msleep(msec_delay);
+        QApplication::processEvents();
+    }
 }
 
 void SceneObserver::SlotPushVisualTriangle_2r(const Triangle_2r &t,
@@ -180,9 +191,11 @@ void SceneObserver::SlotPushVisualTriangle_2r(const Triangle_2r &t,
 
     viz_triangles_[key].push_back(vt);
 
-    GenerateVboTriangles();
-    thread()->msleep(msec_delay);
-    QApplication::processEvents();
+    if (!viz_batched_) {
+        GenerateVboTriangles();
+        thread()->msleep(msec_delay);
+        QApplication::processEvents();
+    }
 }
 
 void SceneObserver::SlotPopVisualTriangle_2r(const Triangle_2r &t,
@@ -198,9 +211,11 @@ void SceneObserver::SlotPopVisualTriangle_2r(const Triangle_2r &t,
         viz_triangles_.remove(key);
     }
 
-    GenerateVboTriangles();
-    thread()->msleep(msec_delay);
-    QApplication::processEvents();
+    if (!viz_batched_) {
+        GenerateVboTriangles();
+        thread()->msleep(msec_delay);
+        QApplication::processEvents();
+    }
 }
 
 void SceneObserver::SlotRegisterPoint_3r(Point_3r &p) {
@@ -218,9 +233,12 @@ void SceneObserver::SlotPushVisualPoint_3r(const Point_3r& p,
                                           const Visual::Point& vp,
                                           const uint32_t msec_delay) {
     viz_points_[p.unique_id()].push_back(vp);
-    GenerateVboPoints();
-    thread()->msleep(msec_delay);
-    QApplication::processEvents();
+
+    if (!viz_batched_) {
+        GenerateVboPoints();
+        thread()->msleep(msec_delay);
+        QApplication::processEvents();
+    }
 }
 
 void SceneObserver::SlotPopVisualPoint_3r(const Point_3r& p,
@@ -231,9 +249,11 @@ void SceneObserver::SlotPopVisualPoint_3r(const Point_3r& p,
         viz_points_.remove(p.unique_id());
     }
 
-    GenerateVboPoints();
-    thread()->msleep(msec_delay);
-    QApplication::processEvents();
+    if (!viz_batched_) {
+        GenerateVboPoints();
+        thread()->msleep(msec_delay);
+        QApplication::processEvents();
+    }
 }
 
 void SceneObserver::SlotPushVisualSegment_3r(const Segment_3r& s,
@@ -241,9 +261,12 @@ void SceneObserver::SlotPushVisualSegment_3r(const Segment_3r& s,
                                              const uint32_t msec_delay) {
     QPair<uint32_t, uint32_t> key(s.p().unique_id(), s.q().unique_id());
     viz_segments_[key].push_back(vs);
-    GenerateVboLines();
-    thread()->msleep(msec_delay);
-    QApplication::processEvents();
+
+    if (!viz_batched_) {
+        GenerateVboLines();
+        thread()->msleep(msec_delay);
+        QApplication::processEvents();
+    }
 }
 
 void SceneObserver::SlotPopVisualSegment_3r(const Segment_3r& s,
@@ -255,9 +278,11 @@ void SceneObserver::SlotPopVisualSegment_3r(const Segment_3r& s,
         viz_segments_.remove(key);
     }
 
-    GenerateVboLines();
-    thread()->msleep(msec_delay);
-    QApplication::processEvents();
+    if (!viz_batched_) {
+        GenerateVboLines();
+        thread()->msleep(msec_delay);
+        QApplication::processEvents();
+    }
 }
 
 void SceneObserver::SlotPushVisualTriangle_3r(const Triangle_3r &t,
@@ -270,9 +295,11 @@ void SceneObserver::SlotPushVisualTriangle_3r(const Triangle_3r &t,
 
     viz_triangles_[key].push_back(vt);
 
-    GenerateVboTriangles();
-    thread()->msleep(msec_delay);
-    QApplication::processEvents();
+    if (!viz_batched_) {
+        GenerateVboTriangles();
+        thread()->msleep(msec_delay);
+        QApplication::processEvents();
+    }
 }
 
 void SceneObserver::SlotPopVisualTriangle_3r(const Triangle_3r &t,
@@ -288,9 +315,19 @@ void SceneObserver::SlotPopVisualTriangle_3r(const Triangle_3r &t,
         viz_triangles_.remove(key);
     }
 
-    GenerateVboTriangles();
-    thread()->msleep(msec_delay);
-    QApplication::processEvents();
+    if (!viz_batched_) {
+        GenerateVboTriangles();
+        thread()->msleep(msec_delay);
+        QApplication::processEvents();
+    }
+}
+
+void SceneObserver::SlotBeginBatch() {
+    viz_batched_ = true;
+}
+
+void SceneObserver::SlotEndBatch() {
+    viz_batched_ = false;
 }
 
 void SceneObserver::SlotUpdate() {

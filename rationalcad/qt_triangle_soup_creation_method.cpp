@@ -49,14 +49,11 @@ void TriangleSoupCreationMethod::on_file_button_choose_clicked() {
 void TriangleSoupCreationMethod::on_file_button_generate_clicked() {
     Assimp::Importer importer;
 
-    // And have it read the given file with some example postprocessing
-    // Usually - if speed is not the most important aspect for you - you'll
-    // propably to request more postprocessing than we do in this example.
     const aiScene* scene = importer.ReadFile(ui->file_name->text().toStdString(),
-            aiProcess_CalcTangentSpace       |
-            aiProcess_Triangulate            |
-            aiProcess_JoinIdenticalVertices  |
-            aiProcess_SortByPType);
+            aiProcess_PreTransformVertices  |
+            aiProcess_FlipWindingOrder      |
+            aiProcess_JoinIdenticalVertices |
+            aiProcess_Triangulate);
 
     if (!scene) {
         LOG(ERROR) << "Unable to open file.";
@@ -67,31 +64,25 @@ void TriangleSoupCreationMethod::on_file_button_generate_clicked() {
 
     QVector<QVector3D> vertices;
     QVector<qint32> indices;
+    qint32 indexOffset = 0;
 
     for (auto i = 0; i < scene->mNumMeshes; ++i) {
         auto mesh = scene->mMeshes[i];
+        indexOffset = vertices.size();
+
         for (auto j = 0; j < mesh->mNumVertices; ++j) {
             vertices.push_back(QVector3D(mesh->mVertices[j].x,
-                                         mesh->mVertices[j].y,
-                                         mesh->mVertices[j].z));
+                                         mesh->mVertices[j].z,
+                                         mesh->mVertices[j].y));
         }
+
         for (auto j = 0; j < mesh->mNumFaces; ++j) {
             assert(mesh->mFaces[j].mNumIndices == 3);
-            indices.push_back(mesh->mFaces[j].mIndices[0]);
-            indices.push_back(mesh->mFaces[j].mIndices[1]);
-            indices.push_back(mesh->mFaces[j].mIndices[2]);
+            indices.push_back(mesh->mFaces[j].mIndices[0] + indexOffset);
+            indices.push_back(mesh->mFaces[j].mIndices[1] + indexOffset);
+            indices.push_back(mesh->mFaces[j].mIndices[2] + indexOffset);
         }
     }
-
-    /*
-    vertices.push_back(QVector3D(0, 0, 0));
-    vertices.push_back(QVector3D(8, 0, 0));
-    vertices.push_back(QVector3D(0, 8, 0));
-
-    indices.push_back(0);
-    indices.push_back(1);
-    indices.push_back(2);
-    */
 
     emit CreateTriangleSoup(vertices, indices);
 }

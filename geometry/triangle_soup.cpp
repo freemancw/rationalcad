@@ -30,6 +30,8 @@ TriangleSoup_3r::TriangleSoup_3r() {
 }
 
 TriangleSoup_3r::~TriangleSoup_3r() {
+    SigBeginBatch();
+
     for (auto triangle : triangle_soup_) {
         SigPopVisualPoint_3r(triangle.a());
         SigPopVisualPoint_3r(triangle.b());
@@ -39,10 +41,15 @@ TriangleSoup_3r::~TriangleSoup_3r() {
         SigPopVisualSegment_3r(Segment_3r(triangle.c_sptr(), triangle.a_sptr()));
         SigPopVisualTriangle_3r(triangle);
     }
+
+    SigEndBatch();
+    SigUpdate();
 }
 
 void TriangleSoup_3r::AddTriangle(Triangle_3r &triangle) {
     triangle_soup_.push_back(triangle);
+
+    SigBeginBatch();
 
     SigRegisterPoint_3r(triangle.a());
     SigPushVisualPoint_3r(triangle.a(), Visual::Point(mat_vertex_));
@@ -63,6 +70,40 @@ void TriangleSoup_3r::AddTriangle(Triangle_3r &triangle) {
                             Visual::Segment(mat_edge_));
 
     SigPushVisualTriangle_3r(triangle, Visual::Triangle(mat_face_));
+
+    SigEndBatch();
+    SigUpdate();
+}
+
+void TriangleSoup_3r::AddTriangles(const std::vector<Triangle_3r>& triangles) {
+    SigBeginBatch();
+
+    for (auto triangle : triangles) {
+        triangle_soup_.push_back(triangle);
+
+        SigRegisterPoint_3r(triangle.a());
+        SigPushVisualPoint_3r(triangle.a(), Visual::Point(mat_vertex_));
+
+        SigRegisterPoint_3r(triangle.b());
+        SigPushVisualPoint_3r(triangle.b(), Visual::Point(mat_vertex_));
+
+        SigRegisterPoint_3r(triangle.c());
+        SigPushVisualPoint_3r(triangle.c(), Visual::Point(mat_vertex_));
+
+        SigPushVisualSegment_3r(Segment_3r(triangle.a_sptr(), triangle.b_sptr()),
+                                Visual::Segment(mat_edge_));
+
+        SigPushVisualSegment_3r(Segment_3r(triangle.b_sptr(), triangle.c_sptr()),
+                                Visual::Segment(mat_edge_));
+
+        SigPushVisualSegment_3r(Segment_3r(triangle.c_sptr(), triangle.a_sptr()),
+                                Visual::Segment(mat_edge_));
+
+        SigPushVisualTriangle_3r(triangle, Visual::Triangle(mat_face_));
+    }
+
+    SigEndBatch();
+    SigUpdate();
 }
 
 }
