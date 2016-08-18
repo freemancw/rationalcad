@@ -197,7 +197,11 @@ public:
             vbo_.setUsagePattern(QOpenGLBuffer::DynamicDraw);
         }
         vbo_.bind();
-        vbo_.allocate(vertices.data(), vertices.size()*sizeof(Vertex));
+        if (num_vertices_ == vertices.size()) {
+            vbo_.write(0, vertices.data(), vertices.size()*sizeof(Vertex));
+        } else {
+            vbo_.allocate(vertices.data(), vertices.size()*sizeof(Vertex));
+        }
         vbo_.release();
 
         num_vertices_ = vertices.size();

@@ -257,42 +257,42 @@ Color::Color() {
     rgba_[3] = 255;
 }
 
-Color::Color(const unsigned char r, const unsigned char g,
-             const unsigned char b, const unsigned char a) {
+Color::Color(const uint8_t r, const uint8_t g, const uint8_t b,
+             const uint8_t a) {
     rgba_[0] = r;
     rgba_[1] = g;
     rgba_[2] = b;
     rgba_[3] = a;
 }
 
-const unsigned char Color::r() const {
+const uint8_t Color::r() const {
     return rgba_[0];
 }
-const unsigned char Color::g() const {
+const uint8_t Color::g() const {
     return rgba_[1];
 }
-const unsigned char Color::b() const {
+const uint8_t Color::b() const {
     return rgba_[2];
 }
-const unsigned char Color::a() const {
+const uint8_t Color::a() const {
     return rgba_[3];
 }
-const std::array<unsigned char, 4>& Color::rgba() const {
+const std::array<uint8_t, 4>& Color::rgba() const {
     return rgba_;
 }
-void Color::set_r(const unsigned char r) {
+void Color::set_r(const uint8_t r) {
     rgba_[0] = r;
 }
-void Color::set_g(const unsigned char g) {
+void Color::set_g(const uint8_t g) {
     rgba_[1] = g;
 }
-void Color::set_b(const unsigned char b) {
+void Color::set_b(const uint8_t b) {
     rgba_[2] = b;
 }
-void Color::set_a(const unsigned char a) {
+void Color::set_a(const uint8_t a) {
     rgba_[3] = a;
 }
-void Color::set_rgba(const std::array<unsigned char, 4>& rgba) {
+void Color::set_rgba(const std::array<uint8_t, 4>& rgba) {
     rgba_ = rgba;
 }
 
@@ -363,8 +363,14 @@ Point::Point(const Material& material, const int32_t z_order) :
     material_(material),
     z_order_(z_order) {}
 
+const int32_t Point::z_order() const {
+    return z_order_;
+}
 const Material& Point::material() const {
     return material_;
+}
+void Point::set_z_order(const int32_t z_order) {
+    z_order_ = z_order;
 }
 void Point::set_material(const Material& material) {
     material_ = material;

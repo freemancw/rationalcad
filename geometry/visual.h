@@ -29,6 +29,10 @@ namespace Visual {
 // Interface: Color
 //=============================================================================
 
+/**
+ * The Color class represents 32-bit RGBA colors and provides a basic palette
+ * as static members.
+ */
 class Color {
 public:
     static const Color RED;
@@ -43,22 +47,21 @@ public:
     static const Color SKYBLUE;
 
     Color();
-    Color(const unsigned char r, const unsigned char g,
-          const unsigned char b, const unsigned char a);
+    Color(const uint8_t r, const uint8_t g, const uint8_t b, const uint8_t a);
 
-    const unsigned char r() const;
-    const unsigned char g() const;
-    const unsigned char b() const;
-    const unsigned char a() const;
-    const std::array<unsigned char, 4>& rgba() const;
-    void set_r(const unsigned char r);
-    void set_g(const unsigned char g);
-    void set_b(const unsigned char b);
-    void set_a(const unsigned char a);
-    void set_rgba(const std::array<unsigned char, 4>& rgba);
+    const uint8_t r() const;
+    const uint8_t g() const;
+    const uint8_t b() const;
+    const uint8_t a() const;
+    const std::array<uint8_t, 4>& rgba() const;
+    void set_r(const uint8_t r);
+    void set_g(const uint8_t g);
+    void set_b(const uint8_t b);
+    void set_a(const uint8_t a);
+    void set_rgba(const std::array<uint8_t, 4>& rgba);
 
 private:
-    std::array<unsigned char, 4> rgba_;
+    std::array<uint8_t, 4> rgba_;
 };
 
 //=============================================================================
@@ -118,10 +121,10 @@ public:
     Point();
     Point(const Material& material, const int32_t z_order = 0);
 
+    const int32_t z_order() const;
     const Material& material() const;
     void set_material(const Material& material);
-    const int32_t z_order() const { return z_order_; }
-    void set_z_order(const int32_t z_order) { z_order_ = z_order; }
+    void set_z_order(const int32_t z_order);
 
 private:
     Material material_;
@@ -165,6 +168,12 @@ private:
 // Interface: IGeometryObserver
 //=============================================================================
 
+/**
+ * The IGeometryObserver interface defines methods that allow an object to
+ * respond to signals emitted from an IObservableGeometry object. Most
+ * geometric types will be both observable and observers of their component
+ * parts - in this case, use the Visual::Geometry abstract class.
+ */
 struct IGeometryObserver {
     virtual void SlotRegisterPoint_2r(Point_2r& p) = 0;
 
@@ -223,6 +232,12 @@ struct IGeometryObserver {
 // Interface: IObservableGeometry
 //=============================================================================
 
+/**
+ * The IObservableGeometry interface defines methods that allow it to emit
+ * visualization signals to any objects that are observing it. Most geometric
+ * types will be both observable and observers of their component parts - in
+ * this case, use the Visual::Geometry abstract class.
+ */
 struct IObservableGeometry {
     virtual void AddObserver(IGeometryObserver* geom_observer) = 0;
     virtual void RemoveObserver(IGeometryObserver* geom_observer) = 0;
@@ -280,6 +295,18 @@ struct IObservableGeometry {
     virtual void SigUpdate() const = 0;
 };
 
+//=============================================================================
+// Interface: Geometry
+//=============================================================================
+
+/**
+ * The Visual::Geometry abstract class enables subclasses to both observe and
+ * be observed by other types. This class propagates signals upward: slots
+ * respond by emitting the corresponding signal, and signals call the
+ * corresponding slot on any objects observing this object. This way, signals
+ * bubble upward to the ultimate observer (usually a renderer) by default,
+ * unless an object needs to do some special interception work.
+ */
 class Geometry : public IGeometryObserver, public IObservableGeometry {
 public:
     virtual ~Geometry();
@@ -347,22 +374,23 @@ public:
     void SigRegisterPoint_2r(Point_2r& p) override;
 
     void SigPushVisualPoint_2r(const Point_2r& p, const Visual::Point& vp,
-                            const uint32_t msec_delay = 0) const override;
-
-    void SigPushVisualSegment_2r(const Segment_2r& s, const Visual::Segment& vs,
-                              const uint32_t msec_delay = 0) const override;
-
-    void SigPushVisualTriangle_2r(const Triangle_2r& t, const Visual::Triangle& vt,
                                const uint32_t msec_delay = 0) const override;
 
+    void SigPushVisualSegment_2r(const Segment_2r& s, const Visual::Segment& vs,
+                                 const uint32_t msec_delay = 0) const override;
+
+    void SigPushVisualTriangle_2r(const Triangle_2r& t,
+                                  const Visual::Triangle& vt,
+                                  const uint32_t msec_delay = 0) const override;
+
     void SigPopVisualPoint_2r(const Point_2r& p,
-                           const uint32_t msec_delay = 0) const override;
+                              const uint32_t msec_delay = 0) const override;
 
     void SigPopVisualSegment_2r(const Segment_2r& s,
-                             const uint32_t msec_delay = 0) const override;
+                                const uint32_t msec_delay = 0) const override;
 
     void SigPopVisualTriangle_2r(const Triangle_2r& t,
-                             const uint32_t msec_delay = 0) const override;
+                                 const uint32_t msec_delay = 0) const override;
 
     void SigRegisterPoint_3r(Point_3r& p) override;
 
@@ -377,7 +405,7 @@ public:
                                   const uint32_t msec_delay = 0) const override;
 
     void SigPopVisualPoint_3r(const Point_3r& p,
-                           const uint32_t msec_delay = 0) const override;
+                              const uint32_t msec_delay = 0) const override;
 
     void SigPopVisualSegment_3r(const Segment_3r& s,
                                 const uint32_t msec_delay = 0) const override;
